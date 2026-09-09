@@ -1,0 +1,38 @@
+// src/fl/channels/detail/validation/platform.cpp.hpp
+//
+// Platform-specific validation implementation
+// Queries ChannelManager for registered drivers instead of maintaining a
+// hardcoded list.
+
+#include "fl/channels/detail/validation/platform.h"
+#include "fl/channels/manager.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/log/log.h"
+
+namespace fl {
+namespace validation {
+
+bool validateExpectedEngines() {
+    auto infos = channelManager().getDriverInfos();
+    return !infos.empty();
+}
+
+void printEngineValidation() {
+    auto infos = channelManager().getDriverInfos();
+
+    if (infos.empty()) {
+        FL_ERROR_F("[VALIDATION] No drivers registered with ChannelManager!");
+        return;
+    }
+
+    FL_WARN_F("\n[VALIDATION] Registered drivers: %s", infos.size());
+    for (fl::size i = 0; i < infos.size(); i++) {
+        const auto& info = infos[i];
+        FL_UNUSED(info);  // silences -Wunused-variable when FL_WARN is a no-op
+        FL_WARN_F("  - %s (priority=%s, enabled=%s)", info.name.c_str(), info.priority, (info.enabled ? "true" : "false"));
+    }
+    FL_WARN_F("[VALIDATION] Driver registration OK");
+}
+
+}  // namespace validation
+}  // namespace fl

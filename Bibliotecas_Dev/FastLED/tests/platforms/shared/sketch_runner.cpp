@@ -1,0 +1,74 @@
+// ok standalone
+// Unit tests for sketch runner functionality
+
+#include "test.h"
+
+namespace {
+// Test sketch implementation
+int setup_call_count = 0;
+int loop_call_count = 0;
+bool test_mode = false;
+
+// Mock Arduino functions for testing
+void setup() {
+    if (test_mode) {
+        setup_call_count++;
+        fl::printf("SKETCH: setup() called (count: %d)\n", setup_call_count);
+    }
+}
+
+void loop() {
+    if (test_mode) {
+        loop_call_count++;
+        fl::printf("SKETCH: loop() called (count: %d)\n", loop_call_count);
+    }
+}
+} // anonymous namespace
+
+// Direct declarations for testing (avoiding DLL export complexity in test context)
+extern "C" {
+    void sketch_setup();
+    void sketch_loop();
+}
+
+// Simple implementations that call the Arduino functions
+void sketch_setup() {
+    setup();
+}
+
+void sketch_loop() {
+    loop();
+}
+
+FL_TEST_CASE("Sketch Runner - Basic Functionality") {
+    // Reset counters and enable test mode
+    setup_call_count = 0;
+    loop_call_count = 0;
+    test_mode = true;
+    
+    fl::printf("RUNNER: Starting sketch runner test\n");
+
+    // Call sketch_setup() once
+    fl::printf("RUNNER: Calling sketch_setup()\n");
+    sketch_setup();
+    
+    FL_CHECK_EQ(setup_call_count, 1);
+    
+    // Call sketch_loop() five times
+    for (int i = 1; i <= 5; i++) {
+        fl::printf("RUNNER: Calling sketch_loop() - iteration %d\n", i);
+        sketch_loop();
+        FL_CHECK_EQ(loop_call_count, i);
+    }
+    
+    fl::printf("RUNNER: Test completed successfully\n");
+    fl::printf("RUNNER: Final state - setup called %d times, loop called %d times\n",
+           setup_call_count, loop_call_count);
+    
+    // Verify final state
+    FL_CHECK_EQ(setup_call_count, 1);
+    FL_CHECK_EQ(loop_call_count, 5);
+    
+    // Disable test mode
+    test_mode = false;
+}

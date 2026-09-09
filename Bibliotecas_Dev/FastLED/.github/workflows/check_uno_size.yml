@@ -1,0 +1,38 @@
+name: check_uno_size
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/check_uno_size.yml'
+      - '.github/workflows/build_template_binary_size.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template_binary_size.yml
+    with:
+      board: uno
+      # FROZEN SIZE THRESHOLD — DO NOT RAISE TO MAKE CI GREEN.
+      # Mirror-locked by ci/lint/check_size_thresholds.py. Raising a value
+      # here without updating the frozen-list constant in that script will
+      # fail `bash lint`. Fix the regression instead.
+      max_size: 11000
+      max_size_apa102: 9300
+  build_no_forced_inline:
+    uses: ./.github/workflows/build_template_binary_size.yml
+    with:
+      board: uno
+      max_size: -1
+      max_size_apa102: -1
+      extra_args: --defines FASTLED_NO_FORCE_INLINE

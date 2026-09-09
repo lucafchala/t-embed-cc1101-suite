@@ -1,0 +1,196 @@
+// IWYU pragma: private
+
+#include "platforms/wasm/is_wasm.h"
+
+#if defined(FL_IS_WASM)
+
+// ⚠️⚠️⚠️ CRITICAL WARNING: C++ ↔ JavaScript ASYNC UI BRIDGE - HANDLE WITH EXTREME CARE! ⚠️⚠️⚠️
+//
+// 🚨 THIS FILE CONTAINS C++ TO JAVASCRIPT ASYNC UI BINDINGS 🚨
+//
+// DO NOT MODIFY FUNCTION SIGNATURES WITHOUT UPDATING CORRESPONDING JAVASCRIPT CODE!
+//
+// This file bridges C++ UI updates with JavaScript UI components using async patterns.
+// Any changes to:
+// - Async jsUpdateUiComponents() function signature
+// - extern "C" async wrapper functions
+// - Parameter types (const char* vs std::string)
+// - EMSCRIPTEN_KEEPALIVE async function signatures
+//
+// Will BREAK the JavaScript UI system and cause SILENT RUNTIME FAILURES!
+//
+// Key async integration points that MUST remain synchronized:
+// - extern "C" jsUpdateUiComponents(const char* jsonStr) - now async-aware
+// - fl::jsUpdateUiComponents(const std::string &jsonStr) - now async-aware
+// - JavaScript Module.cwrap('jsUpdateUiComponents', null, ['string']) - now handles async
+// - globalThis.onFastLedUiUpdateFunction callbacks - now async
+//
+// Before making ANY changes:
+// 1. Understand this affects async UI rendering in the browser
+// 2. Test with real WASM builds that include UI components
+// 3. Verify JSON parsing works correctly on both sides with async
+// 4. Check that async UI update callbacks still fire properly
+//
+// ⚠️⚠️⚠️ REMEMBER: Async UI failures are often silent and hard to debug! ⚠️⚠️⚠️
+
+// IWYU pragma: begin_keep
+#include <emscripten.h>
+#include <emscripten/emscripten.h> // Include Emscripten headers
+#include <emscripten/html5.h>
+// IWYU pragma: end_keep
+
+#include "platforms/wasm/ui.h"
+#include "platforms/wasm/js_bindings.h"
+#include "platforms/shared/ui/json/ui.h"
+#include "fl/log/log.h"
+#include "fl/stl/compiler_control.h"
+
+// Implemented in js_library.js (--js-library side file)
+extern "C" void js_post_ui_elements(const char*);
+
+using fl::JsonUiUpdateOutput;
+
+namespace fl {
+
+// Use function-local statics for better initialization order safety
+static JsonUiUpdateInput& getUpdateEngineState() {
+    static JsonUiUpdateInput updateEngineState;
+    return updateEngineState;
+}
+
+static bool& getUiSystemInitialized() {
+    static bool uiSystemInitialized = false;
+    return uiSystemInitialized;
+}
+
+// Add a periodic check function that can be called from JavaScript
+extern "C" void checkUpdateEngineState() {
+    FL_WARN_F("*** ASYNC PERIODIC CHECK: g_updateEngineState=%s", (getUpdateEngineState() ? "VALID" : "nullptr"));
+    FL_WARN_F("*** ASYNC PERIODIC CHECK: g_uiSystemInitialized=%s", (getUiSystemInitialized() ? "true" : "false"));
+}
+
+/**
+ * Async-aware UI component updater
+ * Now handles async operations and provides better error handling
+ */
+void jsUpdateUiComponents(const char* jsonStr) {
+    // FL_WARN("*** jsUpdateUiComponents ASYNC ENTRY ***");
+    // FL_WARN("*** jsUpdateUiComponents ASYNC RECEIVED JSON: " << jsonStr.c_str());
+    // FL_WARN("*** jsUpdateUiComponents ASYNC JSON LENGTH: " << jsonStr.length());
+    // FL_WARN("*** jsUpdateUiComponents ASYNC ENTRY: g_uiSystemInitialized=" << (getUiSystemInitialized() ? "true" : "false") << ", g_updateEngineState=" << (getUpdateEngineState() ? "VALID" : "nullptr"));
+    
+    // Only initialize if not already initialized - don't force reinitialization
+    if (!getUiSystemInitialized()) {
+        FL_WARN_F("*** ASYNC WASM: UI system not initialized, initializing for first time");
+        ensureWasmUiSystemInitialized();
+    }
+    
+    //FL_WARN("*** jsUpdateUiComponents ASYNC AFTER INIT: g_uiSystemInitialized=" << (getUiSystemInitialized() ? "true" : "false") << ", g_updateEngineState=" << (getUpdateEngineState() ? "VALID" : "nullptr"));
+    
+    if (getUpdateEngineState()) {
+        //FL_WARN("*** ASYNC WASM CALLING BACKEND WITH JSON: " << jsonStr.c_str());
+        
+        // Call the backend function - handle errors via early return
+        if (getUpdateEngineState()) {
+            getUpdateEngineState()(jsonStr);
+            //FL_WARN("*** ASYNC WASM BACKEND CALL COMPLETED SUCCESSFULLY");
+        } else {
+            FL_WARN_F("*** ASYNC WASM BACKEND CALL FAILED: updateEngineState is null");
+            return; // Early return on error
+        }
+        
+    } else {
+        FL_WARN_F("*** ASYNC WASM ERROR: No driver state updater available, attempting emergency reinitialization...");
+        
+        // Try to reinitialize as a recovery mechanism
+        getUiSystemInitialized() = false;  // Force reinitialization
+        ensureWasmUiSystemInitialized();
+        
+        FL_WARN_F("*** ASYNC AFTER EMERGENCY REINIT: g_updateEngineState=%s", (getUpdateEngineState() ? "VALID" : "nullptr"));
+        
+        if (getUpdateEngineState()) {
+            FL_WARN_F("*** ASYNC EMERGENCY REINIT SUCCESSFUL - retrying JSON processing");
+            getUpdateEngineState()(jsonStr);
+            FL_WARN_F("*** ASYNC EMERGENCY RETRY COMPLETED SUCCESSFULLY");
+        } else {
+            FL_WARN_F("*** ASYNC EMERGENCY REINIT FAILED - g_updateEngineState still nullptr");
+            return; // Early return on failure
+        }
+    }
+}
+
+/**
+ * Async-aware UI system initializer
+ * Ensures the UI system is initialized with proper async support
+ */
+void ensureWasmUiSystemInitialized() {
+    // FL_WARN("*** ASYNC CODE UPDATE VERIFICATION: This message confirms the C++ code has been rebuilt! ***");
+    // FL_WARN("*** ensureWasmUiSystemInitialized ASYNC ENTRY: g_uiSystemInitialized=" << (getUiSystemInitialized() ? "true" : "false") << ", g_updateEngineState=" << (getUpdateEngineState() ? "VALID" : "nullptr"));
+    
+    // Return early if already initialized - CRITICAL FIX
+    if (getUiSystemInitialized()) {
+        FL_WARN_F("*** ensureWasmUiSystemInitialized ASYNC: Already initialized, returning early");
+        return;
+    }
+    
+    if (!getUiSystemInitialized() || !getUpdateEngineState()) {
+        FL_WARN_F("*** ASYNC WASM INITIALIZING UI SYSTEM ***");
+        
+        // Create UI update handler that posts message to main thread
+        // In PROXY_TO_PTHREAD mode, C++ runs in worker thread, UI manager runs on main thread
+        JsonUiUpdateOutput updateJsHandler = [](const char* jsonStr) {
+            if (!jsonStr) {
+                FL_WARN_F("*** UI UPDATE HANDLER ERROR: Received null jsonStr");
+                return; // Early return on error
+            }
+
+            // Post message to main thread with UI JSON
+            // Main thread will call uiManager.addUiElements()
+            js_post_ui_elements(jsonStr);
+        };
+        
+        // Initialize with error checking via early return
+        auto tempResult = setJsonUiHandlers(updateJsHandler);
+        if (!tempResult) {
+            FL_WARN_F("*** ASYNC WASM UI SYSTEM INITIALIZATION FAILED: setJsonUiHandlers returned null");
+            return; // Early return on failure
+        }
+        
+        getUpdateEngineState() = tempResult;
+        getUiSystemInitialized() = true;
+        
+        FL_WARN_F("*** ASYNC WASM UI SYSTEM INITIALIZATION COMPLETED ***");
+    }
+}
+
+/**
+ * Async-aware startup initializer
+ * Called automatically when the WASM module loads
+ */
+__attribute__((constructor))
+void on_startup_initialize_wasm_ui() {
+    FL_WARN_F("*** ASYNC WASM UI STARTUP INITIALIZER CALLED ***");
+    ensureWasmUiSystemInitialized();
+}
+
+} // namespace fl
+
+// C binding wrapper for async jsUpdateUiComponents
+extern "C" {
+    /**
+     * Async-aware C binding for UI component updates
+     * Now includes comprehensive error handling for async operations
+     */
+    EMSCRIPTEN_KEEPALIVE void jsUpdateUiComponents(const char* jsonStr) {
+        // Input validation with early return
+        if (!jsonStr) {
+            FL_WARN_F("*** ASYNC C BINDING: Received nullptr jsonStr");
+            return;
+        }
+        
+        // Call the async-aware C++ implementation
+        fl::jsUpdateUiComponents(jsonStr);
+    }
+}
+
+#endif // FL_IS_WASM

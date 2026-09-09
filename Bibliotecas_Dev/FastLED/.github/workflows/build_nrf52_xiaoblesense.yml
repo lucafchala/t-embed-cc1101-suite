@@ -1,0 +1,28 @@
+name: nrf52_xiaoblesense
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_nrf52_xiaoblesense.yml'
+      - '.github/workflows/build_template.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template.yml
+    with:
+      args: xiaoblesense all

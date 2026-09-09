@@ -1,0 +1,91 @@
+REM Title: macOS Network Scanner
+REM Author: BadUSB Library
+REM Description: Scans local network for devices and services
+REM Target: macOS 10.15+
+REM Category: Discovery
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create network scanner script
+STRING cat > /tmp/network_scanner.sh << 'EOF'
+#!/bin/bash
+
+echo "Starting network scan..."
+
+# Get local network
+LOCAL_IP=$(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
+NETWORK=$(echo $LOCAL_IP | cut -d. -f1-3)
+
+echo "Local IP: $LOCAL_IP"
+echo "Scanning network: $NETWORK.0/24"
+
+# Create scan results file
+SCAN_FILE="/tmp/network_scan_$(date +%Y%m%d_%H%M%S).txt"
+echo "=== Network Scan Results ===" > $SCAN_FILE
+echo "Date: $(date)" >> $SCAN_FILE
+echo "Local IP: $LOCAL_IP" >> $SCAN_FILE
+echo "Network: $NETWORK.0/24" >> $SCAN_FILE
+echo "" >> $SCAN_FILE
+
+# Scan for active hosts
+echo "=== Active Hosts ===" >> $SCAN_FILE
+for i in {1..254}; do
+    ip="$NETWORK.$i"
+    if ping -c 1 -W 1000 "$ip" > /dev/null 2>&1; then
+        echo "Host $ip is up" >> $SCAN_FILE
+        
+        # Try to get hostname
+        hostname=$(nslookup "$ip" 2>/dev/null | grep "name" | awk '{print $4}')
+        if [ ! -z "$hostname" ]; then
+            echo "  Hostname: $hostname" >> $SCAN_FILE
+        fi
+        
+        # Scan common ports
+        echo "  Port scan:" >> $SCAN_FILE
+        for port in 22 23 80 443 445 3389 5900; do
+            if nc -z -w1 "$ip" "$port" 2>/dev/null; then
+                echo "    Port $port: OPEN" >> $SCAN_FILE
+            fi
+        done
+        echo "" >> $SCAN_FILE
+    fi
+done
+
+# Get ARP table
+echo "=== ARP Table ===" >> $SCAN_FILE
+arp -a >> $SCAN_FILE
+echo "" >> $SCAN_FILE
+
+# Get routing table
+echo "=== Routing Table ===" >> $SCAN_FILE
+netstat -rn >> $SCAN_FILE
+echo "" >> $SCAN_FILE
+
+# Get network interfaces
+echo "=== Network Interfaces ===" >> $SCAN_FILE
+ifconfig >> $SCAN_FILE
+echo "" >> $SCAN_FILE
+
+# Get connected devices (if available)
+echo "=== Connected Devices ===" >> $SCAN_FILE
+system_profiler SPUSBDataType | grep -A 5 "Product ID" >> $SCAN_FILE
+echo "" >> $SCAN_FILE
+
+echo "Network scan completed. Results saved to: $SCAN_FILE"
+cat $SCAN_FILE
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/network_scanner.sh
+ENTER
+STRING /tmp/network_scanner.sh
+ENTER

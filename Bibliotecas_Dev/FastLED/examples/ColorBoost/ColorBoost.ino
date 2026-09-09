@@ -1,0 +1,8 @@
+// @filter: (memory is large)
+
+// FastLED.h must be included first to trigger precompiled headers for FastLED's build system
+#include "FastLED.h"
+
+#include "fl/system/sketch_macros.h"
+
+#include "./ColorBoost.h"

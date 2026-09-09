@@ -1,0 +1,269 @@
+#pragma once
+
+#include "fl/stl/json.h"
+#include "fl/remote/rpc/type_conversion_result.h"
+#include "fl/remote/rpc/json_dispatch.h"  // type-erased conversion cores (#3247)
+#include "fl/stl/tuple.h"
+#include "fl/stl/type_traits.h"
+#include "fl/stl/string.h"
+#include "fl/stl/move.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/span.h"
+#include "fl/remote/rpc/base64.h"
+#include "fl/stl/noexcept.h"
+namespace fl {
+
+// Helper wrapper for const char* parameters in RPC
+// Stores fl::string internally, provides implicit conversion to const char*
+struct ConstCharPtrWrapper {
+    fl::string value;
+
+    ConstCharPtrWrapper() FL_NO_EXCEPT = default;
+    ConstCharPtrWrapper(const fl::string& s) : value(s) {}
+    ConstCharPtrWrapper(fl::string&& s) : value(fl::move(s)) {}
+
+    operator const char*() const { return value.c_str(); }
+    const char* c_str() const { return value.c_str(); }
+};
+
+// Helper wrapper for span<const T> parameters in RPC
+// Stores fl::vector<T> internally, provides implicit conversion to span<const T>
+template <typename T>
+struct ConstSpanWrapper {
+    fl::vector<T> value;
+
+    ConstSpanWrapper() FL_NO_EXCEPT = default;
+    ConstSpanWrapper(fl::vector<T>&& v) : value(fl::move(v)) {}
+    ConstSpanWrapper(const fl::vector<T>& v) : value(v) {}
+
+    operator fl::span<const T>() const {
+        return value;
+    }
+
+    fl::span<const T> get() const {
+        return value;
+    }
+};
+
+namespace detail {
+
+// =============================================================================
+// JsonToType - Primary template and specializations using visitor pattern
+// =============================================================================
+
+// Primary template declaration for JsonToType (with two template parameters for SFINAE)
+template <typename T, typename Enable = void>
+struct JsonToType {
+    static fl::tuple<T, TypeConversionResult> convert(const json& j) {
+        (void)j;
+        TypeConversionResult result;
+        result.setError("unsupported type for JSON conversion");
+        return fl::make_tuple(T(), result);
+    }
+};
+
+// Integer conversion (excluding bool) - dispatches through the shared
+// non-template `json_convert_to_i64_core` (FastLED #3247). Per-T narrowing
+// + overflow detection happen here; the heavy variant-walking lives once
+// in the core.
+template <typename T>
+struct JsonToType<T, typename fl::enable_if<fl::is_integral<T>::value && !fl::is_same<T, bool>::value>::type> {
+    static fl::tuple<T, TypeConversionResult> convert(const json& j) {
+        const json_value* val = j.internal_value();
+        if (!val) {
+            TypeConversionResult result;
+            result.setError("failed to access JSON value");
+            return fl::make_tuple(T(), result);
+        }
+        fl::i64 raw = 0;
+        TypeConversionResult result = json_convert_to_i64_core(*val, &raw);
+        T narrowed = static_cast<T>(raw);
+        if (static_cast<fl::i64>(narrowed) != raw) {
+            result.addWarning(fl::string("integer overflow/truncation: ") +
+                              fl::to_string(raw) + " converted to " +
+                              fl::to_string(static_cast<fl::i64>(narrowed)));
+        }
+        return fl::make_tuple(narrowed, result);
+    }
+};
+
+// Boolean conversion - dispatches through `json_convert_to_bool_core`.
+template <>
+struct JsonToType<bool, void> {
+    static fl::tuple<bool, TypeConversionResult> convert(const json& j) {
+        const json_value* val = j.internal_value();
+        if (!val) {
+            TypeConversionResult result;
+            result.setError("failed to access JSON value");
+            return fl::make_tuple(bool(false), result);
+        }
+        bool out = false;
+        TypeConversionResult result = json_convert_to_bool_core(*val, &out);
+        return fl::make_tuple(out, result);
+    }
+};
+
+// Float / double conversion - dispatches through `json_convert_to_float_core`.
+// The core works in float precision (no double soft-FP on no-FPU targets);
+// the per-T narrowing here lifts to double for `T == double` if requested.
+template <typename T>
+struct JsonToType<T, typename fl::enable_if<fl::is_floating_point<T>::value>::type> {
+    static fl::tuple<T, TypeConversionResult> convert(const json& j) {
+        const json_value* val = j.internal_value();
+        if (!val) {
+            TypeConversionResult result;
+            result.setError("failed to access JSON value");
+            return fl::make_tuple(T(), result);
+        }
+        float raw = 0.0f;
+        TypeConversionResult result = json_convert_to_float_core(*val, &raw);
+        return fl::make_tuple(static_cast<T>(raw), result);
+    }
+};
+
+// String conversion - dispatches through `json_convert_to_string_core`.
+template <>
+struct JsonToType<fl::string, void> {
+    static fl::tuple<fl::string, TypeConversionResult> convert(const json& j) {
+        const json_value* val = j.internal_value();
+        if (!val) {
+            TypeConversionResult result;
+            result.setError("failed to access JSON value");
+            return fl::make_tuple(fl::string(), result);
+        }
+        fl::string out;
+        TypeConversionResult result = json_convert_to_string_core(*val, &out);
+        return fl::make_tuple(out, result);
+    }
+};
+
+// json identity conversion - pass json through unchanged
+// This enables RPC methods to accept fl::json parameters for dynamic typing
+template <>
+struct JsonToType<fl::json, void> {
+    static fl::tuple<fl::json, TypeConversionResult> convert(const json& j) {
+        TypeConversionResult result;  // Success by default
+        return fl::make_tuple(j, result);
+    }
+};
+
+// ConstCharPtrWrapper conversion - converts JSON string to wrapper
+// The wrapper stores fl::string and converts to const char* on access
+template <>
+struct JsonToType<fl::ConstCharPtrWrapper, void> {
+    static fl::tuple<fl::ConstCharPtrWrapper, TypeConversionResult> convert(const json& j) {
+        // Reuse the string converter
+        auto stringResult = JsonToType<fl::string>::convert(j);
+        fl::string str = fl::get<0>(stringResult);
+        TypeConversionResult result = fl::get<1>(stringResult);
+
+        return fl::make_tuple(fl::ConstCharPtrWrapper(fl::move(str)), result);
+    }
+};
+
+// ConstSpanWrapper conversion - converts JSON array to vector wrapper
+template <typename T>
+struct JsonToType<fl::ConstSpanWrapper<T>, void> {
+    static fl::tuple<fl::ConstSpanWrapper<T>, TypeConversionResult> convert(const json& j) {
+        TypeConversionResult result;
+
+        if (!j.is_array()) {
+            result.setError("expected array for span parameter");
+            return fl::make_tuple(fl::ConstSpanWrapper<T>(), result);
+        }
+
+        fl::vector<T> vec;
+        for (fl::size i = 0; i < j.size(); i++) {
+            auto elemResult = JsonToType<T>::convert(j[i]);
+            T elem = fl::get<0>(elemResult);
+            TypeConversionResult elemConvResult = fl::get<1>(elemResult);
+
+            if (elemConvResult.hasError()) {
+                result.setError("element " + fl::to_string(static_cast<fl::i64>(i)) + ": " + elemConvResult.errorMessage());
+                return fl::make_tuple(fl::ConstSpanWrapper<T>(), result);
+            }
+
+            vec.push_back(elem);
+        }
+
+        return fl::make_tuple(fl::ConstSpanWrapper<T>(fl::move(vec)), result);
+    }
+};
+
+// fl::vector<T> conversion - converts JSON array to vector
+// Works for any T that has a JsonToType specialization
+template <typename T>
+struct JsonToType<fl::vector<T>, void> {
+    static fl::tuple<fl::vector<T>, TypeConversionResult> convert(const json& j) {
+        TypeConversionResult result;
+
+        if (!j.is_array()) {
+            result.setError("expected array for vector parameter");
+            return fl::make_tuple(fl::vector<T>(), result);
+        }
+
+        fl::vector<T> vec;
+        for (fl::size i = 0; i < j.size(); i++) {
+            auto elemResult = JsonToType<T>::convert(j[i]);
+            T elem = fl::get<0>(elemResult);
+            TypeConversionResult elemConvResult = fl::get<1>(elemResult);
+
+            if (elemConvResult.hasError()) {
+                result.setError("element " + fl::to_string(static_cast<fl::i64>(i)) + ": " + elemConvResult.errorMessage());
+                return fl::make_tuple(fl::vector<T>(), result);
+            }
+
+            vec.push_back(fl::move(elem));
+        }
+
+        return fl::make_tuple(fl::move(vec), result);
+    }
+};
+
+// fl::vector<fl::u8> specialization - accepts base64 string OR integer array.
+// Base64 strings provide compact binary transport for JSON-RPC.
+template <>
+struct JsonToType<fl::vector<fl::u8>, void> {
+    static fl::tuple<fl::vector<fl::u8>, TypeConversionResult> convert(const json& j) {
+        TypeConversionResult result;
+
+        if (j.is_string()) {
+            // Decode base64 string to binary
+            fl::string encoded;
+            auto strResult = JsonToType<fl::string>::convert(j);
+            encoded = fl::get<0>(strResult);
+            TypeConversionResult strConvResult = fl::get<1>(strResult);
+            if (strConvResult.hasError()) {
+                return fl::make_tuple(fl::vector<fl::u8>(), strConvResult);
+            }
+            fl::vector<fl::u8> decoded = fl::base64_decode(encoded);
+            if (decoded.empty() && !encoded.empty()) {
+                result.setError("invalid base64 string");
+                return fl::make_tuple(fl::vector<fl::u8>(), result);
+            }
+            return fl::make_tuple(fl::move(decoded), result);
+        }
+
+        if (j.is_array()) {
+            // Fall back to integer array
+            fl::vector<fl::u8> vec;
+            for (fl::size i = 0; i < j.size(); i++) {
+                auto elemResult = JsonToType<fl::u8>::convert(j[i]);
+                fl::u8 elem = fl::get<0>(elemResult);
+                TypeConversionResult elemConvResult = fl::get<1>(elemResult);
+                if (elemConvResult.hasError()) {
+                    result.setError("element " + fl::to_string(static_cast<fl::i64>(i)) + ": " + elemConvResult.errorMessage());
+                    return fl::make_tuple(fl::vector<fl::u8>(), result);
+                }
+                vec.push_back(elem);
+            }
+            return fl::make_tuple(fl::move(vec), result);
+        }
+
+        result.setError("expected base64 string or integer array for byte vector");
+        return fl::make_tuple(fl::vector<fl::u8>(), result);
+    }
+};
+
+} // namespace detail
+} // namespace fl

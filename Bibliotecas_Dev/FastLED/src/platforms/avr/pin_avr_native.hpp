@@ -1,0 +1,646 @@
+#pragma once
+
+// IWYU pragma: private
+
+/// @file platforms/avr/pin_avr_native.hpp
+/// Native AVR register-based GPIO implementation (non-Arduino path)
+///
+/// This file provides direct AVR register manipulation for GPIO operations
+/// when building without Arduino framework. It implements the same pin functions
+/// as Arduino but using native AVR register access.
+///
+/// Supported platforms: ATmega328P, ATmega2560, ATmega32U4, and compatible AVR MCUs
+
+// IWYU pragma: begin_keep
+#include <avr/io.h>
+#include <avr/pgmspace.h>
+// IWYU pragma: end_keep
+#include "fl/stl/stdint.h"
+#include "platforms/avr/is_avr.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace platforms {
+
+// Pin mode constants (matching Arduino API)
+#ifndef INPUT
+#define INPUT 0x0
+#endif
+#ifndef OUTPUT
+#define OUTPUT 0x1
+#endif
+#ifndef INPUT_PULLUP
+#define INPUT_PULLUP 0x2
+#endif
+
+// Digital value constants (matching Arduino API)
+#ifndef LOW
+#define LOW 0x0
+#endif
+#ifndef HIGH
+#define HIGH 0x1
+#endif
+
+// Analog reference modes (matching Arduino API)
+#ifndef DEFAULT
+#define DEFAULT 1
+#endif
+#ifndef INTERNAL
+#define INTERNAL 3
+#endif
+#ifndef EXTERNAL
+#define EXTERNAL 0
+#endif
+
+// Port identifiers
+#define NOT_A_PORT 0
+#define PB 2
+#define PC 3
+#define PD 4
+
+// Pin mapping tables for ATmega328P (Arduino UNO/Nano pinout)
+// These map Arduino pin numbers to AVR ports and bit masks
+#if defined(FL_IS_AVR_ATMEGA_328P)
+
+// Maps Arduino digital pin numbers to port identifiers (PB, PC, PD)
+static const u8 PROGMEM digital_pin_to_port_PGM[] = {
+    PD, // 0 - PORTD
+    PD, // 1 - PORTD
+    PD, // 2 - PORTD
+    PD, // 3 - PORTD
+    PD, // 4 - PORTD
+    PD, // 5 - PORTD
+    PD, // 6 - PORTD
+    PD, // 7 - PORTD
+    PB, // 8 - PORTB
+    PB, // 9 - PORTB
+    PB, // 10 - PORTB
+    PB, // 11 - PORTB
+    PB, // 12 - PORTB
+    PB, // 13 - PORTB
+    PC, // 14 - PORTC (A0)
+    PC, // 15 - PORTC (A1)
+    PC, // 16 - PORTC (A2)
+    PC, // 17 - PORTC (A3)
+    PC, // 18 - PORTC (A4)
+    PC, // 19 - PORTC (A5)
+};
+
+// Maps Arduino digital pin numbers to bit masks
+static const u8 PROGMEM digital_pin_to_bit_mask_PGM[] = {
+    _BV(0), // 0, port D
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+    _BV(6),
+    _BV(7),
+    _BV(0), // 8, port B
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+    _BV(0), // 14, port C
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+};
+
+// Maps port identifiers to DDR (Data Direction Register) addresses
+static const u16 PROGMEM port_to_mode_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &DDRB,
+    (u16) &DDRC,
+    (u16) &DDRD,
+};
+
+// Maps port identifiers to PORT (Output Register) addresses
+static const u16 PROGMEM port_to_output_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &PORTB,
+    (u16) &PORTC,
+    (u16) &PORTD,
+};
+
+// Maps port identifiers to PIN (Input Register) addresses
+static const u16 PROGMEM port_to_input_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &PINB,
+    (u16) &PINC,
+    (u16) &PIND,
+};
+
+// Analog pin to ADC channel mapping (A0-A5 -> ADC0-ADC5)
+static const u8 PROGMEM analog_pin_to_channel_PGM[] = {
+    0, // A0 -> ADC0
+    1, // A1 -> ADC1
+    2, // A2 -> ADC2
+    3, // A3 -> ADC3
+    4, // A4 -> ADC4
+    5, // A5 -> ADC5
+    6, // A6 (internal only on some variants)
+    7, // A7 (internal only on some variants)
+};
+
+#elif defined(FL_IS_AVR_ATMEGA_2560)
+
+// ATmega2560 (Arduino MEGA) pin mapping
+// Note: This is a simplified subset - full MEGA has 70 digital pins
+static const u8 PROGMEM digital_pin_to_port_PGM[] = {
+    // Pins 0-21 for basic compatibility
+    // A full implementation would include all 70 pins
+    4, 4, 4, 4, 4, 4, 4, 4, // 0-7: PE0-PE7 (port E)
+    5, 5, 5, 5, 5, 5, 5, 5, // 8-15: PH0-PH7 (port H)
+    2, 2, 2, 2, 2, 2,       // 16-21: PB0-PB5 (port B)
+};
+
+static const u8 PROGMEM digital_pin_to_bit_mask_PGM[] = {
+    _BV(0), _BV(1), _BV(2), _BV(3), _BV(4), _BV(5), _BV(6), _BV(7), // 0-7
+    _BV(0), _BV(1), _BV(2), _BV(3), _BV(4), _BV(5), _BV(6), _BV(7), // 8-15
+    _BV(0), _BV(1), _BV(2), _BV(3), _BV(4), _BV(5),                 // 16-21
+};
+
+// Port register mappings for ATmega2560
+static const u16 PROGMEM port_to_mode_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &DDRB,
+    (u16) &DDRC,
+    (u16) &DDRD,
+    (u16) &DDRE,
+    (u16) &DDRF,
+    (u16) &DDRG,
+    (u16) &DDRH,
+    NOT_A_PORT, // Port I
+    (u16) &DDRJ,
+    (u16) &DDRK,
+    (u16) &DDRL,
+};
+
+static const u16 PROGMEM port_to_output_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &PORTB,
+    (u16) &PORTC,
+    (u16) &PORTD,
+    (u16) &PORTE,
+    (u16) &PORTF,
+    (u16) &PORTG,
+    (u16) &PORTH,
+    NOT_A_PORT,
+    (u16) &PORTJ,
+    (u16) &PORTK,
+    (u16) &PORTL,
+};
+
+static const u16 PROGMEM port_to_input_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+    (u16) &PINB,
+    (u16) &PINC,
+    (u16) &PIND,
+    (u16) &PINE,
+    (u16) &PINF,
+    (u16) &PING,
+    (u16) &PINH,
+    NOT_A_PORT,
+    (u16) &PINJ,
+    (u16) &PINK,
+    (u16) &PINL,
+};
+
+static const u8 PROGMEM analog_pin_to_channel_PGM[] = {
+    0, 1, 2, 3, 4, 5, 6, 7, // A0-A7
+    8, 9, 10, 11, 12, 13, 14, 15, // A8-A15
+};
+
+#elif defined(FL_IS_AVR_MEGAAVR) || defined(ARDUINO_AVR_NANO_EVERY)
+
+// ATmega4809 (Arduino Nano Every) - megaAVR architecture
+// This chip uses a different port register structure: PORTB.DIR instead of DDRB
+// The Arduino core provides compatibility macros, but we need to ensure proper addressing
+
+// Arduino Nano Every pin mapping (same physical layout as Nano/Uno)
+static const u8 PROGMEM digital_pin_to_port_PGM[] = {
+    PD, // 0 - PORTD
+    PD, // 1 - PORTD
+    PD, // 2 - PORTD (was PA in earlier revisions)
+    PD, // 3 - PORTD (was PF in earlier revisions)
+    PD, // 4 - PORTD (was PC in earlier revisions)
+    PD, // 5 - PORTD (was PB in earlier revisions)
+    PD, // 6 - PORTD (was PF in earlier revisions)
+    PD, // 7 - PORTD (was PA in earlier revisions)
+    PB, // 8 - PORTB (was PE in earlier revisions)
+    PB, // 9 - PORTB
+    PB, // 10 - PORTB
+    PB, // 11 - PORTB (was PE in earlier revisions)
+    PB, // 12 - PORTB (was PE in earlier revisions)
+    PB, // 13 - PORTB (was PE in earlier revisions)
+    PC, // 14 - PORTC (A0)
+    PC, // 15 - PORTC (A1)
+    PC, // 16 - PORTC (A2)
+    PC, // 17 - PORTC (A3)
+    PC, // 18 - PORTC (A4 / SDA)
+    PC, // 19 - PORTC (A5 / SCL)
+};
+
+// Maps Arduino digital pin numbers to bit masks
+static const u8 PROGMEM digital_pin_to_bit_mask_PGM[] = {
+    _BV(0), // 0, port D
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+    _BV(6),
+    _BV(7),
+    _BV(0), // 8, port B
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+    _BV(0), // 14, port C
+    _BV(1),
+    _BV(2),
+    _BV(3),
+    _BV(4),
+    _BV(5),
+};
+
+// Register access patterns by platform:
+//   - megaAVR + Arduino: flat register macros (PORTB_DIR, PORTB_OUT, PORTB_IN)
+//   - megaAVR non-Arduino: PORT structure members (PORTB.DIR, PORTB.OUT, PORTB.IN)
+//   - Classic AVR: legacy registers (DDRB, PORTB, PINB)
+static const u16 PROGMEM port_to_mode_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+#if defined(FL_IS_AVR_MEGAAVR)
+    #if defined(ARDUINO)
+        // Arduino megaAVR: use flat register macros (PORTB_DIR, etc.)
+        (u16) &PORTB_DIR,
+        (u16) &PORTC_DIR,
+        (u16) &PORTD_DIR,
+    #else
+        // Non-Arduino megaAVR: use PORT structure members
+        (u16) &PORTB.DIR,
+        (u16) &PORTC.DIR,
+        (u16) &PORTD.DIR,
+    #endif
+#else
+    // Classic AVR: use DDR registers
+    (u16) &DDRB,
+    (u16) &DDRC,
+    (u16) &DDRD,
+#endif
+};
+
+static const u16 PROGMEM port_to_output_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+#if defined(FL_IS_AVR_MEGAAVR)
+    #if defined(ARDUINO)
+        // Arduino megaAVR: use flat register macros (PORTB_OUT, etc.)
+        (u16) &PORTB_OUT,
+        (u16) &PORTC_OUT,
+        (u16) &PORTD_OUT,
+    #else
+        // Non-Arduino megaAVR: use PORT structure members
+        (u16) &PORTB.OUT,
+        (u16) &PORTC.OUT,
+        (u16) &PORTD.OUT,
+    #endif
+#else
+    // Classic AVR: use PORT registers
+    (u16) &PORTB,
+    (u16) &PORTC,
+    (u16) &PORTD,
+#endif
+};
+
+static const u16 PROGMEM port_to_input_PGM[] = {
+    NOT_A_PORT,
+    NOT_A_PORT,
+#if defined(FL_IS_AVR_MEGAAVR)
+    #if defined(ARDUINO)
+        // Arduino megaAVR: use flat register macros (PORTB_IN, etc.)
+        (u16) &PORTB_IN,
+        (u16) &PORTC_IN,
+        (u16) &PORTD_IN,
+    #else
+        // Non-Arduino megaAVR: use PORT structure members
+        (u16) &PORTB.IN,
+        (u16) &PORTC.IN,
+        (u16) &PORTD.IN,
+    #endif
+#else
+    // Classic AVR: use PIN registers
+    (u16) &PINB,
+    (u16) &PINC,
+    (u16) &PIND,
+#endif
+};
+
+// Analog pin to ADC channel mapping (A0-A5 -> ADC0-ADC5)
+static const u8 PROGMEM analog_pin_to_channel_PGM[] = {
+    0, // A0 -> ADC0
+    1, // A1 -> ADC1
+    2, // A2 -> ADC2
+    3, // A3 -> ADC3
+    4, // A4 -> ADC4
+    5, // A5 -> ADC5
+    6, // A6 (internal only on some variants)
+    7, // A7 (internal only on some variants)
+};
+
+#elif defined(FL_IS_AVR_ATTINY_MODERN)
+
+// megaAVR 0-series / tinyAVR 0/1/2-series (ATtiny1604, ATtiny1616, etc.)
+// These use PORTA.DIR/OUT/IN style registers instead of DDRB/PORTB/PINB
+
+// Minimal pin mapping for PORTB pins (common across tinyAVR 0/1/2-series)
+static const u8 PROGMEM digital_pin_to_port_PGM[] = { PB, PB, PB, PB, PB, PB };
+static const u8 PROGMEM digital_pin_to_bit_mask_PGM[] = { _BV(0), _BV(1), _BV(2), _BV(3), _BV(4), _BV(5) };
+
+// megaAVR uses PORTB.DIR, PORTB.OUT, PORTB.IN instead of DDRB, PORTB, PINB
+static const u16 PROGMEM port_to_mode_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &PORTB.DIR };
+static const u16 PROGMEM port_to_output_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &PORTB.OUT };
+static const u16 PROGMEM port_to_input_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &PORTB.IN };
+static const u8 PROGMEM analog_pin_to_channel_PGM[] = { 0, 1, 2, 3 };
+
+#else
+// Fallback for other classic AVR variants (minimal implementation)
+// Uses traditional DDRx/PORTx/PINx registers
+static const u8 PROGMEM digital_pin_to_port_PGM[] = { PB, PB, PB, PB, PB, PB };
+static const u8 PROGMEM digital_pin_to_bit_mask_PGM[] = { _BV(0), _BV(1), _BV(2), _BV(3), _BV(4), _BV(5) };
+static const u16 PROGMEM port_to_mode_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &DDRB };
+static const u16 PROGMEM port_to_output_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &PORTB };
+static const u16 PROGMEM port_to_input_PGM[] = { NOT_A_PORT, NOT_A_PORT, (u16) &PINB };
+static const u8 PROGMEM analog_pin_to_channel_PGM[] = { 0, 1, 2, 3 };
+#endif
+
+// Analog reference storage (set by analogReference(), used by analogRead())
+static u8 analog_reference = DEFAULT;
+
+// Helper macros to read from PROGMEM tables
+// Only define if not already defined by Arduino core
+#ifndef digitalPinToPort
+#define digitalPinToPort(P) ( pgm_read_byte( digital_pin_to_port_PGM + (P) ) )
+#endif
+#ifndef digitalPinToBitMask
+#define digitalPinToBitMask(P) ( pgm_read_byte( digital_pin_to_bit_mask_PGM + (P) ) )
+#endif
+#ifndef portModeRegister
+#define portModeRegister(P) ( (volatile u8 *)( pgm_read_word( port_to_mode_PGM + (P) ) ) )
+#endif
+#ifndef portOutputRegister
+#define portOutputRegister(P) ( (volatile u8 *)( pgm_read_word( port_to_output_PGM + (P) ) ) )
+#endif
+#ifndef portInputRegister
+#define portInputRegister(P) ( (volatile u8 *)( pgm_read_word( port_to_input_PGM + (P) ) ) )
+#endif
+#ifndef analogPinToChannel
+#define analogPinToChannel(P) ( pgm_read_byte( analog_pin_to_channel_PGM + (P) ) )
+#endif
+
+// ============================================================================
+// GPIO Functions - Native AVR Implementation
+// ============================================================================
+
+inline void pinMode(int pin, PinMode mode) FL_NO_EXCEPT {
+    u8 port = digitalPinToPort(pin);
+    if (port == NOT_A_PORT) return;
+
+    u8 bit_mask = digitalPinToBitMask(pin);
+    volatile u8 *ddr = portModeRegister(port);
+    volatile u8 *port_reg = portOutputRegister(port);
+
+    // Save interrupt state and disable interrupts for atomic operation
+    u8 oldSREG = SREG;
+    __builtin_avr_cli();
+
+    // Translate PinMode to internal constants
+    // PinMode: Input=0, Output=1, InputPullup=2, InputPulldown=3
+    int mode_val = static_cast<int>(mode);
+
+    if (mode_val == 0) {  // Input
+        *ddr &= ~bit_mask;      // Set pin as input
+        *port_reg &= ~bit_mask; // Disable pull-up
+    } else if (mode_val == 2) {  // InputPullup
+        *ddr &= ~bit_mask;      // Set pin as input
+        *port_reg |= bit_mask;  // Enable pull-up
+    } else if (mode_val == 3) {  // InputPulldown (not supported on AVR)
+        *ddr &= ~bit_mask;      // Treat as Input
+        *port_reg &= ~bit_mask; // Disable pull-up
+    } else {  // Output
+        *ddr |= bit_mask;       // Set pin as output
+    }
+
+    // Restore interrupt state
+    SREG = oldSREG;
+}
+
+inline void digitalWrite(int pin, PinValue val) FL_NO_EXCEPT {
+    u8 port = digitalPinToPort(pin);
+    if (port == NOT_A_PORT) return;
+
+    u8 bit_mask = digitalPinToBitMask(pin);
+    volatile u8 *port_reg = portOutputRegister(port);
+
+    // Save interrupt state and disable interrupts for atomic operation
+    u8 oldSREG = SREG;
+    __builtin_avr_cli();
+
+    // Translate PinValue (Low=0, High=1) to register value
+    if (static_cast<int>(val) == 0) {  // Low
+        *port_reg &= ~bit_mask; // Clear bit (set to LOW)
+    } else {  // High
+        *port_reg |= bit_mask;  // Set bit (set to HIGH)
+    }
+
+    // Restore interrupt state
+    SREG = oldSREG;
+}
+
+inline PinValue digitalRead(int pin) FL_NO_EXCEPT {
+    u8 port = digitalPinToPort(pin);
+    if (port == NOT_A_PORT) return PinValue::Low;
+
+    u8 bit_mask = digitalPinToBitMask(pin);
+    volatile u8 *pin_reg = portInputRegister(port);
+
+    // Read pin state (no interrupt protection needed for read)
+    if (*pin_reg & bit_mask) {
+        return PinValue::High;
+    }
+    return PinValue::Low;
+}
+
+inline u16 analogRead(int pin) FL_NO_EXCEPT {
+#if defined(ADCSRA) && defined(ADMUX)
+    // Convert analog pin number to ADC channel
+    u8 channel = analogPinToChannel(pin);
+
+    // Set analog reference and select ADC channel
+    // Clear previous channel selection, keep reference bits
+    ADMUX = (analog_reference << 6) | (channel & 0x0F);
+
+    // Start conversion
+    ADCSRA |= _BV(ADSC);
+
+    // Wait for conversion to complete
+    while (ADCSRA & _BV(ADSC)) {
+        // Busy wait
+    }
+
+    // Read ADC result (must read ADCL first, then ADCH)
+    u8 low = ADCL;
+    u8 high = ADCH;
+
+    return static_cast<u16>((high << 8) | low);
+#else
+    // ADC not available on this variant
+    (void)pin;
+    return 0;
+#endif
+}
+
+inline void analogWrite(int pin, u16 val) FL_NO_EXCEPT {
+    // Simplified PWM implementation
+    // Full implementation would require timer configuration per pin
+    // For now, treat as digital output for edge cases
+    if (val == 0) {
+        platforms::digitalWrite(pin, PinValue::Low);
+    } else if (val >= 255) {
+        platforms::digitalWrite(pin, PinValue::High);
+    } else {
+        // PWM requires timer setup which is platform-specific
+        // This is a basic no-op for intermediate values
+        // A full implementation would configure OCRnx registers
+        platforms::pinMode(pin, PinMode::Output);
+
+        // Placeholder: In a real implementation, this would:
+        // 1. Determine which timer channel controls this pin
+        // 2. Configure the appropriate TCCRnx registers for Fast PWM
+        // 3. Set OCRnx register to 'val' for duty cycle
+        // 4. Enable PWM output on the pin
+
+        // For now, just set digital high if val > 127
+        platforms::digitalWrite(pin, val > 127 ? PinValue::High : PinValue::Low);
+    }
+}
+
+inline void setPwm16(int pin, u16 val) FL_NO_EXCEPT {
+    // AVR 16-bit PWM using Timer1 (pins 9, 10 on Uno)
+    // Provides true 16-bit resolution at ~244 Hz (16 MHz / 65536)
+
+#if defined(FL_IS_AVR_ATMEGA_328P)
+    // ATmega328P (Arduino Uno/Nano): Timer1 controls pins 9 (OC1A) and 10 (OC1B)
+    if (pin == 9 || pin == 10) {
+        // Set pins as output
+        platforms::pinMode(pin, PinMode::Output);
+
+        // Configure Timer1 for Fast PWM mode 14 (ICR1 = TOP)
+        // WGM13:0 = 1110 (Fast PWM, TOP = ICR1)
+        // COM1A1:0 = 10 (Clear OC1A on compare match, set at BOTTOM)
+        // COM1B1:0 = 10 (Clear OC1B on compare match, set at BOTTOM)
+        // CS12:0 = 001 (No prescaler, 16 MHz timer clock)
+
+        // Set ICR1 to maximum for 16-bit resolution
+        ICR1 = 0xFFFF;  // TOP = 65535
+
+        // Configure waveform generation mode and prescaler
+        TCCR1A = _BV(WGM11);  // WGM11 = 1, WGM10 = 0
+        TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS10);  // WGM13 = 1, WGM12 = 1, CS10 = 1 (no prescaler)
+
+        // Set compare output mode and duty cycle
+        if (pin == 9) {
+            // Pin 9 = OC1A (OCR1A)
+            TCCR1A |= _BV(COM1A1);  // Clear OC1A on compare match
+            OCR1A = val;
+        } else {
+            // Pin 10 = OC1B (OCR1B)
+            TCCR1A |= _BV(COM1B1);  // Clear OC1B on compare match
+            OCR1B = val;
+        }
+
+        return;
+    }
+#elif defined(FL_IS_AVR_ATMEGA_2560)
+    // ATmega2560 (Arduino Mega): Timer1 controls pins 11 (OC1A) and 12 (OC1B)
+    if (pin == 11 || pin == 12) {
+        platforms::pinMode(pin, PinMode::Output);
+
+        ICR1 = 0xFFFF;
+        TCCR1A = _BV(WGM11);
+        TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS10);
+
+        if (pin == 11) {
+            TCCR1A |= _BV(COM1A1);
+            OCR1A = val;
+        } else {
+            TCCR1A |= _BV(COM1B1);
+            OCR1B = val;
+        }
+
+        return;
+    }
+#endif
+
+    // Fallback for non-Timer1 pins: scale 16-bit to 8-bit
+    platforms::analogWrite(pin, val >> 8);
+}
+
+inline void setAdcRange(AdcRange range) FL_NO_EXCEPT {
+    // Translate AdcRange to AVR analogReference constants
+    // AdcRange: Default=0, Range0_1V1=1, Range0_1V5=2, Range0_2V2=3, Range0_3V3=4, Range0_5V=5, External=6
+    // AVR constants: DEFAULT=1, INTERNAL=3, EXTERNAL=0
+    u8 ref_mode;
+    switch (range) {
+        case AdcRange::Default:
+            ref_mode = DEFAULT;  // 1 (5V on 5V boards)
+            break;
+        case AdcRange::Range0_1V1:
+            ref_mode = INTERNAL;  // 3 (1.1V internal reference)
+            break;
+        case AdcRange::External:
+            ref_mode = EXTERNAL;  // 0 (AREF pin)
+            break;
+        case AdcRange::Range0_5V:
+            ref_mode = DEFAULT;  // 1 (same as Default for 5V AVR boards)
+            break;
+        default:
+            // Other ranges not supported on AVR (no-op)
+            return;
+    }
+
+    // Store reference mode for use in analogRead()
+    // Don't set ADMUX here to avoid shorting AVCC and AREF
+    analog_reference = ref_mode;
+}
+
+// ============================================================================
+// PWM Frequency Control
+// ============================================================================
+
+inline bool needsPwmIsrFallback(int /*pin*/, u32 /*frequency_hz*/) {
+    return true;
+}
+
+inline int setPwmFrequencyNative(int /*pin*/, u32 /*frequency_hz*/) {
+    return -4;
+}
+
+inline u32 getPwmFrequencyNative(int /*pin*/) {
+    return 0;
+}
+
+}  // namespace platforms
+}  // namespace fl

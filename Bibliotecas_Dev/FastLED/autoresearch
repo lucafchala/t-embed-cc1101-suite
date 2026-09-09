@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+
+# autoresearch - FastLED AutoResearch Test Wrapper
+#
+# Runs the AutoResearch.ino sketch with proper --expect and --fail-on patterns
+# to catch ISR failures, hardware issues, and test matrix errors.
+#
+# Usage:
+#   bash autoresearch --parlio            # Run PARLIO driver test (auto-detect environment)
+#   bash autoresearch esp32s3 --parlio    # Run on esp32s3 environment
+#   bash autoresearch --all               # Test all drivers
+#   bash autoresearch --timeout 120       # Override timeout
+#   bash autoresearch --skip-lint         # Skip linting phase
+#   bash autoresearch --help              # Show help
+
+set -euo pipefail
+
+# Help message
+show_help() {
+    cat <<EOF
+FastLED AutoResearch Test Wrapper
+
+Usage:
+  bash autoresearch [ENVIRONMENT] [--<driver>] [OPTIONS]
+
+Positional Arguments:
+  ENVIRONMENT         Optional PlatformIO environment (e.g., esp32s3, esp32dev, teensy41)
+                      If omitted, auto-detects from attached device
+
+Driver Selection (optional - omit for GPIO-only mode):
+  (none)              GPIO-only mode: pin discovery + toggle capture test
+  --parlio            Test parallel I/O driver
+  --rmt               Test RMT (Remote Control) driver
+  --spi               Test SPI driver
+  --uart              Test UART driver (LPC845: UART DMA clockless RX-DMA loopback)
+  --rp-uart-index N   RP2040/RP2350 UART engine for --uart: 0 or 1 (default: 0)
+  --lpuart            Deprecated alias for --uart; emits a warning
+  --lcd               Test LCD_CLOCKLESS driver (ESP32-S3 only)
+  --lcd-spi           Test LCD_SPI driver (ESP32-S3 only)
+  --lcd-rgb           Test LCD RGB driver (ESP32-P4 only)
+  --object-fled       Test ObjectFLED DMA driver (Teensy 4.x only)
+  --flex-io           Test FlexIO (Teensy 4.x) or PIO (RP2040/RP2350) clockless driver
+  --rp-pio-index N    RP PIO engine for --flex-io: 0, 1, or RP2350-only 2
+  --rp-pio-both       RP: select PIO0 + PIO1 (requires --flex-io --parallel)
+  --rp-spi-loopback   RP2040/RP2350 fixed-SPI DMA byte loopback; requires
+                      GPIO3->GPIO0 (SPI0) or GPIO11->GPIO8 (SPI1)
+  --rp-spi-index N    RP fixed-SPI instance: 0 or 1 (default: 0)
+  --rp-spi-public-api RP2040/RP2350 SPI1 APA102/SK9822 public-API loopback
+  --rp-spi-chipset X  Chipset for --rp-spi-public-api: apa102 or sk9822
+  --flexio [0|1]      Deprecated alias for --flex-io; default 0, 1 enables it
+  --pwm-dma-cl        LPC845-only: channels-API SCT+DMA clockless
+                      self-loopback (FastLED #3468). Jumper P0_10↔P0_11.
+  --dma-uart          LPC845-only: raw async UART TX DMA bench
+  --test-fault-emit   LPC845-only: trigger intentional OOM/stack faults and
+                      assert FAULT diagnostics (FastLED #3302)
+  --all               Test all drivers
+  --simd              Test SIMD operations only (no LED drivers needed)
+  --coroutine         Test coroutine/task creation, stop, await (no LED drivers needed)
+  --parallel          Test multiple drivers simultaneously (requires 2+ drivers)
+
+Network AutoResearch (ESP32 HTTP):
+  --net               Self-contained loopback test: ESP32 HTTP server + client on localhost (no WiFi)
+  --net-server        ESP32 starts WiFi AP + HTTP server; host autoresearch endpoints
+  --net-client        ESP32 starts WiFi AP; host starts HTTP server; ESP32 fetches from host
+
+OTA AutoResearch (ESP32 WiFi + OTA HTTP):
+  --ota               ESP32 starts WiFi AP + OTA HTTP server; host autoresearch auth and update endpoints
+
+Options:
+  -h, --help          Show this help message
+  --timeout SECONDS   Override default timeout (default: 60s)
+  --skip-lint         Skip C++ linting phase (faster iteration)
+  --no-expect         Clear default --expect patterns (use custom only)
+  --no-fail-on        Clear default --fail-on pattern (use custom only)
+  --verbose, -v       Enable verbose output
+
+Build System:
+  --use-fbuild        Deprecated compatibility flag; fbuild is always used
+  --no-fbuild         Deprecated compatibility flag; ignored because fbuild is always used
+
+Lane Configuration:
+  --lanes N or MIN-MAX      Set lane count or range, valid 1-16 (e.g., '2' or '1-4')
+  --lane-counts LED1,LED2,... Set per-lane LED counts (e.g., '100,200,300')
+
+Color Configuration:
+  --color-pattern HEX       Set RGB color pattern (e.g., 'ff00aa' or '0x00ff00')
+
+Description:
+  Runs the AutoResearch.ino sketch with comprehensive pattern matching and
+  JSON-RPC driver selection. Features include:
+
+  - GPIO PRE-TEST: Verifies TX-RX jumper wire connection before running tests
+  - PATTERN MATCHING: AutoResearch hardware setup, driver availability, test results
+  - EARLY EXIT: Stops when test suite completes (no need to wait for timeout)
+  - ERROR DETECTION: Catches ISR hangs, device crashes, and test failures
+
+Examples:
+  bash autoresearch teensy41                    # GPIO-only: pin toggle capture test on Teensy
+  bash autoresearch                             # GPIO-only: auto-detect device, pin toggle test
+  bash autoresearch --parlio                    # Auto-detect env, test PARLIO driver
+  bash autoresearch esp32s3 --parlio            # Run on esp32s3, test PARLIO driver
+  bash autoresearch --rmt --spi                 # Test RMT and SPI drivers
+  bash autoresearch --all                       # Test all drivers
+  bash autoresearch --parlio --skip-lint        # Skip linting for faster iteration
+  bash autoresearch --all --timeout 120         # Longer timeout
+  bash autoresearch --lcd --lanes 2             # Test LCD_CLOCKLESS with exactly 2 lanes
+  bash autoresearch --parlio --lanes 1-4        # Test PARLIO with 1-4 lanes
+  bash autoresearch --lcd --lane-counts 100,200,300  # Test LCD_CLOCKLESS with 3 lanes (100, 200, 300 LEDs)
+  bash autoresearch --rmt --color-pattern ff00aa     # Test RMT with custom color (pink)
+  bash autoresearch --parlio                         # Uses fbuild for compile/upload
+  bash autoresearch --parlio --lcd-rgb --parallel --lanes 1  # Test PARLIO + LCD_RGB in parallel
+  bash autoresearch rp2350w --flex-io --rp-pio-index 2
+  bash autoresearch rp2350w --uart --rp-uart-index 0
+  bash autoresearch rp2350w --rp-spi-loopback --rp-spi-index 0
+  bash autoresearch --net                             # ESP32 self-contained HTTP loopback test
+  bash autoresearch --net-server                     # ESP32 WiFi AP + HTTP server autoresearch
+  bash autoresearch --net-client                     # ESP32 WiFi AP + HTTP client autoresearch
+  bash autoresearch --ota                            # ESP32 WiFi AP + OTA HTTP server autoresearch
+
+Exit Codes:
+  0   Success (all patterns found, no failures)
+  1   Failure (GPIO pre-test failed, missing patterns, ERROR detected, etc.)
+  130 User interrupt (Ctrl+C)
+
+See Also:
+  - examples/AutoResearch/AutoResearch.ino - AutoResearch sketch documentation
+  - CLAUDE.md Section "Live Device Testing (AI Agents)" - Usage guidelines
+
+EOF
+}
+
+# Check for help flag first
+for arg in "$@"; do
+    case "$arg" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+    esac
+done
+
+# Run the Python autoresearch script with all arguments
+exec uv run -m ci.autoresearch "$@"

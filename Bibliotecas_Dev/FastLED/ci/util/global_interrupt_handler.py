@@ -1,0 +1,198 @@
+"""Global interrupt handler for coordinating KeyboardInterrupt across threads."""
+
+import _thread
+import os
+import signal
+import sys
+import threading
+import time
+from typing import Optional
+
+
+_debug_test = False
+
+
+def set_debug_test(enabled: bool = True) -> None:
+    """Enable/disable debug tracing for interrupt handler calls."""
+    global _debug_test  # noqa: PLW0603
+    _debug_test = enabled
+
+
+def _print_caller(label: str) -> None:
+    """When --debug-test is active, print the caller location and short stack."""
+    if not _debug_test:
+        return
+    import traceback  # noqa: PLC0415 - lazy: ~11ms saved; only needed in --debug-test mode
+
+    # extract_stack() includes this function and the public wrapper;
+    # skip the last 2 frames to show the actual caller.
+    stack = traceback.extract_stack()
+    # Remove _print_caller and the calling function frame
+    caller_stack = stack[:-2]
+    if caller_stack:
+        caller = caller_stack[-1]
+        print(
+            f"  [DEBUG-KBI] {label} called from "
+            f"{caller.filename}:{caller.lineno} in {caller.name}()",
+            file=sys.stderr,
+        )
+        # Print abbreviated stack (last 5 frames)
+        print("  [DEBUG-KBI] Stack:", file=sys.stderr)
+        for frame in caller_stack[-5:]:
+            print(
+                f"    {frame.filename}:{frame.lineno} in {frame.name}()",
+                file=sys.stderr,
+            )
+
+
+class GlobalInterruptHandler:
+    """Handles KeyboardInterrupt across threads."""
+
+    _instance: Optional["GlobalInterruptHandler"] = None
+    _lock = threading.Lock()
+
+    def __init__(self, grace_period: float = 3.0, force_exit_timeout: float = 5.0):
+        self.grace_period = grace_period
+        self.force_exit_timeout = force_exit_timeout
+        self.interrupted = threading.Event()
+        self.interrupt_time: Optional[float] = None
+        self._interrupt_count = 0
+        self._in_cleanup = False
+        self._signal_handler_installed = False
+
+    @classmethod
+    def get_instance(cls) -> "GlobalInterruptHandler":
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = cls()
+        assert cls._instance is not None
+        return cls._instance
+
+    def is_interrupted(self) -> bool:
+        return self.interrupted.is_set()
+
+    def signal_interrupt(self, from_thread: Optional[str] = None) -> None:
+        _print_caller("signal_interrupt")
+        now = time.time()
+        if not self.interrupted.is_set():
+            self.interrupt_time = now
+            self.interrupted.set()
+            self._interrupt_count = 1
+            thread_info = f" from {from_thread}" if from_thread else ""
+            print(
+                f"\n⚠️  Interrupt signal received{thread_info}, stopping all operations..."
+            )
+        else:
+            # Only count as a new interrupt if enough time has passed since the
+            # first one.  A single Ctrl+C propagates through multiple except
+            # handlers that each call signal_interrupt(); those cascaded calls
+            # arrive within milliseconds and must not be mistaken for a second
+            # keypress.
+            _DEBOUNCE_SECONDS = 0.25
+            if self.interrupt_time and (now - self.interrupt_time) >= _DEBOUNCE_SECONDS:
+                self._interrupt_count += 1
+
+        if self._interrupt_count >= 2:
+            print("\n⚠️  Double Ctrl+C detected - forcing immediate exit")
+            os._exit(2)
+
+    def notify_main_thread(self) -> None:
+        _print_caller("notify_main_thread")
+        is_worker = threading.current_thread() is not threading.main_thread()
+        if not self.is_interrupted():
+            # Only include thread name when reporting from a worker thread;
+            # "from MainThread" is redundant and confusing.
+            from_thread = threading.current_thread().name if is_worker else None
+            self.signal_interrupt(from_thread=from_thread)
+        # Only interrupt the main thread from a worker thread.  Calling
+        # _thread.interrupt_main() from the main thread schedules a *second*
+        # KeyboardInterrupt that fires later, causing false "double Ctrl+C"
+        # detection.
+        if is_worker:
+            _thread.interrupt_main()
+
+    def install_signal_handler(self) -> None:
+        """Install SIGINT handler to catch Ctrl-C and set interrupt flag."""
+        if self._signal_handler_installed:
+            return
+
+        def sigint_handler(signum: int, frame: object) -> None:
+            """Handle SIGINT (Ctrl-C) by setting the interrupt flag."""
+            _print_caller("sigint_handler (SIGINT received)")
+            self.signal_interrupt()
+            # Raise KeyboardInterrupt so except handlers can run cleanup.
+            raise KeyboardInterrupt()
+
+        signal.signal(signal.SIGINT, sigint_handler)
+        self._signal_handler_installed = True
+
+    def wait_for_cleanup(self) -> None:
+        _print_caller("wait_for_cleanup")
+        if self._in_cleanup:
+            return
+
+        self._in_cleanup = True
+        start_time = time.time()
+        elapsed = 0
+
+        print(
+            f"\n⏳ Waiting up to {self.grace_period}s for worker threads to cleanup..."
+        )
+
+        while elapsed < self.grace_period:
+            elapsed = time.time() - start_time
+            remaining = self.grace_period - elapsed
+
+            if remaining > 0:
+                time.sleep(min(0.1, remaining))
+            else:
+                break
+
+        total_elapsed = time.time() - start_time
+        print(f"⏳ Cleanup wait complete ({total_elapsed:.1f}s)")
+
+        if self.interrupt_time is not None:
+            total_interrupt_time = time.time() - self.interrupt_time
+            if total_interrupt_time > self.force_exit_timeout:
+                print(
+                    f"\n⚠️  Force exit timeout reached ({total_interrupt_time:.1f}s) - exiting"
+                )
+                os._exit(2)
+
+
+_handler = GlobalInterruptHandler.get_instance()
+
+
+def signal_interrupt() -> None:
+    _handler.signal_interrupt()
+
+
+def is_interrupted() -> bool:
+    return _handler.is_interrupted()
+
+
+def notify_main_thread() -> None:
+    _handler.notify_main_thread()
+
+
+def handle_keyboard_interrupt(ki: KeyboardInterrupt) -> None:
+    """Signal the interrupt and (from a worker thread) wake the main thread.
+
+    On the main thread: re-raises with ``from ki`` so the exception chain
+    is preserved in tracebacks.
+    On a worker thread: sets the global interrupt flag and wakes the main thread.
+    """
+    _print_caller("handle_keyboard_interrupt")
+    if threading.current_thread() is threading.main_thread():
+        raise KeyboardInterrupt()
+    notify_main_thread()
+
+
+def wait_for_cleanup() -> None:
+    _handler.wait_for_cleanup()
+
+
+def install_signal_handler() -> None:
+    """Install SIGINT (Ctrl-C) signal handler."""
+    _handler.install_signal_handler()

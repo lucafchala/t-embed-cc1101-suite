@@ -1,0 +1,31 @@
+name: esp32c3
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - '!src/platforms/arm/**'
+      - '!src/platforms/wasm/**'
+      - '!src/platforms/avr/**'
+      - 'src/platforms/esp/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_esp32c3.yml'
+      - '.github/workflows/build_template.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template.yml
+    with:
+      args: esp32c3 all

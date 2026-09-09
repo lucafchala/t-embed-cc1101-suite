@@ -1,0 +1,13 @@
+
+#pragma once
+
+// Backward compatibility - include the new unique_ptr header
+#include "fl/stl/unique_ptr.h"  // IWYU pragma: keep
+
+namespace fl {
+
+// Template alias for backward compatibility
+template<typename T, typename Deleter = default_delete<T>>
+using scoped_ptr = unique_ptr<T, Deleter>;
+
+} // namespace fl

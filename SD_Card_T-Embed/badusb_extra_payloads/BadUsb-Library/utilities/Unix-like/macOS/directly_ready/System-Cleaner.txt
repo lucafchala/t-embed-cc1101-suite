@@ -1,0 +1,41 @@
+REM Title: macOS System Cleaner
+REM Author: BadUSB Library
+REM Description: Cleans system files and caches
+REM Target: macOS 10.15+
+REM Category: Utilities
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Clean system caches
+STRING sudo rm -rf /System/Library/Caches/*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /Library/Caches/*
+ENTER
+DELAY 2000
+
+STRING rm -rf ~/Library/Caches/*
+ENTER
+DELAY 2000
+
+REM Clean temporary files
+STRING sudo rm -rf /tmp/*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /var/tmp/*
+ENTER
+DELAY 2000
+
+REM Clean logs
+STRING sudo rm -rf /var/log/*
+ENTER
+DELAY 2000

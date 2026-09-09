@@ -1,0 +1,64 @@
+#pragma once
+
+#include "fl/stl/function.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace audio {
+namespace detector {
+
+class Percussion {
+public:
+    Percussion() FL_NO_EXCEPT;
+    ~Percussion() FL_NO_EXCEPT;
+
+    void update(shared_ptr<Context> context);
+    void reset();
+
+    // Cooldown periods to prevent double-triggering (in milliseconds)
+    static constexpr u32 KICK_COOLDOWN_MS = 50;
+    static constexpr u32 SNARE_COOLDOWN_MS = 50;
+    static constexpr u32 HIHAT_COOLDOWN_MS = 30;
+
+    // Percussion detection callbacks (multiple listeners supported)
+    function_list<void()> onKick;
+    function_list<void()> onSnare;
+    function_list<void()> onHiHat;
+    function_list<void()> onTom;
+    function_list<void(const char* type)> onPercussionHit;
+
+    // Configuration methods
+    void setKickThreshold(float threshold) { mKickThreshold = threshold; }
+    void setSnareThreshold(float threshold) { mSnareThreshold = threshold; }
+    void setHiHatThreshold(float threshold) { mHiHatThreshold = threshold; }
+
+private:
+    // Detection thresholds
+    float mKickThreshold;
+    float mSnareThreshold;
+    float mHiHatThreshold;
+
+    // Previous energy tracking
+    float mPrevBassEnergy;
+    float mPrevMidEnergy;
+    float mPrevTrebleEnergy;
+
+    // Timestamp tracking to prevent double-triggering
+    u32 mLastKickTime;
+    u32 mLastSnareTime;
+    u32 mLastHiHatTime;
+
+    // Energy band calculations
+    float getBassEnergy(const fft::Bins& fft);
+    float getMidEnergy(const fft::Bins& fft);
+    float getTrebleEnergy(const fft::Bins& fft);
+
+    // Percussion type detection
+    bool detectKick(float bassEnergy, float bassFlux, u32 timestamp);
+    bool detectSnare(float midEnergy, float midFlux, u32 timestamp);
+    bool detectHiHat(float trebleEnergy, float trebleFlux, u32 timestamp);
+};
+
+} // namespace detector
+} // namespace audio
+} // namespace fl

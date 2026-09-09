@@ -1,0 +1,266 @@
+#pragma once
+
+// IWYU pragma: private
+
+#include "platforms/arm/teensy/is_teensy.h"
+
+/// @file platforms/arm/teensy/pin_teensy_native.hpp
+/// Native Teensy pin implementation (non-Arduino builds)
+///
+/// This provides pin access for Teensy boards without Arduino framework.
+/// Uses Teensy's native core_pins.h functions which are available even
+/// in non-Arduino builds (bare-metal Teensy development).
+///
+/// Supported Teensy boards:
+/// - Teensy 3.0, 3.1, 3.2 (ARM Cortex-M4)
+/// - Teensy 3.5, 3.6 (ARM Cortex-M4F)
+/// - Teensy LC (ARM Cortex-M0+)
+/// - Teensy 4.0, 4.1 (ARM Cortex-M7)
+///
+/// Note: Teensy core provides these functions in both Arduino and non-Arduino builds.
+/// The Teensy core headers (core_pins.h) define the standard Arduino-like functions.
+
+#if defined(FL_IS_TEENSY)
+    // Teensy core is available - use native Teensy functions
+    // These are defined in the Teensy core's core_pins.h
+    // IWYU pragma: begin_keep
+    #include <core_pins.h>
+#include "fl/stl/noexcept.h"
+    // IWYU pragma: end_keep
+#else
+    // Fallback: Define basic pin constants if Teensy core not available
+    #ifndef OUTPUT
+        #define OUTPUT 1
+    #endif
+    #ifndef INPUT
+        #define INPUT 0
+    #endif
+    #ifndef INPUT_PULLUP
+        #define INPUT_PULLUP 2
+    #endif
+    #ifndef HIGH
+        #define HIGH 1
+    #endif
+    #ifndef LOW
+        #define LOW 0
+    #endif
+    #ifndef DEFAULT
+        #define DEFAULT 0
+    #endif
+    #ifndef EXTERNAL
+        #define EXTERNAL 1
+    #endif
+    #ifndef INTERNAL
+        #define INTERNAL 2
+    #endif
+#endif
+
+namespace fl {
+namespace platforms {
+
+// ============================================================================
+// Pin mode control
+// ============================================================================
+
+inline void pinMode(int pin, fl::PinMode mode) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    // Translate PinMode to Teensy core constants
+    // PinMode::Input=0, Output=1, InputPullup=2, InputPulldown=3
+    // Teensy: INPUT=0, OUTPUT=1, INPUT_PULLUP=2, INPUT_PULLDOWN (Teensy-specific)
+    int teensy_mode;
+    switch (mode) {
+        case fl::PinMode::Input:
+            teensy_mode = INPUT;  // 0
+            break;
+        case fl::PinMode::Output:
+            teensy_mode = OUTPUT;  // 1
+            break;
+        case fl::PinMode::InputPullup:
+            teensy_mode = INPUT_PULLUP;  // 2
+            break;
+        case fl::PinMode::InputPulldown:
+#ifdef INPUT_PULLDOWN
+            teensy_mode = INPUT_PULLDOWN;  // Teensy-specific
+#else
+            teensy_mode = INPUT_PULLUP;  // Fallback to INPUT_PULLUP
+#endif
+            break;
+    }
+    ::pinMode(pin, teensy_mode);
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    (void)mode;
+#endif
+}
+
+// ============================================================================
+// Digital I/O
+// ============================================================================
+
+inline void digitalWrite(int pin, fl::PinValue val) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    ::digitalWrite(pin, static_cast<int>(val));  // PinValue::Low=0, High=1
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    (void)val;
+#endif
+}
+
+inline fl::PinValue digitalRead(int pin) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    return ::digitalRead(pin) ? fl::PinValue::High : fl::PinValue::Low;
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    return fl::PinValue::Low;  // Always return Low
+#endif
+}
+
+// ============================================================================
+// Analog I/O
+// ============================================================================
+
+inline u16 analogRead(int pin) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    return static_cast<u16>(::analogRead(pin));
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    return 0;  // Always return 0
+#endif
+}
+
+inline void analogWrite(int pin, u16 val) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    ::analogWrite(pin, val);
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    (void)val;
+#endif
+}
+
+inline void setPwm16(int pin, u16 val) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    // Teensy native path: Use analogWriteResolution for 16-bit PWM
+    analogWriteResolution(16);
+    ::analogWrite(pin, val);
+#else
+    // No-op: Teensy core not available
+    (void)pin;
+    (void)val;
+#endif
+}
+
+inline void setAdcRange(fl::AdcRange range) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY)
+    // Translate AdcRange to Teensy analogReference() constants
+    // Teensy supports: DEFAULT, INTERNAL, EXTERNAL
+    int ref_mode;
+    switch (range) {
+        case fl::AdcRange::Default:
+            ref_mode = DEFAULT;
+            break;
+        case fl::AdcRange::Range0_1V1:
+            ref_mode = INTERNAL;  // 1.2V internal reference on Teensy
+            break;
+        case fl::AdcRange::External:
+            ref_mode = EXTERNAL;  // External AREF pin
+            break;
+        default:
+            // Unsupported ranges - use default
+            ref_mode = DEFAULT;
+            break;
+    }
+    ::analogReference(ref_mode);
+#else
+    // No-op: Teensy core not available
+    (void)range;
+#endif
+}
+
+// ============================================================================
+// PWM Frequency Control
+// ============================================================================
+
+#if defined(FL_IS_TEENSY)
+
+namespace {
+    struct TeensyPwmFreq {
+        int pin;      // -1 = unused
+        u32 freq_hz;
+    };
+    constexpr int MAX_TEENSY_PWM_PINS = 40;
+    inline TeensyPwmFreq* getTeensyPwmTable() FL_NO_EXCEPT {
+        static TeensyPwmFreq table[MAX_TEENSY_PWM_PINS] = {
+            {-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},
+            {-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},
+            {-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},
+            {-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},
+            {-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0},{-1,0}
+        };
+        return table;
+    }
+}  // anonymous namespace
+
+inline bool needsPwmIsrFallback(int /*pin*/, u32 frequency_hz) {
+    // Teensy FlexPWM/QuadTimer supports 1 Hz - 200 kHz natively
+    if (frequency_hz >= 1 && frequency_hz <= 200000) {
+        return false;
+    }
+    return true;
+}
+
+inline int setPwmFrequencyNative(int pin, u32 frequency_hz) FL_NO_EXCEPT {
+    ::analogWriteFrequency(pin, frequency_hz);
+    // Track the frequency per pin
+    TeensyPwmFreq* table = getTeensyPwmTable();
+    // Look for existing entry for this pin
+    for (int i = 0; i < MAX_TEENSY_PWM_PINS; ++i) {
+        if (table[i].pin == pin) {
+            table[i].freq_hz = frequency_hz;
+            return 0;
+        }
+    }
+    // Find an unused slot
+    for (int i = 0; i < MAX_TEENSY_PWM_PINS; ++i) {
+        if (table[i].pin == -1) {
+            table[i].pin = pin;
+            table[i].freq_hz = frequency_hz;
+            return 0;
+        }
+    }
+    // No free slot available (should not happen with 40 slots on Teensy 4.x)
+    return -4;
+}
+
+inline u32 getPwmFrequencyNative(int pin) FL_NO_EXCEPT {
+    TeensyPwmFreq* table = getTeensyPwmTable();
+    for (int i = 0; i < MAX_TEENSY_PWM_PINS; ++i) {
+        if (table[i].pin == pin) {
+            return table[i].freq_hz;
+        }
+    }
+    return 0;
+}
+
+#else
+
+inline bool needsPwmIsrFallback(int /*pin*/, u32 /*frequency_hz*/) {
+    return true;
+}
+
+inline int setPwmFrequencyNative(int /*pin*/, u32 /*frequency_hz*/) {
+    return -4;
+}
+
+inline u32 getPwmFrequencyNative(int /*pin*/) {
+    return 0;
+}
+
+#endif
+
+}  // namespace platforms
+}  // namespace fl

@@ -1,0 +1,186 @@
+
+// g++ --std=c++11 test.cpp
+
+
+
+#include "fl/fx/2d/blend.h"
+#include "fl/fx/fx.h"
+
+#include "fl/stl/unique_ptr.h"
+#include "fl/stl/ostream.h"
+#include "fl/stl/stdint.h"
+#include "crgb.h"
+#include "test.h"
+#include "fl/fx/fx2d.h"
+#include "fl/gfx/crgb.h"
+#include "fl/stl/string.h"
+#include "fl/math/xymap.h"
+
+
+// Simple test effect that fills with a solid color
+class SolidColorFx2d : public fl::Fx2d {
+  public:
+    SolidColorFx2d(uint16_t width, uint16_t height, CRGB color)
+        : fl::Fx2d(fl::XYMap::constructRectangularGrid(width, height)),
+          mColor(color) {}
+
+    fl::string fxName() const override { return "SolidColorFx2d"; }
+
+    void draw(fl::Fx::DrawContext context) override {
+        for (uint16_t i = 0; i < mXyMap.getTotal(); i++) {
+            context.leds[i] = mColor;
+        }
+    }
+
+  private:
+    CRGB mColor;
+};
+
+class TestFx2D : public fl::Fx2d {
+  public:
+    TestFx2D(uint16_t width, uint16_t height)
+        : fl::Fx2d(fl::XYMap::constructRectangularGrid(width, height)) {
+        mLeds.reset(new CRGB[width * height]);  // ok bare allocation
+    }
+
+    void set(uint16_t x, uint16_t y, CRGB color) {
+        if (x < mXyMap.getWidth() && y < mXyMap.getHeight()) {
+            uint16_t index = mXyMap(x, y);
+            if (index < mXyMap.getTotal()) {
+                mLeds[index] = color;
+            }
+        }
+    }
+
+    fl::string fxName() const override { return "TestFx2D"; }
+
+    void draw(fl::Fx::DrawContext context) override {
+        for (uint16_t i = 0; i < mXyMap.getTotal(); i++) {
+            context.leds[i] = mLeds[i];
+        }
+    }
+
+    fl::unique_ptr<CRGB[]> mLeds;
+};
+
+FL_TEST_CASE("Test FX2d Layered Blending") {
+    const uint16_t width = 1;
+    const uint16_t height = 1;
+    fl::XYMap xyMap = fl::XYMap::constructRectangularGrid(width, height);
+
+    // Create a red layer
+    SolidColorFx2d redLayer(width, height, CRGB(255, 0, 0));
+
+    // Create a layered effect with just the red layer
+    fl::Blend2d blendFx(xyMap);
+    blendFx.add(redLayer);
+
+    // Create a buffer for the output
+    CRGB led;
+
+    // Draw the layered effect
+    fl::Fx::DrawContext context(0, fl::span<CRGB>(&led, 1));
+    context.now = 0;
+    blendFx.draw(context);
+
+    // Verify the result - should be red
+    FL_CHECK(led.r == 255);
+    FL_CHECK(led.g == 0);
+    FL_CHECK(led.b == 0);
+}
+
+FL_TEST_CASE("Test FX2d Layered with XYMap") {
+    static constexpr int width = 2;
+    static constexpr int height = 2;
+
+    fl::XYMap xyMapSerp = fl::XYMap::constructSerpentine(width, height);
+    fl::XYMap xyRect = fl::XYMap::constructRectangularGrid(width, height);
+
+    FL_SUBCASE("Rectangular Grid") {
+        // Create a blue layer
+        // SolidColorFx2d blueLayer(width, height, CRGB(0, 0, 255));
+        TestFx2D testFx(width, height);
+        testFx.set(0, 0, CRGB(0, 0, 255)); // Set the first pixel to blue
+        testFx.set(1, 0, CRGB(255, 0, 0)); // Set the second pixel to red
+        testFx.set(0, 1, CRGB(0, 255, 0)); // Set the third pixel to gree
+        testFx.set(1, 1, CRGB(0, 0, 0)); // Set the fourth pixel to black
+
+        // Create a layered effect with just the blue layer
+        fl::Blend2d blendFx(xyRect);
+        blendFx.add(testFx);
+
+        // Create a buffer for the output
+        CRGB led[width * height] = {};
+
+        // Draw the layered effect
+        fl::Fx::DrawContext context(0, led);
+        context.now = 0;
+        blendFx.draw(context);
+
+        fl::cout << "Layered Effect Output: " << led[0].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[1].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[2].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[3].toString().c_str() << fl::endl;
+
+        // Verify the result - should be blue
+        FL_CHECK(led[0].r == 0);
+        FL_CHECK(led[0].g == 0);
+        FL_CHECK(led[0].b == 255);
+
+        FL_CHECK(led[1].r == 255);
+        FL_CHECK(led[1].g == 0);
+        FL_CHECK(led[1].b == 0);
+
+        FL_CHECK(led[2].r == 0);
+        FL_CHECK(led[2].g == 255);
+        FL_CHECK(led[2].b == 0);
+
+        FL_CHECK(led[3].r == 0);
+        FL_CHECK(led[3].g == 0);
+        FL_CHECK(led[3].b == 0);
+    }
+
+    FL_SUBCASE("Serpentine") {
+        // Create a blue layer
+        TestFx2D testFx(width, height);
+        testFx.set(0, 0, CRGB(0, 0, 255)); // Set the first pixel to blue
+        testFx.set(1, 0, CRGB(255, 0, 0)); // Set the second pixel to red
+        testFx.set(0, 1, CRGB(0, 255, 0)); // Set the third pixel to gree
+        testFx.set(1, 1, CRGB(0, 0, 0)); // Set the fourth pixel to black
+
+        // Create a layered effect with just the blue layer
+        fl::Blend2d blendFx(xyMapSerp);
+        blendFx.add(testFx);
+
+        // Create a buffer for the output
+        CRGB led[width * height] = {};
+
+        // Draw the layered effect
+        fl::Fx::DrawContext context(0, led);
+        context.now = 0;
+        blendFx.draw(context);
+
+        fl::cout << "Layered Effect Output: " << led[0].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[1].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[2].toString().c_str() << fl::endl;
+        fl::cout << "Layered Effect Output: " << led[3].toString().c_str() << fl::endl;
+
+        // Verify the result - should be blue
+        FL_CHECK(led[0].r == 0);
+        FL_CHECK(led[0].g == 0);
+        FL_CHECK(led[0].b == 255);
+
+        FL_CHECK(led[1].r == 255);
+        FL_CHECK(led[1].g == 0);
+        FL_CHECK(led[1].b == 0);
+
+        // Now it's supposed to go up to the next line at the same column.
+        FL_CHECK(led[2].r == 0);
+        FL_CHECK(led[2].g == 0);
+        FL_CHECK(led[2].b == 0);
+
+        FL_CHECK(led[3].r == 0);
+        FL_CHECK(led[3].g == 255);
+        FL_CHECK(led[3].b == 0);
+    }
+}

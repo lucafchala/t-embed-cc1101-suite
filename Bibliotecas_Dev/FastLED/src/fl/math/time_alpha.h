@@ -1,0 +1,172 @@
+
+#pragma once
+
+
+#include "fl/math/math.h"
+#include "fl/stl/int.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+// Phase of the TimeRamp transition
+enum class RampPhase {
+    Inactive,  // Not started or finished
+    Rising,    // Ramping up from 0 to 255
+    Plateau,   // Holding at 255
+    Falling    // Ramping down from 255 to 0
+};
+
+// Use this function to compute the alpha value based on the time elapsed
+// 0 -> 255
+u8 time_alpha8(u32 now, u32 start, u32 end) FL_NO_EXCEPT;
+// 0 -> 65535
+u16 time_alpha16(u32 now, u32 start, u32 end) FL_NO_EXCEPT;
+
+inline float time_alphaf(u32 now, u32 start, u32 end) FL_NO_EXCEPT {
+    if (now < start) {
+        return 0.0f;
+    }
+    u32 elapsed = now - start;
+    u32 total = end - start;
+    float out = static_cast<float>(elapsed) / static_cast<float>(total);
+    return out;
+}
+
+class TimeAlpha {
+  public:
+    virtual ~TimeAlpha() FL_NO_EXCEPT = default;
+    virtual void trigger(u32 now) FL_NO_EXCEPT = 0;
+    virtual u8 update8(u32 now) FL_NO_EXCEPT = 0;
+    virtual u16 update16(u32 now) FL_NO_EXCEPT {
+        return static_cast<u16>(update8(now) << 8) + 0xFF;
+    }
+    virtual float updatef(u32 now) FL_NO_EXCEPT {
+        return static_cast<float>(update16(now)) / 65535.0f;
+    }
+    virtual bool isActive(u32 now) const FL_NO_EXCEPT = 0;
+};
+
+/*
+ *                       amplitude
+ *                          ^
+ *  255 ───────────────────────
+ *                     /        \
+ *                    /          \
+ *                   /            \
+ *                  /              \
+ *    0 ────────────┴               ┴──────────────────> time (ms)
+ *                  t0   t1     t2   t4
+ *
+ *
+ *
+ */
+class TimeRamp : public TimeAlpha {
+  public:
+    /// @param latchMs     total active time (ms)
+    /// @param risingTime  time to ramp from 0→255 (ms)
+    /// @param fallingTime time to ramp from 255→0 (ms)
+    TimeRamp(u32 risingTime, u32 latchMs, u32 fallingTime) FL_NO_EXCEPT;
+
+    /// Call this when you want to (re)start the ramp cycle.
+    /// Smart re-trigger that preserves state when already active:
+    /// - If in plateau: extends the plateau time
+    /// - If falling: reverses back to plateau
+    /// - If rising: continues rising
+    /// - If inactive: starts new cycle
+    void trigger(u32 now) FL_NO_EXCEPT override;
+
+    /// @return true iff we're still within the latch period.
+    bool isActive(u32 now) const FL_NO_EXCEPT override;
+
+    /// Get the current phase of the ramp
+    RampPhase getCurrentPhase(u32 now) const FL_NO_EXCEPT;
+
+    /// Compute current 0–255 output based on how much time has elapsed since
+    /// trigger().
+    u8 update8(u32 now) FL_NO_EXCEPT override;
+
+  private:
+    u32 mLatchMs;
+    u32 mRisingTime;
+    u32 mFallingTime;
+
+    u32 mFinishedRisingTime = 0;
+    u32 mFinishedPlateauTime = 0;
+    u32 mFinishedFallingTime = 0;
+
+    u32 mStart = 0;
+    u8 mLastValue = 0;
+};
+
+/*
+ *                       amplitude
+ *                          ^
+ *  255 ──────────────────────────────────────
+ *                     /
+ *                    /
+ *                   /
+ *                  /
+ *    0 ────────────┴                       --> time (ms)
+ *                  t0   t1
+ *
+ *
+ *
+ */
+class TimeClampedTransition : public TimeAlpha {
+  public:
+    TimeClampedTransition(u32 duration) FL_NO_EXCEPT : mDuration(duration) {}
+
+    void trigger(u32 now) FL_NO_EXCEPT override {
+        mStart = now;
+        mEnd = now + mDuration;
+    }
+
+    bool isActive(u32 now) const FL_NO_EXCEPT override {
+        bool not_started = (mEnd == 0) && (mStart == 0);
+        if (not_started) {
+            // if we have not started, we are not active
+            return false;
+        }
+        if (now < mStart) {
+            // if the time is before the start, we are not active
+            return false;
+        }
+        if (now > mEnd) {
+            // if the time is after the finished rising, we are not active
+            return false;
+        }
+        return true;
+    }
+
+    u8 update8(u32 now) FL_NO_EXCEPT override {
+        bool not_started = (mEnd == 0) && (mStart == 0);
+        if (not_started) {
+            // if we have not started, we are not active
+            return 0;
+        }
+        u8 out = time_alpha8(now, mStart, mEnd);
+        return out;
+    }
+
+    float updatef(u32 now) FL_NO_EXCEPT override {
+        bool not_started = (mEnd == 0) && (mStart == 0);
+        if (not_started) {
+            return 0;
+        }
+        float out = time_alphaf(now, mStart, mEnd);
+        if (mMaxClamp > 0.f) {
+            out = fl::min(out, mMaxClamp);
+        }
+        return out;
+    }
+
+    void set_max_clamp(float max) FL_NO_EXCEPT { mMaxClamp = max; }
+
+  private:
+    u32 mStart = 0;
+    u32 mDuration = 0;
+    u32 mEnd = 0;
+    float mMaxClamp = -1.f; // default disabled.
+};
+
+} // namespace fl

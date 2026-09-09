@@ -1,0 +1,209 @@
+#pragma once
+
+#include "fl/codec/common.h"  // IWYU pragma: keep
+#include "fl/codec/mp3_memory.h"
+#include "fl/audio/audio.h"  // IWYU pragma: keep
+#include "fl/stl/span.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/stdint.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/unique_ptr.h"
+#include "fl/stl/string.h"  // IWYU pragma: keep
+#include "fl/stl/noexcept.h"
+
+
+namespace fl {
+
+// MP3 metadata information structure
+struct Mp3Info {
+    fl::u32 sampleRate = 0;      // Sample rate in Hz
+    fl::u8 channels = 0;          // Number of channels (1=mono, 2=stereo)
+    fl::u32 bitrate = 0;          // Bitrate in bits per second
+    fl::u32 duration = 0;         // Duration in milliseconds (may be 0 if unknown)
+    fl::u8 version = 0;           // MPEG version (1, 2, or 2.5)
+    fl::u8 layer = 0;             // MPEG layer (1, 2, or 3)
+    bool isValid = false;         // True if metadata was successfully parsed
+
+    Mp3Info() FL_NO_EXCEPT = default;
+
+    // Constructor for easy initialization
+    Mp3Info(fl::u32 rate, fl::u8 ch, fl::u32 br)
+        : sampleRate(rate), channels(ch), bitrate(br), isValid(true) {}
+};
+
+namespace third_party {
+    // Forward declarations of internal implementation classes
+    class Mp3StreamDecoderImpl;
+    struct mp3dec_t;
+    union mp3dec_scratch_t;
+
+    // Mp3Frame represents a decoded MP3 audio frame
+    // This is exposed for testing purposes
+    struct Mp3Frame {
+        const fl::i16* pcm;         // Interleaved PCM data (L/R)
+        int samples;                // Samples per channel
+        int channels;               // 1 (mono) or 2 (stereo)
+        int sample_rate;            // Sample rate in Hz
+        int bitrate;                // Bitrate in bits per second
+        int version;                // MPEG version
+        int layer;                  // MPEG layer
+    };
+
+    // Frame metadata shared by the decoder wrappers.
+    struct Mp3FrameInfo {
+        int bitrate;
+        int nChans;
+        int samprate;
+        int bitsPerSample;
+        int outputSamps;
+        int layer;
+        int version;
+    };
+
+    // Mp3Minimp3Decoder wraps the vendored minimp3 decoder (fixed-point by
+    // default; see MINIMP3_FLOAT_POINT for the float opt-out).
+    // This is exposed for backend-parity testing.
+    class Mp3Minimp3Decoder {
+    public:
+        Mp3Minimp3Decoder() FL_NO_EXCEPT;
+        ~Mp3Minimp3Decoder() FL_NO_EXCEPT;
+
+        bool init() FL_NO_EXCEPT;
+        void reset() FL_NO_EXCEPT;
+
+        template <typename Fn>
+        int decode(const fl::u8* data, fl::size len,
+                   Fn on_frame) FL_NO_EXCEPT {
+            if (!mDecoder) {
+                return 0;
+            }
+
+            const fl::u8* inptr = data;
+            fl::size bytes_left = len;
+            int frames_decoded = 0;
+
+            while (bytes_left > 0) {
+                int offset = findSyncWord(inptr, bytes_left);
+                if (offset < 0) {
+                    break;
+                }
+
+                inptr += offset;
+                bytes_left -= offset;
+
+                int result = decodeFrame(&inptr, &bytes_left);
+                if (result == 0) {
+                    Mp3Frame frame;
+                    frame.pcm = mPcmBuffer.get();
+                    frame.samples = mFrameInfo.outputSamps / mFrameInfo.nChans;
+                    frame.channels = mFrameInfo.nChans;
+                    frame.sample_rate = mFrameInfo.samprate;
+                    frame.bitrate = mFrameInfo.bitrate;
+                    frame.version = mFrameInfo.version;
+                    frame.layer = mFrameInfo.layer;
+
+                    on_frame(frame);
+                    frames_decoded++;
+                } else if (bytes_left > 0) {
+                    inptr++;
+                    bytes_left--;
+                }
+            }
+
+            return frames_decoded;
+        }
+
+        fl::vector<audio::Sample>
+        decodeToAudioSamples(const fl::u8* data,
+                             fl::size len) FL_NO_EXCEPT;
+
+        int findSyncWord(const fl::u8* buf, fl::size len) FL_NO_EXCEPT;
+        int decodeFrame(const fl::u8** inbuf,
+                        fl::size* bytes_left) FL_NO_EXCEPT;
+
+        fl::unique_ptr<fl::i16[], Mp3MemoryDeleter<fl::i16>> mPcmBuffer;
+        Mp3FrameInfo mFrameInfo;
+
+    private:
+        fl::unique_ptr<mp3dec_t, Mp3MemoryDeleter<mp3dec_t>> mDecoder;
+        fl::unique_ptr<mp3dec_scratch_t, Mp3MemoryDeleter<mp3dec_scratch_t>>
+            mScratch;
+    };
+}
+
+// MP3 decoder with streaming byte interface
+// This decoder consumes MP3 data from a filebuf and decodes audio frames on demand
+class Mp3Decoder {
+public:
+    Mp3Decoder() FL_NO_EXCEPT;
+    ~Mp3Decoder() FL_NO_EXCEPT;
+
+    // Initialize the decoder with a byte stream
+    // Returns true on success, false on failure
+    bool begin(fl::filebuf_ptr stream);
+
+    // Clean up decoder resources
+    void end();
+
+    // Check if decoder is ready to use
+    bool isReady() const;
+
+    // Check for errors
+    bool hasError(fl::string* msg = nullptr) const;
+
+    // Decode the next audio frame from the stream
+    // Returns true if a frame was decoded, false if end of stream or error
+    bool decodeNextFrame(audio::Sample* out_sample);
+
+    // Get current stream position in bytes
+    fl::size getPosition() const;
+
+    // Reset decoder state (but keep stream)
+    void reset();
+
+    // Get MP3 stream information (only available after decoding first frame)
+    Mp3Info getInfo() const;
+
+private:
+    fl::unique_ptr<fl::third_party::Mp3StreamDecoderImpl> mImpl;
+};
+
+FASTLED_SHARED_PTR(Mp3Decoder);
+
+// MP3 factory for creating decoders and parsing metadata
+//
+// PERFORMANCE NOTE:
+// Benchmark testing (see REPORT.md) compared MP3 vs OGG Vorbis decoding performance
+// using FFmpeg on a host machine (not embedded platform). Results showed:
+//   - MP3 decode time: 420ms (10 second audio sample)
+//   - OGG decode time: 327ms (28.6% faster than MP3)
+//   - MP3 file size: 157KB at 128kbps
+//   - OGG file size: 108KB at 128kbps (31% smaller than MP3)
+//   - Audio quality difference: 0.67% RMS error (negligible)
+//
+// IMPORTANT: These benchmarks used native FFmpeg decoders on a desktop host.
+// Performance on embedded platforms (ESP32, ARM, etc.) using the fixed-point
+// minimp3 decoder may differ significantly due to:
+//   - Different decoder implementations (minimp3 vs FFmpeg)
+//   - CPU architecture differences (ARM Cortex-M vs x86/x64)
+//   - Clock speeds and available RAM
+//   - Compiler optimizations and platform-specific code paths
+//
+// RECOMMENDATION: Always profile on your target platform before choosing a codec.
+// What works best on desktop FFmpeg may not match embedded performance characteristics.
+// Run your own benchmarks using your specific hardware, sample data, and use case.
+//
+class Mp3 {
+public:
+    // Create an MP3 decoder for streaming playback
+    static Mp3DecoderPtr createDecoder(fl::string* error_message = nullptr);
+
+    // Check if MP3 decoding is supported on this platform
+    static bool isSupported();
+
+    // Parse MP3 metadata from byte data without creating a decoder
+    // This is a fast, lightweight operation that only reads the first MP3 frame header
+    static Mp3Info parseMp3Info(fl::span<const fl::u8> data, fl::string* error_message = nullptr);
+};
+
+} // namespace fl

@@ -1,0 +1,55 @@
+REM Title: iOS Wallpaper Changer
+REM Author: BadUSB Library
+REM Description: Changes wallpaper to prank image
+REM Target: iOS 14.0+
+REM Category: Prank
+REM Type: Directly Ready
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to Wallpaper
+STRING Wallpaper
+ENTER
+DELAY 2000
+
+REM Select new wallpaper
+STRING Choose a New Wallpaper
+ENTER
+DELAY 2000
+
+REM Select from photos
+STRING All Photos
+ENTER
+DELAY 2000
+
+REM Select random photo
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING ENTER
+ENTER
+DELAY 2000
+
+REM Set wallpaper
+STRING Set
+ENTER
+DELAY 2000
+
+STRING Set Lock Screen
+ENTER
+DELAY 2000

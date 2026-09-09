@@ -1,0 +1,273 @@
+#!/bin/bash
+# Ensure UTF-8 everywhere (console and Python), including on Windows msys/cygwin
+case "$OSTYPE" in
+  msys*|cygwin*)
+    if command -v chcp.com >/dev/null 2>&1; then
+      # Attempt to switch Windows code page to UTF-8 (65001)
+      chcp.com 65001 >/dev/null 2>&1
+    fi
+    ;;
+  *)
+    :
+    ;;
+esac
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+export PYTHONUTF8=1
+export PYTHONIOENCODING=UTF-8
+
+set -ex
+if [ ! -d ".venv" ]; then
+    echo "Creating Python 3.11 virtual environment..."
+    uv venv --python 3.11
+else
+    echo "Virtual environment already exists. Skipping."
+fi
+uv sync --refresh && uv sync --refresh
+# This is needed to force the installation to finalize.
+uv run python -c "import os; _ = os.getcwd()"
+set +e
+
+# if ./activate exists, remove it
+if [ -f activate ]; then
+    rm activate
+fi
+# symlink activate to .venv/bin/activate on linux/mac and .venv/Scripts/activate on windows
+if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
+    ln -s .venv/bin/activate activate
+else
+    ln -s .venv/Scripts/activate activate
+fi
+
+echo "Setting up C++ development environment..."
+
+# Build with Meson to generate compile_commands.json for clangd
+echo "Setting up Meson build system..."
+if ! uv run python -m pytest --version &>/dev/null; then
+    uv pip install pytest meson ninja
+fi
+
+# Setup Meson build and generate compile_commands.json
+# Note: We use test.py to handle Meson setup because it properly:
+# 1. Generates meson_native.txt with correct compiler wrapper paths
+# 2. Handles platform-specific configuration automatically
+# 3. Sets up zccache integration correctly
+echo "Configuring Meson and building FastLED..."
+
+# Use test.py --setup-only to configure Meson and generate compile_commands.json
+# This runs only the Meson setup phase (no compilation or testing), which is
+# much faster than a full build.
+# Note: test.py creates .build/meson-quick/ directory (build mode-specific)
+uv run test.py --setup-only --quick 2>/dev/null || true
+
+# Copy compile_commands.json to project root for clangd
+# Note: Build system uses mode-specific directories (.build/meson-quick, etc.)
+if [ -f ".build/meson-quick/compile_commands.json" ]; then
+    cp .build/meson-quick/compile_commands.json .
+    echo "✅ Generated compile_commands.json for VSCode IntelliSense"
+else
+    echo "⚠️  Warning: compile_commands.json not found. Meson setup may have failed."
+    echo "      You can retry with: uv run test.py --cpp --quick"
+fi
+
+if [ -z "$FASTLED_DOCKER" ]; then
+    echo "Setting up JavaScript development environment..."
+
+    # Install fast JavaScript linter (Node.js + ESLint)
+    echo "Installing fast JavaScript linter (Node.js + ESLint)..."
+    if uv run ci/setup-js-linting-fast.py; then
+        echo "✅ Fast JavaScript linting enabled - 53x faster than Deno!"
+    else
+        echo "⚠️  Warning: JavaScript linter setup failed. You can retry with: uv run ci/setup-js-linting-fast.py"
+    fi
+else
+    echo "ℹ️  Skipping JavaScript development environment setup (running in Docker)"
+fi
+
+if [ -z "$FASTLED_DOCKER" ]; then
+    # Install TypeScript for JSDoc type checking
+    echo "Installing TypeScript for JSDoc type checking..."
+    if [ -d ".cache/js-tools" ]; then
+        echo "Installing TypeScript in local js-tools environment..."
+        cd .cache/js-tools
+        # Use the local Node.js installation to run npm
+        if [ -f "node/npm.cmd" ]; then
+            if ./node/npm.cmd install typescript; then
+                echo "✅ TypeScript installed successfully for JSDoc checking!"
+            else
+                echo "⚠️  Warning: TypeScript installation failed. JSDoc checking will be skipped."
+            fi
+        elif [ -f "node/bin/npm" ]; then
+            if ./node/bin/npm install typescript; then
+                echo "✅ TypeScript installed successfully for JSDoc checking!"
+            else
+                echo "⚠️  Warning: TypeScript installation failed. JSDoc checking will be skipped."
+            fi
+        else
+            echo "⚠️  Warning: Local npm not found in js-tools. Trying global installation..."
+            cd ../..
+            if command -v npm >/dev/null 2>&1; then
+                echo "Using global npm to install TypeScript..."
+                if npm install -g typescript; then
+                    echo "✅ TypeScript installed globally for JSDoc checking!"
+                else
+                    echo "⚠️  Warning: Global TypeScript installation failed. JSDoc checking will be skipped."
+                fi
+            else
+                echo "⚠️  Warning: npm not found. TypeScript cannot be installed. JSDoc checking will be skipped."
+            fi
+        fi
+        cd ../.. 2>/dev/null || true
+    elif command -v npm >/dev/null 2>&1; then
+        echo "Using global npm to install TypeScript..."
+        if npm install -g typescript; then
+            echo "✅ TypeScript installed globally for JSDoc checking!"
+        else
+            echo "⚠️  Warning: Global TypeScript installation failed. JSDoc checking will be skipped."
+        fi
+    else
+        echo "⚠️  Warning: npm not found. TypeScript cannot be installed. JSDoc checking will be skipped."
+    fi
+fi
+
+if [ -z "$FASTLED_DOCKER" ]; then
+    echo "Setting up VSCode extensions..."
+
+    # Install Auto Debug extension from local .vsix file
+    echo "Installing Auto Debug extension for VSCode..."
+    if [ -f .vscode/DarrenLevine.auto-debug-1.0.2.vsix ]; then
+    # Get absolute path to extension
+    ext_path="$(cd .vscode && pwd)/DarrenLevine.auto-debug-1.0.2.vsix"
+    installed_count=0
+
+    # Try installing on VSCode
+    if command -v code &> /dev/null; then
+        echo "Installing Auto Debug extension on VSCode..."
+        # Try to install with timeout - VSCode may need to start server first
+        if timeout 10 code --install-extension "$ext_path" 2>/dev/null; then
+            echo "✅ Auto Debug extension installed successfully on VSCode!"
+            installed_count=$((installed_count + 1))
+        else
+            # Installation may have failed silently - suggest alternative method
+            echo "⚠️  Auto Debug extension installation via CLI may have failed."
+            echo "      This is normal if VSCode wasn't running. Trying GUI method..."
+        fi
+    else
+        echo "ℹ️  VSCode not found (code command not available)."
+    fi
+
+    # Try installing on Cursor
+    if command -v cursor &> /dev/null; then
+        echo "Installing Auto Debug extension on Cursor..."
+        if timeout 10 cursor --install-extension "$ext_path" 2>/dev/null; then
+            echo "✅ Auto Debug extension installed successfully on Cursor!"
+            installed_count=$((installed_count + 1))
+        else
+            echo "⚠️  Auto Debug extension installation on Cursor may have failed."
+        fi
+    fi
+
+    # If automatic installation didn't work, suggest manual method
+    if [ $installed_count -eq 0 ]; then
+        echo ""
+        echo "📋 EXTENSION INSTALLATION GUIDE"
+        echo "================================"
+        echo "The Auto Debug extension needs to be installed manually:"
+        echo ""
+        echo "1. Open VSCode with this workspace:"
+        echo "   code ."
+        echo ""
+        echo "2. Install the extension:"
+        echo "   - Go to Extensions (Ctrl+Shift+X)"
+        echo "   - Click the menu (...) in the top-right corner"
+        echo "   - Select 'Install from VSIX...'"
+        echo "   - Navigate to: .vscode/DarrenLevine.auto-debug-1.0.2.vsix"
+        echo ""
+        echo "3. Reload VSCode (Ctrl+Shift+P → Developer: Reload Window)"
+        echo ""
+        echo "ℹ️  After installing, the Auto Debug configuration will be available!"
+        echo ""
+    elif [ $installed_count -eq 1 ]; then
+        echo "✅ Auto Debug extension installed on 1 editor."
+    else
+        echo "✅ Auto Debug extension installed on $installed_count editors!"
+    fi
+    else
+        echo "⚠️  Warning: Auto Debug extension file not found at .vscode/DarrenLevine.auto-debug-1.0.2.vsix"
+        echo "      Please ensure the extension file is in the correct location."
+    fi
+
+    # Install clangd extension from marketplace
+    echo ""
+    echo "Installing clangd extension for C++ IntelliSense..."
+    clangd_installed_count=0
+
+    # Try installing on VSCode
+    if command -v code &> /dev/null; then
+        echo "Installing clangd extension on VSCode..."
+        if timeout 10 code --install-extension llvm-vs-code-extensions.vscode-clangd 2>/dev/null; then
+            echo "✅ clangd extension installed successfully on VSCode!"
+            clangd_installed_count=$((clangd_installed_count + 1))
+        else
+            echo "⚠️  clangd extension installation via CLI may have failed."
+            echo "      This is normal if VSCode wasn't running."
+        fi
+    else
+        echo "ℹ️  VSCode not found (code command not available)."
+    fi
+
+    # Try installing on Cursor
+    if command -v cursor &> /dev/null; then
+        echo "Installing clangd extension on Cursor..."
+        if timeout 10 cursor --install-extension llvm-vs-code-extensions.vscode-clangd 2>/dev/null; then
+            echo "✅ clangd extension installed successfully on Cursor!"
+            clangd_installed_count=$((clangd_installed_count + 1))
+        else
+            echo "⚠️  clangd extension installation on Cursor may have failed."
+        fi
+    fi
+
+    # Report results
+    if [ $clangd_installed_count -eq 0 ]; then
+        echo ""
+        echo "📋 CLANGD EXTENSION INSTALLATION GUIDE"
+        echo "======================================"
+        echo "The clangd extension needs to be installed manually:"
+        echo ""
+        echo "1. Open VSCode with this workspace:"
+        echo "   code ."
+        echo ""
+        echo "2. Install the extension:"
+        echo "   - Go to Extensions (Ctrl+Shift+X)"
+        echo "   - Search for 'clangd'"
+        echo "   - Install the extension by LLVM Extensions"
+        echo ""
+        echo "3. Disable the C/C++ extension if installed (it conflicts with clangd):"
+        echo "   - Search for 'C/C++' in Extensions"
+        echo "   - Click 'Disable' on the Microsoft C/C++ extension"
+        echo ""
+        echo "ℹ️  After installing, clangd will provide IntelliSense using compile_commands.json!"
+        echo ""
+    elif [ $clangd_installed_count -eq 1 ]; then
+        echo "✅ clangd extension installed on 1 editor."
+    else
+        echo "✅ clangd extension installed on $clangd_installed_count editors!"
+    fi
+else
+    echo "ℹ️  Skipping VSCode extensions setup (running in Docker)"
+fi
+
+# Initialize and update git submodules (including wiki)
+echo "Initializing and updating git submodules..."
+git submodule init
+git submodule update --remote
+echo "✅ Git submodules updated!"
+
+echo "🎉 Installation complete!"
+echo ""
+echo "To use:"
+echo "  - Run tests: bash test"
+echo "  - Run linting: bash lint (Python, C++, and JavaScript with JSDoc type checking)"
+echo "  - Debug in VSCode: Open test file and press F5"
+echo "  - Auto Debug: Use '🎯 Auto Debug (Smart File Detection)' configuration"
+echo "  - clangd IntelliSense: Should work automatically in VSCode"

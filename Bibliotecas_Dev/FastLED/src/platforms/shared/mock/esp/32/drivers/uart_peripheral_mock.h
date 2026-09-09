@@ -1,0 +1,308 @@
+/// @file uart_peripheral_mock.h
+/// @brief Mock UART peripheral for unit testing
+///
+/// This class simulates ESP32 UART hardware behavior for host-based unit tests.
+/// It provides:
+/// - Byte-level data capture for validation
+/// - Waveform extraction with start/stop bits (10-bit frames for 8N1)
+/// - Start/stop bit verification
+/// - Transmission timing simulation
+/// - State inspection for debugging
+///
+/// ## Design Philosophy
+///
+/// The mock implementation is designed for TESTING, not perfect hardware simulation:
+/// - Captures all transmitted bytes for analysis
+/// - Expands bytes to 10-bit waveforms (start + 8 data + stop)
+/// - Validates UART framing correctness (start bit LOW, stop bit HIGH)
+/// - Simulates transmission timing (configurable delay)
+/// - Exposes internal state for assertions
+///
+/// ## Usage in Unit Tests
+///
+/// ```cpp
+/// // Create mock peripheral instance
+/// UartPeripheralMock mock;
+///
+/// // Configure
+/// UartPeripheralConfig config = {
+///     .mBaudRate = 4000000,
+///     .mTxPin = 17,
+///     .mRxPin = -1,
+///     .mTxBufferSize = 4096,
+///     .mRxBufferSize = 0,
+///     .mStopBits = 1,
+///     .mUartNum = 1
+/// };
+/// mock.initialize(config);
+///
+/// // Transmit data
+/// uint8_t data[] = {0xA5, 0x5A};
+/// mock.writeBytes(data, 2);
+/// mock.waitTxDone(1000);
+///
+/// // Validate captured data
+/// auto captured = mock.getCapturedBytes();
+/// REQUIRE(captured.size() == 2);
+/// CHECK(captured[0] == 0xA5);
+/// CHECK(captured[1] == 0x5A);
+///
+/// // Validate waveform (includes start/stop bits)
+/// auto waveform = mock.getWaveformWithFraming();
+/// REQUIRE(waveform.size() == 20);  // 2 bytes × 10 bits
+///
+/// // Verify start/stop bits
+/// CHECK(mock.verifyStartStopBits());
+/// ```
+///
+/// ## Waveform Format (8N1)
+///
+/// Each captured byte is expanded to a 10-bit frame:
+/// ```
+/// Byte 0xA5 (0b10100101) becomes:
+///   [0] = 0 (START bit - LOW)
+///   [1] = 1 (B0 - LSB)
+///   [2] = 0 (B1)
+///   [3] = 1 (B2)
+///   [4] = 0 (B3)
+///   [5] = 0 (B4)
+///   [6] = 1 (B5)
+///   [7] = 0 (B6)
+///   [8] = 1 (B7 - MSB)
+///   [9] = 1 (STOP bit - HIGH)
+/// ```
+
+#pragma once
+
+// IWYU pragma: private
+
+// Mock implementation has no platform guards - runs on all platforms for testing
+#include "platforms/esp/32/drivers/uart/iuart_peripheral.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/stdint.h"
+
+namespace fl {
+
+//=============================================================================
+// Mock Peripheral Implementation
+//=============================================================================
+
+/// @brief Mock UART peripheral for unit testing
+///
+/// Simulates UART hardware with byte capture and waveform extraction.
+/// Designed for host-based testing without real ESP32 hardware.
+class UartPeripheralMock : public IUartPeripheral {
+public:
+    //=========================================================================
+    // Lifecycle
+    //=========================================================================
+
+    UartPeripheralMock() FL_NO_EXCEPT;
+    ~UartPeripheralMock() override;
+
+    //=========================================================================
+    // IUartPeripheral Interface Implementation
+    //=========================================================================
+
+    bool initialize(const UartPeripheralConfig& config) FL_NO_EXCEPT override;
+    void deinitialize() FL_NO_EXCEPT override;
+    bool isInitialized() const FL_NO_EXCEPT override;
+    bool writeBytes(const u8* data, size_t length) FL_NO_EXCEPT override;
+    bool waitTxDone(u32 timeout_ms) FL_NO_EXCEPT override;
+    bool isBusy() const FL_NO_EXCEPT override;
+    const UartPeripheralConfig& getConfig() const FL_NO_EXCEPT override;
+
+    //=========================================================================
+    // Mock-Specific API (for unit tests)
+    //=========================================================================
+
+    //-------------------------------------------------------------------------
+    // Simulation Control
+    //-------------------------------------------------------------------------
+
+    /// @brief Set simulated transmission delay
+    /// @param microseconds Delay in microseconds (0 = instant)
+    ///
+    /// Simulates hardware transmission time. Affects waitTxDone() behavior.
+    /// Default: 0 (instant transmission for fast tests)
+    void setTransmissionDelay(u32 microseconds) FL_NO_EXCEPT;
+
+    /// @brief Force immediate transmission completion
+    ///
+    /// Marks all pending transmissions as complete regardless of delay.
+    /// Useful for tests that need to skip timing simulation.
+    void forceTransmissionComplete() FL_NO_EXCEPT;
+
+    /// @brief Reset mock state to initial conditions
+    ///
+    /// Clears:
+    /// - Captured byte history
+    /// - Transmission state (mBusy)
+    /// - Configuration (mInitialized = false)
+    /// - Timing state
+    ///
+    /// Call between tests to ensure clean state.
+    void reset() FL_NO_EXCEPT;
+
+    //-------------------------------------------------------------------------
+    // Data Capture (for validation)
+    //-------------------------------------------------------------------------
+
+    /// @brief Get all captured bytes in transmission order
+    /// @return Vector of transmitted bytes (chronological order)
+    ///
+    /// Returns raw bytes submitted via writeBytes(). Does NOT include
+    /// start/stop bits. Use getWaveformWithFraming() for full UART frames.
+    fl::vector<u8> getCapturedBytes() const FL_NO_EXCEPT;
+
+    /// @brief Get number of captured bytes
+    /// @return Total number of bytes captured since last reset()
+    size_t getCapturedByteCount() const FL_NO_EXCEPT;
+
+    /// @brief Clear captured byte history
+    ///
+    /// Resets captured data without affecting configuration or state.
+    /// Useful for multi-phase tests.
+    void resetCapturedData() FL_NO_EXCEPT;
+
+    /// @brief Get the calculated reset duration for the last transmission
+    /// @return Reset duration in microseconds (0 if no transmission occurred)
+    ///
+    /// Returns the reset duration that the mock calculated for the last
+    /// transmission. This is based on transmission time and WS2812 requirements.
+    /// Use this to verify reset timing logic without wall-clock measurements.
+    u64 getLastCalculatedResetDurationUs() const FL_NO_EXCEPT;
+
+    //-------------------------------------------------------------------------
+    // Virtual Time Control (for deterministic testing)
+    //-------------------------------------------------------------------------
+
+    /// @brief Enable or disable virtual time mode
+    /// @param enabled true to use virtual time, false to use real wall-clock time
+    ///
+    /// When virtual time is enabled, the mock uses an internal virtual clock
+    /// instead of real wall-clock time. Time only advances when you call
+    /// advanceTime(). This eliminates race conditions in parallel tests.
+    void setVirtualTimeMode(bool enabled) FL_NO_EXCEPT;
+
+    /// @brief Advance virtual time by specified amount
+    /// @param microseconds Amount to advance virtual time
+    ///
+    /// Only has effect when virtual time mode is enabled.
+    /// Use this instead of std::this_thread::sleep_for() for deterministic testing.
+    void advanceTime(u64 microseconds) FL_NO_EXCEPT;
+
+    /// @brief Pump virtual time forward (semantic alias for advanceTime)
+    /// @param microseconds Amount to advance virtual time
+    ///
+    /// Convenience method for test readability. Equivalent to advanceTime().
+    /// Use this in test code to make time advancement explicit.
+    void pumpTime(u64 microseconds) FL_NO_EXCEPT;
+
+    /// @brief Get current virtual time
+    /// @return Current virtual time in microseconds
+    ///
+    /// Returns 0 if virtual time mode is disabled.
+    u64 getVirtualTime() const FL_NO_EXCEPT;
+
+    //-------------------------------------------------------------------------
+    // Timing Inspection (for deterministic testing)
+    //-------------------------------------------------------------------------
+
+    /// @brief Get calculated transmission duration for last writeBytes() call
+    /// @return Transmission duration in microseconds
+    ///
+    /// Returns the transmission delay calculated based on baud rate and byte count.
+    /// Useful for tests that need to pump time forward by exact amounts.
+    u64 getTransmissionDuration() const FL_NO_EXCEPT;
+
+    /// @brief Get calculated reset period duration
+    /// @return Reset duration in microseconds
+    ///
+    /// Returns the reset period duration (minimum 50μs for WS2812 compatibility).
+    /// The reset period equals transmission duration or 50μs, whichever is larger.
+    u64 getResetDuration() const FL_NO_EXCEPT;
+
+    /// @brief Get time remaining until transmission complete
+    /// @return Microseconds until transmission finishes (0 if not transmitting)
+    ///
+    /// Returns time remaining in transmission phase (before reset period).
+    u64 getRemainingTransmissionTime() const FL_NO_EXCEPT;
+
+    /// @brief Get time remaining until reset period complete
+    /// @return Microseconds until reset expires (0 if not in reset)
+    ///
+    /// Returns time remaining in reset period (after transmission).
+    u64 getRemainingResetTime() const FL_NO_EXCEPT;
+
+    //-------------------------------------------------------------------------
+    // Waveform Extraction (for validation)
+    //-------------------------------------------------------------------------
+
+    /// @brief Extract full UART waveform including start/stop bits
+    /// @return Vector of bits (false = LOW, true = HIGH)
+    ///
+    /// Expands captured bytes to 10-bit frames (8N1):
+    /// - Bit 0: START (always false/LOW)
+    /// - Bits 1-8: Data bits (LSB first)
+    /// - Bit 9: STOP (always true/HIGH)
+    ///
+    /// Example:
+    /// - 1 byte captured → 10 bits returned
+    /// - 3 bytes captured → 30 bits returned
+    ///
+    /// Use for waveform timing analysis and protocol validation.
+    fl::vector<bool> getWaveformWithFraming() const FL_NO_EXCEPT;
+
+    /// @brief Verify start/stop bit correctness for all frames
+    /// @return true if all frames valid, false if any frame has incorrect start/stop
+    ///
+    /// Validates:
+    /// - Every frame starts with LOW (start bit)
+    /// - Every frame ends with HIGH (stop bit)
+    ///
+    /// Returns false if:
+    /// - Any start bit is HIGH
+    /// - Any stop bit is LOW
+    /// - No data has been captured yet
+    bool verifyStartStopBits() const FL_NO_EXCEPT;
+
+private:
+    //=========================================================================
+    // Internal State
+    //=========================================================================
+
+    UartPeripheralConfig mConfig;                    ///< Current configuration
+    bool mInitialized;                     ///< Initialization state
+    bool mBusy;                            ///< Transmission in progress
+    fl::vector<u8> mCapturedData;     ///< Captured byte history
+    u32 mTransmissionDelayUs;         ///< Simulated TX delay (microseconds)
+    bool mManualDelaySet;                  ///< True if delay was manually set via setTransmissionDelay()
+    u64 mLastWriteTimestamp;          ///< Timestamp of last writeBytes() call
+    u64 mResetExpireTime;             ///< Timestamp when reset period expires
+    u64 mLastCalculatedResetDuration; ///< Calculated reset duration (for testing)
+    bool mVirtualTimeEnabled;              ///< True if using virtual time instead of wall-clock
+    u64 mVirtualTime;                 ///< Current virtual time in microseconds
+
+    //=========================================================================
+    // Internal Helpers
+    //=========================================================================
+
+    /// @brief Get current simulated timestamp in microseconds
+    /// @return Monotonic timestamp (microseconds)
+    u64 getCurrentTimestamp() const FL_NO_EXCEPT;
+
+    /// @brief Check if transmission is complete based on timing
+    /// @return true if enough time has elapsed, false otherwise
+    bool isTransmissionComplete() const FL_NO_EXCEPT;
+
+    /// @brief Update transmission state based on elapsed time
+    ///
+    /// Transitions mBusy from true to false when transmission completes,
+    /// and sets reset timer. Separates state updates from state queries
+    /// to make isBusy() const-correct.
+    void updateTransmissionState() FL_NO_EXCEPT;
+};
+
+} // namespace fl

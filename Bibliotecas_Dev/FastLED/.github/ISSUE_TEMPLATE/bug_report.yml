@@ -1,0 +1,130 @@
+name: Bug Report
+description: Report a bug in FastLED
+labels: ["type: bug", "status: triage"]
+body:
+  - type: dropdown
+    id: board
+    attributes:
+      label: Board / MCU
+      description: Which board or microcontroller are you using? Board build compatibility problems should be filed at https://github.com/FastLED/fbuild/issues.
+      options:
+        - ESP32
+        - ESP32-S2
+        - ESP32-S3
+        - ESP32-C3
+        - ESP32-C6
+        - ESP32-H2
+        - ESP8266
+        - Arduino Uno (ATmega328P)
+        - Arduino Mega (ATmega2560)
+        - ATtiny85
+        - ATtiny1616
+        - Teensy 3.x
+        - Teensy 4.x
+        - RP2040 (Pico)
+        - STM32 (Bluepill)
+        - SAMD21
+        - SAMD51
+        - nRF52840
+        - Apollo3
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: led-chipset
+    attributes:
+      label: LED Chipset
+      description: Which LED chipset are you using?
+      options:
+        - WS2812B / NeoPixel
+        - WS2811
+        - APA102 / DotStar
+        - SK9822
+        - WS2801
+        - LPD8806
+        - SM16703
+        - TM1809
+        - TM1804
+        - UCS1903
+        - GW6205
+        - Other
+        - N/A
+    validations:
+      required: true
+
+  - type: input
+    id: fastled-version
+    attributes:
+      label: FastLED Version
+      description: Which version of FastLED are you using?
+      placeholder: "e.g. 3.9.7 or git master"
+    validations:
+      required: true
+
+  - type: input
+    id: arduino-platformio-version
+    attributes:
+      label: Arduino / PlatformIO version
+      description: Which IDE and version are you using?
+      placeholder: "e.g. Arduino IDE 2.3.2, PlatformIO 6.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: Which OS are you developing on?
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the bug. What did you expect vs what happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps to reproduce the issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: minimal-sketch
+    attributes:
+      label: Minimal sketch
+      description: Paste the smallest sketch that reproduces the issue
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: serial-debug-output
+    attributes:
+      label: Serial / debug output
+      description: Paste any relevant serial monitor output
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues for duplicates
+          required: true
+        - label: I have tested with the latest FastLED release or git master
+          required: true
+        - label: I can reproduce this with a minimal sketch
+          required: true

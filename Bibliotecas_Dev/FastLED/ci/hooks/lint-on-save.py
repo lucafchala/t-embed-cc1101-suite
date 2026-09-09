@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""
+Claude Code hook script for linting source files on save.
+
+Supports C++, Python, and JavaScript/TypeScript files.
+Delegates to lint.py in single-file mode which auto-detects file type.
+Python files always use --strict mode (pyright) since single-file is fast.
+
+Usage: Receives JSON on stdin from Claude Code PostToolUse hook.
+Exit codes:
+  0 - Success (no violations or unsupported file type)
+  2 - Violations found (stderr fed back to Claude)
+"""
+
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+
+SCRIPT_DIR = Path(__file__).parent.resolve()
+PROJECT_ROOT = SCRIPT_DIR.parent.parent
+
+# Supported file extensions (must match lint.py's extension sets)
+CPP_EXTENSIONS = {".cpp", ".h", ".hpp", ".hxx", ".hh", ".ino"}
+PYTHON_EXTENSIONS = {".py"}
+JS_EXTENSIONS = {".js", ".ts"}
+SUPPORTED_EXTENSIONS = CPP_EXTENSIONS | PYTHON_EXTENSIONS | JS_EXTENSIONS
+
+# Cache for submodule paths (avoids spawning git on every save)
+_submodule_cache: list[str] | None = None
+
+
+def _get_submodule_paths() -> list[str]:
+    """Get list of submodule paths, cached after first call."""
+    global _submodule_cache
+    if _submodule_cache is not None:
+        return _submodule_cache
+    _submodule_cache = []
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "config",
+                "--file",
+                ".gitmodules",
+                "--get-regexp",
+                r"^submodule\..*\.path$",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=str(PROJECT_ROOT),
+        )
+        if result.returncode == 0:
+            for line in result.stdout.strip().splitlines():
+                parts = line.split(None, 1)
+                if len(parts) == 2:
+                    _submodule_cache.append(parts[1].replace("\\", "/"))
+    except KeyboardInterrupt:
+        import _thread
+
+        _thread.interrupt_main()
+        raise
+    except Exception:
+        pass
+    return _submodule_cache
+
+
+def get_file_path_from_hook_input() -> str | None:
+    """Extract file path from Claude Code hook JSON input."""
+    try:
+        hook_data = json.load(sys.stdin)
+        # PostToolUse provides tool_input with file_path
+        tool_input = hook_data.get("tool_input", {})
+        return tool_input.get("file_path")
+    except (json.JSONDecodeError, KeyError):
+        return None
+
+
+def is_supported_file(file_path: str) -> bool:
+    """Check if file is a supported type for linting."""
+    return Path(file_path).suffix.lower() in SUPPORTED_EXTENSIONS
+
+
+def main() -> int:
+    """Main entry point for the hook."""
+    file_path = get_file_path_from_hook_input()
+
+    if not file_path:
+        return 0
+
+    # Resolve to absolute path
+    if not os.path.isabs(file_path):
+        file_path = os.path.join(PROJECT_ROOT, file_path)
+
+    # Skip unsupported file types
+    if not is_supported_file(file_path):
+        return 0
+
+    # Skip if file doesn't exist (might have been deleted)
+    if not os.path.exists(file_path):
+        return 0
+
+    # Skip files inside git submodules (e.g., wiki/) to avoid endless loops
+    # Uses cached submodule paths to avoid spawning git on every save
+    rel_path = os.path.relpath(file_path, PROJECT_ROOT)
+    submodule_paths = _get_submodule_paths()
+    rel_norm = rel_path.replace("\\", "/")
+    for sub_path in submodule_paths:
+        if rel_norm == sub_path or rel_norm.startswith(sub_path + "/"):
+            return 0
+
+    # Note: previously C++ files under examples/ were short-circuited here
+    # because IWYU checks aren't applicable. After PR #3293 the Rust lint
+    # path needs to run on save for examples-scope checkers
+    # (UsingNamespaceFlInExamplesChecker, ExampleSerialChecker, the
+    # examples-scope BannedHeadersChecker). The fingerprint cache keeps
+    # the per-save cost low, so the short-circuit was removed.
+
+    # Delegate to lint.py in single-file mode
+    # Always use --strict for Python files (pyright on single file is fast)
+    cmd = ["uv", "run", "ci/lint.py", "--strict", file_path]
+
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        cwd=str(PROJECT_ROOT),
+    )
+
+    if result.returncode != 0:
+        # Send lint output to stderr (fed back to Claude)
+        rel_path = os.path.relpath(file_path, PROJECT_ROOT)
+        print(f"Lint violations in {rel_path}:", file=sys.stderr)
+        # Include both stdout and stderr from lint.py
+        if result.stdout.strip():
+            print(result.stdout.strip(), file=sys.stderr)
+        if result.stderr.strip():
+            print(result.stderr.strip(), file=sys.stderr)
+        return 1  # Exit with code 1 on first failure
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

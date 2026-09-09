@@ -1,0 +1,204 @@
+#pragma once
+
+#include "fl/stl/int.h"
+#include "fl/stl/cstddef.h"
+#include "fl/stl/optional.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+class sstream;  // Forward declaration
+class string;   // Forward declaration
+template <typename> class function;  // Forward declaration for function template
+
+// =============================================================================
+// Global Log Level Control
+// =============================================================================
+// Runtime-configurable log level that can dynamically shut off logging.
+// This affects all FL_PRINT, FL_DBG, FL_WARN, FL_INFO, FL_ERROR macros
+// when they flow through fl::print/fl::println.
+
+/// Log level constants - higher values include more output
+/// Prefixed with FL_ to avoid macro collisions (e.g. NimBLE-Arduino's
+/// #define LOG_LEVEL_NONE).
+enum class LogLevel : u8 {
+    FL_LOG_LEVEL_NONE  = 0,  ///< No logging (completely silent)
+    FL_LOG_LEVEL_ERROR = 1,  ///< Only errors
+    FL_LOG_LEVEL_WARN  = 2,  ///< Errors and warnings
+    FL_LOG_LEVEL_INFO  = 3,  ///< Errors, warnings, and info
+    FL_LOG_LEVEL_DEBUG = 4,  ///< All logging including debug (default)
+};
+
+/// Get the current global log level
+/// @return Current log level (0-4)
+u8 getLogLevel() FL_NO_EXCEPT;
+
+/// Set the global log level
+/// @param level New log level (use LogLevel enum values)
+/// @note Setting to LogLevel::FL_LOG_LEVEL_NONE disables all logging output
+void setLogLevel(u8 level) FL_NO_EXCEPT;
+
+// =============================================================================
+// RAII Scoped Log Control
+// =============================================================================
+
+/// @brief RAII class to temporarily disable all logging output
+///
+/// Creates a scope where all fl::print/fl::println output is suppressed.
+/// When the object is destroyed, the previous log level is restored.
+///
+/// Usage:
+/// @code
+/// void runValidation() {
+///     {
+///         fl::ScopedLogDisable guard;  // Suppress logging
+///         // ... validation code (FL_DBG, FL_WARN, fl::println suppressed) ...
+///     }  // Logging restored when guard goes out of scope
+///
+///     // Or with fl::optional for manual control:
+///     fl::optional<fl::ScopedLogDisable> guard;
+///     guard.emplace();  // Disable logging
+///     // ... work ...
+///     guard.reset();    // Re-enable logging
+///     Serial.println("JSON result");  // Raw Serial.print bypasses fl:: logging
+/// }
+/// @endcode
+class ScopedLogDisable {
+public:
+    /// Constructor - saves current log level and disables logging
+    ScopedLogDisable() FL_NO_EXCEPT : mPreviousLevel(getLogLevel()) {
+        setLogLevel(static_cast<u8>(LogLevel::FL_LOG_LEVEL_NONE));
+    }
+
+    /// Destructor - restores previous log level
+    ~ScopedLogDisable() FL_NO_EXCEPT {
+        setLogLevel(mPreviousLevel);
+    }
+
+    // Non-copyable (prevent accidental copies that would corrupt state)
+    ScopedLogDisable(const ScopedLogDisable&) FL_NO_EXCEPT = delete;
+    ScopedLogDisable& operator=(const ScopedLogDisable&) FL_NO_EXCEPT = delete;
+
+    // Move-only (allow transfer of ownership)
+    ScopedLogDisable(ScopedLogDisable&& other) FL_NO_EXCEPT
+        : mPreviousLevel(other.mPreviousLevel) {
+        // Mark other as "moved-from" by setting to current level (no-op restore)
+        other.mPreviousLevel = static_cast<u8>(LogLevel::FL_LOG_LEVEL_NONE);
+    }
+    ScopedLogDisable& operator=(ScopedLogDisable&&) FL_NO_EXCEPT = delete;
+
+private:
+    u8 mPreviousLevel;
+};
+
+// =============================================================================
+// Serial Initialization
+// =============================================================================
+// Initialize serial communication with specified baud rate
+// Note: On some platforms (host), this is a no-op
+void serial_begin(u32 baudRate = 115200) FL_NO_EXCEPT;
+
+// =============================================================================
+// Low-Level Print Functions
+// =============================================================================
+// These functions avoid printf/sprintf dependencies and use the most efficient
+// output method for each platform.
+
+// Print a string without newline
+void print(const char* str) FL_NO_EXCEPT;
+
+// Print a string with newline
+#ifndef FL_DBG_PRINTLN_DECLARED
+void println(const char* str) FL_NO_EXCEPT;
+#else
+// Declaration already exists from fl/dbg.h
+#endif
+
+// Write raw bytes (binary data)
+// Returns number of bytes written
+size_t write_bytes(const u8* buffer, size_t size) FL_NO_EXCEPT;
+
+// Low-level input functions that provide Serial-style read functionality
+// These use the most efficient input method for each platform
+
+// Returns the number of bytes available to read from input stream
+// Returns 0 if no data is available
+int available() FL_NO_EXCEPT;
+
+// Peeks at the next byte without removing it from input stream
+// Returns the byte value (0-255) if data is available
+// Returns -1 if no data is available
+// Note: Not all platforms support peek (may return -1 always)
+int peek() FL_NO_EXCEPT;
+
+// Reads the next byte from input stream
+// Returns the byte value (0-255) if data is available
+// Returns -1 if no data is available
+int read() FL_NO_EXCEPT;
+
+// Reads from input stream until delimiter is found, writing to sstream (blocking with optional timeout)
+// Returns true when delimiter is found, false only if timeout occurs
+// @param out Output sstream to append characters to (delimiter not included)
+// @param delimiter Character to read until (default: '\n')
+// @param skipChar Character to skip during reading (default: '\r' for cross-platform line endings)
+// @param timeoutMs Optional timeout in milliseconds (nullopt = wait forever)
+// @note Follows Arduino Serial.readStringUntil() API
+bool readStringUntil(sstream& out, char delimiter = '\n', char skipChar = '\r', fl::optional<u32> timeoutMs = fl::nullopt) FL_NO_EXCEPT;
+
+// Reads from input stream until delimiter is found, returning as string (blocking with optional timeout)
+// Returns the string (without delimiter) when delimiter is found
+// Returns nullopt only if timeout occurs (when timeout is set)
+// @param delimiter Character to read until (default: '\n')
+// @param skipChar Character to skip during reading (default: '\r' for cross-platform line endings)
+// @param timeoutMs Optional timeout in milliseconds (nullopt = wait forever)
+// @note Follows Arduino Serial.readStringUntil() API
+// @note Delegates to readStringUntil(sstream&, ...) version
+fl::optional<fl::string> readLine(char delimiter = '\n', char skipChar = '\r', fl::optional<u32> timeoutMs = fl::nullopt) FL_NO_EXCEPT;
+
+// Flush serial output buffer
+// Waits for all buffered data to be transmitted
+// Returns true if flush completed successfully, false on timeout
+// Note: On platforms without buffering, this returns immediately
+bool flush(u32 timeoutMs = 1000) FL_NO_EXCEPT;
+
+// Check if serial port is ready for I/O
+// Returns true if serial is initialized and available
+bool serial_ready() FL_NO_EXCEPT;
+
+// =============================================================================
+// Timing Functions
+// =============================================================================
+// Note: fl::millis() is provided by fl/stl/chrono.h
+// Note: fl::delay() is provided by fl/system/delay.h
+
+#ifdef FASTLED_TESTING
+
+// Testing function handler types
+using print_handler_t = fl::function<void(const char*)>;
+using println_handler_t = fl::function<void(const char*)>;
+using available_handler_t = fl::function<int()>;
+using read_handler_t = fl::function<int()>;
+using flush_handler_t = fl::function<bool(u32)>;
+using write_bytes_handler_t = fl::function<size_t(const u8*, size_t)>;
+
+// Inject function handlers for testing
+void inject_print_handler(const print_handler_t& handler) FL_NO_EXCEPT;
+void inject_println_handler(const println_handler_t& handler) FL_NO_EXCEPT;
+void inject_available_handler(const available_handler_t& handler) FL_NO_EXCEPT;
+void inject_read_handler(const read_handler_t& handler) FL_NO_EXCEPT;
+void inject_flush_handler(const flush_handler_t& handler) FL_NO_EXCEPT;
+void inject_write_bytes_handler(const write_bytes_handler_t& handler) FL_NO_EXCEPT;
+
+// Clear all injected handlers (restores default behavior)
+void clear_io_handlers() FL_NO_EXCEPT;
+
+// Clear individual handlers
+void clear_print_handler() FL_NO_EXCEPT;
+void clear_println_handler() FL_NO_EXCEPT;
+void clear_available_handler() FL_NO_EXCEPT;
+void clear_read_handler() FL_NO_EXCEPT;
+void clear_flush_handler() FL_NO_EXCEPT;
+void clear_write_bytes_handler() FL_NO_EXCEPT;
+
+#endif // FASTLED_TESTING
+
+} // namespace fl

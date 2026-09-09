@@ -1,0 +1,30 @@
+REM Title: macOS System Info
+REM Author: BadUSB Library
+REM Description: Shows system information
+REM Target: macOS 10.15+
+REM Category: Utilities
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Show system info
+STRING sw_vers
+ENTER
+DELAY 1000
+
+STRING whoami
+ENTER
+DELAY 1000
+
+STRING hostname
+ENTER
+DELAY 1000
+
+STRING uptime
+ENTER

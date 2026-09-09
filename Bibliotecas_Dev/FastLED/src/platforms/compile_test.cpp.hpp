@@ -1,0 +1,143 @@
+
+#define FASTLED_INTERNAL  
+#include "fl/system/fastled.h"
+#include "fl/stl/int.h"
+#include "fl/stl/static_assert.h"
+#include "fl/stl/stdint.h"
+#include "fl/stl/type_traits.h"
+
+// In the future, one of these might fail, and the user will want
+// to disable the compile tests so that they can continue on their
+// way.
+// If for some reason you are hitting this then use a BUILD define
+// (not an include define) in your build flags section
+// '-DFASTLED_USE_COMPILE_TESTS=0'
+#ifndef FASTLED_USE_COMPILE_TESTS
+#define FASTLED_USE_COMPILE_TESTS 1
+#endif
+
+#if FASTLED_USE_COMPILE_TESTS
+
+#include "fl/stl/compiler_control.h"
+
+FL_DISABLE_WARNING_PUSH
+
+FL_DISABLE_WARNING(unused-function)
+FL_DISABLE_WARNING(unused-parameter)
+
+// Include platform-specific compile test headers
+#if defined(__AVR__)
+#include "platforms/avr/compile_test.hpp"
+#elif defined(ESP32) || defined(ESP8266)
+#include "platforms/esp/compile_test.hpp"
+#elif defined(ARDUINO_ARCH_CI13XX)
+#include "platforms/ci13xx/compile_test.hpp"
+#elif defined(FL_IS_APOLLO3)
+#include "platforms/apollo3/compile_test.hpp"
+#elif defined(FL_IS_ARM)
+#include "platforms/arm/compile_test.hpp"
+#elif defined(FASTLED_STUB_IMPL)
+#include "platforms/stub/compile_test.hpp"
+#include "fl/stl/noexcept.h"
+#endif
+
+namespace fl {
+
+// Test that sstream and sstream_noop can accept all fundamental integer types
+// This ensures SFINAE collision prevention works across all platforms
+FL_MAYBE_UNUSED static void test_strstream_integer_operators() FL_NO_EXCEPT {
+    fl::sstream ss;
+    fl::sstream_noop fss;
+
+    // Test all fundamental integer types - ensures no ambiguous overloads
+    char c = 'a'; ss << c; fss << c;
+    signed char sc = 1; ss << sc; fss << sc;
+    unsigned char uc = 2; ss << uc; fss << uc;
+    short s = 3; ss << s; fss << s;
+    unsigned short us = 4; ss << us; fss << us;
+    int i = 5; ss << i; fss << i;
+    u32 ui = 6; ss << ui; fss << ui;
+    long l = 7; ss << l; fss << l;
+    unsigned long ul = 8; ss << ul; fss << ul;
+    long long ll = 9; ss << ll; fss << ll;
+    unsigned long long ull = 10; ss << ull; fss << ull;
+
+    // Test fl:: types (which are typedefs to fundamental types)
+    i8 i8v = 11; ss << i8v; fss << i8v;
+    u8 u8v = 12; ss << u8v; fss << u8v;
+    i16 i16v = 13; ss << i16v; fss << i16v;
+    u16 u16v = 14; ss << u16v; fss << u16v;
+    i32 i32v = 15; ss << i32v; fss << i32v;
+    u32 u32v = 16; ss << u32v; fss << u32v;
+    i64 i64v = 17; ss << i64v; fss << i64v;
+    u64 u64v = 18; ss << u64v; fss << u64v;
+    fl::size sz = 19; ss << sz; fss << sz;
+
+    // Test chaining multiple types
+    ss << sc << uc << s << us << i << ui << l << ul << ll << ull;
+    fss << sc << uc << s << us << i << ui << l << ul << ll << ull;
+
+    // Test with stdint types (should match fl:: types)
+    i8 i8_std = 20; ss << i8_std; fss << i8_std;
+    u8 u8_std = 21; ss << u8_std; fss << u8_std;
+    i16 i16_std = 22; ss << i16_std; fss << i16_std;
+    u16 u16_std = 23; ss << u16_std; fss << u16_std;
+    i32 i32_std = 24; ss << i32_std; fss << i32_std;
+    u32 u32_std = 25; ss << u32_std; fss << u32_std;
+    i64 i64_std = 26; ss << i64_std; fss << i64_std;
+    u64 u64_std = 27; ss << u64_std; fss << u64_std;
+}
+
+// This file contains only compile-time tests.
+// The platform-specific test functions are called to trigger
+// any compile-time errors if the platform is not configured correctly.
+FL_MAYBE_UNUSED static void compile_tests() FL_NO_EXCEPT {
+
+    FL_STATIC_ASSERT(fl::is_same<u32, u32>::value, "u32 must be the same type as u32");
+    FL_STATIC_ASSERT(fl::is_same<u16, u16>::value, "u16 must be the same type as u16");
+    FL_STATIC_ASSERT(fl::is_same<u8, u8>::value, "u8 must be the same type as u8");
+    FL_STATIC_ASSERT(fl::is_same<i32, i32>::value, "i32 must be the same type as i32");
+    FL_STATIC_ASSERT(fl::is_same<i16, i16>::value, "i16 must be the same type as i16");
+    FL_STATIC_ASSERT(fl::is_same<i8, i8>::value, "i8 must be the same type as i8");
+    FL_STATIC_ASSERT(fl::is_same<size, size_t>::value, "size must be the same type as size_t");
+    FL_STATIC_ASSERT(fl::is_same<uptr, uintptr_t>::value, "uptr must be the same type as uintptr_t");
+
+    // Test sstream integer operator overloads
+    test_strstream_integer_operators();
+
+    // Size assertions for FastLED integer types
+    FL_STATIC_ASSERT(sizeof(i8) == 1, "i8 must be exactly 1 byte");
+    FL_STATIC_ASSERT(sizeof(u8) == 1, "u8 must be exactly 1 byte");
+    FL_STATIC_ASSERT(sizeof(i16) == 2, "i16 must be exactly 2 bytes");
+    FL_STATIC_ASSERT(sizeof(u16) == 2, "u16 must be exactly 2 bytes");
+    FL_STATIC_ASSERT(sizeof(i32) == 4, "i32 must be exactly 4 bytes");
+    FL_STATIC_ASSERT(sizeof(u32) == 4, "u32 must be exactly 4 bytes");
+    FL_STATIC_ASSERT(sizeof(i64) == 8, "i64 must be exactly 8 bytes");
+    FL_STATIC_ASSERT(sizeof(u64) == 8, "u64 must be exactly 8 bytes");
+    FL_STATIC_ASSERT(sizeof(uptr) == sizeof(uintptr_t), "uptr must be exactly the same size as uintptr_t");
+    FL_STATIC_ASSERT(sizeof(size) == sizeof(size_t), "size must be exactly the same size as size_t");
+
+#if defined(__AVR__)
+    avr_compile_tests();
+#elif defined(ESP32)
+    esp32_compile_tests();
+#elif defined(ESP8266)
+    esp8266_compile_tests();
+#elif defined(ARDUINO_ARCH_CI13XX)
+    ci13xx_compile_tests();
+#elif defined(FL_IS_APOLLO3)
+    apollo3_compile_tests();
+#elif defined(FL_IS_ARM)
+    arm_compile_tests();
+#elif defined(FASTLED_STUB_IMPL)
+    stub_compile_tests();
+#else
+    // No platform-specific tests available for this platform
+    FL_STATIC_ASSERT(false, "Unknown platform - no compile tests available");
+#endif
+}
+}
+
+FL_DISABLE_WARNING_POP
+
+#endif  // FASTLED_USE_COMPILE_TESTS

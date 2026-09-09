@@ -1,0 +1,1042 @@
+#include "fl/audio/audio_reactive.h"
+#include "fl/audio/audio_processor.h"
+#include "fl/stl/assert.h"
+#include "fl/audio/detector/musical_beat_detector.h"
+#include "fl/audio/detector/multiband_beat_detector.h"
+#include "fl/audio/mic_response_data.h"
+#include "fl/math/math.h"
+#include "fl/stl/span.h"
+#include "fl/stl/int.h"
+#include "fl/stl/unique_ptr.h"  // For unique_ptr
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace audio {
+
+Reactive::Reactive()
+    : mConfig{}, mContext(fl::make_shared<Context>(Sample())), mFFTBins(16)  // Initialize with 16 frequency bins
+{
+    // Initialize enhanced beat detection components
+    mSpectralFluxDetector = fl::make_unique<SpectralFluxDetector>();
+    mPerceptualWeighting = fl::make_unique<PerceptualWeighting>();
+
+    // Initialize previous magnitudes array to zero
+    for (fl::size i = 0; i < mPreviousMagnitudes.size(); ++i) {
+        mPreviousMagnitudes[i] = 0.0f;
+    }
+
+    // Configure spectral silence envelopes — tau=0.2s chosen because FFT noise
+    // floor is brittle; these metrics should snap to zero quickly in silence.
+    SilenceEnvelope::Config envCfg;
+    envCfg.decayTauSeconds = 0.2f;
+    envCfg.targetValue = 0.0f;
+    mDominantFrequencyEnvelope.configure(envCfg);
+    mMagnitudeEnvelope.configure(envCfg);
+    mSpectralFluxEnvelope.configure(envCfg);
+}
+
+Reactive::~Reactive() FL_NO_EXCEPT = default;
+
+void Reactive::begin(const ReactiveConfig& config) {
+    setConfig(config);
+
+    // Reset state
+    mCurrentData = Data{};
+    mSmoothedData = Data{};
+    mLastBeatTime = 0;
+    mPreviousVolume = 0.0f;
+
+    // Configure signal conditioning components
+    SignalConditionerConfig scConfig;
+    scConfig.enableDCRemoval = config.enableSignalConditioning;
+    scConfig.enableSpikeFilter = config.enableSignalConditioning;
+    scConfig.enableNoiseGate = config.noiseGate && config.enableSignalConditioning;
+    mSignalConditioner.configure(scConfig);
+    mSignalConditioner.reset();
+
+    NoiseFloorTrackerConfig nfConfig;
+    nfConfig.enabled = config.enableNoiseFloorTracking;
+    mNoiseFloorTracker.configure(nfConfig);
+    mNoiseFloorTracker.reset();
+
+    // Configure frequency bin mapper (obligatory - fixes hardcoded sample rate)
+    FrequencyBinMapperConfig fbmConfig;
+    fbmConfig.mode = FrequencyBinMode::Bins16;
+    fbmConfig.sampleRate = config.sampleRate;
+    fbmConfig.useLogSpacing = config.enableLogBinSpacing;
+    fbmConfig.minFrequency = 20.0f;
+    fbmConfig.maxFrequency = static_cast<float>(config.sampleRate) / 2.0f;  // Nyquist
+    // fftBinCount will be set when we know the fft::FFT size (after first processSample)
+    fbmConfig.fftBinCount = 256;  // Default, overridden when actual fft::FFT size known
+    mFrequencyBinMapper.configure(fbmConfig);
+
+    // Compute pink noise compensation gains from log-spaced CQ bin centers.
+    // CQ bins are log-spaced from fmin to fmax (default: 90-14080 Hz),
+    // matching Bins::binToFreq().
+    {
+        const float fmin = fft::Args::DefaultMinFrequency();
+        const float fmax = fft::Args::DefaultMaxFrequency();
+        const float m = fl::logf(fmax / fmin);
+        float binCenters[16];
+        for (int i = 0; i < 16; ++i) {
+            binCenters[i] = fmin * fl::expf(m * static_cast<float>(i) / 15.0f);
+        }
+        computePinkNoiseGains(binCenters, 16, mPinkNoiseGains);
+        mPinkNoiseComputed = true;
+    }
+
+    // Reset enhanced beat detection components
+    if (mSpectralFluxDetector) {
+        mSpectralFluxDetector->reset();
+        mSpectralFluxDetector->setThreshold(config.spectralFluxThreshold);
+    }
+
+    // Configure musical beat detection (Phase 3 middleware - lazy creation)
+    if (config.enableMusicalBeatDetection) {
+        if (!mMusicalBeatDetector) {
+            mMusicalBeatDetector = fl::make_unique<detector::MusicalBeat>();
+        }
+        detector::MusicalBeatDetectorConfig mbdConfig;
+        mbdConfig.minBPM = config.musicalBeatMinBPM;
+        mbdConfig.maxBPM = config.musicalBeatMaxBPM;
+        mbdConfig.minBeatConfidence = config.musicalBeatConfidence;
+        mbdConfig.sampleRate = config.sampleRate;
+        mbdConfig.samplesPerFrame = 512;  // Typical fft::FFT frame size
+        mMusicalBeatDetector->configure(mbdConfig);
+        mMusicalBeatDetector->reset();
+    } else {
+        mMusicalBeatDetector.reset();
+    }
+
+    if (config.enableMultiBandBeats) {
+        if (!mMultiBandBeatDetector) {
+            mMultiBandBeatDetector = fl::make_unique<detector::MultiBandBeat>();
+        }
+        detector::MultiBandBeatDetectorConfig mbbdConfig;
+        mbbdConfig.bassThreshold = config.bassThreshold;
+        mbbdConfig.midThreshold = config.midThreshold;
+        mbbdConfig.trebleThreshold = config.trebleThreshold;
+        mMultiBandBeatDetector->configure(mbbdConfig);
+        mMultiBandBeatDetector->reset();
+    } else {
+        mMultiBandBeatDetector.reset();
+    }
+
+    // Configure spectral equalizer (optional - lazy creation)
+    if (config.enableSpectralEqualizer) {
+        if (!mSpectralEqualizer) {
+            mSpectralEqualizer = fl::make_unique<SpectralEqualizer>();
+        }
+        SpectralEqualizerConfig seConfig;
+        seConfig.curve = EqualizationCurve::AWeighting;
+        seConfig.numBands = 16;
+        mSpectralEqualizer->configure(seConfig);
+    } else {
+        mSpectralEqualizer.reset();
+    }
+
+    // Reset previous magnitudes
+    for (fl::size i = 0; i < mPreviousMagnitudes.size(); ++i) {
+        mPreviousMagnitudes[i] = 0.0f;
+    }
+
+    // Reset silence envelopes for spectral metrics.
+    mDominantFrequencyEnvelope.reset(0.0f);
+    mMagnitudeEnvelope.reset(0.0f);
+    mSpectralFluxEnvelope.reset(0.0f);
+
+    // Update Context sample rate
+    mContext->setSampleRate(config.sampleRate);
+
+    // Ensure internal Processor exists and is configured.
+    // Eager creation so processSample() can always source volume from it.
+    ensureAudioProcessor();
+    mAudioProcessor->setSampleRate(config.sampleRate);
+    mAudioProcessor->reset();
+    // Force EnergyAnalyzer detector registration so updateFromContext() updates it
+    mAudioProcessor->getEnergy();
+}
+
+void Reactive::setConfig(const ReactiveConfig& config) {
+    mConfig = config;
+}
+
+void Reactive::processSample(const Sample& sample) {
+    if (!sample.isValid()) {
+        return; // Invalid sample, ignore
+    }
+
+    // Extract timestamp from the Sample
+    fl::u32 currentTimeMs = sample.timestamp();
+
+    // Phase 1: Signal conditioning pipeline
+    Sample processedSample = sample;
+
+    // Step 1: Signal conditioning (DC removal, spike filtering, noise gate)
+    if (mConfig.enableSignalConditioning) {
+        processedSample = mSignalConditioner.processSample(processedSample);
+        if (!processedSample.isValid()) {
+            return; // Signal was completely filtered out
+        }
+    }
+
+    // Step 2: Noise floor tracking (update tracker, but don't modify signal)
+    if (mConfig.enableNoiseFloorTracking) {
+        float rms = processedSample.rms();
+        mNoiseFloorTracker.update(rms);
+    }
+
+    // Set conditioned sample on shared Context (clears per-frame FFT cache)
+    mContext->setSample(processedSample);
+
+    // Populate silence flag after setSample() resets it — detectors run via
+    // updateFromContext() below and will read context->isSilent().
+    //
+    // Uses an absolute RMS threshold (not the adaptive noise floor). The
+    // adaptive floor's first-sample init matches the current level, which
+    // causes isAboveFloor() to be stuck at false for any steady signal —
+    // wrongly flagging loud constant tones as silent. Absolute RMS is the
+    // right primitive for "no signal present": a steady loud tone has
+    // large RMS and is not silent regardless of noise-floor adaptation.
+    if (mConfig.enableNoiseFloorTracking) {
+        constexpr float kSilenceRmsThreshold = 10.0f;
+        mContext->setSilent(processedSample.rms() < kSilenceRmsThreshold);
+    }
+
+    // Process the conditioned Sample - timing is gated by sample availability
+    processFFT(processedSample);
+
+    // Update internal Processor BEFORE populating Data fields,
+    // so updateVolumeAndPeak() can source normalized volume.
+    ensureAudioProcessor();
+    mAudioProcessor->updateFromContext(mContext);
+
+    updateVolumeAndPeak(processedSample);
+
+    // Enhanced processing pipeline
+    applySpectralEqualization();
+    calculateBandEnergies();
+
+    // Apply pink noise compensation AFTER band energy calculation
+    // so that bassEnergy/midEnergy/trebleEnergy reflect actual spectral content
+    if (mPinkNoiseComputed) {
+        for (int i = 0; i < 16; ++i) {
+            mCurrentData.frequencyBins[i] *= mPinkNoiseGains[i];
+        }
+    }
+
+    // Apply A-weighting BEFORE spectral flux and beat detection so that
+    // high-frequency attenuation is visible to onset/beat algorithms.
+    // Previously this ran after beat detection, causing bin 15 to appear
+    // disproportionately active (boosted by pink noise but not yet attenuated).
+    applyAWeighting();
+
+    updateSpectralFlux();
+
+    // Silence gate for spectral metrics (FastLED#2253).
+    // During audio the envelopes are pass-through; during silence they
+    // exponentially decay (tau=0.2s) the raw argmax / flux outputs toward
+    // zero so the FFT noise floor cannot lock onto arbitrary bins.
+    // dt is the exact audio duration of this PCM buffer (frame-rate
+    // independent). When enableNoiseFloorTracking is false, isSilent()
+    // is always false, making this a strict pass-through (no behavior
+    // change for users who haven't opted in).
+    {
+        const bool silent = mContext->isSilent();
+        const float dt = computeAudioDt(processedSample.pcm().size(),
+                                        mConfig.sampleRate);
+        mCurrentData.dominantFrequency = mDominantFrequencyEnvelope.update(
+            silent, mCurrentData.dominantFrequency, dt);
+        mCurrentData.magnitude = mMagnitudeEnvelope.update(
+            silent, mCurrentData.magnitude, dt);
+        mCurrentData.spectralFlux = mSpectralFluxEnvelope.update(
+            silent, mCurrentData.spectralFlux, dt);
+    }
+
+    // Enhanced beat detection (includes original)
+    detectBeat(currentTimeMs);
+    detectEnhancedBeats(currentTimeMs);
+
+    // Loudness compensation stays after beat detection — it is a global
+    // level adjustment that should not affect relative frequency balance.
+    applyLoudnessCompensation();
+
+    applyGain();
+    applyScaling();
+    smoothResults();
+
+    mCurrentData.timestamp = currentTimeMs;
+
+    // Processor was already updated earlier in this method (before updateVolumeAndPeak).
+}
+
+void Reactive::update(fl::u32 currentTimeMs) {
+    // This method handles updates without new sample data
+    // Just apply smoothing and update timestamp
+    smoothResults();
+    mCurrentData.timestamp = currentTimeMs;
+}
+
+void Reactive::processFFT(const Sample& sample) {
+    // Get PCM data from Sample
+    const auto& pcmData = sample.pcm();
+    if (pcmData.empty()) return;
+
+    // Use shared Context for cached FFT (avoids recomputation if Processor also needs it)
+    auto cachedBins = mContext->getFFT16();
+    mFFTBins = *cachedBins;
+
+    // Map fft::FFT bins to frequency channels using WLED-compatible mapping
+    mapFFTBinsToFrequencyChannels();
+}
+
+void Reactive::mapFFTBinsToFrequencyChannels() {
+    // Sample::fft() returns CQ-kernel bins that are already
+    // frequency-mapped (linearly spaced from fmin to fmax). Copy them
+    // directly instead of re-mapping through FrequencyBinMapper, which
+    // incorrectly treats CQ bins as raw DFT bins.
+    fl::span<const float> rawBins = mFFTBins.raw();
+    if (rawBins.empty()) {
+        for (int i = 0; i < 16; ++i) {
+            mCurrentData.frequencyBins[i] = 0.0f;
+        }
+        return;
+    }
+
+    // Copy CQ bins directly to frequency bins (already frequency-mapped)
+    for (int i = 0; i < 16; ++i) {
+        if (i < static_cast<int>(rawBins.size())) {
+            mCurrentData.frequencyBins[i] = rawBins[i];
+        } else {
+            mCurrentData.frequencyBins[i] = 0.0f;
+        }
+    }
+
+    // Note: Pink noise compensation is applied later in processSample(),
+    // AFTER band energies are calculated from the raw CQ bins.
+    // This ensures bassEnergy/midEnergy/trebleEnergy reflect actual
+    // spectral content, not display-oriented compensation.
+
+    // Find dominant frequency bin
+    float maxMagnitude = 0.0f;
+    int maxBin = 0;
+    for (int i = 0; i < 16; ++i) {
+        if (mCurrentData.frequencyBins[i] > maxMagnitude) {
+            maxMagnitude = mCurrentData.frequencyBins[i];
+            maxBin = i;
+        }
+    }
+
+    // CQ bins are log-spaced — use the same formula as Bins::binToFreq().
+    mCurrentData.dominantFrequency = mFFTBins.binToFreq(maxBin);
+    mCurrentData.magnitude = maxMagnitude;
+}
+
+void Reactive::updateVolumeAndPeak(const Sample& sample) {
+    // Get PCM data from Sample
+    const auto& pcmData = sample.pcm();
+    if (pcmData.empty()) {
+        mCurrentData.volume = 0.0f;
+        mCurrentData.volumeRaw = 0.0f;
+        mCurrentData.peak = 0.0f;
+        return;
+    }
+    
+    // Raw volume: simple bounded normalization (no adaptive smoothing)
+    // 23170 ≈ max RMS of a full-scale 16-bit sine wave (32767 / √2).
+    // Clamp so clipped/square-wave input stays at 1.0.
+    float rms = sample.rms();
+    float raw = rms / 23170.0f;
+    mCurrentData.volumeRaw = (raw > 1.0f) ? 1.0f : raw;
+
+    // Normalized volume from Processor's EnergyAnalyzer (adaptive 0.0-1.0).
+    // mAudioProcessor is guaranteed non-null: ensureAudioProcessor() is called
+    // in processSample() immediately before this method.
+    FL_ASSERT(mAudioProcessor, "mAudioProcessor is null — was begin() called before processSample()?");
+    mCurrentData.volume = mAudioProcessor->getEnergy();
+
+    // Peak: simple bounded normalization
+    float maxSample = 0.0f;
+    for (fl::i16 pcmSample : pcmData) {
+        float absSample = (pcmSample < 0) ? -static_cast<float>(pcmSample) : static_cast<float>(pcmSample);
+        maxSample = (maxSample > absSample) ? maxSample : absSample;
+    }
+    mCurrentData.peak = maxSample / 32768.0f;
+}
+
+void Reactive::detectBeat(fl::u32 currentTimeMs) {
+    // Need minimum time since last beat
+    if (currentTimeMs - mLastBeatTime < BEAT_COOLDOWN) {
+        mCurrentData.beatDetected = false;
+        return;
+    }
+    
+    // Use raw volume for beat detection — it is proportional to amplitude.
+    // Adaptive volume (mCurrentData.volume) converges toward a steady state,
+    // masking the transient jumps that indicate beats.
+    // NOTE: this runs BEFORE applyGain(), so beat detection is gain-independent.
+    float currentVolume = mCurrentData.volumeRaw;
+    
+    // Beat detected if volume significantly increased
+    if (currentVolume > mPreviousVolume + mVolumeThreshold && 
+        currentVolume > 0.02f) {  // Minimum volume threshold
+        mCurrentData.beatDetected = true;
+        mLastBeatTime = currentTimeMs;
+    } else {
+        mCurrentData.beatDetected = false;
+    }
+    
+    // Update previous volume for next comparison using attack/decay
+    float beatAttackRate = mConfig.attack / 255.0f * 0.5f + 0.1f;   // 0.1 to 0.6
+    float beatDecayRate = mConfig.decay / 255.0f * 0.3f + 0.05f;    // 0.05 to 0.35
+    
+    if (currentVolume > mPreviousVolume) {
+        // Rising volume - use attack rate (faster tracking)
+        mPreviousVolume = mPreviousVolume * (1.0f - beatAttackRate) + currentVolume * beatAttackRate;
+    } else {
+        // Falling volume - use decay rate (slower tracking)
+        mPreviousVolume = mPreviousVolume * (1.0f - beatDecayRate) + currentVolume * beatDecayRate;
+    }
+}
+
+void Reactive::applyGain() {
+    // Apply gain setting (0-255 maps to 0.0-2.0 multiplier)
+    float gainMultiplier = static_cast<float>(mConfig.gain) / 128.0f;
+
+    // Don't apply gain to adaptive volume — it's self-normalizing (converges
+    // to 1.0 regardless of amplitude), so scaling it is meaningless.
+    mCurrentData.volumeRaw *= gainMultiplier;
+    mCurrentData.peak *= gainMultiplier;
+
+    // Clamp to documented 0.0-1.0 range after gain
+    if (mCurrentData.volumeRaw > 1.0f) mCurrentData.volumeRaw = 1.0f;
+    if (mCurrentData.peak > 1.0f) mCurrentData.peak = 1.0f;
+
+    for (int i = 0; i < 16; ++i) {
+        mCurrentData.frequencyBins[i] *= gainMultiplier;
+    }
+}
+
+void Reactive::applyScaling() {
+    // Apply scaling mode to frequency bins
+    for (int i = 0; i < 16; ++i) {
+        float value = mCurrentData.frequencyBins[i];
+        
+        switch (mConfig.scalingMode) {
+            case 1: // Logarithmic scaling
+                if (value > 1.0f) {
+                    value = logf(value) * 20.0f; // Scale factor
+                } else {
+                    value = 0.0f;
+                }
+                break;
+                
+            case 2: // Linear scaling (no change)
+                // value remains as-is
+                break;
+                
+            case 3: // Square root scaling
+                if (value > 0.0f) {
+                    value = sqrtf(value) * 8.0f; // Scale factor
+                } else {
+                    value = 0.0f;
+                }
+                break;
+                
+            case 0: // No scaling
+            default:
+                // value remains as-is
+                break;
+        }
+        
+        mCurrentData.frequencyBins[i] = value;
+    }
+}
+
+void Reactive::smoothResults() {
+    // Attack/decay smoothing - different rates for rising vs falling values
+    // Convert attack/decay times to smoothing factors
+    // Shorter times = less smoothing (faster response)
+    float attackFactor = 1.0f - (mConfig.attack / 255.0f * 0.9f);  // Range: 0.1 to 1.0
+    float decayFactor = 1.0f - (mConfig.decay / 255.0f * 0.95f);   // Range: 0.05 to 1.0
+    
+    // volume is already adaptively smoothed by EnergyAnalyzer — copy directly
+    // to avoid double-smoothing which would make it sluggish.
+    mSmoothedData.volume = mCurrentData.volume;
+
+    // Apply attack/decay smoothing to volumeRaw
+    if (mCurrentData.volumeRaw > mSmoothedData.volumeRaw) {
+        mSmoothedData.volumeRaw = mSmoothedData.volumeRaw * (1.0f - attackFactor) + 
+                                 mCurrentData.volumeRaw * attackFactor;
+    } else {
+        mSmoothedData.volumeRaw = mSmoothedData.volumeRaw * (1.0f - decayFactor) + 
+                                 mCurrentData.volumeRaw * decayFactor;
+    }
+    
+    // Apply attack/decay smoothing to peak
+    if (mCurrentData.peak > mSmoothedData.peak) {
+        mSmoothedData.peak = mSmoothedData.peak * (1.0f - attackFactor) + 
+                            mCurrentData.peak * attackFactor;
+    } else {
+        mSmoothedData.peak = mSmoothedData.peak * (1.0f - decayFactor) + 
+                            mCurrentData.peak * decayFactor;
+    }
+    
+    // Apply attack/decay smoothing to frequency bins
+    for (int i = 0; i < 16; ++i) {
+        if (mCurrentData.frequencyBins[i] > mSmoothedData.frequencyBins[i]) {
+            // Rising - use attack time
+            mSmoothedData.frequencyBins[i] = mSmoothedData.frequencyBins[i] * (1.0f - attackFactor) + 
+                                            mCurrentData.frequencyBins[i] * attackFactor;
+        } else {
+            // Falling - use decay time  
+            mSmoothedData.frequencyBins[i] = mSmoothedData.frequencyBins[i] * (1.0f - decayFactor) + 
+                                            mCurrentData.frequencyBins[i] * decayFactor;
+        }
+    }
+    
+    // Copy non-smoothed values
+    mSmoothedData.beatDetected = mCurrentData.beatDetected;
+    mSmoothedData.dominantFrequency = mCurrentData.dominantFrequency;
+    mSmoothedData.magnitude = mCurrentData.magnitude;
+    mSmoothedData.timestamp = mCurrentData.timestamp;
+
+    // Copy enhanced beat detection fields
+    mSmoothedData.bassBeatDetected = mCurrentData.bassBeatDetected;
+    mSmoothedData.midBeatDetected = mCurrentData.midBeatDetected;
+    mSmoothedData.trebleBeatDetected = mCurrentData.trebleBeatDetected;
+    mSmoothedData.spectralFlux = mCurrentData.spectralFlux;
+    mSmoothedData.bassEnergy = mCurrentData.bassEnergy;
+    mSmoothedData.midEnergy = mCurrentData.midEnergy;
+    mSmoothedData.trebleEnergy = mCurrentData.trebleEnergy;
+}
+
+const Data& Reactive::getData() const {
+    return mCurrentData;
+}
+
+const Data& Reactive::getSmoothedData() const {
+    return mSmoothedData;
+}
+
+float Reactive::getVolume() const {
+    return mCurrentData.volume;
+}
+
+float Reactive::getBass() const {
+    // Average of bins 0-1 (sub-bass and bass)
+    return (mCurrentData.frequencyBins[0] + mCurrentData.frequencyBins[1]) / 2.0f;
+}
+
+float Reactive::getMid() const {
+    // Average of bins 6-7 (midrange around 1kHz)
+    return (mCurrentData.frequencyBins[6] + mCurrentData.frequencyBins[7]) / 2.0f;
+}
+
+float Reactive::getTreble() const {
+    // Average of bins 14-15 (high frequencies)
+    return (mCurrentData.frequencyBins[14] + mCurrentData.frequencyBins[15]) / 2.0f;
+}
+
+bool Reactive::isBeat() const {
+    return mCurrentData.beatDetected;
+}
+
+bool Reactive::isBassBeat() const {
+    return mCurrentData.bassBeatDetected;
+}
+
+bool Reactive::isMidBeat() const {
+    return mCurrentData.midBeatDetected;
+}
+
+bool Reactive::isTrebleBeat() const {
+    return mCurrentData.trebleBeatDetected;
+}
+
+float Reactive::getSpectralFlux() const {
+    return mCurrentData.spectralFlux;
+}
+
+float Reactive::getBassEnergy() const {
+    return mCurrentData.bassEnergy;
+}
+
+float Reactive::getMidEnergy() const {
+    return mCurrentData.midEnergy;
+}
+
+float Reactive::getTrebleEnergy() const {
+    return mCurrentData.trebleEnergy;
+}
+
+fl::u8 Reactive::volumeToScale255() const {
+    float scaled = mCurrentData.volume * 255.0f;
+    if (scaled < 0.0f) scaled = 0.0f;
+    if (scaled > 255.0f) scaled = 255.0f;
+    return static_cast<fl::u8>(scaled);
+}
+
+CRGB Reactive::volumeToColor(const CRGBPalette16& /* palette */) const {
+    fl::u8 index = volumeToScale255();
+    // Simplified color palette lookup 
+    return CRGB(index, index, index);  // For now, return grayscale
+}
+
+fl::u8 Reactive::frequencyToScale255(fl::u8 binIndex) const {
+    if (binIndex >= 16) return 0;
+    // Bin values have no fixed upper bound (depend on FFT output, scaling
+    // mode, gain, and equalization).  Best-effort clamp to 0-255.
+    float value = mCurrentData.frequencyBins[binIndex];
+    if (value < 0.0f) value = 0.0f;
+    if (value > 255.0f) value = 255.0f;
+    return static_cast<fl::u8>(value);
+}
+
+// Enhanced beat detection methods
+void Reactive::calculateBandEnergies() {
+    span<const float> bins(mCurrentData.frequencyBins, 16);
+    mCurrentData.bassEnergy = mFrequencyBinMapper.getBassEnergy(bins);
+    mCurrentData.midEnergy = mFrequencyBinMapper.getMidEnergy(bins);
+    mCurrentData.trebleEnergy = mFrequencyBinMapper.getTrebleEnergy(bins);
+}
+
+void Reactive::applySpectralEqualization() {
+    if (!mConfig.enableSpectralEqualizer) {
+        return;
+    }
+
+    // Apply spectral EQ in-place on the frequency bins
+    float equalizedBins[16];
+    span<const float> inputSpan(mCurrentData.frequencyBins, 16);
+    span<float> outputSpan(equalizedBins, 16);
+    mSpectralEqualizer->apply(inputSpan, outputSpan);
+
+    // Copy back
+    for (int i = 0; i < 16; ++i) {
+        mCurrentData.frequencyBins[i] = equalizedBins[i];
+    }
+}
+
+void Reactive::updateSpectralFlux() {
+    // Compute spectral flux from Reactive's own previous magnitudes.
+    //
+    // IMPORTANT ordering contract (called from processSample):
+    //   Step 7: updateSpectralFlux()   — uses & updates Reactive::mPreviousMagnitudes
+    //   Step 9: detectEnhancedBeats()  — calls SpectralFluxDetector::detectOnset()
+    //           which uses & updates SpectralFluxDetector::mPreviousMagnitudes
+    //
+    // Both arrays converge to the same values (both set to mCurrentData.frequencyBins
+    // each frame), but they are separate to avoid a state-ordering bug: calling
+    // mSpectralFluxDetector->calculateSpectralFlux() here would update the
+    // detector's internal state and cause detectOnset() to see zero flux.
+    float flux = 0.0f;
+    for (int i = 0; i < 16; ++i) {
+        float diff = mCurrentData.frequencyBins[i] - mPreviousMagnitudes[i];
+        if (diff > 0.0f) {
+            flux += diff;
+        }
+    }
+    mCurrentData.spectralFlux = flux;
+
+    // Update previous magnitudes for next frame
+    for (int i = 0; i < 16; ++i) {
+        mPreviousMagnitudes[i] = mCurrentData.frequencyBins[i];
+    }
+}
+
+void Reactive::detectEnhancedBeats(fl::u32 currentTimeMs) {
+    // Reset beat flags
+    mCurrentData.bassBeatDetected = false;
+    mCurrentData.midBeatDetected = false;
+    mCurrentData.trebleBeatDetected = false;
+
+    // Skip if enhanced beat detection is disabled
+    if (!mConfig.enableSpectralFlux && !mConfig.enableMultiBand &&
+        !mConfig.enableMusicalBeatDetection && !mConfig.enableMultiBandBeats) {
+        return;
+    }
+
+    // Need minimum time since last beat for enhanced detection too
+    if (currentTimeMs - mLastBeatTime < BEAT_COOLDOWN) {
+        return;
+    }
+
+    // Spectral flux-based onset detection (preliminary)
+    bool onsetDetected = false;
+    float onsetStrength = 0.0f;
+
+    if (mConfig.enableSpectralFlux && mSpectralFluxDetector) {
+        onsetDetected = mSpectralFluxDetector->detectOnset(
+            mCurrentData.frequencyBins
+        );
+
+        // Use already-computed spectral flux for onset strength.
+        // Do NOT call calculateSpectralFlux() again — detectOnset() already
+        // updated the detector's internal state, so a second call would see
+        // current == previous and return 0.
+        if (onsetDetected) {
+            onsetStrength = mCurrentData.spectralFlux;
+        }
+    }
+
+    // Phase 3: Musical beat detection - validates onsets as true musical beats
+    if (mConfig.enableMusicalBeatDetection) {
+        mMusicalBeatDetector->processSample(onsetDetected, onsetStrength);
+
+        if (mMusicalBeatDetector->isBeat()) {
+            // This is a validated musical beat, not just a random onset
+            mCurrentData.beatDetected = true;
+            mLastBeatTime = currentTimeMs;
+        }
+    } else if (onsetDetected) {
+        // Fall back to simple onset detection if musical beat detection disabled
+        mCurrentData.beatDetected = true;
+        mLastBeatTime = currentTimeMs;
+    }
+
+    // Phase 3: Multi-band beat detection - per-frequency beat tracking
+    if (mConfig.enableMultiBandBeats) {
+        mMultiBandBeatDetector->detectBeats(mCurrentData.frequencyBins);
+
+        mCurrentData.bassBeatDetected = mMultiBandBeatDetector->isBassBeat();
+        mCurrentData.midBeatDetected = mMultiBandBeatDetector->isMidBeat();
+        mCurrentData.trebleBeatDetected = mMultiBandBeatDetector->isTrebleBeat();
+    } else if (mConfig.enableMultiBand) {
+        // Fall back to simple threshold-based detection if multi-band disabled
+        // Bass beat detection (bins 0-1)
+        if (mCurrentData.bassEnergy > mConfig.bassThreshold) {
+            mCurrentData.bassBeatDetected = true;
+        }
+
+        // Mid beat detection (bins 6-7)
+        if (mCurrentData.midEnergy > mConfig.midThreshold) {
+            mCurrentData.midBeatDetected = true;
+        }
+
+        // Treble beat detection (bins 14-15)
+        if (mCurrentData.trebleEnergy > mConfig.trebleThreshold) {
+            mCurrentData.trebleBeatDetected = true;
+        }
+    }
+}
+
+void Reactive::applyAWeighting() {
+    if (mPerceptualWeighting) {
+        mPerceptualWeighting->applyAWeighting(mCurrentData);
+    }
+}
+
+void Reactive::applyLoudnessCompensation() {
+    if (mPerceptualWeighting) {
+        mPerceptualWeighting->applyLoudnessCompensation(mCurrentData, 0.28f);
+    }
+}
+
+// Helper methods
+float Reactive::mapFrequencyBin(int fromBin, int toBin) {
+    if (fromBin < 0 || toBin >= static_cast<int>(mFFTBins.bands()) || fromBin > toBin) {
+        return 0.0f;
+    }
+    
+    float sum = 0.0f;
+    for (int i = fromBin; i <= toBin; ++i) {
+        if (i < static_cast<int>(mFFTBins.raw().size())) {
+            sum += mFFTBins.raw()[i];
+        }
+    }
+    
+    return sum / static_cast<float>(toBin - fromBin + 1);
+}
+
+float Reactive::computeRMS(const fl::vector<fl::i16>& samples) {
+    if (samples.empty()) return 0.0f;
+    
+    float sumSquares = 0.0f;
+    for (const auto& sample : samples) {
+        float f = static_cast<float>(sample);
+        sumSquares += f * f;
+    }
+    
+    return sqrtf(sumSquares / samples.size());
+}
+
+// SpectralFluxDetector implementation
+SpectralFluxDetector::SpectralFluxDetector() 
+    : mFluxThreshold(0.1f)
+#if SKETCH_HAS_LARGE_MEMORY
+    , mHistoryIndex(0)
+#endif
+{
+    // Initialize previous magnitudes to zero
+    for (fl::size i = 0; i < mPreviousMagnitudes.size(); ++i) {
+        mPreviousMagnitudes[i] = 0.0f;
+    }
+    
+#if SKETCH_HAS_LARGE_MEMORY
+    // Initialize flux history to zero
+    for (fl::size i = 0; i < mFluxHistory.size(); ++i) {
+        mFluxHistory[i] = 0.0f;
+    }
+#endif
+}
+
+SpectralFluxDetector::~SpectralFluxDetector() FL_NO_EXCEPT = default;
+
+void SpectralFluxDetector::reset() {
+    for (fl::size i = 0; i < mPreviousMagnitudes.size(); ++i) {
+        mPreviousMagnitudes[i] = 0.0f;
+    }
+    
+#if SKETCH_HAS_LARGE_MEMORY
+    for (fl::size i = 0; i < mFluxHistory.size(); ++i) {
+        mFluxHistory[i] = 0.0f;
+    }
+    mHistoryIndex = 0;
+#endif
+}
+
+bool SpectralFluxDetector::detectOnset(span<const float, 16> currentBins) {
+    float flux = calculateSpectralFlux(currentBins, span<const float, 16>(mPreviousMagnitudes.data(), 16));
+    
+#if SKETCH_HAS_LARGE_MEMORY
+    // Store flux in history for adaptive threshold calculation
+    mFluxHistory[mHistoryIndex] = flux;
+    mHistoryIndex = (mHistoryIndex + 1) % mFluxHistory.size();
+    
+    float adaptiveThreshold = calculateAdaptiveThreshold();
+    return flux > adaptiveThreshold;
+#else
+    // Simple fixed threshold for memory-constrained platforms
+    return flux > mFluxThreshold;
+#endif
+}
+
+float SpectralFluxDetector::calculateSpectralFlux(span<const float, 16> currentBins, span<const float, 16> previousBins) {
+    float flux = 0.0f;
+
+    // Calculate spectral flux as sum of positive differences
+    for (int i = 0; i < 16; ++i) {
+        float diff = currentBins[i] - previousBins[i];
+        if (diff > 0.0f) {
+            flux += diff;
+        }
+    }
+
+    // Update previous magnitudes for next calculation
+    for (int i = 0; i < 16; ++i) {
+        mPreviousMagnitudes[i] = currentBins[i];
+    }
+    
+    return flux;
+}
+
+void SpectralFluxDetector::setThreshold(float threshold) {
+    mFluxThreshold = threshold;
+}
+
+float SpectralFluxDetector::getThreshold() const {
+    return mFluxThreshold;
+}
+
+#if SKETCH_HAS_LARGE_MEMORY
+float SpectralFluxDetector::calculateAdaptiveThreshold() {
+    // Calculate moving average of flux history
+    float sum = 0.0f;
+    for (fl::size i = 0; i < mFluxHistory.size(); ++i) {
+        sum += mFluxHistory[i];
+    }
+    float average = sum / mFluxHistory.size();
+    
+    // Adaptive threshold is base threshold plus some multiple of recent average
+    return mFluxThreshold + (average * 0.5f);
+}
+#endif
+
+// BeatDetectors implementation  
+BeatDetectors::BeatDetectors()
+    : mBassEnergy(0.0f), mMidEnergy(0.0f), mTrebleEnergy(0.0f)
+    , mPreviousBassEnergy(0.0f), mPreviousMidEnergy(0.0f), mPreviousTrebleEnergy(0.0f)
+{
+}
+
+BeatDetectors::~BeatDetectors() FL_NO_EXCEPT = default;
+
+void BeatDetectors::reset() {
+#if SKETCH_HAS_LARGE_MEMORY
+    bass.reset();
+    mid.reset(); 
+    treble.reset();
+#else
+    combined.reset();
+#endif
+    
+    mBassEnergy = 0.0f;
+    mMidEnergy = 0.0f;
+    mTrebleEnergy = 0.0f;
+    mPreviousBassEnergy = 0.0f;
+    mPreviousMidEnergy = 0.0f;
+    mPreviousTrebleEnergy = 0.0f;
+}
+
+void BeatDetectors::detectBeats(span<const float, 16> frequencyBins, Data& audioData) {
+    // Calculate current band energies
+    mBassEnergy = (frequencyBins[0] + frequencyBins[1]) / 2.0f;
+    mMidEnergy = (frequencyBins[6] + frequencyBins[7]) / 2.0f;
+    mTrebleEnergy = (frequencyBins[14] + frequencyBins[15]) / 2.0f;
+    
+    // Simple threshold-based detection using per-band energy deltas.
+    audioData.bassBeatDetected = (mBassEnergy > mPreviousBassEnergy * 1.3f) && (mBassEnergy > 0.1f);
+    audioData.midBeatDetected = (mMidEnergy > mPreviousMidEnergy * 1.25f) && (mMidEnergy > 0.08f);
+    audioData.trebleBeatDetected = (mTrebleEnergy > mPreviousTrebleEnergy * 1.2f) && (mTrebleEnergy > 0.05f);
+    
+    // Update previous energies
+    mPreviousBassEnergy = mBassEnergy;
+    mPreviousMidEnergy = mMidEnergy;
+    mPreviousTrebleEnergy = mTrebleEnergy;
+}
+
+void BeatDetectors::setThresholds(float bassThresh, float midThresh, float trebleThresh) {
+#if SKETCH_HAS_LARGE_MEMORY
+    bass.setThreshold(bassThresh);
+    mid.setThreshold(midThresh);
+    treble.setThreshold(trebleThresh);
+#else
+    combined.setThreshold((bassThresh + midThresh + trebleThresh) / 3.0f);
+#endif
+}
+
+// PerceptualWeighting implementation
+PerceptualWeighting::PerceptualWeighting()
+#if SKETCH_HAS_LARGE_MEMORY
+    : mHistoryIndex(0)
+#endif
+{
+#if SKETCH_HAS_LARGE_MEMORY
+    // Initialize loudness history to zero
+    for (fl::size i = 0; i < mLoudnessHistory.size(); ++i) {
+        mLoudnessHistory[i] = 0.0f;
+    }
+    // Suppress unused warning until mHistoryIndex is implemented
+    (void)mHistoryIndex;
+#endif
+}
+
+PerceptualWeighting::~PerceptualWeighting() FL_NO_EXCEPT = default;
+
+void PerceptualWeighting::applyAWeighting(Data& data) const {
+    // Apply A-weighting coefficients to frequency bins
+    for (int i = 0; i < 16; ++i) {
+        data.frequencyBins[i] *= A_WEIGHTING_COEFFS[i];
+    }
+}
+
+void PerceptualWeighting::applyLoudnessCompensation(Data& data, float referenceLevel) const {
+    // Calculate current loudness level from raw (non-adaptive) volume.
+    // data.volume is adaptive (converges to ~1.0) and cannot distinguish
+    // quiet from loud signals.  volumeRaw preserves actual amplitude.
+    float currentLoudness = data.volumeRaw;
+    
+    // Calculate compensation factor based on difference from reference
+    float compensationFactor = 1.0f;
+    if (currentLoudness < referenceLevel) {
+        // Boost quiet signals
+        compensationFactor = 1.0f + (referenceLevel - currentLoudness) / referenceLevel * 0.3f;
+    } else if (currentLoudness > referenceLevel * 1.5f) {
+        // Slightly reduce very loud signals  
+        compensationFactor = 1.0f - (currentLoudness - referenceLevel * 1.5f) / (referenceLevel * 2.0f) * 0.2f;
+    }
+    
+    // Apply compensation to frequency bins
+    for (int i = 0; i < 16; ++i) {
+        data.frequencyBins[i] *= compensationFactor;
+    }
+    
+#if SKETCH_HAS_LARGE_MEMORY
+    // Store in history for future adaptive compensation (not implemented yet)
+    // This would be used for more sophisticated dynamic range compensation
+#endif
+}
+
+void Reactive::setGain(float gain) {
+    ensureAudioProcessor().setGain(gain);
+}
+
+float Reactive::getGain() const {
+    if (mAudioProcessor) {
+        return mAudioProcessor->getGain();
+    }
+    return 1.0f;
+}
+
+// Signal conditioning stats accessors
+const SignalConditioner::Stats& Reactive::getSignalConditionerStats() const {
+    return mSignalConditioner.getStats();
+}
+
+const NoiseFloorTracker::Stats& Reactive::getNoiseFloorStats() const {
+    return mNoiseFloorTracker.getStats();
+}
+
+bool Reactive::isSpectralEqualizerEnabled() const {
+    return mConfig.enableSpectralEqualizer;
+}
+
+const SpectralEqualizer::Stats& Reactive::getSpectralEqualizerStats() const {
+    if (!mSpectralEqualizer) {
+        static const SpectralEqualizer::Stats kEmpty{};
+        return kEmpty;
+    }
+    return mSpectralEqualizer->getStats();
+}
+
+// ----- Polling Getter Forwarding (via internal Processor) -----
+
+Processor& Reactive::ensureAudioProcessor() {
+    if (!mAudioProcessor) {
+        mAudioProcessor = fl::make_unique<Processor>();
+        mAudioProcessor->setSampleRate(mConfig.sampleRate);
+    }
+    return *mAudioProcessor;
+}
+
+float Reactive::getVocalConfidence() { return ensureAudioProcessor().getVocalConfidence(); }
+float Reactive::getBeatConfidence() { return ensureAudioProcessor().getBeatConfidence(); }
+float Reactive::getBPM() { return ensureAudioProcessor().getBPM(); }
+float Reactive::getEnergyLevel() { return ensureAudioProcessor().getEnergy(); }
+float Reactive::getPeakLevel() { return ensureAudioProcessor().getPeakLevel(); }
+float Reactive::getBassLevel() { return ensureAudioProcessor().getBassLevel(); }
+float Reactive::getMidLevel() { return ensureAudioProcessor().getMidLevel(); }
+float Reactive::getTrebleLevel() { return ensureAudioProcessor().getTrebleLevel(); }
+bool Reactive::isSilent() { return ensureAudioProcessor().isSilent(); }
+u32 Reactive::getSilenceDuration() { return ensureAudioProcessor().getSilenceDuration(); }
+float Reactive::getTransientStrength() { return ensureAudioProcessor().getTransientStrength(); }
+float Reactive::getDynamicTrend() { return ensureAudioProcessor().getDynamicTrend(); }
+bool Reactive::isCrescendo() { return ensureAudioProcessor().isCrescendo(); }
+bool Reactive::isDiminuendo() { return ensureAudioProcessor().isDiminuendo(); }
+float Reactive::getPitchConfidence() { return ensureAudioProcessor().getPitchConfidence(); }
+float Reactive::getPitchHz() { return ensureAudioProcessor().getPitch(); }
+float Reactive::getTempoConfidence() { return ensureAudioProcessor().getTempoConfidence(); }
+float Reactive::getTempoBPM() { return ensureAudioProcessor().getTempoBPM(); }
+float Reactive::getBuildupIntensity() { return ensureAudioProcessor().getBuildupIntensity(); }
+float Reactive::getBuildupProgress() { return ensureAudioProcessor().getBuildupProgress(); }
+float Reactive::getDropImpact() { return ensureAudioProcessor().getDropImpact(); }
+bool Reactive::isKick() { return ensureAudioProcessor().isKick(); }
+bool Reactive::isSnare() { return ensureAudioProcessor().isSnare(); }
+bool Reactive::isHiHat() { return ensureAudioProcessor().isHiHat(); }
+bool Reactive::isTom() { return ensureAudioProcessor().isTom(); }
+u8 Reactive::getCurrentNote() { return ensureAudioProcessor().getCurrentNote(); }
+float Reactive::getNoteVelocity() { return ensureAudioProcessor().getNoteVelocity(); }
+float Reactive::getNoteConfidence() { return ensureAudioProcessor().getNoteConfidence(); }
+float Reactive::getDownbeatConfidence() { return ensureAudioProcessor().getDownbeatConfidence(); }
+float Reactive::getMeasurePhase() { return ensureAudioProcessor().getMeasurePhase(); }
+u8 Reactive::getCurrentBeatNumber() { return ensureAudioProcessor().getCurrentBeatNumber(); }
+float Reactive::getBackbeatConfidence() { return ensureAudioProcessor().getBackbeatConfidence(); }
+float Reactive::getBackbeatStrength() { return ensureAudioProcessor().getBackbeatStrength(); }
+float Reactive::getChordConfidence() { return ensureAudioProcessor().getChordConfidence(); }
+float Reactive::getKeyConfidence() { return ensureAudioProcessor().getKeyConfidence(); }
+float Reactive::getMoodArousal() { return ensureAudioProcessor().getMoodArousal(); }
+float Reactive::getMoodValence() { return ensureAudioProcessor().getMoodValence(); }
+
+} // namespace audio
+} // namespace fl

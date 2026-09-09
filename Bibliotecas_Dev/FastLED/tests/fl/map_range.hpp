@@ -1,0 +1,244 @@
+
+#include "fl/math/math.h"
+#include "fl/math/geometry.h"
+#include "test.h"
+#include "fl/stl/int.h"
+
+using namespace fl;
+
+FL_TEST_CASE("fl::map_range - basic functionality") {
+    FL_SUBCASE("integer mapping") {
+        // Map 0-100 to 0-1000
+        FL_CHECK_EQ(map_range(0, 0, 100, 0, 1000), 0);
+        FL_CHECK_EQ(map_range(50, 0, 100, 0, 1000), 500);
+        FL_CHECK_EQ(map_range(100, 0, 100, 0, 1000), 1000);
+        FL_CHECK_EQ(map_range(25, 0, 100, 0, 1000), 250);
+        FL_CHECK_EQ(map_range(75, 0, 100, 0, 1000), 750);
+    }
+
+    FL_SUBCASE("negative range mapping") {
+        // Map -100 to 100 to 0 to 200
+        FL_CHECK_EQ(map_range(-100, -100, 100, 0, 200), 0);
+        FL_CHECK_EQ(map_range(0, -100, 100, 0, 200), 100);
+        FL_CHECK_EQ(map_range(100, -100, 100, 0, 200), 200);
+        FL_CHECK_EQ(map_range(-50, -100, 100, 0, 200), 50);
+    }
+
+    FL_SUBCASE("reverse mapping") {
+        // Map 0-100 to 1000-0 (reversed output range)
+        FL_CHECK_EQ(map_range(0, 0, 100, 1000, 0), 1000);
+        FL_CHECK_EQ(map_range(50, 0, 100, 1000, 0), 500);
+        FL_CHECK_EQ(map_range(100, 0, 100, 1000, 0), 0);
+    }
+
+    FL_SUBCASE("float to float mapping") {
+        FL_CHECK(doctest::Approx(map_range(0.0f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 0.0f);
+        FL_CHECK(doctest::Approx(map_range(0.5f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 50.0f);
+        FL_CHECK(doctest::Approx(map_range(1.0f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 100.0f);
+        FL_CHECK(doctest::Approx(map_range(0.25f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 25.0f);
+    }
+
+    FL_SUBCASE("double to double mapping") {
+        FL_CHECK(doctest::Approx(map_range(0.0, 0.0, 1.0, 0.0, 100.0)).epsilon(0.001) == 0.0);
+        FL_CHECK(doctest::Approx(map_range(0.5, 0.0, 1.0, 0.0, 100.0)).epsilon(0.001) == 50.0);
+        FL_CHECK(doctest::Approx(map_range(1.0, 0.0, 1.0, 0.0, 100.0)).epsilon(0.001) == 100.0);
+    }
+
+    FL_SUBCASE("int to float mapping") {
+        FL_CHECK(doctest::Approx(map_range(0, 0, 100, 0.0f, 1.0f)).epsilon(0.001) == 0.0f);
+        FL_CHECK(doctest::Approx(map_range(50, 0, 100, 0.0f, 1.0f)).epsilon(0.001) == 0.5f);
+        FL_CHECK(doctest::Approx(map_range(100, 0, 100, 0.0f, 1.0f)).epsilon(0.001) == 1.0f);
+    }
+}
+
+FL_TEST_CASE("fl::map_range - u8 specialization") {
+    FL_SUBCASE("basic u8 mapping") {
+        FL_CHECK_EQ((map_range<u8, u8>(0, 0, 255, 0, 100)), 0);
+        FL_CHECK_EQ((map_range<u8, u8>(255, 0, 255, 0, 100)), 100);
+        FL_CHECK_EQ((map_range<u8, u8>(127, 0, 255, 0, 100)), 49);  // ~50
+    }
+
+    FL_SUBCASE("u8 partial range") {
+        FL_CHECK_EQ((map_range<u8, u8>(0, 0, 100, 0, 255)), 0);
+        FL_CHECK_EQ((map_range<u8, u8>(50, 0, 100, 0, 255)), 127);
+        FL_CHECK_EQ((map_range<u8, u8>(100, 0, 100, 0, 255)), 255);
+    }
+
+    FL_SUBCASE("u8 clamping - underflow") {
+        // The u8 specialization clamps to 0 if result would be negative
+        u8 result = map_range<u8, u8>(10, 50, 100, 0, 255);
+        FL_CHECK(result >= 0);  // Should be clamped to minimum
+    }
+
+    FL_SUBCASE("u8 clamping - overflow") {
+        // The u8 specialization clamps to 255 if result would exceed 255
+        u8 result = map_range<u8, u8>(200, 0, 100, 0, 255);
+        FL_CHECK_EQ(result, 255);
+    }
+
+    FL_SUBCASE("u8 edge values") {
+        FL_CHECK_EQ((map_range<u8, u8>(0, 0, 0, 100, 200)), 100);  // in_min == in_max
+        FL_CHECK_EQ((map_range<u8, u8>(5, 0, 0, 100, 200)), 100);  // in_min == in_max
+    }
+}
+
+FL_TEST_CASE("fl::map_range - u16 specialization") {
+    FL_SUBCASE("basic u16 mapping") {
+        FL_CHECK_EQ((map_range<u16, u16>(0, 0, 65535, 0, 1000)), 0);
+        FL_CHECK_EQ((map_range<u16, u16>(65535, 0, 65535, 0, 1000)), 1000);
+        FL_CHECK_EQ((map_range<u16, u16>(32767, 0, 65535, 0, 1000)), 499);  // ~500
+    }
+
+    FL_SUBCASE("u16 partial range") {
+        FL_CHECK_EQ((map_range<u16, u16>(0, 0, 1000, 0, 65535)), 0);
+        FL_CHECK_EQ((map_range<u16, u16>(500, 0, 1000, 0, 65535)), 32767);
+        FL_CHECK_EQ((map_range<u16, u16>(1000, 0, 1000, 0, 65535)), 65535);
+    }
+
+    FL_SUBCASE("u16 overflow protection") {
+        // The u16 specialization prevents overflow by promoting to u32
+        u16 result = map_range<u16, u16>(60000, 0, 65535, 0, 65535);
+        FL_CHECK(result >= 0);
+        FL_CHECK(result <= 65535);
+    }
+}
+
+FL_TEST_CASE("fl::map_range - edge cases") {
+    FL_SUBCASE("exact min boundary") {
+        // When value equals in_min, should return out_min exactly
+        FL_CHECK_EQ(map_range(100, 100, 200, 1000, 2000), 1000);
+        FL_CHECK_EQ(map_range(0.0f, 0.0f, 1.0f, 50.0f, 100.0f), 50.0f);
+    }
+
+    FL_SUBCASE("exact max boundary") {
+        // When value equals in_max, should return out_max exactly
+        FL_CHECK_EQ(map_range(200, 100, 200, 1000, 2000), 2000);
+        FL_CHECK_EQ(map_range(1.0f, 0.0f, 1.0f, 50.0f, 100.0f), 100.0f);
+    }
+
+    FL_SUBCASE("single point range") {
+        // When in_min == in_max, should return out_min
+        FL_CHECK_EQ(map_range(5, 5, 5, 100, 200), 100);
+        FL_CHECK_EQ(map_range(10, 5, 5, 100, 200), 100);
+        FL_CHECK(doctest::Approx(map_range(5.0f, 5.0f, 5.0f, 100.0f, 200.0f)).epsilon(0.001) == 100.0f);
+    }
+
+    FL_SUBCASE("value out of input range") {
+        // map_range doesn't clamp input, so values outside the range extrapolate
+        FL_CHECK_EQ(map_range(150, 0, 100, 0, 1000), 1500);  // Extrapolates beyond range
+        FL_CHECK_EQ(map_range(-50, 0, 100, 0, 1000), -500);  // Extrapolates below range
+    }
+}
+
+FL_TEST_CASE("fl::map_range_clamped") {
+    FL_SUBCASE("value within range") {
+        FL_CHECK_EQ(map_range_clamped(50, 0, 100, 0, 1000), 500);
+        FL_CHECK_EQ(map_range_clamped(25, 0, 100, 0, 1000), 250);
+    }
+
+    FL_SUBCASE("value below range - clamped to min") {
+        FL_CHECK_EQ(map_range_clamped(-50, 0, 100, 0, 1000), 0);
+        FL_CHECK_EQ(map_range_clamped(-1, 0, 100, 0, 1000), 0);
+    }
+
+    FL_SUBCASE("value above range - clamped to max") {
+        FL_CHECK_EQ(map_range_clamped(150, 0, 100, 0, 1000), 1000);
+        FL_CHECK_EQ(map_range_clamped(200, 0, 100, 0, 1000), 1000);
+    }
+
+    FL_SUBCASE("float clamping") {
+        FL_CHECK(doctest::Approx(map_range_clamped(-0.5f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 0.0f);
+        FL_CHECK(doctest::Approx(map_range_clamped(1.5f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 100.0f);
+        FL_CHECK(doctest::Approx(map_range_clamped(0.5f, 0.0f, 1.0f, 0.0f, 100.0f)).epsilon(0.001) == 50.0f);
+    }
+
+    FL_SUBCASE("u8 clamped") {
+        FL_CHECK_EQ((map_range_clamped<u8, u8>(200, 0, 100, 0, 255)), 255);
+        FL_CHECK_EQ((map_range_clamped<u8, u8>(50, 0, 100, 0, 255)), 127);
+    }
+}
+
+FL_TEST_CASE("fl::map_range - vec2 specialization") {
+    FL_SUBCASE("basic vec2 mapping") {
+        vec2<float> out_min = {0.0f, 0.0f};
+        vec2<float> out_max = {100.0f, 200.0f};
+
+        auto result = map_range(0.0f, 0.0f, 1.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.001) == 0.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.001) == 0.0f);
+
+        result = map_range(1.0f, 0.0f, 1.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.001) == 100.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.001) == 200.0f);
+
+        result = map_range(0.5f, 0.0f, 1.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.001) == 50.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.001) == 100.0f);
+    }
+
+    FL_SUBCASE("vec2 with different component ranges") {
+        vec2<float> out_min = {-100.0f, -200.0f};
+        vec2<float> out_max = {100.0f, 200.0f};
+
+        // When input is at midpoint (0), output should be midpoint of range
+        auto result = map_range(0.0f, -10.0f, 10.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.1) == 0.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.1) == 0.0f);
+
+        // When input is at min, output should be out_min
+        result = map_range(-10.0f, -10.0f, 10.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.1) == -100.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.1) == -200.0f);
+
+        // When input is at max, output should be out_max
+        result = map_range(10.0f, -10.0f, 10.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.1) == 100.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.1) == 200.0f);
+    }
+
+    FL_SUBCASE("vec2 single point range") {
+        vec2<float> out_min = {10.0f, 20.0f};
+        vec2<float> out_max = {100.0f, 200.0f};
+
+        auto result = map_range(5.0f, 5.0f, 5.0f, out_min, out_max);
+        FL_CHECK(doctest::Approx(result.x).epsilon(0.001) == 10.0f);
+        FL_CHECK(doctest::Approx(result.y).epsilon(0.001) == 20.0f);
+    }
+}
+
+FL_TEST_CASE("fl::map_range - float equality handling") {
+    FL_SUBCASE("float boundary equality uses epsilon") {
+        // The map_range_detail::equals function uses fl::almost_equal
+        // This ensures that values very close to boundaries are treated correctly
+        float epsilon = 0.0000001f;
+        float result = map_range(1.0f + epsilon, 1.0f, 2.0f, 100.0f, 200.0f);
+        // Should be very close to 100.0f if epsilon comparison works
+        FL_CHECK(result >= 99.9f);
+        FL_CHECK(result <= 100.1f);
+    }
+
+    FL_SUBCASE("double boundary equality uses epsilon") {
+        double epsilon = 0.00000000001;
+        double result = map_range(1.0 + epsilon, 1.0, 2.0, 100.0, 200.0);
+        FL_CHECK(result >= 99.99);
+        FL_CHECK(result <= 100.01);
+    }
+}
+
+FL_TEST_CASE("fl::map_range - different type combinations") {
+    FL_SUBCASE("i16 to i32") {
+        i16 in_val = 100;
+        i32 result = map_range(in_val, i16(0), i16(1000), i32(0), i32(1000000));
+        FL_CHECK_EQ(result, 100000);
+    }
+
+    FL_SUBCASE("u32 to u32") {
+        u32 result = map_range(500000u, 0u, 1000000u, 0u, 100u);
+        FL_CHECK_EQ(result, 50u);
+    }
+
+    FL_SUBCASE("float to int") {
+        int result = map_range(0.5f, 0.0f, 1.0f, 0, 100);
+        FL_CHECK_EQ(result, 50);
+    }
+}

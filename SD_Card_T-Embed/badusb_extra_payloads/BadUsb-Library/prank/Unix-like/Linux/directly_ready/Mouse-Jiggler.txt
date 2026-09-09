@@ -1,0 +1,35 @@
+REM Title: Linux Mouse Jiggler
+REM Author: BadUSB Library
+REM Description: Moves mouse cursor to prevent screen lock
+REM Target: Linux
+REM Category: Prank
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create mouse jiggler
+STRING cat > /tmp/mouse_jiggler.sh << 'EOF'
+#!/bin/bash
+while true; do
+    xdotool mousemove 100 100
+    sleep 1
+    xdotool mousemove 200 200
+    sleep 1
+done
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/mouse_jiggler.sh
+ENTER
+DELAY 1000
+
+STRING nohup /tmp/mouse_jiggler.sh > /dev/null 2>&1 &
+ENTER
+DELAY 2000

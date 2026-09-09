@@ -1,0 +1,27 @@
+name: rgbw
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_rgbw.yml'
+      - '.github/workflows/build_template.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template.yml
+    with:
+      args: esp32s3 --examples RGBW

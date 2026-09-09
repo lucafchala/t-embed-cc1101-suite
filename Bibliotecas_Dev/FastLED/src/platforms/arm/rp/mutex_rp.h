@@ -1,0 +1,91 @@
+// ok no namespace fl
+// allow-include-after-namespace
+#pragma once
+
+// IWYU pragma: private
+
+/// @file platforms/arm/rp/mutex_rp.h
+/// @brief RP2040/RP2350 Pico SDK mutex implementation
+///
+/// This header provides RP2040/RP2350-specific mutex implementations using Pico SDK mutexes.
+/// For RP platforms, we use std::unique_lock for full compatibility with condition variables.
+
+#include "fl/stl/assert.h"
+// IWYU pragma: begin_keep
+#include <mutex>  // ok include - needed for std::unique_lock
+#include "fl/stl/noexcept.h"
+#include "pico/mutex.h"  // IWYU pragma: keep
+// IWYU pragma: end_keep
+
+namespace fl {
+namespace platforms {
+
+// Forward declarations
+class MutexRP;
+class RecursiveMutexRP;
+
+// Platform implementation aliases for RP2040/RP2350
+using mutex = MutexRP;
+using recursive_mutex = RecursiveMutexRP;
+
+// Use std::unique_lock/lock_guard for full compatibility with std::condition_variable
+template<typename Mutex>
+using unique_lock = std::unique_lock<Mutex>;  // okay std namespace
+template<typename Mutex>
+using lock_guard = std::lock_guard<Mutex>;  // okay std namespace
+
+// Lock constructor tag types (re-export from std)
+using std::defer_lock_t;  // okay std namespace
+using std::try_to_lock_t;  // okay std namespace
+using std::adopt_lock_t;  // okay std namespace
+using std::defer_lock;  // okay std namespace
+using std::try_to_lock;  // okay std namespace
+using std::adopt_lock;  // okay std namespace
+
+// RP2040/RP2350 Pico SDK mutex wrapper
+class MutexRP {
+private:
+    mutex_t mMutex;
+
+public:
+    MutexRP() FL_NO_EXCEPT;
+    ~MutexRP();
+
+    // Non-copyable and non-movable
+    MutexRP(const MutexRP&) = delete;
+    MutexRP& operator=(const MutexRP&) = delete;
+    MutexRP(MutexRP&&) = delete;
+    MutexRP& operator=(MutexRP&&) = delete;
+
+    void lock() FL_NO_EXCEPT;
+    void unlock() FL_NO_EXCEPT;
+    bool try_lock() FL_NO_EXCEPT;
+};
+
+// RP2040/RP2350 Pico SDK recursive mutex wrapper
+class RecursiveMutexRP {
+private:
+    recursive_mutex_t mMutex;
+
+public:
+    RecursiveMutexRP() FL_NO_EXCEPT;
+    ~RecursiveMutexRP();
+
+    // Non-copyable and non-movable
+    RecursiveMutexRP(const RecursiveMutexRP&) = delete;
+    RecursiveMutexRP& operator=(const RecursiveMutexRP&) = delete;
+    RecursiveMutexRP(RecursiveMutexRP&&) = delete;
+    RecursiveMutexRP& operator=(RecursiveMutexRP&&) = delete;
+
+    void lock() FL_NO_EXCEPT;
+    void unlock() FL_NO_EXCEPT;
+    bool try_lock() FL_NO_EXCEPT;
+};
+
+// Define FASTLED_MULTITHREADED for RP2040/RP2350 (has dual-core support)
+#ifndef FASTLED_MULTITHREADED
+#define FASTLED_MULTITHREADED 1
+#endif
+
+} // namespace platforms
+} // namespace fl

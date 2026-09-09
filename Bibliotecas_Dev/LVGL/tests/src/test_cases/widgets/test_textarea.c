@@ -1,0 +1,924 @@
+#if LV_BUILD_TEST
+#include "../lvgl.h"
+#include "../../lvgl_private.h"
+
+#include "unity/unity.h"
+
+static lv_obj_t * active_screen = NULL;
+static lv_obj_t * textarea = NULL;
+
+static const char * textarea_default_text = "";
+static char insert_replace_text[10] = "123";
+
+static void event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_INSERT) {
+        const char * txt = lv_event_get_param(e);
+        if(txt && txt[0] >= '0' && txt[0] <= '9') {
+            /* insert */
+        }
+        else {
+            lv_obj_t * obj = lv_event_get_target(e);
+            lv_textarea_set_insert_replace(obj, insert_replace_text);
+        }
+    }
+}
+
+static bool test_font_get_glyph_dsc(const lv_font_t * font,
+                                    lv_font_glyph_dsc_t * dsc_out,
+                                    uint32_t unicode_letter,
+                                    uint32_t unicode_letter_next)
+{
+    LV_UNUSED(font);
+    LV_UNUSED(unicode_letter_next);
+    if(unicode_letter >= 0x20 && unicode_letter <= 0x7E) {
+        dsc_out->adv_w = 10;
+        dsc_out->box_w = 8;
+        dsc_out->box_h = 12;
+        return true;
+    }
+    return false;
+}
+
+const void * test_font_get_glyph_bitmap(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf)
+{
+    LV_UNUSED(g_dsc);
+    LV_UNUSED(draw_buf);
+    return NULL;
+}
+
+static lv_font_t test_font_no_bullet = {
+    .get_glyph_dsc = test_font_get_glyph_dsc,
+    .get_glyph_bitmap = test_font_get_glyph_bitmap,
+    .line_height = 14,
+    .base_line = 12,
+};
+
+void setUp(void)
+{
+    active_screen = lv_screen_active();
+    textarea = lv_textarea_create(active_screen);
+}
+
+void tearDown(void)
+{
+    lv_obj_clean(active_screen);
+}
+
+void test_textarea_should_have_valid_documented_default_values(void)
+{
+    TEST_ASSERT(lv_textarea_get_cursor_click_pos(textarea));
+    TEST_ASSERT_EQUAL(0U, lv_textarea_get_one_line(textarea));
+    /* No placeholder text should be set on widget creation */
+    TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_placeholder_text(textarea));
+    TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_text(textarea));
+}
+
+/* When in password mode the lv_textarea_get_text function returns
+ * the actual text, not the bullet characters. */
+void test_textarea_should_return_actual_text_when_password_mode_is_enabled(void)
+{
+    const char * text = "Hello LVGL!";
+
+    lv_textarea_add_text(textarea, text);
+    lv_textarea_set_password_mode(textarea, true);
+
+    TEST_ASSERT_TRUE(lv_textarea_get_password_mode(textarea));
+    TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_text(textarea));
+
+    lv_textarea_set_password_mode(textarea, false);
+}
+
+void test_textarea_should_update_label_style_with_one_line_enabled(void)
+{
+    lv_textarea_t * txt_ptr = (lv_textarea_t *) textarea;
+
+    lv_textarea_add_text(textarea, "Hi");
+    lv_textarea_set_one_line(textarea, true);
+
+    int32_t left_padding = lv_obj_get_style_pad_left(txt_ptr->label, LV_PART_MAIN);
+    int32_t right_padding = lv_obj_get_style_pad_right(txt_ptr->label, LV_PART_MAIN);
+    int32_t line_width = lv_obj_get_width(txt_ptr->label);
+    int32_t expected_size = left_padding + right_padding + line_width;
+
+    TEST_ASSERT(lv_textarea_get_one_line(textarea));
+    TEST_ASSERT_EQUAL_UINT16(expected_size, lv_obj_get_width(txt_ptr->label));
+    TEST_ASSERT_EQUAL_UINT16(lv_pct(100), lv_obj_get_style_min_width(txt_ptr->label, LV_PART_MAIN));
+}
+
+void test_textarea_cursor_click_pos_field_update(void)
+{
+    lv_textarea_set_cursor_click_pos(textarea, false);
+
+    TEST_ASSERT_FALSE(lv_textarea_get_cursor_click_pos(textarea));
+}
+
+void test_textarea_should_scroll_to_the_end(void)
+{
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_add_text(textarea, "Hi this is a long text to test if the textarea scrolls to the end");
+    lv_obj_set_width(textarea, LV_DPI_DEF * 3);
+
+    int32_t cur_pos = (int32_t)lv_textarea_get_cursor_pos(textarea);
+    const lv_font_t * font = lv_obj_get_style_text_font(textarea, LV_PART_MAIN);
+    int32_t font_h = lv_font_get_line_height(font);
+    int32_t w = lv_obj_get_content_width(textarea);
+    if(cur_pos + font_h - lv_obj_get_scroll_left(textarea) > w) {
+        TEST_ASSERT_EQUAL_INT32(lv_obj_get_scroll_x(textarea) + 10, cur_pos - w + font_h);
+    }
+
+    TEST_ASSERT(lv_textarea_get_one_line(textarea));
+}
+
+void test_textarea_should_not_scroll_if_text_is_fully_visible(void)
+{
+    lv_textarea_set_text(textarea, "Type here...");
+    lv_obj_set_width(textarea, 100);
+    lv_obj_center(textarea);
+    TEST_ASSERT_EQUAL_SCREENSHOT("widgets/textarea_1.png");
+}
+
+void test_textarea_should_update_placeholder_text(void)
+{
+    const char * new_placeholder = "LVGL Rocks!!!!!";
+    const char * text = "Hello LVGL!";
+
+    /* Allocating memory for placeholder text */
+    lv_textarea_set_placeholder_text(textarea, text);
+    TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_placeholder_text(textarea));
+
+    /* Reallocating memory for the new placeholder text */
+    lv_textarea_set_placeholder_text(textarea, new_placeholder);
+    TEST_ASSERT_EQUAL_STRING(new_placeholder, lv_textarea_get_placeholder_text(textarea));
+
+    /* Freeing allocated memory for placeholder text */
+    lv_textarea_set_placeholder_text(textarea, "");
+    TEST_ASSERT_EQUAL_STRING("", lv_textarea_get_placeholder_text(textarea));
+}
+
+void test_textarea_should_keep_only_accepted_chars(void)
+{
+    const char * accepted_list = "abcd";
+
+    lv_textarea_set_accepted_chars(textarea, accepted_list);
+    lv_textarea_set_text(textarea, "abcde");
+
+    TEST_ASSERT_EQUAL_STRING(accepted_list, lv_textarea_get_text(textarea));
+}
+
+void test_textarea_in_one_line_mode_should_ignore_line_break_characters(void)
+{
+    lv_textarea_set_one_line(textarea, true);
+
+    lv_textarea_add_char(textarea, '\n');
+    TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_text(textarea));
+
+    lv_textarea_add_char(textarea, '\r');
+    TEST_ASSERT_EQUAL_STRING(textarea_default_text, lv_textarea_get_text(textarea));
+}
+
+void test_textarea_should_hide_password_characters(void)
+{
+    lv_textarea_set_password_mode(textarea, true);
+    lv_textarea_set_text(textarea, "12345");
+
+    /* setting bullet hides characters */
+    lv_textarea_set_password_bullet(textarea, "O");
+    TEST_ASSERT_EQUAL_STRING("OOOOO", lv_label_get_text(lv_textarea_get_label(textarea)));
+
+    /* setting text hides characters */
+    lv_textarea_set_text(textarea, "A");
+    TEST_ASSERT_EQUAL_STRING("O", lv_label_get_text(lv_textarea_get_label(textarea)));
+
+    lv_textarea_add_char(textarea, 'B');
+    TEST_ASSERT_EQUAL_STRING("OB", lv_label_get_text(lv_textarea_get_label(textarea)));
+
+    /* setting show time hides characters */
+    /* current behavior is to hide the characters upon setting the show time regardless of the value */
+    lv_textarea_set_password_show_time(textarea, lv_textarea_get_password_show_time(textarea));
+    TEST_ASSERT_EQUAL_STRING("OO", lv_label_get_text(lv_textarea_get_label(textarea)));
+
+    lv_textarea_set_password_mode(textarea, false);
+    TEST_ASSERT_EQUAL_STRING("AB", lv_label_get_text(lv_textarea_get_label(textarea)));
+
+    /* enabling password mode hides characters */
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_STRING("OO", lv_label_get_text(lv_textarea_get_label(textarea)));
+}
+
+void test_textarea_properties(void)
+{
+#if LV_USE_OBJ_PROPERTY
+    lv_property_t prop = { };
+    lv_obj_t * obj = lv_textarea_create(lv_screen_active());
+
+    prop.id = LV_PROPERTY_TEXTAREA_TEXT;
+    prop.ptr = "Hello World!";
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_STRING("Hello World!", lv_textarea_get_text(obj));
+    TEST_ASSERT_EQUAL_STRING("Hello World!", lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_TEXT).ptr);
+
+    prop.id = LV_PROPERTY_TEXTAREA_PLACEHOLDER_TEXT;
+    prop.ptr = "Hello!";
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_STRING("Hello!", lv_textarea_get_placeholder_text(obj));
+    TEST_ASSERT_EQUAL_STRING("Hello!", lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_PLACEHOLDER_TEXT).ptr);
+
+    prop.id = LV_PROPERTY_TEXTAREA_CURSOR_POS;
+    prop.num = 5;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(5, lv_textarea_get_cursor_pos(obj));
+    TEST_ASSERT_EQUAL_INT(5, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_CURSOR_POS).num);
+
+    prop.id = LV_PROPERTY_TEXTAREA_CURSOR_CLICK_POS;
+    prop.num = 1;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(1, lv_textarea_get_cursor_click_pos(obj));
+    TEST_ASSERT_EQUAL_INT(1, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_CURSOR_CLICK_POS).num);
+
+    prop.id = LV_PROPERTY_TEXTAREA_PASSWORD_MODE;
+    prop.num = true;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_TRUE(lv_textarea_get_password_mode(obj));
+    TEST_ASSERT_TRUE(lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_PASSWORD_MODE).num);
+
+    prop.id = LV_PROPERTY_TEXTAREA_PASSWORD_BULLET;
+    prop.ptr = "password bullet";
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_STRING("password bullet", lv_textarea_get_password_bullet(obj));
+    TEST_ASSERT_EQUAL_STRING("password bullet", lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_PASSWORD_BULLET).ptr);
+
+    prop.id = LV_PROPERTY_TEXTAREA_ONE_LINE;
+    prop.enable = true;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(true, lv_textarea_get_one_line(obj));
+    TEST_ASSERT_EQUAL_INT(true, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_ONE_LINE).enable);
+
+    prop.id = LV_PROPERTY_TEXTAREA_ACCEPTED_CHARS;
+    prop.ptr = "ABCDEF";
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_STRING("ABCDEF", lv_textarea_get_accepted_chars(obj));
+    TEST_ASSERT_EQUAL_STRING("ABCDEF", lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_ACCEPTED_CHARS).ptr);
+
+    prop.id = LV_PROPERTY_TEXTAREA_MAX_LENGTH;
+    prop.num = 10;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(10, lv_textarea_get_max_length(obj));
+    TEST_ASSERT_EQUAL_INT(10, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_MAX_LENGTH).num);
+
+    prop.id = LV_PROPERTY_TEXTAREA_TEXT_SELECTION;
+    prop.num = true;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(true, lv_textarea_get_text_selection(obj));
+    TEST_ASSERT_EQUAL_INT(true, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_TEXT_SELECTION).enable);
+
+    prop.id = LV_PROPERTY_TEXTAREA_PASSWORD_SHOW_TIME;
+    prop.num = 10;
+    TEST_ASSERT_TRUE(lv_obj_set_property(obj, &prop) == LV_RESULT_OK);
+    TEST_ASSERT_EQUAL_INT(10, lv_textarea_get_password_show_time(obj));
+    TEST_ASSERT_EQUAL_INT(10, lv_obj_get_property(obj, LV_PROPERTY_TEXTAREA_PASSWORD_SHOW_TIME).num);
+#endif
+}
+
+static uint32_t event_count;
+static void event_counter_cb(lv_event_t * e)
+{
+    LV_UNUSED(e);
+    event_count++;
+}
+
+void test_textarea_set_text_should_emit_value_changed_event_only_once(void)
+{
+
+    const char * accepted_list = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ!,";
+    const char * text = "Hello, World!";
+    const uint32_t text_len = 13U; /* strlen("Hello, World!") */
+
+    /* Test 1: with accepted_chars set */
+    event_count = 0;
+    lv_textarea_set_accepted_chars(textarea, accepted_list);
+    lv_obj_add_event_cb(textarea, event_counter_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+    lv_textarea_set_text(textarea, text);
+
+    TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_text(textarea));
+    TEST_ASSERT_EQUAL_UINT32(1U, event_count);
+
+    /* Test 2: with max_length set to exactly the text length — if set_text
+     * doesn't clear before re-adding chars, char_is_accepted sees the buffer
+     * as already full and rejects every character, leaving the textarea empty */
+    lv_obj_clean(active_screen);
+    textarea = lv_textarea_create(active_screen);
+
+    event_count = 0;
+    lv_textarea_set_max_length(textarea, text_len);
+    lv_obj_add_event_cb(textarea, event_counter_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+    lv_textarea_set_text(textarea, text);
+
+    TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_text(textarea));
+    TEST_ASSERT_EQUAL_UINT32(1U, event_count);
+
+    /* Test 3: with both accepted_chars and max_length set */
+    lv_obj_clean(active_screen);
+    textarea = lv_textarea_create(active_screen);
+
+    event_count = 0;
+    lv_textarea_set_accepted_chars(textarea, accepted_list);
+    lv_textarea_set_max_length(textarea, text_len);
+    lv_obj_add_event_cb(textarea, event_counter_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+    lv_textarea_set_text(textarea, text);
+
+    TEST_ASSERT_EQUAL_STRING(text, lv_textarea_get_text(textarea));
+    TEST_ASSERT_EQUAL_UINT32(1U, event_count);
+
+    /* Test 4: empty string — no characters to add, no event */
+    lv_obj_clean(active_screen);
+    textarea = lv_textarea_create(active_screen);
+
+    event_count = 0;
+    lv_textarea_set_accepted_chars(textarea, accepted_list);
+    lv_textarea_set_max_length(textarea, text_len);
+    lv_obj_add_event_cb(textarea, event_counter_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+    lv_textarea_set_text(textarea, "");
+
+    TEST_ASSERT_EQUAL_STRING("", lv_textarea_get_text(textarea));
+    TEST_ASSERT_EQUAL_UINT32(0U, event_count);
+
+    /* Test 5: all characters rejected by accepted_chars — no characters added, no event */
+    lv_obj_clean(active_screen);
+    textarea = lv_textarea_create(active_screen);
+
+    event_count = 0;
+    lv_textarea_set_accepted_chars(textarea, accepted_list);
+    lv_obj_add_event_cb(textarea, event_counter_cb, LV_EVENT_VALUE_CHANGED, NULL);
+
+    lv_textarea_set_text(textarea, "123"); /* digits not in accepted_list */
+
+    TEST_ASSERT_EQUAL_STRING("", lv_textarea_get_text(textarea));
+    TEST_ASSERT_EQUAL_UINT32(0U, event_count);
+}
+
+void test_textarea_set_max_length(void)
+{
+    lv_textarea_set_max_length(textarea, 8);
+    lv_textarea_add_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_STRING("12345678", lv_textarea_get_text(textarea));
+}
+
+void test_textarea_set_insert_replace(void)
+{
+    lv_textarea_set_text(textarea, "1234567890");
+    lv_obj_add_event_cb(textarea, event_handler, LV_EVENT_INSERT, NULL);
+
+    lv_textarea_add_text(textarea, "abc");
+    TEST_ASSERT_EQUAL_STRING("1234567890123", lv_textarea_get_text(textarea));
+
+    lv_memset(insert_replace_text, 0, sizeof(insert_replace_text));
+    lv_textarea_add_text(textarea, "abc");
+    TEST_ASSERT_EQUAL_STRING("1234567890123", lv_textarea_get_text(textarea));
+}
+
+void test_textarea_placeholder_text_show_one_line(void)
+{
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_placeholder_text(textarea, "1234567890");
+
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_placeholder_show.png");
+}
+
+void test_textarea_password_mode(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+
+    lv_textarea_set_text(textarea, "123456");
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode.png");
+
+    lv_textarea_set_password_mode(textarea, false);
+
+    lv_textarea_set_text(textarea, "123456789");
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_update.png");
+
+    lv_textarea_set_password_mode(textarea, false);
+
+    lv_textarea_add_text(textarea, "abc");
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_add_text.png");
+
+    lv_textarea_set_password_mode(textarea, false);
+
+    lv_textarea_add_char(textarea, 'a');
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_add_char.png");
+
+    lv_textarea_set_password_mode(textarea, false);
+
+    lv_textarea_delete_char(textarea);
+    lv_textarea_set_password_mode(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_delete_char.png");
+
+    lv_textarea_set_password_mode(textarea, false);
+
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_normal_mode.png");
+}
+
+/* In password mode, adding text must go through the realloc path of
+ * lv_textarea_add_text() so that pwd_tmp stays valid. */
+void test_textarea_add_text_in_password_mode(void)
+{
+    lv_textarea_set_password_mode(textarea, true);
+    lv_textarea_add_text(textarea, "Hello");
+    TEST_ASSERT_EQUAL_STRING("Hello", lv_textarea_get_text(textarea));
+
+    /*Adding more text should keep pwd_tmp in sync*/
+    lv_textarea_add_text(textarea, " World");
+    TEST_ASSERT_EQUAL_STRING("Hello World", lv_textarea_get_text(textarea));
+
+    lv_textarea_set_password_mode(textarea, false);
+    TEST_ASSERT_EQUAL_STRING("Hello World", lv_textarea_get_text(textarea));
+}
+
+/* In password mode, deleting a char must go through the realloc path of
+ * lv_textarea_delete_char() so that pwd_tmp stays valid. */
+void test_textarea_delete_char_in_password_mode(void)
+{
+    lv_textarea_set_text(textarea, "Hello World");
+    lv_textarea_set_password_mode(textarea, true);
+    lv_textarea_set_cursor_pos(textarea, 11);
+
+    lv_textarea_delete_char(textarea);
+    TEST_ASSERT_EQUAL_STRING("Hello Worl", lv_textarea_get_text(textarea));
+
+    lv_textarea_delete_char(textarea);
+    TEST_ASSERT_EQUAL_STRING("Hello Wor", lv_textarea_get_text(textarea));
+
+    lv_textarea_set_password_mode(textarea, false);
+    TEST_ASSERT_EQUAL_STRING("Hello Wor", lv_textarea_get_text(textarea));
+}
+
+void test_textarea_password_mode_hide_char(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_password_mode(textarea, true);
+
+    lv_textarea_set_password_show_time(textarea, 0);
+    lv_textarea_add_char(textarea, 'a');
+
+    lv_test_wait(50);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_hide_char_one.png");
+
+    lv_textarea_set_password_show_time(textarea, 500);
+    lv_textarea_add_char(textarea, 'b');
+
+    lv_test_wait(550);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_hide_char_two.png");
+
+    lv_textarea_add_char(textarea, 'c');
+    lv_textarea_set_password_mode(textarea, false);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_password_mode_to_normal_mode.png");
+
+    lv_textarea_set_text(textarea, "");
+}
+
+void test_textarea_set_password_bullet(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "1234567890");
+    lv_textarea_set_password_mode(textarea, true);
+
+    lv_obj_set_style_text_font(textarea, &test_font_no_bullet, 0);
+    TEST_ASSERT_EQUAL_STRING("*", lv_textarea_get_password_bullet(textarea));
+
+    lv_textarea_set_password_bullet(textarea, "*");
+    TEST_ASSERT_EQUAL_STRING("*", lv_textarea_get_password_bullet(textarea));
+
+    lv_textarea_set_password_bullet(textarea, NULL);
+    TEST_ASSERT_EQUAL_STRING("*", lv_textarea_get_password_bullet(textarea));
+
+    lv_textarea_set_password_mode(textarea, false);
+    lv_textarea_set_text(textarea, "");
+}
+
+void test_textarea_delete_char(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "1234567890");
+    lv_textarea_delete_char(textarea);
+}
+
+void test_textarea_delete_char_forward(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "1234567890");
+    lv_textarea_delete_char_forward(textarea);
+}
+
+void test_textarea_set_text_selection(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "1234567890");
+
+    lv_textarea_set_text_selection(textarea, true);
+    TEST_ASSERT_EQUAL(1U, lv_textarea_get_text_selection(textarea));
+
+    lv_obj_t * label = lv_textarea_get_label(textarea);
+    lv_label_set_text_selection_start(label, 0);
+    lv_label_set_text_selection_end(label, 10);
+    TEST_ASSERT_EQUAL(1U, lv_textarea_text_is_selected(textarea));
+
+    lv_textarea_clear_selection(textarea);
+    TEST_ASSERT_EQUAL(0U, lv_textarea_text_is_selected(textarea));
+}
+
+void test_textarea_set_password_show_time(void)
+{
+    lv_textarea_set_password_show_time(textarea, 1000);
+
+    TEST_ASSERT_EQUAL_UINT32(1000, lv_textarea_get_password_show_time(textarea));
+}
+
+void test_textarea_set_align(void)
+{
+    LV_DEPRECATIONS_IGNORE_BEGIN
+    lv_textarea_set_align(textarea, LV_TEXT_ALIGN_CENTER);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_center.png");
+
+    lv_textarea_set_align(textarea, LV_TEXT_ALIGN_LEFT);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_left.png");
+
+    lv_textarea_set_align(textarea, LV_TEXT_ALIGN_RIGHT);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_right.png");
+    LV_DEPRECATIONS_IGNORE_END
+}
+
+void test_textarea_text_align(void)
+{
+    lv_obj_set_style_text_align(textarea, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_center.png");
+
+    lv_obj_set_style_text_align(textarea, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_left.png");
+
+    lv_obj_set_style_text_align(textarea, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
+    lv_textarea_set_text(textarea, "1234567890");
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_align_right.png");
+}
+
+void test_textarea_cursor_show(void)
+{
+    lv_textarea_set_password_show_time(textarea, 1000);
+    lv_obj_send_event(textarea, LV_EVENT_FOCUSED, NULL);
+
+    lv_test_wait(1000);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_cursor_show.png");
+}
+
+void test_textarea_set_cursor_pos(void)
+{
+    lv_obj_set_size(textarea, 100, 60);
+
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "123456789012345678901234567890123456789012345678901");
+
+    lv_textarea_set_cursor_pos(textarea, 0);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_cursor_pos_top.png");
+
+    lv_textarea_set_cursor_pos(textarea, 50);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_cursor_pos_bottom.png");
+
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_text(textarea, "123456789012345678901234567890123456789012345678901");
+
+    lv_textarea_set_cursor_pos(textarea, 0);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_cursor_pos_left.png");
+
+    lv_textarea_set_cursor_pos(textarea, 50);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_cursor_pos_right.png");
+
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "123456789012345678901234567890123456789012345678901");
+    lv_obj_set_size(lv_textarea_get_label(textarea), 100, 200);
+
+    lv_obj_scroll_to_y(textarea, 300, LV_ANIM_OFF);
+    lv_textarea_set_cursor_pos(textarea, 4);
+    lv_test_wait(500);
+    TEST_ASSERT_EQUAL_UINT32(0, lv_obj_get_scroll_y(textarea));
+
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_cursor_pos(textarea, 50);
+    lv_test_wait(100);
+    lv_textarea_set_cursor_pos(textarea, 10);
+    lv_test_wait(100);
+    TEST_ASSERT_EQUAL_UINT32(10, lv_textarea_get_cursor_pos(textarea));
+}
+
+void test_textarea_get_current_char(void)
+{
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "1234567890");
+
+    lv_textarea_set_cursor_pos(textarea, 2);
+    TEST_ASSERT_EQUAL_INT('2', lv_textarea_get_current_char(textarea));
+
+    lv_textarea_set_cursor_pos(textarea, 0);
+    TEST_ASSERT_EQUAL_INT(0, lv_textarea_get_current_char(textarea));
+}
+
+void test_textarea_cursor_position_on_click(void)
+{
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_text(textarea, "Hello World");
+    lv_obj_set_size(textarea, 200, 100);
+
+    lv_textarea_set_cursor_click_pos(textarea, true);
+
+    lv_test_mouse_click_at(5, 15);
+    TEST_ASSERT_EQUAL_UINT32(0, lv_textarea_get_cursor_pos(textarea));
+
+    lv_test_mouse_click_at(180, 15);
+    TEST_ASSERT_EQUAL_UINT32(11, lv_textarea_get_cursor_pos(textarea));
+
+    int32_t label_width = lv_obj_get_width(lv_textarea_get_label(textarea));
+    lv_test_mouse_click_at(label_width + 20, 15);
+    TEST_ASSERT_EQUAL_UINT32(11, lv_textarea_get_cursor_pos(textarea));
+
+    lv_textarea_set_text_selection(textarea, true);
+    lv_test_mouse_click_at(40, 15);
+    lv_test_mouse_press();
+    lv_test_wait(100);
+    lv_test_mouse_move_to(100, 15);
+    lv_test_wait(100);
+    lv_test_mouse_release();
+    TEST_ASSERT_EQUAL_UINT32(11, lv_textarea_get_cursor_pos(textarea));
+
+    lv_test_mouse_click_at(40, 15);
+    lv_test_mouse_press();
+    lv_test_wait(100);
+    lv_test_mouse_move_to(5, 15);
+    lv_test_wait(100);
+    lv_test_mouse_release();
+    TEST_ASSERT_EQUAL_UINT32(0, lv_textarea_get_cursor_pos(textarea));
+
+    lv_textarea_set_text_selection(textarea, false);
+    lv_test_mouse_click_at(5, 15);
+    TEST_ASSERT_EQUAL_UINT32(0, lv_textarea_get_cursor_pos(textarea));
+
+    lv_textarea_set_cursor_click_pos(textarea, false);
+    uint32_t pos_before = lv_textarea_get_cursor_pos(textarea);
+    lv_test_mouse_click_at(50, 15);
+    TEST_ASSERT_EQUAL_UINT32(pos_before, lv_textarea_get_cursor_pos(textarea));
+}
+
+void test_textarea_key_event(void)
+{
+    lv_textarea_set_text(textarea, "Hello World");
+    lv_textarea_set_cursor_pos(textarea, 11);
+
+    uint32_t key = LV_KEY_BACKSPACE;
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    TEST_ASSERT_EQUAL_STRING("Hello Worl", lv_textarea_get_text(textarea));
+
+    lv_textarea_set_text(textarea, "Hello World");
+    lv_textarea_set_cursor_pos(textarea, 0);
+
+    key = LV_KEY_DEL;
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    TEST_ASSERT_EQUAL_STRING("ello World", lv_textarea_get_text(textarea));
+
+    key = LV_KEY_HOME;
+    lv_textarea_set_cursor_pos(textarea, 10);
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    TEST_ASSERT_EQUAL_UINT32(0, lv_textarea_get_cursor_pos(textarea));
+
+    key = LV_KEY_END;
+    lv_textarea_set_cursor_pos(textarea, 0);
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    TEST_ASSERT_EQUAL_UINT32(10, lv_textarea_get_cursor_pos(textarea));
+
+    lv_obj_set_size(textarea, 100, 40);
+    lv_textarea_set_one_line(textarea, false);
+    lv_textarea_set_text(textarea, "Hello World, this is a test for the key event");
+    lv_textarea_set_cursor_pos(textarea, 0);
+
+    key = LV_KEY_DOWN;
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    lv_test_wait(100);
+    TEST_ASSERT_EQUAL_UINT32(6, lv_textarea_get_cursor_pos(textarea));
+
+    lv_textarea_set_text(textarea, "Hello World");
+    lv_textarea_set_cursor_pos(textarea, 11);
+
+    key = 49;
+    lv_obj_send_event(textarea, LV_EVENT_KEY, (void *) &key);
+    TEST_ASSERT_EQUAL_STRING("Hello World1", lv_textarea_get_text(textarea));
+}
+
+void test_textarea_check_placeholder_text_position(void)
+{
+    lv_textarea_set_placeholder_text(textarea, "Placeholder");
+    lv_textarea_set_one_line(textarea, true);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_placeholder_center.png");
+
+    lv_textarea_set_one_line(textarea, false);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_placeholder_top.png");
+
+    lv_obj_set_style_align(lv_textarea_get_label(textarea), LV_ALIGN_LEFT_MID, LV_PART_MAIN);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_placeholder_left_mid.png");
+
+    lv_obj_set_style_align(lv_textarea_get_label(textarea), LV_ALIGN_TOP_LEFT, LV_PART_MAIN);
+    lv_obj_set_style_pad_top(lv_textarea_get_label(textarea), 50, LV_PART_TEXTAREA_PLACEHOLDER);
+    lv_obj_set_style_pad_left(lv_textarea_get_label(textarea), 50, LV_PART_TEXTAREA_PLACEHOLDER);
+    TEST_ASSERT_EQUAL_SCREENSHOT("textarea_placeholder_pad_left_top_50.png");
+}
+
+static const char * scroll_test_text = "Lorem ipsum dolor sit amet";
+
+static lv_obj_t * one_line_textarea_create(int32_t w)
+{
+    lv_obj_t * obj = lv_textarea_create(active_screen);
+    lv_textarea_set_one_line(obj, true);
+    lv_obj_set_pos(obj, 20, 20);
+    lv_obj_set_size(obj, w, 40);
+
+    lv_obj_set_scroll_momentum(obj, false);
+
+    for(uint32_t i = 0; i < 3; i++) lv_textarea_add_text(obj, scroll_test_text);
+    lv_test_wait(500);
+
+    return obj;
+}
+
+/* Scrolling a one_line textarea must not be undone by an unrelated style change. See #9929. */
+void test_textarea_one_line_should_keep_scroll_position_on_style_change(void)
+{
+    lv_obj_clean(active_screen);
+    textarea = one_line_textarea_create(100);
+
+    /* The cursor is at the end of the text, so the textarea is scrolled to the end */
+    int32_t scroll_x_end = lv_obj_get_scroll_x(textarea);
+    TEST_ASSERT_GREATER_THAN_INT32(0, scroll_x_end);
+
+    /* Drag towards the beginning of the text */
+    lv_test_mouse_move_to_obj(textarea);
+    lv_test_mouse_press();
+    lv_test_wait(50);
+    for(uint32_t i = 0; i < 10; i++) {
+        lv_test_mouse_move_by(5, 0);
+        lv_test_wait(20);
+    }
+    int32_t scroll_x = lv_obj_get_scroll_x(textarea);
+    TEST_ASSERT_LESS_THAN_INT32(scroll_x_end, scroll_x);
+
+    lv_test_mouse_release();
+    lv_test_wait(500);
+    TEST_ASSERT_EQUAL_INT32(scroll_x, lv_obj_get_scroll_x(textarea));
+
+    /* Any other style change must not move the scroll position either */
+    lv_obj_add_state(textarea, LV_STATE_DISABLED);
+    lv_test_wait(500);
+    TEST_ASSERT_EQUAL_INT32(scroll_x, lv_obj_get_scroll_x(textarea));
+}
+
+void test_textarea_one_line_scroll_should_not_depend_on_text_align(void)
+{
+    const lv_text_align_t aligns[] = { LV_TEXT_ALIGN_LEFT, LV_TEXT_ALIGN_CENTER, LV_TEXT_ALIGN_RIGHT };
+    int32_t reference[2] = { 0 };
+
+    for(uint32_t a = 0; a < 3; a++) {
+        lv_obj_clean(active_screen);
+        textarea = one_line_textarea_create(100);
+        LV_DEPRECATIONS_IGNORE_BEGIN
+        lv_textarea_set_align(textarea, aligns[a]);
+        LV_DEPRECATIONS_IGNORE_END
+        lv_test_wait(500);
+
+        /* The text overflows, so the textarea has to be scrolled to show the cursor */
+        int32_t scrolled_to_end = lv_obj_get_scroll_x(textarea);
+        TEST_ASSERT_GREATER_THAN_INT32(0, scrolled_to_end);
+
+        /* Shrink the text, but keep it overflowing */
+        for(uint32_t i = 0; i < 20; i++) lv_textarea_delete_char(textarea);
+        lv_test_wait(500);
+        int32_t scrolled_after_delete = lv_obj_get_scroll_x(textarea);
+        TEST_ASSERT_GREATER_THAN_INT32(0, scrolled_after_delete);
+
+        if(a == 0) {
+            reference[0] = scrolled_to_end;
+            reference[1] = scrolled_after_delete;
+        }
+        else {
+            TEST_ASSERT_EQUAL_INT32(reference[0], scrolled_to_end);
+            TEST_ASSERT_EQUAL_INT32(reference[1], scrolled_after_delete);
+        }
+    }
+}
+
+/* The scroll position may only be moved if the cursor would end up outside of the
+ * visible area. Moving the cursor within the visible area must not scroll. */
+void test_textarea_one_line_should_not_scroll_when_cursor_stays_visible(void)
+{
+    lv_obj_clean(active_screen);
+    textarea = one_line_textarea_create(200);
+
+    int32_t scroll_x = lv_obj_get_scroll_x(textarea);
+    TEST_ASSERT_GREATER_THAN_INT32(0, scroll_x);
+
+    /* Ten characters back from the end of the text is still within the visible
+     * area of a 200 px wide textarea */
+    lv_textarea_set_cursor_pos(textarea, lv_textarea_get_cursor_pos(textarea) - 10);
+    lv_test_wait(500);
+
+    TEST_ASSERT_EQUAL_INT32(scroll_x, lv_obj_get_scroll_x(textarea));
+}
+
+/* Resizing the textarea must keep the cursor in view. The label has LV_SIZE_CONTENT
+ * width in one_line mode, so no label size change reports the new geometry. */
+void test_textarea_one_line_should_keep_cursor_in_view_when_resized(void)
+{
+    lv_obj_clean(active_screen);
+    textarea = one_line_textarea_create(200);
+
+    /* The cursor is at the end of the text, so the view is scrolled to the end */
+    TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_scroll_right(textarea));
+
+    lv_obj_set_width(textarea, 100);
+    lv_test_wait(500);
+    TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_scroll_right(textarea));
+}
+
+void test_textarea_should_keep_cursor_in_view_when_resized(void)
+{
+    lv_obj_clean(active_screen);
+    textarea = lv_textarea_create(active_screen);
+    lv_obj_set_pos(textarea, 20, 20);
+    lv_obj_set_size(textarea, 200, 60);
+    lv_textarea_set_text(textarea, "aaa\nbbb\nccc\nddd\neee\nfff");
+    lv_test_wait(500);
+
+    /* The cursor is on the last line, so the view is scrolled to the bottom */
+    TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_scroll_bottom(textarea));
+
+    lv_obj_set_height(textarea, 40);
+    lv_test_wait(500);
+    TEST_ASSERT_EQUAL_INT32(0, lv_obj_get_scroll_bottom(textarea));
+}
+
+static lv_obj_t * scroll_screenshot_row(int32_t y, const char * caption)
+{
+    static const char * ruler_text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    lv_obj_t * label = lv_label_create(active_screen);
+    lv_label_set_text(label, caption);
+    lv_obj_set_pos(label, 20, y);
+
+    lv_obj_t * obj = lv_textarea_create(active_screen);
+    lv_textarea_set_one_line(obj, true);
+    lv_obj_set_pos(obj, 20, y + 20);
+    lv_obj_set_size(obj, 200, 40);
+    lv_textarea_add_text(obj, ruler_text);
+
+    /* Draw the cursor, without blinking, so that it is visible where the view ends up */
+    lv_obj_set_style_anim_duration(obj, 0, LV_PART_CURSOR | LV_STATE_FOCUSED);
+    lv_obj_add_state(obj, LV_STATE_FOCUSED);
+    lv_obj_send_event(obj, LV_EVENT_FOCUSED, NULL);
+    lv_test_wait(500);
+
+    return obj;
+}
+
+void test_textarea_one_line_scroll_screenshot(void)
+{
+    lv_obj_clean(active_screen);
+
+    /* Moving the cursor within the visible area must not scroll */
+    lv_obj_t * ta = scroll_screenshot_row(20, "cursor moved back 10 characters");
+    lv_textarea_set_cursor_pos(ta, lv_textarea_get_cursor_pos(ta) - 10);
+    lv_test_wait(500);
+
+    /* Resizing has to bring the cursor back into view */
+    ta = scroll_screenshot_row(100, "resized from 200 px to 120 px");
+    lv_obj_set_width(ta, 120);
+    lv_test_wait(500);
+
+    /* A style change must not move the scroll position */
+    ta = scroll_screenshot_row(180, "scrolled to the start, then disabled");
+    lv_obj_scroll_to_x(ta, 0, LV_ANIM_OFF);
+    lv_test_wait(1000);
+    lv_obj_add_state(ta, LV_STATE_DISABLED);
+    lv_test_wait(1000);
+
+    TEST_ASSERT_EQUAL_SCREENSHOT("widgets/textarea_one_line_scroll.png");
+}
+
+#endif

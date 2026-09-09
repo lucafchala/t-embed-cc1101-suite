@@ -1,0 +1,45 @@
+// ok no namespace fl
+#pragma once
+
+/// @file platforms/coroutine.h
+/// @brief Coroutine system interfaces — all declarations, no implementations
+///
+/// This is the single entry point for coroutine interfaces.
+/// Consumers include this header; implementations are in coroutine.impl.cpp.hpp.
+
+#include "fl/stl/string.h"
+#include "fl/stl/function.h"
+#include "fl/stl/unique_ptr.h"
+
+#include "platforms/coroutine_runtime.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace platforms {
+
+//=============================================================================
+// ICoroutineTask - Interface for platform-specific task implementations
+//=============================================================================
+
+class ICoroutineTask {
+public:
+    using TaskFunction = fl::function<void()>;
+
+    virtual ~ICoroutineTask() = default;
+    virtual void stop() FL_NO_EXCEPT = 0;
+    virtual bool isRunning() const FL_NO_EXCEPT = 0;
+    static void exitCurrent() FL_NO_EXCEPT;  // Platform-specific static method
+};
+
+/// @brief Owning smart pointer for task coroutines
+using TaskCoroutinePtr = fl::unique_ptr<ICoroutineTask>;
+
+// Factory function provided by each platform implementation
+TaskCoroutinePtr createTaskCoroutine(fl::string name,
+                                      ICoroutineTask::TaskFunction function,
+                                      size_t stack_size,
+                                      u8 priority,
+                                      int core_id = -1) FL_NO_EXCEPT;
+
+} // namespace platforms
+} // namespace fl

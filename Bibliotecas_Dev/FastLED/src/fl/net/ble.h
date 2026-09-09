@@ -1,0 +1,102 @@
+/// @file fl/net/ble.h
+/// @brief fl::net::ble — BLE GATT transport layer for JSON-RPC
+///
+/// Provides factory functions for creating RequestSource and ResponseSink
+/// callbacks that communicate over BLE instead of serial.
+///
+/// Platform-neutral header: all ESP32 BLE implementation lives in
+/// drivers/ble/ble_esp32.cpp.hpp.
+///
+/// API is always visible. On platforms without BLE support, factory functions
+/// return nullptr / no-op stubs.  FL_BLE_AVAILABLE is still defined for
+/// compile-time feature detection when needed.
+///
+/// Follows the fl::net namespace convention: all types in fl::net::ble
+/// (collection module, no single primary class).
+
+#pragma once
+
+#include "fl/stl/json.h"
+#include "fl/stl/has_include.h"
+#include "fl/stl/function.h"
+#include "fl/stl/optional.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/pair.h"
+
+// BLE requires either ESP32 + IDF 5+ + NimBLE headers, or an RP2350W build
+// that selected Arduino-Pico's BTstack menu.
+#if defined(FL_IS_ESP32) && defined(FL_IS_IDF_5_OR_HIGHER) \
+    && FL_HAS_INCLUDE(<nimble/nimble_port.h>)
+#define FL_BLE_AVAILABLE 1
+#elif defined(FL_IS_RP2350) && defined(ENABLE_BLE) && ENABLE_BLE \
+    && FL_HAS_INCLUDE(<BTstackLib.h>)
+#define FL_BLE_AVAILABLE 1
+#else
+#define FL_BLE_AVAILABLE 0
+#endif
+
+namespace fl {
+namespace net {
+namespace ble {
+
+// GATT UUIDs for FastLED BLE service (string form, used by validation/diagnostics)
+#define FL_BLE_SERVICE_UUID "12345678-1234-1234-1234-123456789abc"
+#define FL_BLE_CHAR_RX_UUID "12345678-1234-1234-1234-123456789ab0"
+#define FL_BLE_CHAR_TX_UUID "12345678-1234-1234-1234-123456789ab1"
+
+#if FL_BLE_AVAILABLE
+// NimBLE BLE_UUID128_INIT takes bytes in LITTLE-ENDIAN order.
+// UUID "12345678-1234-1234-1234-123456789abc" in BE byte order is:
+//   12 34 56 78  12 34  12 34  12 34  12 34 56 78 9a bc
+// Reversed (LE) for BLE_UUID128_INIT:
+//   bc 9a 78 56 34 12 34 12 34 12 34 12 78 56 34 12
+#define FL_BLE_SERVICE_UUID_INIT \
+    0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12, \
+    0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12
+
+#define FL_BLE_CHAR_RX_UUID_INIT \
+    0xb0, 0x9a, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12, \
+    0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12
+
+#define FL_BLE_CHAR_TX_UUID_INIT \
+    0xb1, 0x9a, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12, \
+    0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12
+#endif // FL_BLE_AVAILABLE
+
+/// @brief Platform-neutral BLE diagnostics (returned by queryStatus)
+struct StatusInfo {
+    bool connected = false;
+    int connectedCount = 0;
+    bool txCharExists = false;
+    int txValueLen = 0;
+    int ringHead = 0;
+    int ringTail = 0;
+};
+
+/// @brief Opaque BLE transport state — defined in drivers/ble/ble_esp32.cpp.hpp
+struct TransportState;
+
+/// @brief Create BLE GATT server, heap-allocate transport state
+/// @param deviceName BLE advertising name (e.g., "FastLED-C6")
+/// @return Heap-allocated state pointer (caller owns, free with destroyTransport)
+///         Returns nullptr on platforms without BLE support.
+TransportState* createTransport(const char* deviceName) FL_NO_EXCEPT;
+
+/// @brief Deinitialize BLE stack and free heap state
+/// @param state Pointer returned by createTransport (safe to call with nullptr)
+void destroyTransport(TransportState* state) FL_NO_EXCEPT;
+
+/// @brief Query BLE connection/subscription diagnostics
+/// @param state Pointer returned by createTransport
+/// @return Platform-neutral status snapshot
+StatusInfo queryStatus(const TransportState* state) FL_NO_EXCEPT;
+
+/// @brief Get RequestSource and ResponseSink lambdas for fl::Remote
+/// @param state Pointer returned by createTransport (must outlive returned lambdas)
+/// @return Pair of {RequestSource, ResponseSink} ready for fl::Remote constructor
+fl::pair<fl::function<fl::optional<fl::json>()>, fl::function<void(const fl::json&)>>
+getTransportCallbacks(TransportState* state) FL_NO_EXCEPT;
+
+} // namespace ble
+} // namespace net
+} // namespace fl

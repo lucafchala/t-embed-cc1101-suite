@@ -1,0 +1,180 @@
+# Standard Library Include What You Use Mapping File
+# This file provides standard library header mappings for better IWYU suggestions
+#
+# BLANKET RULE: Block ALL libc++ private headers (any header starting with __)
+# Different platforms (Linux/macOS/Windows) and compilers (gcc/clang/MSVC) have
+# different private header structures. We use regex to catch them all.
+
+[
+  # Regex patterns to block ALL private libc++ headers (IWYU supports @ prefix for regex)
+  # This catches __memory/*, __string/*, __algorithm/*, etc. on all platforms
+  { include: ['@"__.*"', 'private', '<stdlib.h>', 'public'] },
+  { include: ['@<__.*>', 'private', '<stdlib.h>', 'public'] },
+
+
+  # C++ standard library headers
+  { include: ['<cstdint>', 'public', '"fl/stl/stdint.h"', 'public'] },
+  { include: ['<cstddef>', 'public', '"fl/stl/cstddef.h"', 'public'] },
+  { include: ['<cstring>', 'public', '"fl/stl/cstring.h"', 'public'] },
+  { include: ['<cstdlib>', 'public', '"fl/stl/cstdlib.h"', 'public'] },
+  { include: ['<cmath>', 'public', '"fl/math.h"', 'public'] },
+  { include: ['<cassert>', 'public', '"fl/stl/assert.h"', 'public'] },
+  { include: ['<climits>', 'public', '"fl/stl/limits.h"', 'public'] },
+  { include: ['<cfloat>', 'public', '"fl/stl/limits.h"', 'public'] },
+  
+  # C++ containers and algorithms
+  { include: ['<vector>', 'public', '"fl/stl/vector.h"', 'public'] },
+  { include: ['<array>', 'public', '"fl/stl/array.h"', 'public'] },
+  { include: ['<string>', 'public', '"fl/stl/string.h"', 'public'] },
+  { include: ['<unordered_map>', 'public', '"fl/stl/unordered_map.h"', 'public'] },
+  { include: ['<unordered_set>', 'public', '"fl/stl/unordered_set.h"', 'public'] },
+  { include: ['<multimap>', 'public', '"fl/stl/multi_map.h"', 'public'] },
+  { include: ['<multiset>', 'public', '"fl/stl/multi_set.h"', 'public'] },
+  { include: ['<deque>', 'public', '"fl/stl/deque.h"', 'public'] },
+  { include: ['<list>', 'public', '"fl/stl/list.h"', 'public'] },
+  { include: ['<map>', 'public', '"fl/stl/map.h"', 'public'] },
+  { include: ['<queue>', 'public', '"fl/stl/queue.h"', 'public'] },
+  { include: ['<set>', 'public', '"fl/stl/set.h"', 'public'] },
+  { include: ['<valarray>', 'public', '"fl/stl/vector.h"', 'public'] },
+  { include: ['<algorithm>', 'public', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['<memory>', 'public', '"fl/stl/shared_ptr.h"', 'public'] },
+  { include: ['<functional>', 'public', '"fl/stl/functional.h"', 'public'] },
+  { include: ['<utility>', 'public', '"fl/stl/utility.h"', 'public'] },
+  { include: ['<type_traits>', 'public', '"fl/stl/type_traits.h"', 'public'] },
+  
+  { include: ['<typeinfo>', 'public', '"fl/stl/type_traits.h"', 'public'] },
+  { include: ['<thread>', 'public', '"fl/stl/thread.h"', 'public'] },
+  { include: ['<stdio.h>', 'public', '"fl/stl/stdio.h"', 'public'] },
+  { include: ['<mutex>', 'public', '"fl/stl/mutex.h"', 'public'] },
+  { include: ['<cstdio>', 'public', '"fl/stdio.h"', 'public'] },
+  { include: ['<complex>', 'public', '"fl/geometry.h"', 'public'] },
+  { include: ['<chrono>', 'public', '"fl/time.h"', 'public'] },
+  # I/O headers
+  { include: ['<iostream>', 'public', '"fl/stl/iostream.h"', 'public'] },
+  { include: ['<iomanip>', 'public', '"fl/stl/iostream.h"', 'public'] },
+  { include: ['<sstream>', 'public', '"fl/stl/sstream.h"', 'public'] },
+  { include: ['<fstream>', 'public', '"fl/stl/fstream.h"', 'public'] },
+  
+  # Common type mappings
+  { symbol: ['std::uint8_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::uint16_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::uint32_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::uint64_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::int8_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::int16_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::int32_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::int64_t', 'public', '<cstdint>', 'public'] },
+  { symbol: ['std::size_t', 'public', '<cstddef>', 'public'] },
+  { symbol: ['std::ptrdiff_t', 'public', '<cstddef>', 'public'] },
+  
+  # Common functions
+  { symbol: ['std::memcpy', 'public', '<cstring>', 'public'] },
+  { symbol: ['std::memset', 'public', '<cstring>', 'public'] },
+  { symbol: ['std::strlen', 'public', '<cstring>', 'public'] },
+  { symbol: ['std::malloc', 'public', '<cstdlib>', 'public'] },
+  { symbol: ['std::free', 'public', '<cstdlib>', 'public'] },
+  { symbol: ['std::abs', 'public', '<cmath>', 'public'] },
+  { symbol: ['std::sin', 'public', '<cmath>', 'public'] },
+  { symbol: ['std::cos', 'public', '<cmath>', 'public'] },
+  { symbol: ['std::sqrt', 'public', '<cmath>', 'public'] },
+  
+  # C standard library compatibility (prefer C++ versions)
+  { include: ['<stdint.h>', 'public', '"fl/stl/stdint.h"', 'public'] },
+  { include: ['<stddef.h>', 'public', '"fl/stl/cstddef.h"', 'public'] },
+  { include: ['<string.h>', 'public', '"fl/stl/string.h"', 'public'] },
+  { include: ['<stdlib.h>', 'public', '"fl/stl/cstdlib.h"', 'public'] },
+  { include: ['<math.h>', 'public', '"fl/math.h"', 'public'] },
+  { include: ['<assert.h>', 'public', '"fl/stl/compiler_control.h"', 'public'] },
+  { include: ['<limits.h>', 'public', '"fl/stl/limits.h"', 'public'] },
+  { include: ['<float.h>', 'public', '"fl/stl/limits.h"', 'public'] },
+  
+  # Platform-specific but common headers
+  { include: ['<sys/types.h>', 'public', '<sys/types.h>', 'public'] },
+  { include: ['<unistd.h>', 'public', '<unistd.h>', 'public'] },
+
+  # Block all libc++ private headers (pattern: __*/*.h or __*)
+  # These are internal implementation details and should never be included directly
+  # Map to FastLED equivalents (fl/stl/*) instead of standard library headers
+
+  # __algorithm/* -> "fl/stl/algorithm.h"
+  { include: ['"__algorithm/min.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['"__algorithm/max.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['"__algorithm/reverse.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['"__algorithm/shuffle.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['"__algorithm/sort.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+  { include: ['"__algorithm/remove.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+
+  # __atomic/* -> "fl/stl/atomic.h"
+  { include: ['"__atomic/atomic.h"', 'private', '"fl/stl/atomic.h"', 'public'] },
+  { include: ['"__atomic/support/c11.h"', 'private', '"fl/stl/atomic.h"', 'public'] },
+
+  # __chrono/* -> "fl/stl/thread.h" (chrono types used with thread sleep functions)
+  { include: ['"__chrono/duration.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+  { include: ['"__chrono/steady_clock.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+  { include: ['"__chrono/time_point.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+
+  # __functional/* -> "fl/stl/functional.h"
+  { include: ['"__functional/operations.h"', 'private', '"fl/stl/functional.h"', 'public'] },
+
+  # __fwd/* -> appropriate FastLED headers
+  { include: ['"__fwd/string.h"', 'private', '"fl/stl/string.h"', 'public'] },
+
+  # __iterator/* -> "fl/stl/iterator.h"
+  { include: ['"__iterator/reverse_iterator.h"', 'private', '"fl/stl/iterator.h"', 'public'] },
+
+  # __numeric/* -> "fl/stl/algorithm.h" (FastLED has accumulate in algorithm.h)
+  { include: ['"__numeric/accumulate.h"', 'private', '"fl/stl/algorithm.h"', 'public'] },
+
+  # __ostream/* -> "fl/stl/ostream.h"
+  { include: ['"__ostream/basic_ostream.h"', 'private', '"fl/stl/ostream.h"', 'public'] },
+
+  # __random/* -> "fl/math/random.h"
+  { include: ['"__random/mersenne_twister_engine.h"', 'private', '"fl/math/random.h"', 'public'] },
+  { include: ['"__random/random_device.h"', 'private', '"fl/math/random.h"', 'public'] },
+
+  # __thread/* -> "fl/stl/thread.h"
+  { include: ['"__thread/id.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+  { include: ['"__thread/this_thread.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+  { include: ['"__thread/thread.h"', 'private', '"fl/stl/thread.h"', 'public'] },
+
+  # __type_traits/* -> "fl/stl/type_traits.h"
+  { include: ['"__type_traits/invoke.h"', 'private', '"fl/stl/type_traits.h"', 'public'] },
+
+  # __utility/* -> "fl/stl/utility.h"
+  { include: ['"__utility/move.h"', 'private', '"fl/stl/utility.h"', 'public'] },
+  { include: ['"__utility/pair.h"', 'private', '"fl/stl/utility.h"', 'public'] },
+
+  # __vector/* -> "fl/stl/vector.h"
+  { include: ['"__vector/comparison.h"', 'private', '"fl/stl/vector.h"', 'public'] },
+  { include: ['"__vector/vector.h"', 'private', '"fl/stl/vector.h"', 'public'] },
+
+  # __hash/* -> hash-based containers (unordered_map/unordered_set)
+  { include: ['"__hash/base.h"', 'private', '"fl/stl/unordered_map.h"', 'public'] },
+  { include: ['"__hash/node_handle.h"', 'private', '"fl/stl/unordered_map.h"', 'public'] },
+
+  # __memory/* -> "fl/stl/shared_ptr.h" or "fl/stl/string.h" (for allocator)
+  { include: ['"__memory/allocator.h"', 'private', '"fl/stl/string.h"', 'public'] },
+  { include: ['"__memory/allocator_traits.h"', 'private', '"fl/stl/string.h"', 'public'] },
+  { include: ['"__memory/shared_ptr.h"', 'private', '"fl/stl/shared_ptr.h"', 'public'] },
+  { include: ['"__memory/unique_ptr.h"', 'private', '"fl/stl/shared_ptr.h"', 'public'] },
+  { include: ['"__memory/construct_at.h"', 'private', '"fl/stl/shared_ptr.h"', 'public'] },
+
+  # __string/* -> "fl/stl/string.h"
+  { include: ['"__string/char_traits.h"', 'private', '"fl/stl/string.h"', 'public'] },
+  { include: ['"__string/string.h"', 'private', '"fl/stl/string.h"', 'public'] },
+
+  # __ios/* -> "fl/stl/iostream.h"
+  { include: ['"__ios/fpos.h"', 'private', '"fl/stl/iostream.h"', 'public'] },
+
+  # __locale/* -> "fl/stl/iostream.h"
+  { include: ['"__locale"', 'private', '"fl/stl/iostream.h"', 'public'] },
+
+  # __filesystem/* -> not supported in FastLED
+  { include: ['"__filesystem/path.h"', 'private', '<filesystem>', 'public'] },
+
+  # Top-level private headers
+  { include: ['"__hash_table"', 'private', '"fl/stl/unordered_map.h"', 'public'] },
+  { include: ['"__tree"', 'private', '"fl/stl/map.h"', 'public'] },
+  { include: ['"__node_handle"', 'private', '"fl/stl/unordered_map.h"', 'public'] },
+  { include: ['"__split_buffer"', 'private', '"fl/stl/vector.h"', 'public'] },
+]

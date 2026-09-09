@@ -1,0 +1,264 @@
+// Test file for Tile2x2 functionality
+// g++ --std=c++11 test.cpp
+
+#include "fl/gfx/tile2x2.h"
+#include "fl/gfx/xypath.h"
+#include "fl/stl/stdint.h"
+#include "test.h"
+#include "fl/math/geometry.h"
+#include "fl/gfx/raster_sparse.h"
+#include "fl/stl/span.h"
+
+
+// Test basic fl::Tile2x2_u8 functionality
+// Verifies that a 2x2 tile can be created and values can be set/retrieved correctly
+FL_TEST_CASE("Tile2x2_u8") {
+    fl::Tile2x2_u8 tile;
+    // Set the origin point of the tile
+    tile.setOrigin(1, 1);
+    // Set values in a 2x2 grid pattern
+    tile.at(0, 0) = 1;
+    tile.at(0, 1) = 2;
+    tile.at(1, 0) = 3;
+    tile.at(1, 1) = 4;
+
+    // Verify all values are stored and retrieved correctly
+    FL_REQUIRE_EQ(tile.at(0, 0), 1);
+    FL_REQUIRE_EQ(tile.at(0, 1), 2);
+    FL_REQUIRE_EQ(tile.at(1, 0), 3);
+    FL_REQUIRE_EQ(tile.at(1, 1), 4);
+}
+
+// Test fl::Tile2x2_u8_wrap functionality
+// Verifies that a wrapped tile correctly maps coordinates to their wrapped positions
+FL_TEST_CASE("Tile2x2_u8_wrap") {
+    fl::Tile2x2_u8 tile;
+    tile.setOrigin(4, 4);
+    // Initialize the base tile with values
+    tile.at(0, 0) = 1;
+    tile.at(0, 1) = 2;
+    tile.at(1, 0) = 3;
+    tile.at(1, 1) = 4;
+
+    // Create a wrapped version of the tile with wrap dimensions 2x2
+    fl::Tile2x2_u8_wrap wrap(tile, 2, 2);
+    // Verify that coordinates are correctly wrapped
+    // Each test checks both x and y coordinates of the wrapped position
+    FL_REQUIRE_EQ(wrap.at(0, 0).first.x, 0);
+    FL_REQUIRE_EQ(wrap.at(0, 0).first.y, 0);
+    FL_REQUIRE_EQ(wrap.at(0, 1).first.x, 0);
+    FL_REQUIRE_EQ(wrap.at(0, 1).first.y, 1);
+    FL_REQUIRE_EQ(wrap.at(1, 0).first.x, 1);
+    FL_REQUIRE_EQ(wrap.at(1, 0).first.y, 0);
+    FL_REQUIRE_EQ(wrap.at(1, 1).first.x, 1);
+    FL_REQUIRE_EQ(wrap.at(1, 1).first.y, 1);
+}
+
+// Test fl::Tile2x2_u8_wrap wrap-around behavior
+FL_TEST_CASE("Tile2x2_u8_wrap wrap-around test with width and height") {
+    // Initialize a fl::Tile2x2_u8 with known values and set origin beyond boundaries
+    fl::Tile2x2_u8 originalTile;
+    originalTile.setOrigin(3, 3); // Set the origin beyond the width and height
+    originalTile.at(0, 0) = 1;
+    originalTile.at(0, 1) = 2;
+    originalTile.at(1, 0) = 3;
+    originalTile.at(1, 1) = 4;
+
+    // Convert to fl::Tile2x2_u8_wrap with given width and height
+    uint16_t width = 2;
+    uint16_t height = 2;
+    fl::Tile2x2_u8_wrap cycTile(originalTile, width, height);
+
+    // Verify that the conversion wraps around correctly
+    FL_REQUIRE_EQ(cycTile.at(0, 0).first.x, 1); // Wraps around to (1, 1)
+    FL_REQUIRE_EQ(cycTile.at(0, 0).first.y, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).first.x, 1); // Wraps around to (1, 0)
+    FL_REQUIRE_EQ(cycTile.at(0, 1).first.y, 0);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).first.x, 0); // Wraps around to (0, 1)
+    FL_REQUIRE_EQ(cycTile.at(1, 0).first.y, 1);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).first.x, 0); // Wraps around to (0, 0)
+    FL_REQUIRE_EQ(cycTile.at(1, 1).first.y, 0);
+
+    // Verify that the values are correct
+    FL_REQUIRE_EQ(cycTile.at(0, 0).second, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).second, 2);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).second, 3);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).second, 4);
+}
+
+// Test fl::Tile2x2_u8_wrap conversion with width and height
+FL_TEST_CASE("Tile2x2_u8_wrap conversion with width and height") {
+    // Initialize a fl::Tile2x2_u8 with known values
+    fl::Tile2x2_u8 originalTile;
+    originalTile.setOrigin(0, 0); // Set the origin to (0, 0)
+    originalTile.at(0, 0) = 1;
+    originalTile.at(0, 1) = 2;
+    originalTile.at(1, 0) = 3;
+    originalTile.at(1, 1) = 4;
+
+    // Convert to fl::Tile2x2_u8_wrap with given width and height
+    uint16_t width = 2;
+    uint16_t height = 2;
+    fl::Tile2x2_u8_wrap cycTile(originalTile, width, height);
+
+    // Verify that the conversion is correct
+    FL_REQUIRE_EQ(cycTile.at(0, 0).second, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).second, 2);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).second, 3);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).second, 4);
+}
+
+// Test fl::Tile2x2_u8_wrap conversion with width only
+FL_TEST_CASE("Tile2x2_u8_wrap conversion test") {
+    // Initialize a fl::Tile2x2_u8 with known values and a specific origin
+    fl::Tile2x2_u8 originalTile;
+    originalTile.setOrigin(50, 50); // Set the origin to (50, 50)
+    originalTile.at(0, 0) = 1; // Initialize the missing element
+    originalTile.at(0, 1) = 2;
+    originalTile.at(1, 0) = 3;
+    originalTile.at(1, 1) = 4;
+
+    // Convert to fl::Tile2x2_u8_wrap with a given width
+    uint16_t width = 10;
+    fl::Tile2x2_u8_wrap cycTile(originalTile, width);
+
+    // Verify that the conversion is correct
+    FL_REQUIRE_EQ(cycTile.at(0, 0).second, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).second, 2);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).second, 3);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).second, 4);
+
+    // Verify wrap-around behavior on the x-axis
+    FL_REQUIRE_EQ(cycTile.at(2, 2).second, 1); // Wraps around to (0, 0)
+    FL_REQUIRE_EQ(cycTile.at(2, 3).second, 2); // Wraps around to (0, 1)
+    FL_REQUIRE_EQ(cycTile.at(3, 2).second, 3); // Wraps around to (1, 0)
+    FL_REQUIRE_EQ(cycTile.at(3, 3).second, 4); // Wraps around to (1, 1)
+}
+
+FL_TEST_CASE("Tile2x2_u8_wrap wrap-around test with width and height") {
+    // Initialize a fl::Tile2x2_u8 with known values and set origin beyond boundaries
+    fl::Tile2x2_u8 originalTile;
+    originalTile.setOrigin(3, 3); // Set the origin beyond the width and height
+    originalTile.at(0, 0) = 1;
+    originalTile.at(0, 1) = 2;
+    originalTile.at(1, 0) = 3;
+    originalTile.at(1, 1) = 4;
+    
+    // Convert to fl::Tile2x2_u8_wrap with given width and height
+    uint16_t width = 2;
+    uint16_t height = 2;
+    fl::Tile2x2_u8_wrap cycTile(originalTile, width, height);
+
+    // Verify that the conversion wraps around correctly
+    FL_REQUIRE_EQ(cycTile.at(0, 0).first.x, 1); // Wraps around to (1, 1)
+    FL_REQUIRE_EQ(cycTile.at(0, 0).first.y, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).first.x, 1); // Wraps around to (1, 0)
+    FL_REQUIRE_EQ(cycTile.at(0, 1).first.y, 0);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).first.x, 0); // Wraps around to (0, 1)
+    FL_REQUIRE_EQ(cycTile.at(1, 0).first.y, 1);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).first.x, 0); // Wraps around to (0, 0)
+    FL_REQUIRE_EQ(cycTile.at(1, 1).first.y, 0);
+    
+    // Verify that the values are correct
+    FL_REQUIRE_EQ(cycTile.at(0, 0).second, 1);
+    FL_REQUIRE_EQ(cycTile.at(0, 1).second, 2);
+    FL_REQUIRE_EQ(cycTile.at(1, 0).second, 3);
+    FL_REQUIRE_EQ(cycTile.at(1, 1).second, 4);
+}
+
+FL_TEST_CASE("Tile2x2_u8_wrap::Interpolate") {
+
+    FL_SUBCASE("Basic interpolation") {
+        // Create test tiles by converting from regular fl::Tile2x2_u8
+        fl::Tile2x2_u8 base_a, base_b;
+        base_a.setOrigin(0, 0);
+        base_b.setOrigin(0, 0);
+        
+        // Set up base tiles with different alpha values
+        base_a.at(0, 0) = 100;
+        base_a.at(0, 1) = 150;
+        base_a.at(1, 0) = 200;
+        base_a.at(1, 1) = 250;
+        
+        base_b.at(0, 0) = 200;
+        base_b.at(0, 1) = 250;
+        base_b.at(1, 0) = 50;
+        base_b.at(1, 1) = 100;
+        
+        // Convert to wrapped tiles
+        fl::Tile2x2_u8_wrap tile_a(base_a, 10);
+        fl::Tile2x2_u8_wrap tile_b(base_b, 10);
+        
+        // Test interpolation at t=0.5
+        auto result = fl::Tile2x2_u8_wrap::Interpolate(tile_a, tile_b, 0.5f);
+        
+        FL_REQUIRE(result.size() == 1);
+        const auto& interpolated = result[0];
+        
+        // Check interpolated values (should be halfway between a and b)
+        FL_CHECK(interpolated.at(0, 0).second == 150); // (100 + 200) / 2
+        FL_CHECK(interpolated.at(0, 1).second == 200); // (150 + 250) / 2
+        FL_CHECK(interpolated.at(1, 0).second == 125); // (200 + 50) / 2
+        FL_CHECK(interpolated.at(1, 1).second == 175); // (250 + 100) / 2
+        
+        // Check that positions are preserved from tile_a
+        FL_CHECK(interpolated.at(0, 0).first.x == 0);
+        FL_CHECK(interpolated.at(0, 0).first.y == 0);
+        FL_CHECK(interpolated.at(1, 1).first.x == 1);
+        FL_CHECK(interpolated.at(1, 1).first.y == 1);
+    }
+    
+    FL_SUBCASE("Edge cases") {
+        // Create simple test tiles
+        fl::Tile2x2_u8 base_a, base_b;
+        base_a.setOrigin(0, 0);
+        base_b.setOrigin(0, 0);
+        base_a.at(0, 0) = 100;
+        base_b.at(0, 0) = 200;
+        
+        fl::Tile2x2_u8_wrap tile_a(base_a, 10);
+        fl::Tile2x2_u8_wrap tile_b(base_b, 10);
+        
+        // Test t=0 (should return tile_a)
+        auto result_0 = fl::Tile2x2_u8_wrap::Interpolate(tile_a, tile_b, 0.0f);
+        FL_REQUIRE(result_0.size() == 1);
+        FL_CHECK(result_0[0].at(0, 0).second == 100);
+        
+        // Test t=1 (should return tile_b)
+        auto result_1 = fl::Tile2x2_u8_wrap::Interpolate(tile_a, tile_b, 1.0f);
+        FL_REQUIRE(result_1.size() == 1);
+        FL_CHECK(result_1[0].at(0, 0).second == 200);
+        
+        // Test t<0 (should clamp to tile_a)
+        auto result_neg = fl::Tile2x2_u8_wrap::Interpolate(tile_a, tile_b, -0.5f);
+        FL_REQUIRE(result_neg.size() == 1);
+        FL_CHECK(result_neg[0].at(0, 0).second == 100);
+        
+        // Test t>1 (should clamp to tile_b)
+        auto result_over = fl::Tile2x2_u8_wrap::Interpolate(tile_a, tile_b, 1.5f);
+        FL_REQUIRE(result_over.size() == 1);
+        FL_CHECK(result_over[0].at(0, 0).second == 200);
+    }
+}
+
+// ============================================================
+// Raster sparse tests using tiles (merged from raster.cpp)
+// ============================================================
+
+FL_TEST_CASE("XYRasterU8SparseTest should match bounds of pixels draw area") {
+    fl::XYPathPtr path = fl::XYPath::NewLinePath(-1, -1, 1, 1);
+    path->setDrawBounds(4,4);
+    fl::Tile2x2_u8 sp0 = path->at_subpixel(0);
+    fl::Tile2x2_u8 sp1 = path->at_subpixel(1);
+    fl::Tile2x2_u8 subpixels[2] = {sp0, sp1};
+
+    FL_MESSAGE("subpixels[0] = " << subpixels[0]);
+    FL_MESSAGE("subpixels[1] = " << subpixels[1]);
+    fl::XYRasterU8Sparse raster(4, 4);
+    raster.rasterize(subpixels);
+    auto obligatory_bounds = raster.bounds();
+    FL_REQUIRE_EQ(fl::rect<uint16_t>(0, 0, 4, 4), obligatory_bounds);
+
+    auto pixel_bounds = raster.bounds_pixels();
+    FL_REQUIRE_EQ(fl::rect<uint16_t>(0, 0, 4, 4), pixel_bounds);
+}

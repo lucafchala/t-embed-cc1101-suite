@@ -1,0 +1,27 @@
+name: example tests macos
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/example_test*.yml'
+      - '.github/workflows/template_example_test.yml'
+      - 'CMakeLists.txt'
+      - 'meson.build'
+      - 'examples/meson.build'
+      - 'pyproject.toml'
+      - 'test'
+      - 'test.py'
+jobs:
+  test:
+    uses: ./.github/workflows/template_example_test.yml
+    with:
+      os: macos-latest

@@ -1,0 +1,401 @@
+#pragma once
+
+#ifndef FL_AUDIO_AUDIO_PROCESSOR_H
+#define FL_AUDIO_AUDIO_PROCESSOR_H
+
+#include "fl/audio/audio.h"  // IWYU pragma: keep
+#include "fl/audio/audio_context.h"  // IWYU pragma: keep
+#include "fl/audio/audio_detector.h"  // IWYU pragma: keep
+#include "fl/audio/detector/vibe.h"  // IWYU pragma: keep - detector::VibeLevels used in public callback API
+#include "fl/audio/mic_profiles.h"
+#include "fl/audio/signal_conditioner.h"
+#include "fl/audio/noise_floor_tracker.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/function.h"  // IWYU pragma: keep
+#include "fl/stl/vector.h"
+#include "fl/task/task.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace audio {
+
+class AudioManager;
+class IInput;
+
+// Forward declarations of detector types (defined in fl::audio::detector)
+namespace detector {
+class Beat;
+class FrequencyBands;
+class EnergyAnalyzer;
+class TempoAnalyzer;
+class Transient;
+class Silence;
+class DynamicsAnalyzer;
+class Pitch;
+class Note;
+class Downbeat;
+class Backbeat;
+class Vocal;
+class Percussion;
+enum class PercussionType : u8;
+class ChordDetector;
+struct Chord;
+class KeyDetector;
+struct Key;
+class MoodAnalyzer;
+struct Mood;
+class BuildupDetector;
+struct Buildup;
+class DropDetector;
+struct Drop;
+class EqualizerDetector;
+struct Equalizer;
+struct EqualizerConfig;
+class Vibe;
+} // namespace detector
+
+class Processor {
+public:
+    Processor() FL_NO_EXCEPT;
+    ~Processor() FL_NO_EXCEPT;
+
+    // ----- Main Update -----
+    void update(const Sample& sample) FL_NO_EXCEPT;
+
+    // Update detectors using an externally-provided Context (FFT already cached).
+    // Skips signal conditioning and setSample — caller is responsible for those.
+    void updateFromContext(shared_ptr<Context> externalContext) FL_NO_EXCEPT;
+
+    // ----- Beat Detection Events -----
+    void onBeat(function<void()> callback) FL_NO_EXCEPT;
+    void onBeatPhase(function<void(float phase)> callback) FL_NO_EXCEPT;
+    void onOnset(function<void(float strength)> callback) FL_NO_EXCEPT;
+    void onTempoChange(function<void(float bpm, float confidence)> callback) FL_NO_EXCEPT;
+
+    // ----- Tempo Analysis Events -----
+    void onTempo(function<void(float bpm)> callback) FL_NO_EXCEPT;
+    void onTempoWithConfidence(function<void(float bpm, float confidence)> callback) FL_NO_EXCEPT;
+    void onTempoStable(function<void()> callback) FL_NO_EXCEPT;
+    void onTempoUnstable(function<void()> callback) FL_NO_EXCEPT;
+
+    // ----- Frequency Band Events -----
+    void onBass(function<void(float level)> callback) FL_NO_EXCEPT;
+    void onMid(function<void(float level)> callback) FL_NO_EXCEPT;
+    void onTreble(function<void(float level)> callback) FL_NO_EXCEPT;
+    void onFrequencyBands(function<void(float bass, float mid, float treble)> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Equalizer Events (WLED-style, all 0.0-1.0) -----
+    void onEqualizer(function<void(const detector::Equalizer&)> callback) FL_NO_EXCEPT;
+
+    // ----- Energy/Level Events -----
+    void onEnergy(function<void(float rms)> callback) FL_NO_EXCEPT;
+    void onNormalizedEnergy(function<void(float normalizedRms)> callback) FL_NO_EXCEPT;
+    void onPeak(function<void(float peak)> callback) FL_NO_EXCEPT;
+    void onAverageEnergy(function<void(float avgEnergy)> callback) FL_NO_EXCEPT;
+
+    // ----- Transient Detection Events -----
+    void onTransient(function<void()> callback) FL_NO_EXCEPT;
+    void onTransientWithStrength(function<void(float strength)> callback) FL_NO_EXCEPT;
+    void onAttack(function<void(float strength)> callback) FL_NO_EXCEPT;
+
+    // ----- Silence Detection Events -----
+    void onSilence(function<void(u8 silent)> callback) FL_NO_EXCEPT;
+    void onSilenceStart(function<void()> callback) FL_NO_EXCEPT;
+    void onSilenceEnd(function<void()> callback) FL_NO_EXCEPT;
+    void onSilenceDuration(function<void(u32 durationMs)> callback) FL_NO_EXCEPT;
+
+    // ----- Dynamics Analysis Events -----
+    void onCrescendo(function<void()> callback) FL_NO_EXCEPT;
+    void onDiminuendo(function<void()> callback) FL_NO_EXCEPT;
+    void onDynamicTrend(function<void(float trend)> callback) FL_NO_EXCEPT;
+    void onCompressionRatio(function<void(float compression)> callback) FL_NO_EXCEPT;
+
+    // ----- Pitch Detection Events -----
+    void onPitch(function<void(float hz)> callback) FL_NO_EXCEPT;
+    void onPitchWithConfidence(function<void(float hz, float confidence)> callback) FL_NO_EXCEPT;
+    void onPitchChange(function<void(float hz)> callback) FL_NO_EXCEPT;
+    void onVoiced(function<void(u8 voiced)> callback) FL_NO_EXCEPT;
+
+    // ----- Note Detection Events -----
+    void onNoteOn(function<void(u8 note, u8 velocity)> callback) FL_NO_EXCEPT;
+    void onNoteOff(function<void(u8 note)> callback) FL_NO_EXCEPT;
+    void onNoteChange(function<void(u8 note, u8 velocity)> callback) FL_NO_EXCEPT;
+
+    // ----- Downbeat Detection Events -----
+    void onDownbeat(function<void()> callback) FL_NO_EXCEPT;
+    void onMeasureBeat(function<void(u8 beatNumber)> callback) FL_NO_EXCEPT;
+    void onMeterChange(function<void(u8 beatsPerMeasure)> callback) FL_NO_EXCEPT;
+    void onMeasurePhase(function<void(float phase)> callback) FL_NO_EXCEPT;
+
+    // ----- Backbeat Detection Events -----
+    void onBackbeat(function<void(u8 beatNumber, float confidence, float strength)> callback) FL_NO_EXCEPT;
+
+    // ----- Vocal Detection Events -----
+    void onVocal(function<void(u8 active)> callback) FL_NO_EXCEPT;
+    void onVocalStart(function<void()> callback) FL_NO_EXCEPT;
+    void onVocalEnd(function<void()> callback) FL_NO_EXCEPT;
+    void onVocalConfidence(function<void(float confidence)> callback) FL_NO_EXCEPT;
+
+    // ----- Percussion Detection Events -----
+    void onPercussion(function<void(detector::PercussionType type)> callback) FL_NO_EXCEPT;
+    void onKick(function<void()> callback) FL_NO_EXCEPT;
+    void onSnare(function<void()> callback) FL_NO_EXCEPT;
+    void onHiHat(function<void()> callback) FL_NO_EXCEPT;
+    void onTom(function<void()> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Chord Detection Events -----
+    void onChord(function<void(const detector::Chord& chord)> callback) FL_NO_EXCEPT;
+    void onChordChange(function<void(const detector::Chord& chord)> callback) FL_NO_EXCEPT;
+    void onChordEnd(function<void()> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Key Detection Events -----
+    void onKey(function<void(const detector::Key& key)> callback) FL_NO_EXCEPT;
+    void onKeyChange(function<void(const detector::Key& key)> callback) FL_NO_EXCEPT;
+    void onKeyEnd(function<void()> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Mood Analysis Events -----
+    void onMood(function<void(const detector::Mood& mood)> callback) FL_NO_EXCEPT;
+    void onMoodChange(function<void(const detector::Mood& mood)> callback) FL_NO_EXCEPT;
+    void onValenceArousal(function<void(float valence, float arousal)> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Buildup Detection Events -----
+    void onBuildupStart(function<void()> callback) FL_NO_EXCEPT;
+    void onBuildupProgress(function<void(float progress)> callback) FL_NO_EXCEPT;
+    void onBuildupPeak(function<void()> callback) FL_NO_EXCEPT;
+    void onBuildupEnd(function<void()> callback) FL_NO_EXCEPT;
+    void onBuildup(function<void(const detector::Buildup&)> callback) FL_NO_EXCEPT;
+
+    // ----- detector::Drop Detection Events -----
+    void onDrop(function<void()> callback) FL_NO_EXCEPT;
+    void onDropEvent(function<void(const detector::Drop&)> callback) FL_NO_EXCEPT;
+    void onDropImpact(function<void(float impact)> callback) FL_NO_EXCEPT;
+
+    // ----- Vibe Audio-Reactive Events -----
+    // Comprehensive self-normalizing levels, spikes, and raw values
+    void onVibeLevels(function<void(const detector::VibeLevels&)> callback) FL_NO_EXCEPT;
+    void onVibeBassSpike(function<void()> callback) FL_NO_EXCEPT;
+    void onVibeMidSpike(function<void()> callback) FL_NO_EXCEPT;
+    void onVibeTrebSpike(function<void()> callback) FL_NO_EXCEPT;
+
+    // ----- Polling Getters (float 0.0-1.0, bool, or integer) -----
+
+    // Vocal Detection
+    float getVocalConfidence() FL_NO_EXCEPT;
+
+    // Beat Detection
+    float getBeatConfidence() FL_NO_EXCEPT;
+    float getBPM() FL_NO_EXCEPT;
+
+    // Energy Analysis
+    float getEnergy() FL_NO_EXCEPT;
+    float getPeakLevel() FL_NO_EXCEPT;
+
+    // Frequency Bands (normalized 0-1, per-band self-referential)
+    float getBassLevel() FL_NO_EXCEPT;
+    float getMidLevel() FL_NO_EXCEPT;
+    float getTrebleLevel() FL_NO_EXCEPT;
+
+    // Frequency Bands (raw unnormalized energy)
+    float getBassRaw() FL_NO_EXCEPT;
+    float getMidRaw() FL_NO_EXCEPT;
+    float getTrebleRaw() FL_NO_EXCEPT;
+
+    // Silence Detection
+    bool isSilent() FL_NO_EXCEPT;
+    u32 getSilenceDuration() FL_NO_EXCEPT;
+
+    // Transient Detection
+    float getTransientStrength() FL_NO_EXCEPT;
+
+    // Dynamics Analysis
+    float getDynamicTrend() FL_NO_EXCEPT;  // -1.0 to 1.0
+    bool isCrescendo() FL_NO_EXCEPT;
+    bool isDiminuendo() FL_NO_EXCEPT;
+
+    // Pitch Detection
+    float getPitchConfidence() FL_NO_EXCEPT;
+    float getPitch() FL_NO_EXCEPT;
+
+    // Tempo Analysis
+    float getTempoConfidence() FL_NO_EXCEPT;
+    float getTempoBPM() FL_NO_EXCEPT;
+
+    // detector::Buildup Detection
+    float getBuildupIntensity() FL_NO_EXCEPT;
+    float getBuildupProgress() FL_NO_EXCEPT;
+
+    // detector::Drop Detection
+    float getDropImpact() FL_NO_EXCEPT;
+
+    // Percussion Detection
+    bool isKick() FL_NO_EXCEPT;
+    bool isSnare() FL_NO_EXCEPT;
+    bool isHiHat() FL_NO_EXCEPT;
+    bool isTom() FL_NO_EXCEPT;
+
+    // Note Detection
+    u8 getCurrentNote() FL_NO_EXCEPT;
+    float getNoteVelocity() FL_NO_EXCEPT;
+    float getNoteConfidence() FL_NO_EXCEPT;
+
+    // Downbeat Detection
+    float getDownbeatConfidence() FL_NO_EXCEPT;
+    float getMeasurePhase() FL_NO_EXCEPT;
+    u8 getCurrentBeatNumber() FL_NO_EXCEPT;
+
+    // Backbeat Detection
+    float getBackbeatConfidence() FL_NO_EXCEPT;
+    float getBackbeatStrength() FL_NO_EXCEPT;
+
+    // detector::Chord Detection
+    float getChordConfidence() FL_NO_EXCEPT;
+
+    // detector::Key Detection
+    float getKeyConfidence() FL_NO_EXCEPT;
+
+    // detector::Mood Analysis
+    float getMoodArousal() FL_NO_EXCEPT;
+    float getMoodValence() FL_NO_EXCEPT;  // -1.0 to 1.0
+
+    // Vibe Audio-Reactive (self-normalizing, ~1.0 = average)
+    float getVibeBass() FL_NO_EXCEPT;      // Immediate relative bass level
+    float getVibeMid() FL_NO_EXCEPT;       // Immediate relative mid level
+    float getVibeTreb() FL_NO_EXCEPT;      // Immediate relative treble level
+    float getVibeVol() FL_NO_EXCEPT;       // Average of bass/mid/treb
+    float getVibeBassAtt() FL_NO_EXCEPT;   // Smoothed relative bass level
+    float getVibeMidAtt() FL_NO_EXCEPT;    // Smoothed relative mid level
+    float getVibeTrebAtt() FL_NO_EXCEPT;   // Smoothed relative treble level
+    float getVibeVolAtt() FL_NO_EXCEPT;    // Average of smoothed bands
+    bool isVibeBassSpike() FL_NO_EXCEPT;   // True when bass > bass_att (beat)
+    bool isVibeMidSpike() FL_NO_EXCEPT;    // True when mid > mid_att
+    bool isVibeTrebSpike() FL_NO_EXCEPT;   // True when treb > treb_att
+
+    // detector::Equalizer (WLED-style, all 0.0-1.0)
+    float getEqBass() FL_NO_EXCEPT;
+    float getEqMid() FL_NO_EXCEPT;
+    float getEqTreble() FL_NO_EXCEPT;
+    float getEqVolume() FL_NO_EXCEPT;
+    float getEqVolumeNormFactor() FL_NO_EXCEPT;
+    float getEqZcf() FL_NO_EXCEPT;
+    float getEqBin(int index) FL_NO_EXCEPT;
+    float getEqAutoGain() FL_NO_EXCEPT;
+    bool getEqIsSilence() FL_NO_EXCEPT;
+
+    // detector::Equalizer P2: peak detection and dB mapping
+    float getEqDominantFreqHz() FL_NO_EXCEPT;     ///< Frequency of strongest bin (Hz)
+    float getEqDominantMagnitude() FL_NO_EXCEPT;  ///< Magnitude of strongest bin (0.0-1.0)
+    float getEqVolumeDb() FL_NO_EXCEPT;           ///< Volume in approximate dB
+
+    // ----- Configuration -----
+    /// Set the sample rate for all frequency-based calculations.
+    /// This propagates to Context and all detector.
+    /// Default is 44100 Hz. Common values: 16000, 22050, 44100.
+    void setSampleRate(int sampleRate) FL_NO_EXCEPT;
+    int getSampleRate() const FL_NO_EXCEPT;
+
+    // ----- Gain Control -----
+    /// Set a simple digital gain multiplier applied to each sample before detector.
+    /// Default: 1.0 (no change). Values > 1.0 amplify, < 1.0 attenuate.
+    void setGain(float gain) FL_NO_EXCEPT;
+    float getGain() const FL_NO_EXCEPT;
+
+    // ----- Signal Conditioning -----
+    /// Enable/disable signal conditioning pipeline (DC removal, spike filter, noise gate)
+    void setSignalConditioningEnabled(bool enabled) FL_NO_EXCEPT;
+    /// Enable/disable noise floor tracking
+    void setNoiseFloorTrackingEnabled(bool enabled) FL_NO_EXCEPT;
+
+    // ----- Microphone Profile -----
+    /// Set microphone correction profile for frequency response compensation.
+    /// This is a property of the physical microphone hardware.
+    /// Propagates to detector::EqualizerDetector as pink noise correction gains.
+    void setMicProfile(MicProfile profile) FL_NO_EXCEPT;
+    MicProfile getMicProfile() const FL_NO_EXCEPT { return mMicProfile; }
+
+    /// Configure signal conditioner
+    void configureSignalConditioner(const SignalConditionerConfig& config) FL_NO_EXCEPT;
+    /// Configure noise floor tracker
+    void configureNoiseFloorTracker(const NoiseFloorTrackerConfig& config) FL_NO_EXCEPT;
+    /// Configure equalizer detector tuning parameters
+    void configureEqualizer(const detector::EqualizerConfig& config) FL_NO_EXCEPT;
+
+    /// Access signal conditioning statistics
+    const SignalConditioner::Stats& getSignalConditionerStats() const FL_NO_EXCEPT { return mSignalConditioner.getStats(); }
+    const NoiseFloorTracker::Stats& getNoiseFloorStats() const FL_NO_EXCEPT { return mNoiseFloorTracker.getStats(); }
+
+    // ----- State Access -----
+    shared_ptr<Context> getContext() const FL_NO_EXCEPT { return mContext; }
+    const Sample& getSample() const FL_NO_EXCEPT;
+    void reset() FL_NO_EXCEPT;
+
+private:
+    int mSampleRate = 44100;
+    float mGain = 1.0f;
+    bool mSignalConditioningEnabled = true;
+    bool mNoiseFloorTrackingEnabled = false;
+    MicProfile mMicProfile = MicProfile::None;
+    SignalConditioner mSignalConditioner;
+    NoiseFloorTracker mNoiseFloorTracker;
+    shared_ptr<Context> mContext;
+
+    // Active detector registry for two-phase update loop
+    vector<shared_ptr<Detector>> mActiveDetectors;
+    void registerDetector(shared_ptr<Detector> detector) FL_NO_EXCEPT;
+
+    // Lazy detector storage
+    shared_ptr<detector::Beat> mBeatDetector;
+    shared_ptr<detector::FrequencyBands> mFrequencyBands;
+    shared_ptr<detector::EnergyAnalyzer> mEnergyAnalyzer;
+    shared_ptr<detector::TempoAnalyzer> mTempoAnalyzer;
+    shared_ptr<detector::Transient> mTransientDetector;
+    shared_ptr<detector::Silence> mSilenceDetector;
+    shared_ptr<detector::DynamicsAnalyzer> mDynamicsAnalyzer;
+    shared_ptr<detector::Pitch> mPitchDetector;
+    shared_ptr<detector::Note> mNoteDetector;
+    shared_ptr<detector::Downbeat> mDownbeatDetector;
+    shared_ptr<detector::Backbeat> mBackbeatDetector;
+    shared_ptr<detector::Vocal> mVocalDetector;
+    shared_ptr<detector::Percussion> mPercussionDetector;
+    shared_ptr<detector::ChordDetector> mChordDetector;
+    shared_ptr<detector::KeyDetector> mKeyDetector;
+    shared_ptr<detector::MoodAnalyzer> mMoodAnalyzer;
+    shared_ptr<detector::BuildupDetector> mBuildupDetector;
+    shared_ptr<detector::DropDetector> mDropDetector;
+    shared_ptr<detector::EqualizerDetector> mEqualizerDetector;
+    shared_ptr<detector::Vibe> mVibeDetector;
+
+    // Lazy creation helpers
+    shared_ptr<detector::Beat> getBeatDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::FrequencyBands> getFrequencyBands() FL_NO_EXCEPT;
+    shared_ptr<detector::EnergyAnalyzer> getEnergyAnalyzer() FL_NO_EXCEPT;
+    shared_ptr<detector::TempoAnalyzer> getTempoAnalyzer() FL_NO_EXCEPT;
+    shared_ptr<detector::Transient> getTransientDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Silence> getSilenceDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::DynamicsAnalyzer> getDynamicsAnalyzer() FL_NO_EXCEPT;
+    shared_ptr<detector::Pitch> getPitchDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Note> getNoteDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Downbeat> getDownbeatDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Backbeat> getBackbeatDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Vocal> getVocalDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Percussion> getPercussionDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::ChordDetector> getChordDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::KeyDetector> getKeyDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::MoodAnalyzer> getMoodAnalyzer() FL_NO_EXCEPT;
+    shared_ptr<detector::BuildupDetector> getBuildupDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::DropDetector> getDropDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::EqualizerDetector> getEqualizerDetector() FL_NO_EXCEPT;
+    shared_ptr<detector::Vibe> getVibeDetector() FL_NO_EXCEPT;
+
+    // Auto-pump support (used by CFastLED::add(Config))
+    fl::task::Handle mAutoTask;
+    fl::shared_ptr<IInput> mAudioInput;
+
+    static fl::shared_ptr<Processor> createWithAutoInput(
+        fl::shared_ptr<IInput> input) FL_NO_EXCEPT;
+    friend class AudioManager;
+};
+
+} // namespace audio
+} // namespace fl
+
+#endif // FL_AUDIO_AUDIO_PROCESSOR_H

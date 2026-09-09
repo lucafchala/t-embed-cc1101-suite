@@ -1,0 +1,147 @@
+name: wasm
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/wasm/**'
+      - 'examples/WasmScreenCoords/**'
+      - 'ci/**'
+      - '.github/workflows/build_wasm.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/wasm/**'
+      - 'examples/WasmScreenCoords/**'
+      - 'ci/**'
+      - '.github/workflows/build_wasm.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+permissions:
+  contents: read        # Required to checkout code
+  actions: read         # Required for artifact operations  
+  id-token: write      # Required for artifact upload (OIDC)
+  pull-requests: read   # If needed to read PR info
+
+jobs:
+  build:
+    # Hard-block external-fork pull requests (no exceptions per #2757).
+    if: github.event.pull_request == null || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Easter Egg! 🐇🥚
+        run: |
+          echo -e "\nHi if you are reading this then you are probably a cut above the rest."
+          echo "Therefore you are invited to test out our beta release of the Fastled Compiler!"
+          echo "Now you can compile FastLED sketch so that it runs... in the BROWSER!"
+          echo "Why would we do such a thing? BECAUSE COMPILE TIMES ARE INSANELY FAST!!!!"
+          echo "The install is just one line of code: 'pip install fastled'"
+          echo "Then run it on your favorite sketch: 'fastled mysketch'"
+          echo "Almost all of the FastLED sketches are already supported!"
+          echo "To find out more, visit the project github: https://github.com/zackees/fastled-wasm"
+          echo "Or check the demo: https://zackees.github.io/fastled-wasm/"
+          echo "Happy coding! - Zach Vorhies"
+
+      - name: Install UV and clang-tool-chain
+        run: |
+          pip install uv clang-tool-chain --upgrade
+          npm install -g live-server
+
+      - name: Verify tool installations
+        run: |
+          which live-server || (echo "live-server not found in PATH" && exit 1)
+          live-server --version
+          which clang-tool-chain-emcc || (echo "clang-tool-chain-emcc not found in PATH" && exit 1)
+          clang-tool-chain-emcc --version
+
+      - name: Compile fastled.js, fastled.wasm, and index.html
+        run: |
+          uv run ci/wasm_compile.py examples/wasm
+        shell: bash
+
+      - name: Scan for wasm/js/html artifacts
+        run: |
+          find . -name "*.wasm" -o -name "*.js" -o -name "*.html"
+
+      - name: Check for required artifacts
+        run: |
+          cd examples/wasm/fastled_js
+          if [ ! -f fastled.js ] || [ ! -f fastled.wasm ] || [ ! -f index.html ]; then
+            echo "Error: One or more required files (fastled.js, fastled.wasm, index.html) are missing."
+            exit 1
+          fi
+          echo "All required files are present."
+
+      # The asset pipeline is only provable by running the page: a build proves
+      # the loader code exists, not that bytes reach the filesystem. AudioUrl is
+      # the case that matters because its only asset is a remote `.lnk`, so its
+      # files.json is literally `[]` -- if the asset appears at all, it came
+      # through the manifest path. See FastLED#4026.
+      - name: Build AudioUrl for the asset-pipeline check
+        run: uv run ci/ci-compile.py wasm --examples AudioUrl
+        shell: bash
+
+      - name: Install Chromium for Playwright
+        run: uv run python -m playwright install --with-deps chromium
+        shell: bash
+
+      - name: Verify .lnk assets reach the WASM filesystem
+        run: uv run python ci/tests/verify_wasm_assets.py --timeout 45
+        shell: bash
+
+      - name: Generate timestamp and random hex
+        id: generate_id
+        run: |
+          echo "timestamp=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_OUTPUT
+          echo "random_hex=$(openssl rand -hex 3)" >> $GITHUB_OUTPUT
+
+      - name: Upload wasm artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-artifacts-${{ steps.generate_id.outputs.timestamp }}-${{ github.sha }}-${{ steps.generate_id.outputs.random_hex }}
+          path: examples/wasm/fastled_js/*.*
+          if-no-files-found: ${{ matrix.os == 'ubuntu-latest' && 'error' || 'ignore' }}
+
+      - name: Install Playwright
+        run: |
+          uv pip install playwright
+          uv run python -m playwright install chromium
+
+      - name: Verify FastLED_onFrame with Playwright
+        run: |
+          uv run ci/wasm_test.py
+        continue-on-error: ${{ matrix.os != 'ubuntu-latest' }}

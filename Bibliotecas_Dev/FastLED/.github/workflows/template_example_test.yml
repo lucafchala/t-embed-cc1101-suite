@@ -1,0 +1,73 @@
+name: example tests template
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+        description: 'Runner OS (ubuntu-latest, macos-latest, or windows-latest)'
+
+permissions:
+  contents: read        # Required to checkout code
+  actions: read         # Required for artifact operations
+  id-token: write      # Required for artifact upload (OIDC)
+  pull-requests: read   # If needed to read PR info
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+    # Fail fast instead of waiting for the 6h default runner timeout.
+    # Successful runs complete in ~8-20 minutes; anything past 45m is hung.
+    # Observed Windows runners hanging in the Install step for 3+ hours
+    # before losing communication with the server (runs/24593311481).
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+          version: "0.8.0" # 0.8.8 has problems with deployment on linux.
+
+      - name: Install libunwind-dev (Linux only)
+        if: runner.os == 'Linux'
+        # Refresh apt indexes before install so stale mirror metadata
+        # (e.g. a transitional liblzma-dev version the mirror hasn't
+        # propagated yet, returning 404) doesn't fail the build.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libunwind-dev
+
+      - name: Install
+        run: ./install
+        shell: bash
+
+      - name: Run Example Blink
+        run: |
+          ./test --clang --no-parallel --no-unity --examples Blink --no-pch --verbose
+        shell: bash
+
+      - name: Run All Examples
+        run: |
+          # Enable unbuffered Python output for better CI log streaming
+          export PYTHONUNBUFFERED=1
+          # Force line-buffered output for better log streaming
+          export PYTHONIOENCODING=utf-8
+          # Run examples with debug mode
+          ./test --clang --no-parallel --examples --verbose --debug
+        shell: bash

@@ -1,0 +1,26 @@
+REM Title: macOS Network Info
+REM Author: BadUSB Library
+REM Description: Shows network information
+REM Target: macOS 10.15+
+REM Category: Discovery
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Show network info
+STRING ifconfig
+ENTER
+DELAY 1000
+
+STRING netstat -rn
+ENTER
+DELAY 1000
+
+STRING arp -a
+ENTER

@@ -1,0 +1,35 @@
+// IWYU pragma: private
+
+/// @file network_state_tracker.cpp
+/// @brief Singleton tracker for network state changes implementation
+
+#include "platforms/esp/32/drivers/rmt/rmt_5/network_state_tracker.h"
+
+#include "platforms/is_platform.h"
+#if defined(FL_IS_ESP32) && FASTLED_RMT5
+
+#include "platforms/esp/32/drivers/rmt/rmt_5/network_detector.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+bool NetworkStateTracker::hasChanged() FL_NO_EXCEPT {
+    bool currentState = NetworkDetector::isAnyNetworkActive();
+
+    if (currentState != mLastKnownState) {
+        // State changed - update and return true
+        mLastKnownState = currentState;
+        return true;
+    }
+
+    // No change
+    return false;
+}
+
+bool NetworkStateTracker::isActive() const FL_NO_EXCEPT {
+    return NetworkDetector::isAnyNetworkActive();
+}
+
+} // namespace fl
+
+#endif // FL_IS_ESP32 && FASTLED_RMT5

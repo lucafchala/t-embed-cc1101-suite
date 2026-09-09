@@ -1,0 +1,141 @@
+// IWYU pragma: private
+
+/// @file wave8_encoder_i2s.cpp
+/// @brief Implementation of wave8 encoding for ESP32-S3 I2S LCD_CAM
+
+#include "fl/stl/compiler_control.h"
+#include "platforms/esp/32/drivers/i2s/wave8_encoder_i2s.h"
+#include "fl/channels/detail/wave8.h"
+#include "fl/stl/algorithm.h"
+#include "fl/stl/noexcept.h"
+#include "fl/log/log.h"
+#include "fl/log/log.h"
+
+namespace fl {
+
+size_t wave8EncodeI2sSingleLane(
+    fl::span<const u8> input,
+    fl::span<u16> output,
+    const Wave8BitExpansionLut& lut) FL_NO_EXCEPT {
+
+    // Calculate required output size
+    const size_t required_words = wave8CalculateI2sOutputSize(input.size());
+    if (output.size() < required_words) {
+        FL_WARN_F("wave8EncodeI2sSingleLane: Output buffer too small (need %s words, have %s)", required_words, output.size());
+        return 0;
+    }
+
+    size_t output_idx = 0;
+
+    // Process each input byte
+    for (size_t i = 0; i < input.size(); i++) {
+        // Convert byte to Wave8Byte (8 bytes = 64 bits of waveform)
+        Wave8Byte wave8_output;
+        detail::wave8_convert_byte_to_wave8byte(input[i], lut, &wave8_output);
+
+        // Pack Wave8Byte into I2S 16-bit words
+        // Each Wave8Bit (1 byte) contains 8 pulses, but we need to expand each
+        // pulse to one clock cycle on D0
+        //
+        // For I2S: each uint16_t represents one parallel output cycle
+        // We output 1 bit per clock for single-lane mode
+        //
+        // Wave8Byte = 8 bytes = 64 bits of pulse data
+        // Output = 64 uint16_t words (each with D0 = pulse value)
+
+        for (int sym = 0; sym < 8; sym++) {
+            u8 wave8_bits = wave8_output.symbols[sym].data;
+
+            // Each bit in wave8_bits becomes one output word
+            for (int bit = 7; bit >= 0; bit--) {
+                u16 word = ((wave8_bits >> bit) & 1);
+                output[output_idx++] = word;
+            }
+        }
+    }
+
+    return output_idx;
+}
+
+size_t wave8EncodeI2sMultiLane(
+    fl::span<const u8>* lanes,
+    int num_lanes,
+    fl::span<u16> output,
+    const Wave8BitExpansionLut& lut) FL_NO_EXCEPT {
+
+    if (num_lanes < 1 || num_lanes > 16 || lanes == nullptr) {
+        return 0;
+    }
+
+    // All lanes must have same size
+    const size_t lane_size = lanes[0].size();
+    for (int i = 1; i < num_lanes; i++) {
+        if (lanes[i].size() != lane_size) {
+            FL_WARN_F("wave8EncodeI2sMultiLane: Lane size mismatch");
+            return 0;
+        }
+    }
+
+    // Calculate required output size
+    const size_t required_words = wave8CalculateI2sOutputSize(lane_size);
+    if (output.size() < required_words) {
+        FL_WARN_F("wave8EncodeI2sMultiLane: Output buffer too small");
+        return 0;
+    }
+
+    size_t output_idx = 0;
+
+    // Process each byte position across all lanes
+    for (size_t byte_idx = 0; byte_idx < lane_size; byte_idx++) {
+        // Convert each lane's byte to Wave8Byte
+        Wave8Byte wave8_lanes[16];
+        for (int lane = 0; lane < num_lanes; lane++) {
+            detail::wave8_convert_byte_to_wave8byte(
+                lanes[lane][byte_idx], lut, &wave8_lanes[lane]);
+        }
+
+        // Zero unused lanes
+        for (int lane = num_lanes; lane < 16; lane++) {
+            fl::memset(&wave8_lanes[lane], 0, sizeof(Wave8Byte));
+        }
+
+        // Interleave all lanes into output
+        // For each of the 8 symbols (bits from original byte):
+        for (int sym = 0; sym < 8; sym++) {
+            // For each of the 8 pulses in the symbol:
+            for (int pulse = 7; pulse >= 0; pulse--) {
+                u16 word = 0;
+
+                // Gather pulse bit from each lane
+                for (int lane = 0; lane < num_lanes; lane++) {
+                    u8 wave8_bits = wave8_lanes[lane].symbols[sym].data;
+                    u16 bit = (wave8_bits >> pulse) & 1;
+                    word |= (bit << lane);
+                }
+
+                output[output_idx++] = word;
+            }
+        }
+    }
+
+    return output_idx;
+}
+
+u32 calculateI2sClockHz(const ChipsetTiming& timing) FL_NO_EXCEPT {
+    // Calculate total period for one LED bit
+    // WS2812: T1 (T0H/T1H start) + T2 (middle) + T3 (T0L/T1L end)
+    // Total period = T1 + T2 + T3 nanoseconds
+    u32 total_period_ns = timing.T1 + timing.T2 + timing.T3;
+
+    // Wave8 expands each bit to 8 pulses
+    // Pulse period = total_period_ns / 8
+    u32 pulse_period_ns = total_period_ns / 8;
+
+    // Clock frequency = 1 / pulse_period
+    // f = 1e9 / pulse_period_ns
+    u32 clock_hz = 1000000000U / pulse_period_ns;
+
+    return clock_hz;
+}
+
+} // namespace fl

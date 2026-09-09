@@ -1,0 +1,85 @@
+#pragma once
+
+/// @file spi/config.h
+/// @brief Configuration structure for SPI communication
+
+#include "fl/stl/stdint.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/span.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+// ============================================================================
+// SPI Constants
+// ============================================================================
+
+/// @brief Maximum number of SPI lanes supported (hardware: 1-8, software: up to 32)
+constexpr size_t MAX_SPI_LANES = 32;
+
+// ============================================================================
+// SPI Output Modes
+// ============================================================================
+
+/// @brief SPI output mode for multi-lane devices
+enum class spi_output_mode_t : u8 {
+    SPI_AUTO = 0,  ///< Auto-selects best backend (DMA/bit-bang/ISR)
+    SPI_HW,        ///< Use DMA-capable hardware (Async or Sync), supports 1/2/4/8 lanes depending on platform
+    SPI_BITBANG,   ///< Use bit-bang software (Blocking)
+    SPI_ISR,       ///< Use ISR-based software (Async)
+};
+
+/// @brief Parallel device execution modes
+enum class SpiParallelMode : u8 {
+    AUTO = 0,          ///< Auto-select best mode (default: ISR)
+    ISR_ASYNC,         ///< ISR-driven async mode
+    BITBANG_BLOCKING   ///< Bit-bang blocking mode
+};
+
+// ============================================================================
+// SPI Configuration
+// ============================================================================
+
+/// @brief Configuration for SPI device (supports 1-8 lanes)
+struct SpiConfig {
+    SpiConfig() FL_NO_EXCEPT = default;
+
+    /// @brief Construct single-lane SPI config
+    SpiConfig(int clk, int data, u32 speed_hz = 0xffffffff, spi_output_mode_t output_mode = spi_output_mode_t::SPI_AUTO, u8 spi_mode = 0)
+        : clock_pin(clk)
+        , clock_speed_hz(speed_hz)
+        , output_mode(output_mode)
+        , spi_mode(spi_mode) {
+        data_pins.push_back(data);
+    }
+
+    /// @brief Construct multi-lane SPI config
+    SpiConfig(int clk, fl::span<const int> pins, u32 speed_hz = 0xffffffff, spi_output_mode_t output_mode = spi_output_mode_t::SPI_AUTO, u8 spi_mode = 0)
+        : clock_pin(clk)
+        , clock_speed_hz(speed_hz)
+        , output_mode(output_mode)
+        , spi_mode(spi_mode) {
+        // Manually copy pins to data_pins vector
+        for (size_t i = 0; i < pins.size(); i++) {
+            data_pins.push_back(pins[i]);
+        }
+    }
+
+    /// @brief Check if this is a multi-lane configuration
+    bool isMultiLane() const { return data_pins.size() > 1; }
+
+    int clock_pin;                          ///< SCK pin number
+    fl::vector<int> data_pins;              ///< Data pins (1 = single-lane, 2-8 = multi-lane)
+    u32 clock_speed_hz = 0xffffffff;   ///< Clock frequency in Hz (0xffffffff = as fast as possible)
+    spi_output_mode_t output_mode = spi_output_mode_t::SPI_AUTO; ///< Output mode (auto/hw/bitbang/isr)
+    u8 spi_mode = 0;                   ///< SPI mode 0-3 (CPOL/CPHA)
+};
+
+namespace spi {
+
+// Use the top-level SpiConfig as the internal Config
+// This avoids duplication and ensures consistency
+using Config = fl::SpiConfig;
+
+} // namespace spi
+} // namespace fl

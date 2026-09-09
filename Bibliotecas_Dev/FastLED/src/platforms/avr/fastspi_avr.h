@@ -1,0 +1,912 @@
+// IWYU pragma: private
+
+#ifndef __INC_FASTSPI_AVR_H
+#define __INC_FASTSPI_AVR_H
+
+#include "fastspi_types.h"
+#include "fl/system/delay.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/noexcept.h"
+
+FL_DISABLE_WARNING_PUSH
+FL_DISABLE_WARNING_DEPRECATED_REGISTER
+
+namespace fl {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Hardware SPI support using USART registers and friends
+//
+// TODO: Complete/test implementation - right now this doesn't work
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// uno/mini/duemilanove
+#if defined(AVR_HARDWARE_SPI)
+
+#if defined(UBRR1)
+
+#ifndef UCPHA1
+#define UCPHA1 1
+#endif
+
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class AVRUSART1SPIOutput {
+	Selectable *mPSelect;
+
+public:
+	AVRUSART1SPIOutput() { mPSelect = nullptr; }
+	AVRUSART1SPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	void init() FL_NO_EXCEPT {
+		UBRR1 = 0;
+
+		/* Set MSPI mode of operation and SPI data mode 0. */
+		UCSR1C = (1<<UMSEL11)|(1<<UMSEL10)|(0<<UCPHA1)|(0<<UCPOL1);
+		/* Enable receiver and transmitter. */
+		UCSR1B = (1<<RXEN1)|(1<<TXEN1);
+
+		FastPin<_CLOCK_PIN>::setOutput();
+		FastPin<_DATA_PIN>::setOutput();
+
+		// must be done last, see page 206
+		setSPIRate();
+	}
+
+	void setSPIRate() FL_NO_EXCEPT {
+		if(_SPI_CLOCK_DIVIDER > 2) {
+			UBRR1 = (_SPI_CLOCK_DIVIDER/2)-1;
+		} else {
+			UBRR1 = 0;
+		}
+	}
+
+
+	static void stop() FL_NO_EXCEPT {
+		// TODO: stop the uart spi output
+	}
+
+	static bool shouldWait(bool wait = false) FL_NO_EXCEPT __attribute__((always_inline)) {
+		static bool sWait=false;
+		if(sWait) {
+			sWait = wait; return true;
+		} else {
+			sWait = wait; return false;
+		}
+		// return true;
+	}
+	static void wait() FL_NO_EXCEPT __attribute__((always_inline)) {
+		if(shouldWait()) {
+			while(!(UCSR1A & (1<<UDRE1)));
+		}
+	}
+	static void waitFully() __attribute__((always_inline)) { wait(); }
+
+	static void writeWord(u16 w) __attribute__((always_inline)) { writeByte(w>>8); writeByte(w&0xFF); }
+
+	static void writeByte(u8 b) __attribute__((always_inline)) { wait(); UDR1=b;  shouldWait(true); }
+	static void writeBytePostWait(u8 b) __attribute__((always_inline)) { UDR1=b; shouldWait(true); wait(); }
+	static void writeByteNoWait(u8 b) __attribute__((always_inline)) { UDR1=b; shouldWait(true); }
+
+
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		if(b && (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		FastPin<_CLOCK_PIN>::lo();
+	}
+
+	void enable_pins() { }
+	void disable_pins() { }
+
+	void select() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->select();
+		}
+		enable_pins();
+		setSPIRate();
+	}
+
+	void release() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->release();
+		}
+		disable_pins();
+	}
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) {
+			writeByte(value);
+		}
+	}
+
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		select();
+		while(len--) {
+			writeByte(value);
+		}
+		release();
+	}
+
+	// Write a block of n uint8_ts out
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		u8 *end = data + len;
+		select();
+		while(data != end) {
+			// a slight touch of delay here helps optimize the timing of the status register check loop (not used on ARM)
+			writeByte(D::adjust(*data++)); delaycycles<3>();
+		}
+		release();
+	}
+
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	/// Finalize transmission (no-op for AVR USART1 SPI)
+	/// This method exists for compatibility with other SPI implementations
+	/// that may need to flush buffers or perform post-transmission operations
+	static void finalizeTransmission() { }
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		//setSPIRate();
+		int len = pixels.mLen;
+
+		select();
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+				writeBytePostWait(D::adjust(pixels.loadAndScale0()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale1()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale2()));
+			} else {
+				writeByte(D::adjust(pixels.loadAndScale0()));
+				writeByte(D::adjust(pixels.loadAndScale1()));
+				writeByte(D::adjust(pixels.loadAndScale2()));
+			}
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		release();
+	}
+};
+#endif
+
+#if defined(UBRR0)
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class AVRUSART0SPIOutput {
+	Selectable *mPSelect;
+
+public:
+	AVRUSART0SPIOutput() { mPSelect = nullptr; }
+	AVRUSART0SPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	void init() FL_NO_EXCEPT {
+		UBRR0 = 0;
+
+		/* Set MSPI mode of operation and SPI data mode 0. */
+		UCSR0C = (1<<UMSEL01)|(1<<UMSEL00)/*|(0<<UCPHA0)*/|(0<<UCPOL0);
+		/* Enable receiver and transmitter. */
+		UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+
+		FastPin<_CLOCK_PIN>::setOutput();
+		FastPin<_DATA_PIN>::setOutput();
+
+		// must be done last, see page 206
+		setSPIRate();
+	}
+
+	void setSPIRate() FL_NO_EXCEPT {
+		if(_SPI_CLOCK_DIVIDER > 2) {
+			UBRR0 = (_SPI_CLOCK_DIVIDER/2)-1;
+		} else {
+			UBRR0 = 0;
+		}
+	}
+
+	static void stop() FL_NO_EXCEPT {
+		// TODO: stop the uart spi output
+	}
+
+	static bool shouldWait(bool wait = false) FL_NO_EXCEPT __attribute__((always_inline)) {
+		static bool sWait=false;
+		if(sWait) {
+			sWait = wait; return true;
+		} else {
+			sWait = wait; return false;
+		}
+		// return true;
+	}
+	static void wait() FL_NO_EXCEPT __attribute__((always_inline)) {
+		if(shouldWait()) {
+			while(!(UCSR0A & (1<<UDRE0)));
+		}
+	}
+	static void waitFully() __attribute__((always_inline)) { wait(); }
+
+	static void writeWord(u16 w) __attribute__((always_inline)) { writeByte(w>>8); writeByte(w&0xFF); }
+
+	static void writeByte(u8 b) __attribute__((always_inline)) { wait(); UDR0=b;  shouldWait(true); }
+	static void writeBytePostWait(u8 b) __attribute__((always_inline)) { UDR0=b; shouldWait(true); wait(); }
+	static void writeByteNoWait(u8 b) __attribute__((always_inline)) { UDR0=b; shouldWait(true); }
+
+
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		if(b && (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		FastPin<_CLOCK_PIN>::lo();
+	}
+
+	void enable_pins() { }
+	void disable_pins() { }
+
+	void select() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->select();
+		}
+		enable_pins();
+		setSPIRate();
+	}
+
+	void release() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->release();
+		}
+		disable_pins();
+	}
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) {
+			writeByte(value);
+		}
+	}
+
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		select();
+		while(len--) {
+			writeByte(value);
+		}
+		release();
+	}
+
+	// Write a block of n uint8_ts out
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		u8 *end = data + len;
+		select();
+		while(data != end) {
+			// a slight touch of delay here helps optimize the timing of the status register check loop (not used on ARM)
+			writeByte(D::adjust(*data++)); delaycycles<3>();
+		}
+		release();
+	}
+
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		//setSPIRate();
+		int len = pixels.mLen;
+
+		select();
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+				writeBytePostWait(D::adjust(pixels.loadAndScale0()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale1()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale2()));
+			} else {
+				writeByte(D::adjust(pixels.loadAndScale0()));
+				writeByte(D::adjust(pixels.loadAndScale1()));
+				writeByte(D::adjust(pixels.loadAndScale2()));
+			}
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		waitFully();
+		release();
+	}
+
+	/// Finalize transmission (no-op for AVR USART0 SPI)
+	/// This method exists for compatibility with other SPI implementations
+	/// that may need to flush buffers or perform post-transmission operations
+	static void finalizeTransmission() { }
+};
+
+#endif
+
+#if defined(SPI0_CTRLA)
+
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class AVRHardwareSPIOutput {
+	Selectable *mPSelect;
+
+public:
+	AVRHardwareSPIOutput() { mPSelect = nullptr; }
+	AVRHardwareSPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	void init() FL_NO_EXCEPT {
+		FastPin<_CLOCK_PIN>::setOutput();
+		FastPin<_DATA_PIN>::setOutput();
+
+		// Configure PORTMUX for SPI (varies by chip family)
+		// megaAVR 0-series (ATmega4809) uses PORTMUX_TWISPIROUTEA
+		// tinyAVR 0/1-series (ATtiny1604 etc) uses PORTMUX.CTRLB
+#if defined(PORTMUX_TWISPIROUTEA)
+		// Arduino Nano Every documentation lists SPI pins in ALT2 portmux position
+		PORTMUX_TWISPIROUTEA = PORTMUX_SPI01_bm;
+#elif defined(PORTMUX_CTRLB)
+		// tinyAVR 0/1-series: use default SPI pin positions (no portmux change needed)
+		// PORTMUX.CTRLB bits are for SPI0 pin swap - we use default (0)
+#endif
+
+		// Set SPI master mode and clock scaler.
+		SPI0_CTRLA = SPI_MASTER_bm;
+		if(_SPI_CLOCK_DIVIDER >= 128) { SPI0_CTRLA |= SPI_PRESC1_bm|SPI_PRESC0_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 64) { SPI0_CTRLA |= SPI_PRESC1_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 32) { SPI0_CTRLA |= SPI_PRESC1_bm|SPI_CLK2X_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 16) { SPI0_CTRLA |= SPI_PRESC0_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 8) { SPI0_CTRLA |= SPI_PRESC0_bm|SPI_CLK2X_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 4) { /* default rate */ }
+		else { SPI0_CTRLA |= SPI_CLK2X_bm; }
+
+		// Set mode 0 and disable slave select.
+		SPI0_CTRLB = SPI_SSD_bm;
+
+		// Enable SPI.
+		SPI0_CTRLA |= SPI_ENABLE_bm;
+	}
+
+	void setSPIRate() FL_NO_EXCEPT {
+		SPI0_CTRLA &= ~ ( (1<<SPI_PRESC1_bp)|(1<<SPI_PRESC0_bp)|(1<<SPI_CLK2X_bp) ); // clear pre-scaler and clock multiplier bits
+
+		if(_SPI_CLOCK_DIVIDER >= 128) { SPI0_CTRLA |= SPI_PRESC1_bm|SPI_PRESC0_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 64) { SPI0_CTRLA |= SPI_PRESC1_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 32) { SPI0_CTRLA |= SPI_PRESC1_bm|SPI_CLK2X_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 16) { SPI0_CTRLA |= SPI_PRESC0_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 8) { SPI0_CTRLA |= SPI_PRESC0_bm|SPI_CLK2X_bm; }
+		else if (_SPI_CLOCK_DIVIDER >= 4) { /* default rate */ }
+		else { SPI0_CTRLA |= SPI_CLK2X_bm; }
+	}
+
+	static void stop() FL_NO_EXCEPT {
+		SPI0_CTRLA &= ~(SPI_ENABLE_bm);
+	}
+
+	static bool shouldWait(bool wait = false) FL_NO_EXCEPT __attribute__((always_inline)) {
+		static bool sWait=false;
+		if(sWait) {
+			sWait = wait; return true;
+		} else {
+			sWait = wait; return false;
+		}
+	}
+	static void wait() FL_NO_EXCEPT __attribute__((always_inline)) {
+		if(shouldWait()) {
+			while(!(SPI0_INTFLAGS & SPI_IF_bm));
+		}
+	}
+	static void waitFully() __attribute__((always_inline)) { wait(); }
+
+	static void writeWord(u16 w) __attribute__((always_inline)) { writeByte(w>>8); writeByte(w&0xFF); }
+
+	static void writeByte(u8 b) __attribute__((always_inline)) { wait(); SPI0_DATA=b;  shouldWait(true); }
+	static void writeBytePostWait(u8 b) __attribute__((always_inline)) { SPI0_DATA=b; shouldWait(true); wait(); }
+	static void writeByteNoWait(u8 b) __attribute__((always_inline)) { SPI0_DATA=b; shouldWait(true); }
+
+
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		if(b && (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		FastPin<_CLOCK_PIN>::lo();
+	}
+
+	void enable_pins() { }
+	void disable_pins() { }
+
+	void select() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->select();
+		}
+		enable_pins();
+		setSPIRate();
+	}
+
+	void release() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) {
+			mPSelect->release();
+		}
+		disable_pins();
+	}
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) {
+			writeByte(value);
+		}
+	}
+
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		select();
+		while(len--) {
+			writeByte(value);
+		}
+		release();
+	}
+
+	// Write a block of n uint8_ts out
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		u8 *end = data + len;
+		select();
+		while(data != end) {
+			// a slight touch of delay here helps optimize the timing of the status register check loop (not used on ARM)
+			writeByte(D::adjust(*data++)); delaycycles<3>();
+		}
+		release();
+	}
+
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		//setSPIRate();
+		int len = pixels.mLen;
+
+		select();
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+				writeBytePostWait(D::adjust(pixels.loadAndScale0()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale1()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale2()));
+			} else {
+				writeByte(D::adjust(pixels.loadAndScale0()));
+				writeByte(D::adjust(pixels.loadAndScale1()));
+				writeByte(D::adjust(pixels.loadAndScale2()));
+			}
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		release();
+	}
+
+	/// Finalize transmission (no-op for AVR Hardware SPI)
+	/// This method exists for compatibility with other SPI implementations
+	/// that may need to flush buffers or perform post-transmission operations
+	static void finalizeTransmission() { }
+};
+
+#endif
+
+#if defined(SPSR)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Hardware SPI support using SPDR registers and friends
+//
+// Technically speaking, this uses the AVR SPI registers.  This will work on the Teensy 3.0 because Paul made a set of compatability
+// classes that map the AVR SPI registers to ARM's, however this caps the performance of output.
+//
+// TODO: implement ARMHardwareSPIOutput
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class AVRHardwareSPIOutput {
+	Selectable *mPSelect;
+	bool mWait;
+
+public:
+	AVRHardwareSPIOutput() { mPSelect = nullptr; mWait = false;}
+	AVRHardwareSPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	void setSPIRate() FL_NO_EXCEPT {
+		SPCR &= ~ ( (1<<SPR1) | (1<<SPR0) ); 	// clear out the prescalar bits
+
+	    bool b2x = false;
+
+	    if(_SPI_CLOCK_DIVIDER >= 128) { SPCR |= (1<<SPR1); SPCR |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 64) { SPCR |= (1<<SPR1);}
+	    else if(_SPI_CLOCK_DIVIDER >= 32) { SPCR |= (1<<SPR1); b2x = true;  }
+	    else if(_SPI_CLOCK_DIVIDER >= 16) { SPCR |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 8) { SPCR |= (1<<SPR0); b2x = true; }
+	    else if(_SPI_CLOCK_DIVIDER >= 4) { /* do nothing - default rate */ }
+	    else { b2x = true; }
+
+	    if(b2x) { SPSR |= (1<<SPI2X); }
+	    else { SPSR &= ~ (1<<SPI2X); }
+	}
+
+	void init() FL_NO_EXCEPT {
+		volatile u8 clr;
+
+		// set the pins to output
+		FastPin<_DATA_PIN>::setOutput();
+		FastPin<_CLOCK_PIN>::setOutput();
+#ifdef SPI_SELECT
+		// Make sure the slave select line is set to output, or arduino will block us
+		FastPin<SPI_SELECT>::setOutput();
+		FastPin<SPI_SELECT>::lo();
+#endif
+
+		SPCR |= ((1<<SPE) | (1<<MSTR) ); 		// enable SPI as master
+		SPCR &= ~ ( (1<<SPR1) | (1<<SPR0) ); 	// clear out the prescalar bits
+
+		clr = SPSR; // clear SPI status register
+		clr = SPDR; // clear SPI data register
+		clr;
+
+	    bool b2x = false;
+
+	    if(_SPI_CLOCK_DIVIDER >= 128) { SPCR |= (1<<SPR1); SPCR |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 64) { SPCR |= (1<<SPR1);}
+	    else if(_SPI_CLOCK_DIVIDER >= 32) { SPCR |= (1<<SPR1); b2x = true;  }
+	    else if(_SPI_CLOCK_DIVIDER >= 16) { SPCR |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 8) { SPCR |= (1<<SPR0); b2x = true; }
+	    else if(_SPI_CLOCK_DIVIDER >= 4) { /* do nothing - default rate */ }
+	    else { b2x = true; }
+
+	    if(b2x) { SPSR |= (1<<SPI2X); }
+	    else { SPSR &= ~ (1<<SPI2X); }
+
+	    SPDR=0;
+	    shouldWait(false);
+			release();
+		}
+
+	static bool shouldWait(bool wait = false) FL_NO_EXCEPT __attribute__((always_inline)) {
+		static bool sWait=false;
+		if(sWait) { sWait = wait; return true; } else { sWait = wait; return false; }
+		// return true;
+	}
+	static void wait() __attribute__((always_inline)) { if(shouldWait()) { while(!(SPSR & (1<<SPIF))); } }
+	static void waitFully() __attribute__((always_inline)) { wait(); }
+
+	static void writeWord(u16 w) __attribute__((always_inline)) { writeByte(w>>8); writeByte(w&0xFF); }
+
+	static void writeByte(u8 b) __attribute__((always_inline)) { wait(); SPDR=b;  shouldWait(true); }
+	static void writeBytePostWait(u8 b) __attribute__((always_inline)) { SPDR=b; shouldWait(true); wait(); }
+	static void writeByteNoWait(u8 b) __attribute__((always_inline)) { SPDR=b; shouldWait(true); }
+
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		SPCR &= ~(1 << SPE);
+		if(b & (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		FastPin<_CLOCK_PIN>::lo();
+		SPCR |= 1 << SPE;
+		shouldWait(false);
+	}
+
+	void enable_pins() FL_NO_EXCEPT {
+		SPCR |= ((1<<SPE) | (1<<MSTR) ); 		// enable SPI as master
+	}
+
+	void disable_pins() FL_NO_EXCEPT {
+		SPCR &= ~(((1<<SPE) | (1<<MSTR) )); // disable SPI
+	}
+
+	void select() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) { mPSelect->select(); }
+		enable_pins();
+		setSPIRate();
+	}
+
+	void release() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) { mPSelect->release(); }
+		disable_pins();
+	}
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) { writeByte(value); }
+	}
+
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		select();
+		while(len--) {
+			writeByte(value);
+		}
+		release();
+	}
+
+	// Write a block of n uint8_ts out
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		u8 *end = data + len;
+		select();
+		while(data != end) {
+			// a slight touch of delay here helps optimize the timing of the status register check loop (not used on ARM)
+			writeByte(D::adjust(*data++)); delaycycles<3>();
+		}
+		release();
+	}
+
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		//setSPIRate();
+		int len = pixels.mLen;
+
+		select();
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+				writeBytePostWait(D::adjust(pixels.loadAndScale0()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale1()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale2()));
+			} else {
+				writeByte(D::adjust(pixels.loadAndScale0()));
+				writeByte(D::adjust(pixels.loadAndScale1()));
+				writeByte(D::adjust(pixels.loadAndScale2()));
+			}
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		waitFully();
+		release();
+	}
+
+	/// Finalize transmission (no-op for AVR Hardware SPI)
+	/// This method exists for compatibility with other SPI implementations
+	/// that may need to flush buffers or perform post-transmission operations
+	static void finalizeTransmission() { }
+};
+#elif defined(SPSR0)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Hardware SPI support using SPDR0 registers and friends
+//
+// Technically speaking, this uses the AVR SPI registers.  This will work on the Teensy 3.0 because Paul made a set of compatability
+// classes that map the AVR SPI registers to ARM's, however this caps the performance of output.
+//
+// TODO: implement ARMHardwareSPIOutput
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class AVRHardwareSPIOutput {
+	Selectable *mPSelect;
+	bool mWait;
+
+public:
+	AVRHardwareSPIOutput() { mPSelect = nullptr; mWait = false;}
+	AVRHardwareSPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	void setSPIRate() FL_NO_EXCEPT {
+		SPCR0 &= ~ ( (1<<SPR10) | (1<<SPR0) ); 	// clear out the prescalar bits
+
+	    bool b2x = false;
+
+	    if(_SPI_CLOCK_DIVIDER >= 128) { SPCR0 |= (1<<SPR1); SPCR0 |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 64) { SPCR0 |= (1<<SPR1);}
+	    else if(_SPI_CLOCK_DIVIDER >= 32) { SPCR0 |= (1<<SPR1); b2x = true;  }
+	    else if(_SPI_CLOCK_DIVIDER >= 16) { SPCR0 |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 8) { SPCR0 |= (1<<SPR0); b2x = true; }
+	    else if(_SPI_CLOCK_DIVIDER >= 4) { /* do nothing - default rate */ }
+	    else { b2x = true; }
+
+	    if(b2x) { SPSR0 |= (1<<SPI2X); }
+	    else { SPSR0 &= ~ (1<<SPI2X); }
+	}
+
+	void init() FL_NO_EXCEPT {
+		volatile u8 clr;
+
+		// set the pins to output
+		FastPin<_DATA_PIN>::setOutput();
+		FastPin<_CLOCK_PIN>::setOutput();
+#ifdef SPI_SELECT
+		// Make sure the slave select line is set to output, or arduino will block us
+		FastPin<SPI_SELECT>::setOutput();
+		FastPin<SPI_SELECT>::lo();
+#endif
+
+		SPCR0 |= ((1<<SPE) | (1<<MSTR) ); 		// enable SPI as master
+		SPCR0 &= ~ ( (1<<SPR1) | (1<<SPR0) ); 	// clear out the prescalar bits
+
+		clr = SPSR0; // clear SPI status register
+		clr = SPDR0; // clear SPI data register
+		clr;
+
+	    bool b2x = false;
+
+	    if(_SPI_CLOCK_DIVIDER >= 128) { SPCR0 |= (1<<SPR1); SPCR0 |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 64) { SPCR0 |= (1<<SPR1);}
+	    else if(_SPI_CLOCK_DIVIDER >= 32) { SPCR0 |= (1<<SPR1); b2x = true;  }
+	    else if(_SPI_CLOCK_DIVIDER >= 16) { SPCR0 |= (1<<SPR0); }
+	    else if(_SPI_CLOCK_DIVIDER >= 8) { SPCR0 |= (1<<SPR0); b2x = true; }
+	    else if(_SPI_CLOCK_DIVIDER >= 4) { /* do nothing - default rate */ }
+	    else { b2x = true; }
+
+	    if(b2x) { SPSR0 |= (1<<SPI2X); }
+	    else { SPSR0 &= ~ (1<<SPI2X); }
+
+	    SPDR0=0;
+	    shouldWait(false);
+			release();
+		}
+
+	static bool shouldWait(bool wait = false) FL_NO_EXCEPT __attribute__((always_inline)) {
+		static bool sWait=false;
+		if(sWait) { sWait = wait; return true; } else { sWait = wait; return false; }
+		// return true;
+	}
+	static void wait() __attribute__((always_inline)) { if(shouldWait()) { while(!(SPSR0 & (1<<SPIF))); } }
+	static void waitFully() __attribute__((always_inline)) { wait(); }
+
+	static void writeWord(u16 w) __attribute__((always_inline)) { writeByte(w>>8); writeByte(w&0xFF); }
+
+	static void writeByte(u8 b) __attribute__((always_inline)) { wait(); SPDR0=b;  shouldWait(true); }
+	static void writeBytePostWait(u8 b) __attribute__((always_inline)) { SPDR0=b; shouldWait(true); wait(); }
+	static void writeByteNoWait(u8 b) __attribute__((always_inline)) { SPDR0=b; shouldWait(true); }
+
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		SPCR0 &= ~(1 << SPE);
+		if(b & (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		FastPin<_CLOCK_PIN>::lo();
+		SPCR0 |= 1 << SPE;
+		shouldWait(false);
+	}
+
+	void enable_pins() FL_NO_EXCEPT {
+		SPCR0 |= ((1<<SPE) | (1<<MSTR) ); 		// enable SPI as master
+	}
+
+	void disable_pins() FL_NO_EXCEPT {
+		SPCR0 &= ~(((1<<SPE) | (1<<MSTR) )); // disable SPI
+	}
+
+	void select() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) { mPSelect->select(); }
+		enable_pins();
+		setSPIRate();
+	}
+
+	void release() FL_NO_EXCEPT {
+		if(mPSelect != nullptr) { mPSelect->release(); }
+		disable_pins();
+	}
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) { writeByte(value); }
+	}
+
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		select();
+		while(len--) {
+			writeByte(value);
+		}
+		release();
+	}
+
+	// Write a block of n uint8_ts out
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		//setSPIRate();
+		u8 *end = data + len;
+		select();
+		while(data != end) {
+			// a slight touch of delay here helps optimize the timing of the status register check loop (not used on ARM)
+			writeByte(D::adjust(*data++)); delaycycles<3>();
+		}
+		release();
+	}
+
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		//setSPIRate();
+		int len = pixels.mLen;
+
+		select();
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+				writeBytePostWait(D::adjust(pixels.loadAndScale0()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale1()));
+				writeBytePostWait(D::adjust(pixels.loadAndScale2()));
+			} else {
+				writeByte(D::adjust(pixels.loadAndScale0()));
+				writeByte(D::adjust(pixels.loadAndScale1()));
+				writeByte(D::adjust(pixels.loadAndScale2()));
+			}
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		waitFully();
+		release();
+	}
+
+	/// Finalize transmission (no-op for AVR Hardware SPI)
+	/// This method exists for compatibility with other SPI implementations
+	/// that may need to flush buffers or perform post-transmission operations
+	static void finalizeTransmission() { }
+};
+#endif
+
+#else
+// #define FASTLED_FORCE_SOFTWARE_SPI
+#endif
+
+}  // namespace fl
+
+
+
+FL_DISABLE_WARNING_POP
+
+#endif

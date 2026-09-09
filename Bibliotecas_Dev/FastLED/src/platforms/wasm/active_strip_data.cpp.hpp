@@ -1,0 +1,46 @@
+// IWYU pragma: private
+
+
+
+// ok no namespace fl
+#include "platforms/wasm/is_wasm.h"
+
+#ifdef FL_IS_WASM
+
+// ⚠️⚠️⚠️ WASM-SPECIFIC ACTIVE STRIP DATA WRAPPER ⚠️⚠️⚠️
+//
+// This file provides WASM-specific initialization for ActiveStripData.
+// The core logic has been moved to src/platforms/shared/active_strip_data/
+// for better testability and platform independence.
+//
+// WASM-specific functionality:
+// - Constructor attribute for early initialization
+// - Integration with StripIdMap for WASM strip ID management
+//
+// Core functionality is now in the shared implementation:
+// - JSON parsing and creation
+// - Strip data management
+// - Screen map handling
+// 
+// JavaScript bindings have been moved to js_bindings.cpp:
+// - getStripPixelData() function
+//
+// ⚠️⚠️⚠️ DO NOT DUPLICATE SHARED FUNCTIONALITY HERE ⚠️⚠️⚠️
+
+// IWYU pragma: begin_keep
+#include <emscripten.h>
+// IWYU pragma: end_keep
+
+#include "platforms/shared/active_strip_data/active_strip_data.h"
+#include "fl/channels/id_tracker.h"
+
+/// WASM-SPECIFIC: Early initialization using GCC constructor attribute.
+/// EMSCRIPTEN_KEEPALIVE prevents the function and its call to Instance()
+/// from being optimized out during LTO linking.
+__attribute__((constructor))
+EMSCRIPTEN_KEEPALIVE
+void __init_ActiveStripData() {
+    fl::ActiveStripData::Instance();
+}
+
+#endif // FL_IS_WASM

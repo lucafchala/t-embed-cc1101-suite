@@ -1,0 +1,44 @@
+#pragma once
+
+// IWYU pragma: private
+
+#include "fl/stl/stdint.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+// RMT item structure (compatible with RMT4)
+union rmt_item32_t {
+    struct {
+        u32 duration0 : 15;
+        u32 level0 : 1;
+        u32 duration1 : 15;
+        u32 level1 : 1;
+    };
+    u32 val;
+};
+
+// Nibble lookup table: 16 nibbles (0x0-0xF), each mapping to 4 RMT items
+typedef rmt_item32_t rmt_nibble_lut_t[16][4];
+
+/**
+ * Build nibble lookup table for fast byte-to-RMT conversion
+ *
+ * Each nibble (4 bits) maps to 4 RMT items (MSB first: bit3, bit2, bit1, bit0)
+ * Same LUT used for both high nibble (bits 7-4) and low nibble (bits 3-0)
+ *
+ * @param lut Output array [16][4] to fill with RMT items
+ * @param zero_val RMT item value for '0' bit (uint32_t)
+ * @param one_val RMT item value for '1' bit (uint32_t)
+ */
+inline void buildNibbleLut(rmt_nibble_lut_t& lut, u32 zero_val, u32 one_val) FL_NO_EXCEPT {
+    for (int nibble = 0; nibble < 16; nibble++) {
+        // Nibble LUT: MSB first (bit 3 → bit 2 → bit 1 → bit 0)
+        lut[nibble][0].val = (nibble & 0x8) ? one_val : zero_val;  // bit 3 (MSB)
+        lut[nibble][1].val = (nibble & 0x4) ? one_val : zero_val;  // bit 2
+        lut[nibble][2].val = (nibble & 0x2) ? one_val : zero_val;  // bit 1
+        lut[nibble][3].val = (nibble & 0x1) ? one_val : zero_val;  // bit 0 (LSB)
+    }
+}
+
+} // namespace fl

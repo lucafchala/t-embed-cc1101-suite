@@ -1,0 +1,50 @@
+name: esp_extra_libs
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_esp_extra_libs.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+
+permissions:
+  contents: read        # Required to checkout code
+  actions: read         # Required for artifact operations  
+  id-token: write      # Required for artifact upload (OIDC)
+  pull-requests: read   # If needed to read PR info
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Platformio Latest
+        run: |
+          pip install platformio
+
+      - name: Run Native Build
+        run: |
+          cd ci/kitchensink && pio run

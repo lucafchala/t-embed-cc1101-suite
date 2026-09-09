@@ -1,0 +1,1082 @@
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/deque.h"
+#include "fl/stl/cstddef.h"
+#include "fl/stl/new.h"
+#include "test.h"
+#include "fl/stl/move.h"
+
+// FastLED #3270: a tag type whose deque_traits<> specialization pins chunk
+// size to 4. Used by the per-type chunk-size override test below. Must be
+// declared at namespace scope (specializations cannot live inside a class
+// or function body), so it lives above the FL_TEST_FILE block.
+struct SmallChunkTag {
+    int v;
+    SmallChunkTag() : v(0) {}
+    explicit SmallChunkTag(int x) : v(x) {}
+};
+
+namespace fl {
+template <>
+struct deque_traits<SmallChunkTag> {
+    static constexpr fl::size chunk_size = 4u;
+};
+} // namespace fl
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+using namespace fl;
+
+FL_TEST_CASE("fl::deque - default constructor") {
+    deque<int> dq;
+    FL_CHECK(dq.empty());
+    FL_CHECK_EQ(dq.size(), 0u);
+}
+
+FL_TEST_CASE("fl::deque - constructor with count and value") {
+    FL_SUBCASE("int type") {
+        deque<int> dq(5, 42);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_FALSE(dq.empty());
+        for (size_t i = 0; i < 5; ++i) {
+            FL_CHECK_EQ(dq[i], 42);
+        }
+    }
+
+    FL_SUBCASE("float type") {
+        deque<float> dq(3, 3.14f);
+        FL_CHECK_EQ(dq.size(), 3u);
+        for (size_t i = 0; i < 3; ++i) {
+            FL_CHECK_EQ(dq[i], 3.14f);
+        }
+    }
+}
+
+FL_TEST_CASE("fl::deque - initializer list constructor") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+    FL_CHECK_EQ(dq.size(), 5u);
+    FL_CHECK_EQ(dq[0], 1);
+    FL_CHECK_EQ(dq[1], 2);
+    FL_CHECK_EQ(dq[2], 3);
+    FL_CHECK_EQ(dq[3], 4);
+    FL_CHECK_EQ(dq[4], 5);
+}
+
+FL_TEST_CASE("fl::deque - copy constructor") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2(dq1);
+
+    FL_CHECK_EQ(dq2.size(), 3u);
+    FL_CHECK_EQ(dq2[0], 1);
+    FL_CHECK_EQ(dq2[1], 2);
+    FL_CHECK_EQ(dq2[2], 3);
+
+    // Modify original to ensure deep copy
+    dq1[0] = 99;
+    FL_CHECK_EQ(dq2[0], 1);
+}
+
+FL_TEST_CASE("fl::deque - move constructor") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2(fl::move(dq1));
+
+    FL_CHECK_EQ(dq2.size(), 3u);
+    FL_CHECK_EQ(dq2[0], 1);
+    FL_CHECK_EQ(dq2[1], 2);
+    FL_CHECK_EQ(dq2[2], 3);
+
+    // Original should be empty after move
+    FL_CHECK(dq1.empty());
+}
+
+FL_TEST_CASE("fl::deque - copy assignment") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2;
+    dq2 = dq1;
+
+    FL_CHECK_EQ(dq2.size(), 3u);
+    FL_CHECK_EQ(dq2[0], 1);
+    FL_CHECK_EQ(dq2[1], 2);
+    FL_CHECK_EQ(dq2[2], 3);
+
+    // Test self-assignment
+    FL_DISABLE_WARNING_PUSH
+    FL_DISABLE_WARNING_SELF_ASSIGN_OVERLOADED
+    dq1 = dq1;
+    FL_DISABLE_WARNING_POP
+    FL_CHECK_EQ(dq1.size(), 3u);
+}
+
+FL_TEST_CASE("fl::deque - move assignment") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2;
+    dq2 = fl::move(dq1);
+
+    FL_CHECK_EQ(dq2.size(), 3u);
+    FL_CHECK_EQ(dq2[0], 1);
+
+    // Original should be empty after move
+    FL_CHECK(dq1.empty());
+}
+
+FL_TEST_CASE("fl::deque - push_back") {
+    deque<int> dq;
+
+    dq.push_back(1);
+    FL_CHECK_EQ(dq.size(), 1u);
+    FL_CHECK_EQ(dq[0], 1);
+
+    dq.push_back(2);
+    FL_CHECK_EQ(dq.size(), 2u);
+    FL_CHECK_EQ(dq[1], 2);
+
+    dq.push_back(3);
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[2], 3);
+}
+
+FL_TEST_CASE("fl::deque - push_front") {
+    deque<int> dq;
+
+    dq.push_front(1);
+    FL_CHECK_EQ(dq.size(), 1u);
+    FL_CHECK_EQ(dq[0], 1);
+
+    dq.push_front(2);
+    FL_CHECK_EQ(dq.size(), 2u);
+    FL_CHECK_EQ(dq[0], 2);
+    FL_CHECK_EQ(dq[1], 1);
+
+    dq.push_front(3);
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[0], 3);
+    FL_CHECK_EQ(dq[1], 2);
+    FL_CHECK_EQ(dq[2], 1);
+}
+
+FL_TEST_CASE("fl::deque - pop_back") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    dq.pop_back();
+    FL_CHECK_EQ(dq.size(), 4u);
+    FL_CHECK_EQ(dq[3], 4);
+
+    dq.pop_back();
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[2], 3);
+
+    // Pop from empty should be safe
+    deque<int> empty_dq;
+    empty_dq.pop_back();
+    FL_CHECK(empty_dq.empty());
+}
+
+FL_TEST_CASE("fl::deque - pop_front") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    dq.pop_front();
+    FL_CHECK_EQ(dq.size(), 4u);
+    FL_CHECK_EQ(dq[0], 2);
+
+    dq.pop_front();
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[0], 3);
+
+    // Pop from empty should be safe
+    deque<int> empty_dq;
+    empty_dq.pop_front();
+    FL_CHECK(empty_dq.empty());
+}
+
+FL_TEST_CASE("fl::deque - front and back") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    FL_CHECK_EQ(dq.front(), 1);
+    FL_CHECK_EQ(dq.back(), 5);
+
+    dq.front() = 10;
+    dq.back() = 50;
+
+    FL_CHECK_EQ(dq.front(), 10);
+    FL_CHECK_EQ(dq.back(), 50);
+}
+
+FL_TEST_CASE("fl::deque - at with bounds checking") {
+    deque<int> dq = {1, 2, 3};
+
+    FL_CHECK_EQ(dq.at(0), 1);
+    FL_CHECK_EQ(dq.at(1), 2);
+    FL_CHECK_EQ(dq.at(2), 3);
+
+    // Out of bounds returns front element (embedded behavior)
+    FL_CHECK_EQ(dq.at(100), dq.front());
+}
+
+FL_TEST_CASE("fl::deque - operator[]") {
+    deque<int> dq = {10, 20, 30, 40, 50};
+
+    FL_CHECK_EQ(dq[0], 10);
+    FL_CHECK_EQ(dq[2], 30);
+    FL_CHECK_EQ(dq[4], 50);
+
+    dq[1] = 200;
+    FL_CHECK_EQ(dq[1], 200);
+}
+
+FL_TEST_CASE("fl::deque - clear") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+    FL_CHECK_EQ(dq.size(), 5u);
+
+    dq.clear();
+    FL_CHECK(dq.empty());
+    FL_CHECK_EQ(dq.size(), 0u);
+}
+
+FL_TEST_CASE("fl::deque - resize") {
+    FL_SUBCASE("resize up") {
+        deque<int> dq = {1, 2, 3};
+        dq.resize(5);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_EQ(dq[0], 1);
+        FL_CHECK_EQ(dq[1], 2);
+        FL_CHECK_EQ(dq[2], 3);
+        FL_CHECK_EQ(dq[3], 0); // Default value
+        FL_CHECK_EQ(dq[4], 0);
+    }
+
+    FL_SUBCASE("resize up with value") {
+        deque<int> dq = {1, 2, 3};
+        dq.resize(5, 99);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_EQ(dq[3], 99);
+        FL_CHECK_EQ(dq[4], 99);
+    }
+
+    FL_SUBCASE("resize down") {
+        deque<int> dq = {1, 2, 3, 4, 5};
+        dq.resize(3);
+        FL_CHECK_EQ(dq.size(), 3u);
+        FL_CHECK_EQ(dq[0], 1);
+        FL_CHECK_EQ(dq[1], 2);
+        FL_CHECK_EQ(dq[2], 3);
+    }
+
+    FL_SUBCASE("resize to same size") {
+        deque<int> dq = {1, 2, 3};
+        dq.resize(3);
+        FL_CHECK_EQ(dq.size(), 3u);
+        FL_CHECK_EQ(dq[0], 1);
+        FL_CHECK_EQ(dq[1], 2);
+        FL_CHECK_EQ(dq[2], 3);
+    }
+}
+
+FL_TEST_CASE("fl::deque - swap") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2 = {4, 5, 6, 7};
+
+    dq1.swap(dq2);
+
+    FL_CHECK_EQ(dq1.size(), 4u);
+    FL_CHECK_EQ(dq1[0], 4);
+    FL_CHECK_EQ(dq1[3], 7);
+
+    FL_CHECK_EQ(dq2.size(), 3u);
+    FL_CHECK_EQ(dq2[0], 1);
+    FL_CHECK_EQ(dq2[2], 3);
+
+    // Test self-swap
+    dq1.swap(dq1);
+    FL_CHECK_EQ(dq1.size(), 4u);
+}
+
+FL_TEST_CASE("fl::deque - iterator") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    FL_SUBCASE("forward iteration") {
+        int expected = 1;
+        for (auto it = dq.begin(); it != dq.end(); ++it) {
+            FL_CHECK_EQ(*it, expected++);
+        }
+    }
+
+    FL_SUBCASE("range-based for loop") {
+        int expected = 1;
+        for (int val : dq) {
+            FL_CHECK_EQ(val, expected++);
+        }
+    }
+
+    FL_SUBCASE("iterator modification") {
+        for (auto it = dq.begin(); it != dq.end(); ++it) {
+            *it *= 2;
+        }
+        FL_CHECK_EQ(dq[0], 2);
+        FL_CHECK_EQ(dq[1], 4);
+        FL_CHECK_EQ(dq[2], 6);
+    }
+
+    FL_SUBCASE("post-increment") {
+        auto it = dq.begin();
+        auto it2 = it++;
+        FL_CHECK_EQ(*it2, 1);
+        FL_CHECK_EQ(*it, 2);
+    }
+
+    FL_SUBCASE("pre-decrement") {
+        auto it = dq.end();
+        --it;
+        FL_CHECK_EQ(*it, 5);
+    }
+
+    FL_SUBCASE("post-decrement") {
+        auto it = dq.end();
+        --it;
+        auto it2 = it--;
+        FL_CHECK_EQ(*it2, 5);
+        FL_CHECK_EQ(*it, 4);
+    }
+}
+
+FL_TEST_CASE("fl::deque - const_iterator") {
+    const deque<int> dq = {1, 2, 3, 4, 5};
+
+    FL_SUBCASE("forward iteration") {
+        int expected = 1;
+        for (auto it = dq.begin(); it != dq.end(); ++it) {
+            FL_CHECK_EQ(*it, expected++);
+        }
+    }
+
+    FL_SUBCASE("range-based for loop") {
+        int expected = 1;
+        for (const int val : dq) {
+            FL_CHECK_EQ(val, expected++);
+        }
+    }
+}
+
+FL_TEST_CASE("fl::deque - capacity management") {
+    deque<int> dq;
+
+    // Initially empty
+    FL_CHECK_EQ(dq.capacity(), 0u);
+
+    // Push elements to trigger capacity growth
+    for (int i = 0; i < 10; ++i) {
+        dq.push_back(i);
+    }
+
+    FL_CHECK_GE(dq.capacity(), 10u);
+    FL_CHECK_EQ(dq.size(), 10u);
+}
+
+FL_TEST_CASE("fl::deque - mixed push_front and push_back") {
+    deque<int> dq;
+
+    dq.push_back(3);
+    dq.push_back(4);
+    dq.push_front(2);
+    dq.push_front(1);
+    dq.push_back(5);
+
+    FL_CHECK_EQ(dq.size(), 5u);
+    FL_CHECK_EQ(dq[0], 1);
+    FL_CHECK_EQ(dq[1], 2);
+    FL_CHECK_EQ(dq[2], 3);
+    FL_CHECK_EQ(dq[3], 4);
+    FL_CHECK_EQ(dq[4], 5);
+}
+
+FL_TEST_CASE("fl::deque - mixed pop_front and pop_back") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    dq.pop_front();
+    FL_CHECK_EQ(dq.size(), 4u);
+    FL_CHECK_EQ(dq[0], 2);
+
+    dq.pop_back();
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[2], 4);
+
+    dq.pop_front();
+    FL_CHECK_EQ(dq.size(), 2u);
+    FL_CHECK_EQ(dq[0], 3);
+    FL_CHECK_EQ(dq[1], 4);
+}
+
+FL_TEST_CASE("fl::deque - wrap-around behavior") {
+    deque<int> dq;
+
+    // Push to back
+    for (int i = 0; i < 5; ++i) {
+        dq.push_back(i);
+    }
+
+    // Pop from front
+    dq.pop_front();
+    dq.pop_front();
+
+    // Push to front (should wrap around)
+    dq.push_front(100);
+    dq.push_front(101);
+
+    FL_CHECK_EQ(dq[0], 101);
+    FL_CHECK_EQ(dq[1], 100);
+    FL_CHECK_EQ(dq[2], 2);
+    FL_CHECK_EQ(dq[3], 3);
+    FL_CHECK_EQ(dq[4], 4);
+}
+
+FL_TEST_CASE("fl::deque - stress test with many operations") {
+    deque<int> dq;
+
+    // Push many elements
+    for (int i = 0; i < 100; ++i) {
+        dq.push_back(i);
+    }
+    FL_CHECK_EQ(dq.size(), 100u);
+
+    // Remove half from front
+    for (int i = 0; i < 50; ++i) {
+        dq.pop_front();
+    }
+    FL_CHECK_EQ(dq.size(), 50u);
+    FL_CHECK_EQ(dq.front(), 50);
+
+    // Push more to front
+    for (int i = 0; i < 25; ++i) {
+        dq.push_front(i);
+    }
+    FL_CHECK_EQ(dq.size(), 75u);
+}
+
+FL_TEST_CASE("fl::deque - typedefs") {
+    FL_SUBCASE("deque_int") {
+        deque_int dq = {1, 2, 3};
+        FL_CHECK_EQ(dq.size(), 3u);
+        FL_CHECK_EQ(dq[0], 1);
+    }
+
+    FL_SUBCASE("deque_float") {
+        deque_float dq = {1.5f, 2.5f, 3.5f};
+        FL_CHECK_EQ(dq.size(), 3u);
+        FL_CHECK_EQ(dq[0], 1.5f);
+    }
+
+    FL_SUBCASE("deque_double") {
+        deque_double dq = {1.5, 2.5, 3.5};
+        FL_CHECK_EQ(dq.size(), 3u);
+        FL_CHECK_EQ(dq[0], 1.5);
+    }
+}
+
+FL_TEST_CASE("fl::deque - empty deque operations") {
+    deque<int> dq;
+
+    FL_CHECK(dq.empty());
+    FL_CHECK_EQ(dq.size(), 0u);
+
+    // Ensure begin() == end() for empty deque
+    FL_CHECK(dq.begin() == dq.end());
+}
+
+FL_TEST_CASE("fl::deque - move semantics with push") {
+    struct MoveOnlyType {
+        int value;
+        MoveOnlyType(int v) : value(v) {}
+        MoveOnlyType(const MoveOnlyType&) = delete;
+        MoveOnlyType& operator=(const MoveOnlyType&) = delete;
+        MoveOnlyType(MoveOnlyType&& other) : value(other.value) { other.value = -1; }
+        MoveOnlyType& operator=(MoveOnlyType&&) = default;
+    };
+
+    deque<MoveOnlyType> dq;
+
+    MoveOnlyType obj(42);
+    dq.push_back(fl::move(obj));
+    FL_CHECK_EQ(dq[0].value, 42);
+    FL_CHECK_EQ(obj.value, -1); // Moved from
+
+    MoveOnlyType obj2(99);
+    dq.push_front(fl::move(obj2));
+    FL_CHECK_EQ(dq[0].value, 99);
+    FL_CHECK_EQ(obj2.value, -1); // Moved from
+}
+
+// ============================================================================
+// NEW FUNCTIONALITY TESTS (Iterator Arithmetic, Insert/Erase, etc.)
+// ============================================================================
+
+FL_TEST_CASE("fl::deque - iterator arithmetic") {
+    deque<int> dq = {10, 20, 30, 40, 50};
+
+    FL_SUBCASE("iterator operator+") {
+        auto it = dq.begin();
+        auto it2 = it + 2;
+        FL_CHECK_EQ(*it2, 30);
+        FL_CHECK_EQ(*it, 10);  // Original unchanged
+    }
+
+    FL_SUBCASE("iterator operator+=") {
+        auto it = dq.begin();
+        it += 2;
+        FL_CHECK_EQ(*it, 30);
+    }
+
+    FL_SUBCASE("iterator operator-") {
+        auto it = dq.end();
+        --it;  // Back to last element (5)
+        auto it2 = it - 2;
+        FL_CHECK_EQ(*it2, 30);
+    }
+
+    FL_SUBCASE("iterator operator-=") {
+        auto it = dq.end();
+        --it;
+        it -= 2;
+        FL_CHECK_EQ(*it, 30);
+    }
+
+    FL_SUBCASE("iterator operator[]") {
+        auto it = dq.begin();
+        FL_CHECK_EQ(it[0], 10);
+        FL_CHECK_EQ(it[2], 30);
+        FL_CHECK_EQ(it[4], 50);
+    }
+
+    FL_SUBCASE("iterator difference operator") {
+        auto it1 = dq.begin();
+        auto it2 = dq.begin() + 3;
+        FL_CHECK_EQ(it2 - it1, 3u);
+    }
+
+    FL_SUBCASE("iterator comparison operators") {
+        auto it1 = dq.begin();
+        auto it2 = dq.begin() + 2;
+        auto it3 = dq.begin() + 2;
+
+        FL_CHECK(it1 < it2);
+        FL_CHECK(it1 <= it2);
+        FL_CHECK(it2 > it1);
+        FL_CHECK(it2 >= it1);
+        FL_CHECK(it2 == it3);
+        FL_CHECK(it1 != it2);
+    }
+}
+
+FL_TEST_CASE("fl::deque - const_iterator arithmetic") {
+    const deque<int> dq = {10, 20, 30, 40, 50};
+
+    FL_SUBCASE("const_iterator operator+") {
+        auto it = dq.begin();
+        auto it2 = it + 2;
+        FL_CHECK_EQ(*it2, 30);
+    }
+
+    FL_SUBCASE("const_iterator operator[]") {
+        auto it = dq.begin();
+        FL_CHECK_EQ(it[0], 10);
+        FL_CHECK_EQ(it[2], 30);
+    }
+}
+
+FL_TEST_CASE("fl::deque - cbegin/cend/crbegin/crend") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    FL_SUBCASE("cbegin/cend") {
+        int expected = 1;
+        for (auto it = dq.cbegin(); it != dq.cend(); ++it) {
+            FL_CHECK_EQ(*it, expected++);
+        }
+    }
+
+    FL_SUBCASE("crbegin/crend") {
+        int expected = 5;
+        for (auto it = dq.crbegin(); it != dq.crend(); ++it) {
+            FL_CHECK_EQ(*it, expected--);
+        }
+    }
+}
+
+FL_TEST_CASE("fl::deque - insert single element") {
+    deque<int> dq = {1, 2, 4, 5};
+
+    FL_SUBCASE("insert at position") {
+        auto it = dq.insert(dq.begin() + 2, 3);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_EQ(dq[0], 1);
+        FL_CHECK_EQ(dq[1], 2);
+        FL_CHECK_EQ(dq[2], 3);
+        FL_CHECK_EQ(dq[3], 4);
+        FL_CHECK_EQ(dq[4], 5);
+        FL_CHECK_EQ(*it, 3);
+    }
+
+    FL_SUBCASE("insert at front") {
+        dq.insert(dq.begin(), 0);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_EQ(dq[0], 0);
+        FL_CHECK_EQ(dq[1], 1);
+    }
+
+    FL_SUBCASE("insert at back") {
+        dq.insert(dq.end(), 6);
+        FL_CHECK_EQ(dq.size(), 5u);
+        FL_CHECK_EQ(dq[4], 6);
+    }
+}
+
+FL_TEST_CASE("fl::deque - insert multiple elements") {
+    deque<int> dq = {1, 2, 5};
+
+    auto it = dq.insert(dq.begin() + 2, 3, 3);  // Insert three 3's at position 2
+    FL_CHECK_EQ(dq.size(), 6u);
+    FL_CHECK_EQ(dq[0], 1);
+    FL_CHECK_EQ(dq[1], 2);
+    FL_CHECK_EQ(dq[2], 3);
+    FL_CHECK_EQ(dq[3], 3);
+    FL_CHECK_EQ(dq[4], 3);
+    FL_CHECK_EQ(dq[5], 5);
+    FL_CHECK_EQ(*it, 3);
+}
+
+FL_TEST_CASE("fl::deque - erase single element") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    FL_SUBCASE("erase from middle") {
+        auto it = dq.erase(dq.begin() + 2);
+        FL_CHECK_EQ(dq.size(), 4u);
+        FL_CHECK_EQ(dq[0], 1);
+        FL_CHECK_EQ(dq[1], 2);
+        FL_CHECK_EQ(dq[2], 4);  // Shifted left
+        FL_CHECK_EQ(dq[3], 5);
+        FL_CHECK_EQ(*it, 4);  // Iterator points to next element
+    }
+
+    FL_SUBCASE("erase from front") {
+        dq.erase(dq.begin());
+        FL_CHECK_EQ(dq.size(), 4u);
+        FL_CHECK_EQ(dq[0], 2);
+    }
+
+    FL_SUBCASE("erase from back") {
+        dq.erase(dq.end() - 1);
+        FL_CHECK_EQ(dq.size(), 4u);
+        FL_CHECK_EQ(dq[3], 4);
+    }
+}
+
+FL_TEST_CASE("fl::deque - erase range") {
+    deque<int> dq = {1, 2, 3, 4, 5, 6, 7};
+
+    auto it = dq.erase(dq.begin() + 2, dq.begin() + 5);  // Erase 3, 4, 5
+    FL_CHECK_EQ(dq.size(), 4u);
+    FL_CHECK_EQ(dq[0], 1);
+    FL_CHECK_EQ(dq[1], 2);
+    FL_CHECK_EQ(dq[2], 6);
+    FL_CHECK_EQ(dq[3], 7);
+    FL_CHECK_EQ(*it, 6);
+}
+
+FL_TEST_CASE("fl::deque - emplace_back") {
+    struct TestObj {
+        int x, y;
+        TestObj(int a, int b) : x(a), y(b) {}
+    };
+
+    deque<TestObj> dq;
+    auto& obj = dq.emplace_back(10, 20);
+    FL_CHECK_EQ(dq.size(), 1u);
+    FL_CHECK_EQ(dq[0].x, 10);
+    FL_CHECK_EQ(dq[0].y, 20);
+    FL_CHECK_EQ(obj.x, 10);
+}
+
+FL_TEST_CASE("fl::deque - emplace_front") {
+    struct TestObj {
+        int x, y;
+        TestObj(int a, int b) : x(a), y(b) {}
+    };
+
+    deque<TestObj> dq;
+    dq.push_back(TestObj(5, 6));
+    auto& obj = dq.emplace_front(10, 20);
+    FL_CHECK_EQ(dq.size(), 2u);
+    FL_CHECK_EQ(dq[0].x, 10);
+    FL_CHECK_EQ(dq[0].y, 20);
+    FL_CHECK_EQ(dq[1].x, 5);
+    FL_CHECK_EQ(obj.x, 10);
+}
+
+FL_TEST_CASE("fl::deque - emplace at position") {
+    struct TestObj {
+        int x, y;
+        TestObj(int a, int b) : x(a), y(b) {}
+    };
+
+    deque<TestObj> dq;
+    dq.push_back(TestObj(1, 2));
+    dq.push_back(TestObj(5, 6));
+
+    auto it = dq.emplace(dq.begin() + 1, 10, 20);
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[0].x, 1);
+    FL_CHECK_EQ(dq[1].x, 10);
+    FL_CHECK_EQ(dq[2].x, 5);
+    FL_CHECK_EQ((*it).x, 10);
+}
+
+FL_TEST_CASE("fl::deque - assign") {
+    deque<int> dq = {1, 2, 3};
+
+    dq.assign(5, 42);
+    FL_CHECK_EQ(dq.size(), 5u);
+    for (size_t i = 0; i < 5; ++i) {
+        FL_CHECK_EQ(dq[i], 42);
+    }
+}
+
+FL_TEST_CASE("fl::deque - reserve") {
+    deque<int> dq;
+
+    FL_CHECK_EQ(dq.capacity(), 0u);
+
+    dq.reserve(100);
+    FL_CHECK_GE(dq.capacity(), 100u);
+    FL_CHECK_EQ(dq.size(), 0u);  // Size unchanged
+
+    // Add elements without reallocation
+    for (int i = 0; i < 100; ++i) {
+        dq.push_back(i);
+    }
+    FL_CHECK_EQ(dq.size(), 100u);
+}
+
+FL_TEST_CASE("fl::deque - max_size") {
+    deque<int> dq;
+    FL_CHECK_GT(dq.max_size(), 0u);
+}
+
+FL_TEST_CASE("fl::deque - shrink_to_fit") {
+    deque<int> dq;
+
+    // Add many elements
+    for (int i = 0; i < 100; ++i) {
+        dq.push_back(i);
+    }
+    fl::size large_capacity = dq.capacity();
+
+    // Remove most elements
+    while (dq.size() > 5) {
+        dq.pop_back();
+    }
+
+    // Capacity should still be large (pop_back doesn't deallocate chunks).
+    FL_CHECK_EQ(dq.capacity(), large_capacity);
+
+    // Shrink. Chunked deque capacity is chunk-quantized: after shrink_to_fit
+    // the remaining chunks span [front .. back] only. 5 contiguous elements
+    // fit in a single chunk, so capacity() == kChunkSize after shrink.
+    // (See FastLED #3270 -- capacity is no longer element-exact.)
+    dq.shrink_to_fit();
+    FL_CHECK_GE(dq.capacity(), 5u);
+    FL_CHECK_LE(dq.capacity(), large_capacity);
+    FL_CHECK_EQ(dq.size(), 5u);
+
+    // Data should still be intact
+    for (int i = 0; i < 5; ++i) {
+        FL_CHECK_EQ(dq[i], i);
+    }
+}
+
+FL_TEST_CASE("fl::deque - shrink_to_fit empty") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    dq.clear();
+    dq.shrink_to_fit();
+
+    FL_CHECK_EQ(dq.capacity(), 0u);
+    FL_CHECK(dq.empty());
+}
+
+FL_TEST_CASE("fl::deque - comparison operator==") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2 = {1, 2, 3};
+    deque<int> dq3 = {1, 2, 4};
+    deque<int> dq4 = {1, 2};
+
+    FL_CHECK(dq1 == dq2);
+    FL_CHECK_FALSE(dq1 == dq3);
+    FL_CHECK_FALSE(dq1 == dq4);
+}
+
+FL_TEST_CASE("fl::deque - comparison operator!=") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2 = {1, 2, 3};
+    deque<int> dq3 = {1, 2, 4};
+
+    FL_CHECK_FALSE(dq1 != dq2);
+    FL_CHECK(dq1 != dq3);
+}
+
+FL_TEST_CASE("fl::deque - comparison operators < <= > >=") {
+    deque<int> dq1 = {1, 2, 3};
+    deque<int> dq2 = {1, 2, 4};
+    deque<int> dq3 = {1, 2, 3};
+
+    FL_CHECK(dq1 < dq2);
+    FL_CHECK(dq1 <= dq2);
+    FL_CHECK(dq2 > dq1);
+    FL_CHECK(dq2 >= dq1);
+    FL_CHECK(dq1 <= dq3);
+    FL_CHECK(dq1 >= dq3);
+}
+
+FL_TEST_CASE("fl::deque - insert and erase stress test") {
+    deque<int> dq = {1, 2, 3, 4, 5};
+
+    // Insert in middle
+    dq.insert(dq.begin() + 2, 99);
+    FL_CHECK_EQ(dq[2], 99);
+    FL_CHECK_EQ(dq.size(), 6u);
+
+    // Erase from middle
+    dq.erase(dq.begin() + 2);
+    FL_CHECK_EQ(dq[2], 3);
+    FL_CHECK_EQ(dq.size(), 5u);
+
+    // Erase range
+    dq.erase(dq.begin() + 1, dq.begin() + 3);
+    FL_CHECK_EQ(dq.size(), 3u);
+    FL_CHECK_EQ(dq[0], 1);
+    FL_CHECK_EQ(dq[1], 4);
+    FL_CHECK_EQ(dq[2], 5);
+}
+
+FL_TEST_CASE("fl::deque - mixed operations with new methods") {
+    deque<int> dq;
+
+    // Reserve space
+    dq.reserve(50);
+
+    // Add elements via push
+    for (int i = 0; i < 5; ++i) {
+        dq.push_back(i);
+    }
+    // dq = [0, 1, 2, 3, 4], size = 5
+
+    // Insert in middle
+    dq.insert(dq.begin() + 2, 99);
+    // dq = [0, 1, 99, 2, 3, 4], size = 6
+
+    // Emplace at position
+    dq.emplace(dq.begin() + 3, 88);
+    // dq = [0, 1, 99, 88, 2, 3, 4], size = 7
+
+    // Erase
+    dq.erase(dq.begin() + 4);
+    // dq = [0, 1, 99, 88, 3, 4], size = 6
+
+    // Check final state
+    FL_CHECK_EQ(dq.size(), 6u);
+    FL_CHECK_EQ(dq[0], 0);
+    FL_CHECK_EQ(dq[1], 1);
+    FL_CHECK_EQ(dq[2], 99);
+    FL_CHECK_EQ(dq[3], 88);
+    FL_CHECK_EQ(dq[4], 3);
+    FL_CHECK_EQ(dq[5], 4);
+}
+
+// ---- FastLED #3270 chunked-deque acceptance tests ----
+
+// Pointer stability across grow: an element's address taken at insertion
+// time must remain valid (and dereference to the same value) after many
+// subsequent push_back calls that span multiple chunk boundaries. The old
+// vector-style deque would have invalidated this pointer on every doubling
+// realloc; the chunked deque never moves existing elements.
+FL_TEST_CASE("fl::deque - pointer stability across push_back grow (#3270)") {
+    deque<int> dq;
+    constexpr int kChunkSize = static_cast<int>(deque_traits<int>::chunk_size);
+
+    dq.push_back(42);
+    int* anchor = &dq[0];
+
+    // Push enough elements to allocate ~10 chunks, well past the initial
+    // chunk-map capacity and forcing the map itself to grow several times.
+    for (int i = 1; i < 10 * kChunkSize; ++i) {
+        dq.push_back(i);
+    }
+
+    // anchor must still address the original element with the original value.
+    FL_CHECK_EQ(*anchor, 42);
+    FL_CHECK_EQ(&dq[0], anchor);
+}
+
+// Pointer stability across push_front: same contract, exercising the
+// front-grow path which touches mFrontMapIdx and mFrontOffset rather than
+// the back of the map.
+FL_TEST_CASE("fl::deque - pointer stability across push_front grow (#3270)") {
+    deque<int> dq;
+    constexpr int kChunkSize = static_cast<int>(deque_traits<int>::chunk_size);
+
+    dq.push_back(1234);
+    int* anchor = &dq[0];
+
+    // Push many elements at the front -- chunks get allocated before the
+    // initial chunk, and the chunk-map gets grown leftward.
+    for (int i = 0; i < 10 * kChunkSize; ++i) {
+        dq.push_front(i);
+    }
+
+    // anchor must still address the same element (now the back of the deque).
+    FL_CHECK_EQ(*anchor, 1234);
+    FL_CHECK_EQ(&dq.back(), anchor);
+}
+
+// Push across an exact chunk boundary: with kChunkSize elements pushed,
+// the next push_back must allocate a new chunk without disturbing the
+// previous chunk's contents.
+FL_TEST_CASE("fl::deque - push_back across chunk boundary (#3270)") {
+    deque<int> dq;
+    constexpr int kChunkSize = static_cast<int>(deque_traits<int>::chunk_size);
+
+    for (int i = 0; i < kChunkSize; ++i) {
+        dq.push_back(i);
+    }
+    FL_CHECK_EQ(dq.size(), static_cast<fl::size>(kChunkSize));
+
+    // Anchor a pointer in the first chunk before the boundary-crossing push.
+    int* anchor = &dq[kChunkSize / 2];
+    int anchor_value = *anchor;
+
+    // This push must trigger a new-chunk allocation, not a move of existing elements.
+    dq.push_back(kChunkSize);
+    FL_CHECK_EQ(*anchor, anchor_value);
+    FL_CHECK_EQ(dq.size(), static_cast<fl::size>(kChunkSize + 1));
+    FL_CHECK_EQ(dq[kChunkSize], kChunkSize);
+}
+
+// Multi-element insert that spans more than one chunk: insert(pos, count, v)
+// must allocate ceil(count / kChunkSize) chunks and not move existing
+// elements outside the shift range. We check elements before the shift
+// retain stable addresses.
+FL_TEST_CASE("fl::deque - insert(count) allocating multiple chunks (#3270)") {
+    deque<int> dq;
+    constexpr int kChunkSize = static_cast<int>(deque_traits<int>::chunk_size);
+
+    // Start with one element so the leading anchor is in the front chunk
+    // and won't be shifted by the insert below.
+    dq.push_back(-1);
+    int* anchor = &dq[0];
+
+    // Insert 3 * kChunkSize copies at position 1. This needs at least 3
+    // more chunks past the front chunk.
+    dq.insert(dq.begin() + 1, 3 * kChunkSize, 7);
+
+    FL_CHECK_EQ(dq.size(), static_cast<fl::size>(1 + 3 * kChunkSize));
+    FL_CHECK_EQ(*anchor, -1);
+    FL_CHECK_EQ(&dq[0], anchor);
+    for (fl::size i = 1; i < dq.size(); ++i) {
+        FL_CHECK_EQ(dq[i], 7);
+    }
+}
+
+// Per-type chunk_size override via deque_traits partial specialization.
+// SmallChunkTag is declared at namespace scope above the FL_TEST_FILE block;
+// its deque_traits specialization pins chunk_size = 4.
+FL_TEST_CASE("fl::deque_traits<T> chunk_size override (#3270)") {
+    deque<SmallChunkTag> dq;
+
+    // Push 12 elements; with chunk_size=4 that's 3 chunks. Capacity is
+    // chunk-quantized: 12 elements fit in exactly 3 chunks.
+    for (int i = 0; i < 12; ++i) dq.push_back(SmallChunkTag(i));
+    dq.shrink_to_fit();
+    FL_CHECK_EQ(dq.capacity(), 12u);
+
+    // Add one more -- needs a 4th chunk.
+    dq.push_back(SmallChunkTag(12));
+    dq.shrink_to_fit();
+    FL_CHECK_EQ(dq.capacity(), 16u);
+    FL_CHECK_EQ(dq.size(), 13u);
+    for (int i = 0; i < 13; ++i) {
+        FL_CHECK_EQ(dq[i].v, i);
+    }
+}
+
+// FastLED #3286: regression test for the chunked-deque grow_map leak.
+//
+// Original bug (introduced in #3282 / commit a8b5cac9a):
+//
+//   pop_front() advances mFrontMapIdx past the now-empty front chunk
+//   without freeing it -- the chunk pointer is left orphaned in
+//   mMap[mFrontMapIdx-1]. The destructor catches this (it iterates the
+//   entire mMap), so the orphan is harmless as long as the map itself
+//   survives.
+//
+//   But when later push_back() forces grow_map(), the old map is
+//   deallocated and ONLY pointers in [mFrontMapIdx, mFrontMapIdx+used)
+//   are copied forward. Every orphaned pointer below mFrontMapIdx is
+//   silently lost -- and its backing chunk leaks.
+//
+//   macOS-arm64 ASAN's LeakSanitizer caught this; Linux x86-64 didn't,
+//   because that job ran without leak detection enabled. The
+//   TempoAnalyzer's sliding mBPMHistory / mOnsetTimes exercise exactly
+//   this push/pop/push-grow pattern.
+//
+// This test pins chunk_size=4 (via SmallChunkTag) to make the bug
+// reproducible in a few dozen ops instead of the thousands needed at
+// the default chunk_size=64.
+FL_TEST_CASE("fl::deque - grow_map releases orphaned chunks (#3286)") {
+    deque<SmallChunkTag> dq;
+
+    // Phase 1: fill chunks 0..3 (initial map capacity is 4, chunk_size=4
+    // -> 16 elements fills the map exactly).
+    for (int i = 0; i < 16; ++i) dq.push_back(SmallChunkTag(i));
+    FL_CHECK_EQ(dq.size(), 16u);
+
+    // Phase 2: pop_front 12 elements (3 full chunks). After this,
+    // mFrontMapIdx advances to 3; the chunks at mMap[0], mMap[1],
+    // mMap[2] are now orphans -- still allocated, still in the map,
+    // but no live element lives there.
+    for (int i = 0; i < 12; ++i) dq.pop_front();
+    FL_CHECK_EQ(dq.size(), 4u);
+    FL_CHECK_EQ(dq[0].v, 12);
+    FL_CHECK_EQ(dq[3].v, 15);
+
+    // Phase 3: push_back enough to force grow_map(). At this point the
+    // back is in chunk 3 (the only live chunk); pushing past the end
+    // of chunk 3 needs chunk 4, which is past mMapCapacity=4, so
+    // grow_map runs.
+    //
+    // Before the #3286 fix this is where the leak happened: orphans at
+    // mMap[0..2] were never freed and never copied forward; only the
+    // live chunk at mMap[3] survived into the new map. Three chunk
+    // allocations were lost on the floor every time this pattern fired.
+    //
+    // After the fix, grow_map proactively releases orphans before
+    // deallocating the old map -- no chunk pointers go missing.
+    for (int i = 0; i < 20; ++i) dq.push_back(SmallChunkTag(100 + i));
+    FL_CHECK_EQ(dq.size(), 24u);
+
+    // The grow-triggering pattern is the leak path. We don't try to
+    // detect the leak in-test (that's ASAN's job); we just exercise
+    // the path so that any leak reproduces under sanitizers. The data
+    // invariants below also verify that the surviving live chunks
+    // weren't accidentally double-freed by the fix.
+    FL_CHECK_EQ(dq[0].v, 12);
+    FL_CHECK_EQ(dq[3].v, 15);
+    FL_CHECK_EQ(dq[4].v, 100);
+    FL_CHECK_EQ(dq[23].v, 119);
+
+    // Phase 4: hammer the slide pattern across many grow cycles to
+    // exercise the path the audio detector hits (mOnsetTimes /
+    // mBPMHistory pop_front + push_back loop for ~hundreds of frames).
+    for (int round = 0; round < 50; ++round) {
+        dq.pop_front();
+        dq.push_back(SmallChunkTag(1000 + round));
+    }
+    FL_CHECK_EQ(dq.size(), 24u);
+    FL_CHECK_EQ(dq[23].v, 1049);
+}
+
+} // FL_TEST_FILE

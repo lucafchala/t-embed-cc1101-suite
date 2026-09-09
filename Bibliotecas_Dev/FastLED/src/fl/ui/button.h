@@ -1,0 +1,165 @@
+#pragma once
+
+#include "fl/stl/function.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/string.h"
+#include "fl/stl/compiler_control.h"  // IWYU pragma: keep
+#include "fl/stl/noexcept.h"
+#include "fl/system/engine_events.h"
+#include "fl/ui/element.h"
+#include "platforms/ui_defs.h"
+
+#ifndef FASTLED_HAS_UI_BUTTON
+#define FASTLED_HAS_UI_BUTTON 0
+#endif
+
+namespace fl {
+
+#if !FASTLED_HAS_UI_BUTTON
+
+class UIButtonImpl {
+  public:
+    UIButtonImpl(const char *name) : mName(name ? name : "") {}
+    ~UIButtonImpl() FL_NO_EXCEPT {}
+    bool isPressed() const { return false; }
+    bool clicked() const { return false; }
+    int clickedCount() const { return 0; }
+    operator bool() const { return false; }
+    void click() {}
+    fl::string name() const { return mName; }
+
+    // Stub method for group setting (does nothing on non-WASM platforms)
+    void setGroup(const fl::string& groupName) { FASTLED_UNUSED(groupName); }
+
+  private:
+    fl::string mName;
+};
+
+#endif
+
+class UIButton : public UIElement {
+  public:
+    FL_NO_COPY(UIButton)
+    UIButton(const char *name) FL_NO_EXCEPT;
+    ~UIButton() FL_NO_EXCEPT;
+    bool isPressed() const FL_NO_EXCEPT {
+        if (mImpl.isPressed()) {
+            return true;
+        }
+        if (mButtonInput) {
+            return mButtonInput->isPressed();
+        }
+        return false;
+    }
+    bool clicked() const FL_NO_EXCEPT {
+        if (mImpl.clicked()) {
+            return true;
+        }
+        if (mButtonInput) {
+            return mButtonInput->clicked();
+        }
+        return false;
+    }
+    int clickedCount() const FL_NO_EXCEPT;
+    operator bool() const FL_NO_EXCEPT { return clicked(); }
+    bool value() const FL_NO_EXCEPT { return clicked(); }
+
+    void addRealButton(fl::shared_ptr<IButtonInput> button) FL_NO_EXCEPT;
+
+    void click() FL_NO_EXCEPT { mImpl.click(); }
+
+    // Override setGroup to also update the implementation
+    void setGroup(const fl::string& groupName) FL_NO_EXCEPT override {
+        UIElement::setGroup(groupName);
+        // Update the implementation's group if it has the method (WASM platforms)
+        mImpl.setGroup(groupName);
+    }
+
+    int onChanged(function<void(UIButton &)> callback) FL_NO_EXCEPT {
+        int id = mCallbacks.add(callback);
+        mListener.addToEngineEventsOnce();
+        return id;
+    }
+
+    int onClicked(function<void()> callback) FL_NO_EXCEPT {
+        int id = mCallbacks.add([callback](UIButton &btn) {
+            if (btn.clicked()) {
+                callback();
+            }
+        });
+        mListener.addToEngineEventsOnce();
+        return id;
+    }
+
+    int onPressed(function<void()> callback) FL_NO_EXCEPT {
+        int id = mPressCallbacks.add(callback);
+        mListener.addToEngineEventsOnce();
+        return id;
+    }
+
+    int onReleased(function<void()> callback) FL_NO_EXCEPT {
+        int id = mReleaseCallbacks.add(callback);
+        mListener.addToEngineEventsOnce();
+        return id;
+    }
+
+    // Per-list removers. Each callback list maintains its own ID counter,
+    // so an id returned by onChanged()/onPressed()/onReleased() is only
+    // meaningful to its originating list — use the matching remover here.
+    // Note: onClicked() also registers into the changed-callbacks list, so
+    // ids returned by onClicked() are removed via removeClickedCallback
+    // (an alias for removeChangedCallback).
+    void removeChangedCallback(int id) FL_NO_EXCEPT { mCallbacks.remove(id); }
+    void removeClickedCallback(int id) FL_NO_EXCEPT { mCallbacks.remove(id); }
+    void removePressedCallback(int id) FL_NO_EXCEPT { mPressCallbacks.remove(id); }
+    void removeReleasedCallback(int id) FL_NO_EXCEPT { mReleaseCallbacks.remove(id); }
+
+    void clearCallbacks() FL_NO_EXCEPT {
+        mCallbacks.clear();
+        mPressCallbacks.clear();
+        mReleaseCallbacks.clear();
+    }
+
+  protected:
+    UIButtonImpl mImpl;
+
+    struct Listener : public EngineEvents::Listener {
+        Listener(UIButton *owner) FL_NO_EXCEPT : mOwner(owner) {
+        }
+        ~Listener() FL_NO_EXCEPT {
+            if (added) {
+                EngineEvents::removeListener(this);
+            }
+        }
+        void addToEngineEventsOnce() FL_NO_EXCEPT {
+            if (added) {
+                return;
+            }
+            EngineEvents::addListener(this);
+            added = true;
+        }
+        void onBeginFrame() FL_NO_EXCEPT override;
+        int realButtonClickCount() const FL_NO_EXCEPT { return mRealButtonClickCount; }
+
+      private:
+        UIButton *mOwner;
+        bool added = false;
+        bool mClickedLastFrame = false;
+        bool mPressedLastFrame = false;
+        bool mRealButtonClickedLastFrame = false;
+        int mRealButtonClickCount = 0;
+    };
+
+  private:
+    function_list<void(UIButton &)> mCallbacks;
+    function_list<void()> mPressCallbacks;
+    function_list<void()> mReleaseCallbacks;
+    fl::shared_ptr<IButtonInput> mButtonInput;
+    // Declared last so it is destroyed first and removes itself from
+    // EngineEvents before mButtonInput / callback lists are torn down.
+    Listener mListener;
+};
+
+FASTLED_UI_DEFINE_OPERATORS(UIButton)
+
+} // namespace fl

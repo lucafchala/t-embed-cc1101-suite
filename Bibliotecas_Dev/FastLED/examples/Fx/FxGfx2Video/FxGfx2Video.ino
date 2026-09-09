@@ -1,0 +1,88 @@
+// @filter: (memory is large)
+
+/// @file    FxGfx2Video.ino
+/// @brief   Demonstrates graphics to video conversion
+/// @example FxGfx2Video.ino
+///
+/// This sketch is fully compatible with the FastLED web compiler. To use it do the following:
+/// 1. Install Fastled: `pip install fastled`
+/// 2. cd into this examples page.
+/// 3. Run the FastLED web compiler at root: `fastled`
+/// 4. When the compiler is done a web page will open.
+///
+/// The render pattern is alternating black/red pixels as a checkerboard.
+/// Demonstrates drawing to a frame buffer, which is used as source video for the memory player.
+
+#include <FastLED.h>
+#include "fl/stl/detail/memory_file_handle.h"
+#include "fl/fx/fx_engine.h"
+#include "fl/stl/memory.h"
+#include "fl/fx/video.h"
+#include "fl/log/log.h"
+
+#define LED_PIN 2
+#define BRIGHTNESS 96
+#define LED_TYPE WS2811
+#define COLOR_ORDER GRB
+
+#define MATRIX_WIDTH 22
+#define MATRIX_HEIGHT 22
+#define NUM_LEDS (MATRIX_WIDTH * MATRIX_HEIGHT)
+
+fl::CRGB leds[NUM_LEDS];
+
+const int BYTES_PER_FRAME = 3 * NUM_LEDS;
+const int NUM_FRAMES = 2;
+const uint32_t BUFFER_SIZE = BYTES_PER_FRAME * NUM_FRAMES;
+
+fl::memorybufPtr memoryStream;
+fl::FxEngine fxEngine(NUM_LEDS);
+// Create and initialize Video object
+fl::XYMap xymap(MATRIX_WIDTH, MATRIX_HEIGHT);
+fl::Video video(NUM_LEDS, 2.0f);
+
+void write_one_frame(fl::memorybufPtr memoryStream) {
+    //memoryStream->seek(0);  // Reset to the beginning of the stream
+    uint32_t total_bytes_written = 0;
+    bool toggle = (fl::millis() / 500) % 2 == 0;
+    FL_DBG("Writing frame data, toggle = " << toggle);
+    for (uint32_t i = 0; i < NUM_LEDS; ++i) {
+        fl::CRGB color = (toggle ^ i%2) ? fl::CRGB::Black : fl::CRGB::Red;
+        size_t bytes_written = memoryStream->writeCRGB(&color, 1);
+        if (bytes_written != 1) {
+            FL_DBG("Failed to write frame data, wrote " << bytes_written << " bytes");
+            break;
+        }
+        total_bytes_written += bytes_written;
+    }
+    if (total_bytes_written) {
+        FL_DBG("Frame written, total bytes: " << total_bytes_written);
+    }
+}
+
+void setup() {
+    delay(1000); // sanity delay
+    FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS)
+        .setCorrection(TypicalLEDStrip)
+        .setScreenMap(xymap);
+    FastLED.setBrightness(BRIGHTNESS);
+
+    // Create memory-backed file handle for streaming video
+    memoryStream = fl::make_shared<fl::memorybuf>(BUFFER_SIZE*sizeof(fl::CRGB));
+
+    video.begin(memoryStream);
+    // Add the video effect to the FxEngine
+    fxEngine.addFx(video);
+}
+
+void loop() {
+    EVERY_N_MILLISECONDS(500) {
+        write_one_frame(memoryStream);  // Write next frame data
+    }
+    // write_one_frame(memoryStream);  // Write next frame data
+    // Draw the frame
+    fxEngine.draw(fl::millis(), leds);
+    // Show the LEDs
+    FastLED.show();
+    delay(20); // Adjust this delay to control frame rate
+}

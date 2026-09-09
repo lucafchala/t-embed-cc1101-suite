@@ -1,0 +1,277 @@
+"""
+Compilation orchestration module.
+
+This module provides high-level orchestration for compiling examples across boards.
+It handles compilation workflow, result collection, and statistics reporting.
+"""
+
+import os
+import time
+from concurrent.futures import as_completed
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Optional
+
+from typeguard import typechecked
+
+from ci.boards import Board
+from ci.compiler.board_example_utils import get_filtered_examples
+from ci.compiler.compiler import SketchResult
+from ci.compiler.pio import FastLEDPaths, PioCompiler
+from ci.util.global_interrupt_handler import handle_keyboard_interrupt
+
+
+# fbuild is the only supported board build backend. The legacy PioCompiler
+# ``pio run`` path is retained as a *comparison-only* tool for users who
+# pass ``bash compile <board> --backend platformio`` explicitly. See
+# #3279 (Phase 3 deprecation) and #3274.
+BOARD_BUILDS_USE_FBUILD = True
+
+# Env var the CLI sets when the user passes ``--backend platformio`` (or
+# the ``--platformio`` / ``--pio`` shortcuts). Programmatic callers that
+# try to flip ``use_fbuild=False`` without that explicit user intent are
+# rejected by ``_assert_explicit_platformio_backend`` below.
+PLATFORMIO_BACKEND_OPT_IN_ENV = "FASTLED_BACKEND_PLATFORMIO_EXPLICIT"
+
+
+def _assert_explicit_platformio_backend() -> None:
+    """Reject programmatic ``use_fbuild=False`` flips without the explicit
+    ``--backend platformio`` CLI opt-in.
+
+    The PlatformIO ``pio run`` backend is a *comparison-only* tool kept
+    around so users can reproduce PlatformIO-native size / link behaviour
+    and diagnose fbuild gaps. Library / CI code MUST NOT silently route
+    around fbuild — every board build in production CI runs through
+    fbuild. If a new caller needs the PIO backend, the user must say so
+    on the command line so the choice is visible in CI logs.
+    """
+    if os.environ.get(PLATFORMIO_BACKEND_OPT_IN_ENV, "").lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    ):
+        return
+    raise RuntimeError(
+        "compile_board_examples(use_fbuild=False) requires the explicit "
+        "`bash compile <board> --backend platformio` CLI flag (which sets "
+        f"{PLATFORMIO_BACKEND_OPT_IN_ENV}=1). The PlatformIO `pio run` "
+        "backend is a comparison-only tool — production CI compiles ALL "
+        "boards via fbuild. See #3279 (Phase 3 deprecation) and #3274."
+    )
+
+
+@typechecked
+@dataclass
+class BoardCompilationResult:
+    """Aggregated result for compiling a set of examples on a single board."""
+
+    ok: bool
+    sketch_results: list[SketchResult]
+    stopped_early: bool = False
+    skipped_examples: list[tuple[str, str]] = field(
+        default_factory=lambda: []
+    )  # List of (example, reason) tuples
+
+
+def compile_board_examples(
+    board: Board,
+    examples: list[str],
+    defines: list[str],
+    verbose: bool,
+    global_cache_dir: Optional[Path] = None,
+    extra_packages: Optional[list[str]] = None,
+    max_failures: Optional[int] = None,
+    skip_filters: bool = False,
+    use_fbuild: Optional[bool] = None,
+) -> BoardCompilationResult:
+    """Compile examples for a single board using PioCompiler.
+
+    Args:
+        use_fbuild: If None, uses BOARD_BUILDS_USE_FBUILD (default True,
+            i.e. fbuild). If True, uses fbuild. ``False`` is only honoured
+            when the user passed ``--backend platformio`` on the CLI (which
+            sets ``FASTLED_BACKEND_PLATFORMIO_EXPLICIT=1``); programmatic
+            flips without that opt-in raise ``RuntimeError``. The PIO
+            ``pio run`` backend is a comparison-only tool — see #3279.
+    """
+    if use_fbuild is None:
+        use_fbuild = BOARD_BUILDS_USE_FBUILD
+
+    if not use_fbuild:
+        _assert_explicit_platformio_backend()
+
+    # Resolve global cache directory immediately for display
+    resolved_cache_dir = None
+    if global_cache_dir is not None:
+        # User specified a path - use it exactly as provided
+        resolved_cache_dir = global_cache_dir.resolve()
+    else:
+        # Default path ends with 'global_cache'
+        resolved_cache_dir = Path.home() / ".fastled" / "global_cache"
+
+    print(f"\n{'=' * 60}")
+    print(f"COMPILING BOARD: {board.board_name}")
+    print(f"EXAMPLES: {', '.join(examples)}")
+    # Show cache directories in verbose mode only
+    paths = FastLEDPaths(board.board_name)
+    if verbose:
+        print(f"GLOBAL CACHE: {resolved_cache_dir}")
+        print(f"BUILD CACHE: {paths.build_cache_dir}")
+        print(f"CORE DIR: {paths.core_dir}")
+        print(f"PACKAGES DIR: {paths.packages_dir}")
+
+    # Apply filters based on @filter directives (unless skip_filters is True)
+    if skip_filters:
+        # User explicitly requested to skip filters (--no-filter flag)
+        filtered_examples = examples
+        skipped_examples: list[tuple[str, str]] = []
+    else:
+        # Apply filters to prevent compilation failures
+        filtered_examples, skipped_examples = get_filtered_examples(board, examples)
+
+    if skipped_examples:
+        print(
+            f"\nSKIPPED {len(skipped_examples)} example(s) due to @filter constraints:"
+        )
+        for example, reason in skipped_examples:
+            print(f"  - {example}: {reason}")
+        print("  Use --no-filter to override and attempt compilation anyway")
+
+    if filtered_examples:
+        print(f"COMPILING {len(filtered_examples)} example(s)...")
+        # Update examples to use only filtered ones
+        examples = filtered_examples
+    else:
+        print("No examples to compile after filtering")
+        print(f"{'=' * 60}")
+        # Return success with no compilation
+        return BoardCompilationResult(
+            ok=True, sketch_results=[], skipped_examples=skipped_examples
+        )
+
+    backend_label = "fbuild" if use_fbuild else "platformio (pio run)"
+    print(f"BUILD BACKEND: {backend_label}")
+    print(f"{'=' * 60}")
+
+    try:
+        # Create PioCompiler instance. CI compile is hermetic w.r.t. the
+        # repo-root platformio.ini — per-board flags live in ci/boards.py
+        # (#3274, sever in #3278, legacy opt-in parameter removed in
+        # #3279 Phase 4).
+        compiler = PioCompiler(
+            board=board,
+            verbose=verbose,
+            global_cache_dir=resolved_cache_dir,
+            additional_defines=defines,
+            additional_libs=extra_packages,
+            use_fbuild=use_fbuild,
+        )
+
+        futures = compiler.build(examples)
+
+        # Wait for completion and collect results
+        results: list[SketchResult] = []
+        failure_count = 0
+        stopped_early = False
+
+        # Use as_completed to process results as they finish (faster failure detection)
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                results.append(result)
+
+                # Track failures
+                if not result.success:
+                    failure_count += 1
+
+                # SUCCESS/FAILED messages are printed by worker threads
+
+                # Check if we've hit the max_failures threshold
+                if max_failures is not None and failure_count >= max_failures:
+                    stopped_early = True
+                    print(
+                        f"\n⚠️  Reached failure threshold ({failure_count} failures, max={max_failures}). "
+                        f"Cancelling remaining builds..."
+                    )
+                    # Cancel all remaining futures
+                    compiler.cancel_all()
+                    for f in futures:
+                        if not f.done():
+                            f.cancel()
+                    break
+
+            except KeyboardInterrupt as ki:
+                print("\n⏹️  Cancelling builds and cleaning up...")
+                compiler.cancel_all()
+                for f in futures:
+                    f.cancel()
+                print("   ✓ Cleanup complete")
+                handle_keyboard_interrupt(ki)
+            except Exception as e:
+                # Represent unexpected exception as a failed SketchResult for consistency
+                from pathlib import Path as _Path
+
+                results.append(
+                    SketchResult(
+                        success=False,
+                        output=f"Build exception: {str(e)}",
+                        build_dir=_Path("."),
+                        example="<exception>",
+                    )
+                )
+                failure_count += 1
+                print(f"EXCEPTION during build: {e}")
+                # Cleanup
+                compiler.cancel_all()
+
+                # Check max_failures after exception too
+                if max_failures is not None and failure_count >= max_failures:
+                    stopped_early = True
+                    print(
+                        f"\n⚠️  Reached failure threshold ({failure_count} failures, max={max_failures}). "
+                        f"Cancelling remaining builds..."
+                    )
+                    for f in futures:
+                        if not f.done():
+                            f.cancel()
+                    break
+
+        any_failures = failure_count > 0
+        return BoardCompilationResult(
+            ok=not any_failures,
+            sketch_results=results,
+            stopped_early=stopped_early,
+            skipped_examples=skipped_examples,
+        )
+    except KeyboardInterrupt as ki:
+        print("\n⏹️  Cancelling builds and cleaning up...")
+        handle_keyboard_interrupt(ki)
+        print("   ✓ Cleanup complete")
+        # Don't re-raise - handle_keyboard_interrupt(ki) already signaled the main thread
+        return BoardCompilationResult(
+            ok=False,
+            sketch_results=[],
+            skipped_examples=skipped_examples,
+        )
+    except Exception as e:
+        # Compiler could not be set up; return a single failed result to carry message
+        from pathlib import Path as _Path
+
+        return BoardCompilationResult(
+            ok=False,
+            sketch_results=[
+                SketchResult(
+                    success=False,
+                    output=f"Compiler setup failed: {str(e)}",
+                    build_dir=_Path("."),
+                    example="<setup>",
+                )
+            ],
+            skipped_examples=skipped_examples,
+        )
+
+
+def format_elapsed_time(elapsed_seconds: float) -> str:
+    """Format elapsed time in a human-readable format (e.g., '2m:35s')."""
+    return time.strftime("%Mm:%Ss", time.gmtime(elapsed_seconds))

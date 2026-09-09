@@ -1,0 +1,56 @@
+
+// g++ --std=c++11 test.cpp
+
+
+#include "fl/fx/frame.h"
+#include "fl/stl/cstdlib.h"
+#include "fl/stl/allocator.h"
+#include "crgb.h"
+#include "test.h"
+#include "fl/gfx/draw_mode.h"
+#include "fl/gfx/crgb.h"
+#include "fl/stl/shared_ptr.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+using namespace fl;
+namespace {
+    int allocation_count = 0;
+
+    void* custom_malloc(size_t size) {
+        allocation_count++;
+        return ::malloc(size);
+    }
+
+    void custom_free(void* ptr) {
+        allocation_count--;
+        ::free(ptr);
+    }
+}
+
+FL_TEST_CASE("test frame custom allocator") {
+    // Set our custom allocator
+    SetPSRamAllocator(custom_malloc, custom_free);
+    
+    FramePtr frame = fl::make_shared<Frame>(100);  // 100 pixels.
+    FL_CHECK(allocation_count == 1);  // One for RGB.
+    frame.reset();
+
+    // Frame should be destroyed here
+    FL_CHECK(allocation_count == 0);
+}
+
+
+FL_TEST_CASE("test blend by black") {
+    SetPSRamAllocator(custom_malloc, custom_free);
+    FramePtr frame = fl::make_shared<Frame>(1);  // 1 pixels.
+    frame->rgb()[0] = CRGB(255, 0, 0);  // Red
+    CRGB out[1];
+    frame->draw(out, DrawMode::DRAW_MODE_BLEND_BY_MAX_BRIGHTNESS);
+    FL_CHECK(out[0] == CRGB(255, 0, 0));  // full red because max luma is 255
+    out[0] = CRGB(0, 0, 0);
+    frame->rgb()[0] = CRGB(128, 0, 0);  // Red
+    frame->draw(out, DrawMode::DRAW_MODE_BLEND_BY_MAX_BRIGHTNESS);
+    FL_CHECK(out[0] == CRGB(64, 0, 0));
+}
+
+} // FL_TEST_FILE

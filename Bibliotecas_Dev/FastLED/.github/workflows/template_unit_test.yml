@@ -1,0 +1,131 @@
+name: unit tests template
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+        description: 'Runner OS (ubuntu-latest, macos-latest, or windows-latest)'
+
+permissions:
+  contents: read        # Required to checkout code
+  actions: read         # Required for artifact operations
+  id-token: write      # Required for artifact upload (OIDC)
+  pull-requests: read   # If needed to read PR info
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+          version: "0.8.0" # 0.8.8 has problems with deployment on linux.
+
+      - name: Install libunwind-dev (Linux only)
+        if: runner.os == 'Linux'
+        # Refresh apt indexes before install so stale mirror metadata
+        # (e.g. a transitional liblzma-dev version the mirror hasn't
+        # propagated yet, returning 404) doesn't fail the build.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libunwind-dev
+
+      - name: Install
+        run: ./install
+        shell: bash
+
+      - name: Cache Rust C++ linter build
+        # Skips the ~60-180s soldr cargo build on every CI run when the
+        # crate sources haven't changed. Keyed on Cargo.lock + every .rs
+        # under the crate's src/ tree so any meaningful change forces a
+        # rebuild. Persists the cached fastled-lint binary plus the
+        # native-Python fingerprint that the build-on-change wrapper
+        # consults at lint time. See FastLED #3288.
+        uses: actions/cache@v4
+        with:
+          path: |
+            ci/lint_cpp_rs/target
+            .cache/rust_lint_binary.fingerprint
+          key: rust-lint-${{ runner.os }}-${{ hashFiles('ci/lint_cpp_rs/Cargo.lock', 'ci/lint_cpp_rs/src/**/*.rs', 'ci/lint_cpp_rs/Cargo.toml') }}
+          restore-keys: |
+            rust-lint-${{ runner.os }}-
+
+      - name: Rust C++ linter unit tests
+        # The crate carries ~53 tests covering real rule behaviour -- the
+        # SRC00x subprocess codes, SingletonElision/PreferConstexpr's
+        # partition, the unity-build structural checks -- and until now CI
+        # never ran them. Only `bash lint --cpp` below ran, which exercises
+        # the BINARY but not its tests, so a broken rule shipped silently.
+        #
+        # Two things were already broken when this step was added: the
+        # crate's own 1,000-line-per-file rule (unity_build.rs had reached
+        # 1,205) and a doctest that tried to compile a C++ snippet as Rust.
+        # Both are fixed in the same change.
+        run: |
+          uv run soldr cargo test --release --manifest-path ci/lint_cpp_rs/Cargo.toml
+        shell: bash
+
+      - name: C++ lint (Rust path)
+        # Exercises the Rust C++ linter (`fastled-lint`) end-to-end via the
+        # default `bash lint --cpp` path on every PR. The binary is rebuilt
+        # only if the crate sources changed; otherwise it runs directly.
+        # See FastLED #3288.
+        run: |
+          bash lint --cpp
+        shell: bash
+
+      - name: Run All Unit Tests
+        id: run_tests
+        run: |
+          set -o pipefail
+          ./test --clang --no-parallel --unit --verbose --debug --log-failures failures 2>&1 | tee test.log
+        shell: bash
+
+      - name: Test summary and failure logs
+        if: always()
+        run: |
+          echo "############################################"
+          echo "Last 100 lines of test.log (most recent output)"
+          echo "############################################"
+          tail -n 100 test.log || true
+
+          echo ""
+          echo "############################################"
+          echo "Failure logs (if any)"
+          echo "############################################"
+          fail_dir="failures"
+          if [ -d "$fail_dir" ] && ls "$fail_dir"/*.log >/dev/null 2>&1; then
+            # Failures exist - print them and exit with error
+            for f in "$fail_dir"/*.log; do
+              echo "----------------------"
+              echo "$(basename "$f")"
+              echo "----------------------"
+              # Print the failure log content
+              cat "$f"
+              echo ""
+            done
+            echo "TESTS FAILED: See failure logs above"
+            exit 1
+          else
+            echo "ALL UNIT TESTS PASSED"
+          fi
+        shell: bash

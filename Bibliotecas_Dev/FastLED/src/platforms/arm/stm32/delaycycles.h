@@ -1,0 +1,35 @@
+// ok no namespace fl
+#pragma once
+
+// IWYU pragma: private
+
+#include "platforms/cycle_type.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/noexcept.h"
+
+/// @file platforms/arm/stm32/delaycycles.h
+/// ARM Cortex-M3/M4 (STM32) platform-specific cycle-accurate delay utilities
+
+/// ARM Cortex-M3/M4 (STM32, Teensy 3.x, etc.): Use DWT cycle counter
+constexpr fl::u32 ARM_DEMCR_ADDR = 0xE000EDFC;
+constexpr fl::u32 ARM_DWT_CTRL_ADDR = 0xE0001000;
+constexpr fl::u32 ARM_DWT_CYCCNT_ADDR = 0xE0001004;
+
+FASTLED_FORCE_INLINE void dwt_enable_cycle_counter() FL_NO_EXCEPT {
+  volatile fl::u32* demcr = (volatile fl::u32*)ARM_DEMCR_ADDR;
+  volatile fl::u32* dwt_ctrl = (volatile fl::u32*)ARM_DWT_CTRL_ADDR;
+
+  *demcr |= (1u << 24);  // DEMCR.TRCENA
+  *dwt_ctrl |= 1u;       // DWT.CYCCNTENA
+}
+
+FASTLED_FORCE_INLINE fl::u32 dwt_cyccnt_arm() FL_NO_EXCEPT {
+  volatile fl::u32* cyccnt = (volatile fl::u32*)ARM_DWT_CYCCNT_ADDR;
+  return *cyccnt;
+}
+
+FASTLED_FORCE_INLINE void delay_cycles_dwt_arm(fl::u32 cycles) FL_NO_EXCEPT {
+  if (cycles == 0) return;
+  fl::u32 start = dwt_cyccnt_arm();
+  while ((fl::u32)(dwt_cyccnt_arm() - start) < cycles) { }
+}

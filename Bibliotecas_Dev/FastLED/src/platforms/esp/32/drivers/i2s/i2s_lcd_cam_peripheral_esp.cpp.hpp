@@ -1,0 +1,337 @@
+// IWYU pragma: private
+
+/// @file i2s_lcd_cam_peripheral_esp.cpp
+/// @brief ESP32-S3 I2S LCD_CAM peripheral implementation
+
+#include "platforms/is_platform.h"
+#if defined(FL_IS_ESP32)
+
+#include "fl/stl/has_include.h"
+#include "sdkconfig.h"
+
+#if defined(FL_IS_ESP_32S3) && FL_HAS_INCLUDE("esp_lcd_panel_io.h")
+
+#include "platforms/esp/32/drivers/i2s/i2s_lcd_cam_peripheral_esp.h"
+#include "fl/stl/singleton.h"
+#include "fl/stl/noexcept.h"
+#include "fl/log/log.h"
+
+// IWYU pragma: begin_keep
+#include "freertos/FreeRTOS.h"
+// IWYU pragma: end_keep
+#include "esp_lcd_panel_io.h"
+#include "esp_heap_caps.h"
+#include "esp_timer.h"
+#include "platforms/esp/esp_version.h"
+
+// Alignment for DMA buffers
+#ifndef LCD_DRIVER_PSRAM_DATA_ALIGNMENT
+#define LCD_DRIVER_PSRAM_DATA_ALIGNMENT 64
+#endif
+
+// Default I2S clock frequency (2.4 MHz - standard for WS2812)
+#ifndef FASTLED_ESP32S3_I2S_CLOCK_HZ
+#define FASTLED_ESP32S3_I2S_CLOCK_HZ fl::u32(24 * 100 * 1000)
+#endif
+
+namespace fl {
+namespace detail {
+
+//=============================================================================
+// ISR Callback Wrapper
+//=============================================================================
+
+/// @brief ISR callback for transfer complete
+/// @param panel_io Panel IO handle
+/// @param edata Event data
+/// @param user_ctx User context (I2sLcdCamPeripheralEsp*)
+/// @return true if a higher priority task was woken
+bool IRAM_ATTR i2s_lcd_cam_flush_ready(
+    esp_lcd_panel_io_handle_t panel_io,
+    esp_lcd_panel_io_event_data_t* edata,
+    void* user_ctx) { // ok no noexcept — matches friend decl in header
+
+    I2sLcdCamPeripheralEsp* self = static_cast<I2sLcdCamPeripheralEsp*>(user_ctx);
+
+    // Clear busy flag
+    self->mBusy = false;
+
+    // Call user callback if registered
+    if (self->mCallback) {
+        using CallbackType = bool (*)(void*, const void*, void*);
+        auto fn = reinterpret_cast<CallbackType>(self->mCallback); // ok reinterpret cast
+        return fn(panel_io, edata, self->mUserCtx);
+    }
+
+    return false;
+}
+
+//=============================================================================
+// Singleton Instance
+//=============================================================================
+
+I2sLcdCamPeripheralEsp& I2sLcdCamPeripheralEsp::instance() FL_NO_EXCEPT {
+    return Singleton<I2sLcdCamPeripheralEsp>::instance();
+}
+
+//=============================================================================
+// Constructor / Destructor
+//=============================================================================
+
+I2sLcdCamPeripheralEsp::I2sLcdCamPeripheralEsp() FL_NO_EXCEPT
+    : mInitialized(false),
+      mConfig(),
+      mI80Bus(nullptr),
+      mPanelIo(nullptr),
+      mCallback(nullptr),
+      mUserCtx(nullptr),
+      mBusy(false) {
+}
+
+I2sLcdCamPeripheralEsp::~I2sLcdCamPeripheralEsp() {
+    deinitialize();
+}
+
+//=============================================================================
+// Lifecycle Methods
+//=============================================================================
+
+bool I2sLcdCamPeripheralEsp::initialize(const I2sLcdCamConfig& config) FL_NO_EXCEPT {
+    if (mInitialized) {
+        // Check if config matches - if so, reuse existing peripheral
+        if (mConfig.num_lanes == config.num_lanes &&
+            mConfig.pclk_hz == config.pclk_hz &&
+            mConfig.max_transfer_bytes >= config.max_transfer_bytes &&
+            mConfig.use_psram == config.use_psram) {
+            // GPIOs might differ for different channels, but peripheral can be shared
+            // as long as all GPIOs are configured in the bus
+            FL_WARN_F_ONCE("I2sLcdCamPeripheralEsp: Already initialized, reusing peripheral");
+            return true;
+        }
+
+        // Config doesn't match - need to reinitialize
+        FL_WARN_F_ONCE("I2sLcdCamPeripheralEsp: Config changed, reinitializing peripheral");
+        deinitialize();
+    }
+
+    mConfig = config;
+
+    // Validate configuration
+    if (config.num_lanes < 1 || config.num_lanes > 16) {
+        FL_WARN_F("I2sLcdCamPeripheralEsp: Invalid num_lanes: %s", config.num_lanes);
+        return false;
+    }
+
+    if (config.pclk_hz == 0) {
+        FL_WARN_F("I2sLcdCamPeripheralEsp: Invalid pclk_hz: 0");
+        return false;
+    }
+
+    // Create I80 bus configuration
+    esp_lcd_i80_bus_config_t bus_config = {};
+    bus_config.clk_src = LCD_CLK_SRC_PLL160M;
+    bus_config.dc_gpio_num = static_cast<gpio_num_t>(0);  // Not used for LED driving
+    bus_config.wr_gpio_num = static_cast<gpio_num_t>(0);  // Not used for LED driving
+    bus_config.bus_width = 16;
+    bus_config.max_transfer_bytes = config.max_transfer_bytes;
+
+    // DMA configuration (IDF version dependent)
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(5, 3, 0)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    bus_config.psram_trans_align = LCD_DRIVER_PSRAM_DATA_ALIGNMENT;
+    bus_config.sram_trans_align = 4;
+#pragma GCC diagnostic pop
+#else
+    bus_config.dma_burst_size = 64;
+#endif
+
+    // Data GPIO pins
+    for (int i = 0; i < 16; i++) {
+        if (i < config.num_lanes) {
+            bus_config.data_gpio_nums[i] = static_cast<gpio_num_t>(config.data_gpios[i]);
+        } else {
+            bus_config.data_gpio_nums[i] = static_cast<gpio_num_t>(0);  // Unused pins set to 0
+        }
+    }
+
+    // Create I80 bus
+    esp_err_t err = esp_lcd_new_i80_bus(&bus_config, &mI80Bus);
+    if (err != ESP_OK) {
+        FL_WARN_F("I2sLcdCamPeripheralEsp: Failed to create I80 bus: %s", err);
+        return false;
+    }
+
+    // Create panel IO configuration
+    esp_lcd_panel_io_i80_config_t io_config = {};
+    io_config.cs_gpio_num = GPIO_NUM_NC;  // No CS pin
+    io_config.pclk_hz = config.pclk_hz > 0 ? config.pclk_hz : FASTLED_ESP32S3_I2S_CLOCK_HZ;
+    io_config.trans_queue_depth = 1;
+    io_config.dc_levels = {
+        .dc_idle_level = 0,
+        .dc_cmd_level = 0,
+        .dc_dummy_level = 0,
+        .dc_data_level = 1,
+    };
+    io_config.lcd_cmd_bits = 0;
+    io_config.lcd_param_bits = 0;
+    io_config.user_ctx = this;
+    io_config.on_color_trans_done = i2s_lcd_cam_flush_ready;
+
+    // Create panel IO
+    err = esp_lcd_new_panel_io_i80(mI80Bus, &io_config, &mPanelIo);
+    if (err != ESP_OK) {
+        FL_WARN_F("I2sLcdCamPeripheralEsp: Failed to create panel IO: %s", err);
+        esp_lcd_del_i80_bus(mI80Bus);
+        mI80Bus = nullptr;
+        return false;
+    }
+
+    mInitialized = true;
+    return true;
+}
+
+void I2sLcdCamPeripheralEsp::deinitialize() FL_NO_EXCEPT {
+    if (mPanelIo != nullptr) {
+        esp_lcd_panel_io_del(mPanelIo);
+        mPanelIo = nullptr;
+    }
+    if (mI80Bus != nullptr) {
+        esp_lcd_del_i80_bus(mI80Bus);
+        mI80Bus = nullptr;
+    }
+    mInitialized = false;
+    mCallback = nullptr;
+    mUserCtx = nullptr;
+    mBusy = false;
+}
+
+bool I2sLcdCamPeripheralEsp::isInitialized() const FL_NO_EXCEPT {
+    return mInitialized;
+}
+
+//=============================================================================
+// Buffer Management
+//=============================================================================
+
+u16* I2sLcdCamPeripheralEsp::allocateBuffer(size_t size_bytes) FL_NO_EXCEPT {
+    // Round up to 64-byte alignment
+    size_t aligned_size = ((size_bytes + 63) / 64) * 64;
+
+    void* buffer = nullptr;
+
+    // Try PSRAM first if enabled (follows MoonBase pattern)
+    // Use calloc (zero-initialized) for deterministic behavior
+    if (mConfig.use_psram) {
+        buffer = heap_caps_aligned_calloc(
+            LCD_DRIVER_PSRAM_DATA_ALIGNMENT,
+            aligned_size, 1,
+            MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA | MALLOC_CAP_8BIT
+        );
+    }
+
+    // Fallback to internal DMA RAM
+    if (buffer == nullptr) {
+        buffer = heap_caps_aligned_calloc(
+            LCD_DRIVER_PSRAM_DATA_ALIGNMENT,
+            aligned_size, 1,
+            MALLOC_CAP_DMA | MALLOC_CAP_8BIT
+        );
+    }
+
+    return static_cast<u16*>(buffer);
+}
+
+void I2sLcdCamPeripheralEsp::freeBuffer(u16* buffer) FL_NO_EXCEPT {
+    if (buffer != nullptr) {
+        heap_caps_free(buffer);
+    }
+}
+
+//=============================================================================
+// Transmission Methods
+//=============================================================================
+
+bool I2sLcdCamPeripheralEsp::transmit(const u16* buffer, size_t size_bytes) FL_NO_EXCEPT {
+    if (!mInitialized || mPanelIo == nullptr) {
+        return false;
+    }
+
+    mBusy = true;
+
+    // Use esp_lcd_panel_io_tx_color to transmit data via LCD_CAM DMA
+    // Command 0x2C is the standard "write memory" command for displays
+    // The LCD_CAM peripheral will DMA the buffer to the data pins
+    esp_err_t err = esp_lcd_panel_io_tx_color(mPanelIo, 0x2C, buffer, size_bytes);
+
+    if (err != ESP_OK) {
+        mBusy = false;
+        return false;
+    }
+
+    return true;
+}
+
+bool I2sLcdCamPeripheralEsp::waitTransmitDone(u32 timeout_ms) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+
+    // Simple polling wait (callback will clear mBusy)
+    u32 start = (u32)(esp_timer_get_time() / 1000);
+    while (mBusy) {
+        if (timeout_ms > 0) {
+            u32 now = (u32)(esp_timer_get_time() / 1000);
+            if ((now - start) >= timeout_ms) {
+                return false;  // Timeout
+            }
+        }
+        vTaskDelay(1);  // Yield
+    }
+    return true;
+}
+
+bool I2sLcdCamPeripheralEsp::isBusy() const FL_NO_EXCEPT {
+    return mBusy;
+}
+
+//=============================================================================
+// Callback Registration
+//=============================================================================
+
+bool I2sLcdCamPeripheralEsp::registerTransmitCallback(void* callback, void* user_ctx) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+
+    // Store callback info for ISR to invoke
+    mCallback = callback;
+    mUserCtx = user_ctx;
+    return true;
+}
+
+//=============================================================================
+// State Inspection
+//=============================================================================
+
+const I2sLcdCamConfig& I2sLcdCamPeripheralEsp::getConfig() const FL_NO_EXCEPT {
+    return mConfig;
+}
+
+//=============================================================================
+// Platform Utilities
+//=============================================================================
+
+u64 I2sLcdCamPeripheralEsp::getMicroseconds() FL_NO_EXCEPT {
+    return esp_timer_get_time();
+}
+
+void I2sLcdCamPeripheralEsp::delay(u32 ms) FL_NO_EXCEPT {
+    vTaskDelay(pdMS_TO_TICKS(ms));
+}
+
+} // namespace detail
+} // namespace fl
+
+#endif // CONFIG_IDF_TARGET_ESP32S3 && esp_lcd_panel_io.h
+#endif // FL_IS_ESP32

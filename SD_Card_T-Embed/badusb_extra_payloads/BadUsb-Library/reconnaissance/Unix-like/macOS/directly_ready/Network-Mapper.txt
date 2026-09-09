@@ -1,0 +1,36 @@
+REM Title: macOS Network Mapper
+REM Author: BadUSB Library
+REM Description: Maps network topology and devices
+REM Target: macOS 10.15+
+REM Category: Reconnaissance
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Get network information
+STRING ifconfig > ~/Desktop/network_map.txt
+ENTER
+DELAY 2000
+
+STRING netstat -rn >> ~/Desktop/network_map.txt
+ENTER
+DELAY 2000
+
+STRING arp -a >> ~/Desktop/network_map.txt
+ENTER
+DELAY 2000
+
+REM Scan local network
+STRING LOCAL_IP=$(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}' | head -1) && NETWORK=$(echo $LOCAL_IP | cut -d. -f1-3) && echo "Scanning network: $NETWORK.0/24" >> ~/Desktop/network_map.txt
+ENTER
+DELAY 2000
+
+STRING for i in {1..254}; do ping -c 1 -W 1000 $NETWORK.$i > /dev/null 2>&1 && echo "Host $NETWORK.$i is up" >> ~/Desktop/network_map.txt; done
+ENTER
+DELAY 10000

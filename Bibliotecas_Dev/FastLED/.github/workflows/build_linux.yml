@@ -1,0 +1,64 @@
+name: linux_native
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_linux.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+permissions:
+  contents: read        # Required to checkout code
+  actions: read         # Required for artifact operations  
+  id-token: write      # Required for artifact upload (OIDC)
+  pull-requests: read   # If needed to read PR info
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: pip install uv
+
+      - name: Install LLVM Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lld llvm
+          # Create symlink for easier detection
+          sudo ln -sf /usr/bin/ld.lld /usr/bin/lld || true
+          # Verify installation
+          llvm-ar --version
+          ld.lld --version
+
+      - name: Run Native Build
+        run: |
+          # Run C++ unit tests (uses Meson for native compilation)
+          uv run test.py --cpp
+
+      - name: Test Multi-Word Fuzzy Matching
+        run: |
+          # Test that multiple positional arguments work for fuzzy matching
+          # This should find and run the "string_view" test
+          uv run test.py string view --cpp

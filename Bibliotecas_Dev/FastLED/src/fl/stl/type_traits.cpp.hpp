@@ -1,0 +1,127 @@
+
+#include "fl/stl/type_traits.h"
+#include "fl/stl/int.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/static_assert.h"
+
+FL_DISABLE_WARNING_PUSH
+FL_DISABLE_WARNING(unused-function)
+
+// Type traits are tricky and can be compiler dependent. We can't rely on
+// unit testing since that runs on the host machine. So to any type trait
+// that can statically be tested, add below.
+
+// typetrait test
+namespace {
+FL_MAYBE_UNUSED void __compile_test() {
+    FL_STATIC_ASSERT(fl::is_integral<int>::value, "int should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<float>::value == false,
+                  "float should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<bool>::value, "bool should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<char>::value, "char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<unsigned char>::value,
+                  "unsigned char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<signed char>::value,
+                  "signed char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<short>::value, "short should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<unsigned short>::value,
+                  "unsigned short should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<long>::value, "long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<unsigned long>::value,
+                  "unsigned long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<long long>::value,
+                  "long long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<unsigned long long>::value,
+                  "unsigned long long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<int *>::value == false,
+                  "int* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<float *>::value == false,
+                  "float* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<void>::value == false,
+                  "void should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<void *>::value == false,
+                  "void* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const int>::value,
+                  "const int should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const float>::value == false,
+                  "const float should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const char>::value,
+                  "const char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const unsigned char>::value,
+                  "const unsigned char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const signed char>::value,
+                  "const signed char should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const short>::value,
+                  "const short should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const unsigned short>::value,
+                  "const unsigned short should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const long>::value,
+                  "const long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const unsigned long>::value,
+                  "const unsigned long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const long long>::value,
+                  "const long long should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const unsigned long long>::value,
+                  "const unsigned long long should be integral");
+
+    // volatile
+    FL_STATIC_ASSERT(fl::is_integral<volatile int>::value,
+                  "volatile int should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<volatile float>::value == false,
+                  "volatile float should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<volatile char>::value,
+                  "volatile char should be integral");
+
+    // ref
+    FL_STATIC_ASSERT(fl::is_integral<unsigned char &>::value,
+                  "unsigned char& should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<const unsigned char &>::value,
+                  "const unsigned char& should be integral");
+
+    // fixed width int types from fl/int.h
+    FL_STATIC_ASSERT(fl::is_integral<fl::i8>::value, "i8 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u8>::value,
+                  "u8 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i16>::value,
+                  "i16 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u16>::value,
+                  "u16 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i32>::value,
+                  "i32 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u32>::value,
+                  "u32 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i64>::value,
+                  "fl::i64 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u64>::value,
+                  "fl::u64 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i8 *>::value == false,
+                  "i8* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u8 *>::value == false,
+                  "u8* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::uint>::value,
+                  "uint should be integral");
+
+    // fixed width int types from fl/stl/stdint.h
+    FL_STATIC_ASSERT(fl::is_integral<fl::i8>::value, "fl::i8 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u8>::value,
+                  "fl::u8 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i16>::value,
+                  "fl::i16 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u16>::value,
+                  "fl::u16 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i32>::value,
+                  "fl::i32 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u32>::value,
+                  "fl::u32 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<i64>::value,
+                  "i64 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<u64>::value,
+                  "u64 should be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::i8 *>::value == false,
+                  "fl::i8* should not be integral");
+    FL_STATIC_ASSERT(fl::is_integral<fl::u8 *>::value == false,
+                  "fl::u8* should not be integral");
+}
+} // namespace
+
+FL_DISABLE_WARNING_POP

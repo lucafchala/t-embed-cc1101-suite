@@ -1,0 +1,89 @@
+
+#include "fl/fx/2d/scale_up.h"
+
+#include "crgb.h"
+#include "fl/stl/stdint.h"
+#include "fl/gfx/upscale.h"
+#include "fl/stl/memory.h"
+#include "fl/math/xymap.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/allocator.h"
+#include "fl/fx/fx2d.h"
+
+// Optimized for 2^n grid sizes in terms of both memory and performance.
+// If you are somehow running this on AVR then you probably want this if
+// you can make your grid size a power of 2.
+#define FASTLED_SCALE_UP_ALWAYS_POWER_OF_2 0 // 0 for always power of 2.
+// Uses more memory than FASTLED_SCALE_UP_ALWAYS_POWER_OF_2 but can handle
+// arbitrary grid sizes.
+#define FASTLED_SCALE_UP_HIGH_PRECISION 1 // 1 for always choose high precision.
+// Uses the most executable memory because both low and high precision versions
+// are compiled in. If the grid size is a power of 2 then the faster version is
+// used. Note that the floating point version has to be directly specified
+// because in testing it offered no benefits over the integer versions.
+#define FASTLED_SCALE_UP_DECIDE_AT_RUNTIME 2 // 2 for runtime decision.
+
+#define FASTLED_SCALE_UP_FORCE_FLOATING_POINT 3 // Warning, this is slow.
+
+#ifndef FASTLED_SCALE_UP
+#define FASTLED_SCALE_UP FASTLED_SCALE_UP_DECIDE_AT_RUNTIME
+#endif
+
+namespace fl {
+
+ScaleUp::ScaleUp(const XYMap& xymap, Fx2dPtr fx) : Fx2d(xymap), mDelegate(fx) {
+    // Turn off re-mapping of the delegate's XYMap, since bilinearExpand needs
+    // to work in screen coordinates. The final mapping will for this class will
+    // still be performed.
+    mDelegate->getXYMap().setRectangularGrid();
+}
+
+void ScaleUp::draw(DrawContext context) {
+    if (mSurface.empty()) {
+        mSurface.resize(mDelegate->getNumLeds());
+    }
+    DrawContext delegateContext = context;
+    delegateContext.leds = fl::span<CRGB>(mSurface);
+    mDelegate->draw(delegateContext);
+
+    u16 in_w = mDelegate->getWidth();
+    u16 in_h = mDelegate->getHeight();
+    u16 out_w = getWidth();
+    u16 out_h = getHeight();
+    ;
+    if (in_w == out_w && in_h == out_h) {
+        noExpand(fl::span<const CRGB>(mSurface), context.leds, in_w, in_h);
+    } else {
+        expand(fl::span<const CRGB>(mSurface), context.leds, in_w, in_h, mXyMap);
+    }
+}
+
+void ScaleUp::expand(fl::span<const CRGB> input, fl::span<CRGB> output, u16 width,
+                     u16 height, const XYMap& mXyMap) {
+#if FASTLED_SCALE_UP == FASTLED_SCALE_UP_ALWAYS_POWER_OF_2
+    fl::upscalePowerOf2(input.data(), output.data(), static_cast<u8>(width), static_cast<u8>(height), mXyMap);
+#elif FASTLED_SCALE_UP == FASTLED_SCALE_UP_HIGH_PRECISION
+    fl::upscaleArbitrary(input.data(), output.data(), width, height, mXyMap);
+#elif FASTLED_SCALE_UP == FASTLED_SCALE_UP_DECIDE_AT_RUNTIME
+    fl::upscale(input.data(), output.data(), width, height, mXyMap);
+#elif FASTLED_SCALE_UP == FASTLED_SCALE_UP_FORCE_FLOATING_POINT
+    fl::upscaleFloat(input.data(), output.data(), static_cast<u8>(width), static_cast<u8>(height), mXyMap);
+#else
+#error "Invalid FASTLED_SCALE_UP"
+#endif
+}
+
+void ScaleUp::noExpand(fl::span<const CRGB> input, fl::span<CRGB> output, u16 width,
+                       u16 height) {
+    u16 n = mXyMap.getTotal();
+    for (u16 w = 0; w < width; w++) {
+        for (u16 h = 0; h < height; h++) {
+            u16 idx = mXyMap.mapToIndex(w, h);
+            if (idx < n) {
+                output[idx] = input[w * height + h];
+            }
+        }
+    }
+}
+
+} // namespace fl

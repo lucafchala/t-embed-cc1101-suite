@@ -1,0 +1,28 @@
+// IWYU pragma: private
+
+
+#include "fl/stl/unique_ptr.h"
+#include "pixel_iterator.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+class PixelIterator;
+
+/// Interface for Adafruit NeoPixel driver - implementation in clockless.cpp
+class IAdafruitNeoPixelDriver {
+public:
+    /// Static factory method to create driver implementation
+    static unique_ptr<IAdafruitNeoPixelDriver> create() FL_NO_EXCEPT;
+
+    virtual ~IAdafruitNeoPixelDriver() = default;
+    
+    /// Initialize the driver with data pin and RGBW mode
+    virtual void init(int dataPin) FL_NO_EXCEPT = 0;
+    
+    /// Output pixels to the LED strip
+    virtual void showPixels(PixelIterator& pixelIterator) FL_NO_EXCEPT = 0;
+
+};
+
+} // namespace fl

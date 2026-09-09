@@ -1,0 +1,166 @@
+#pragma once
+
+// IWYU pragma: private
+
+#include "fl/audio/audio_input.h"
+#include "fl/log/log.h"
+#include "fl/stl/assert.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/span.h"
+#include "fl/stl/shared_ptr.h"
+#include "platforms/arm/teensy/audio_input_teensy_config.h"
+#include "platforms/arm/teensy/is_teensy.h"
+
+// FastLED owns the small PJRC-derived I2S subset it needs. Do not include the
+// external Audio.h umbrella: it selects the full Audio, SD, and SerialFlash
+// stacks for sketches that only include FastLED.h.
+#if TEENSY_AUDIO_LIBRARY_AVAILABLE
+// IWYU pragma: begin_keep
+#include "platforms/arm/teensy/audio/pjrc_audio_stream.h"
+#include "platforms/arm/teensy/audio/pjrc_input_i2s.h"
+#if defined(FL_IS_TEENSY_4X)
+#include "platforms/arm/teensy/audio/pjrc_input_i2s2.h"
+#endif
+#include "fl/stl/noexcept.h"
+// IWYU pragma: end_keep
+#endif
+
+namespace fl {
+
+#if TEENSY_AUDIO_LIBRARY_AVAILABLE
+
+namespace platforms {
+namespace teensy {
+
+// Type aliases for FastLED's PJRC-compatible private I2S classes.
+using TeensyAudioInputI2S = platforms::teensy::PjrcAudioInputI2S;
+#if defined(FL_IS_TEENSY_4X)
+using TeensyAudioInputI2S2 = platforms::teensy::PjrcAudioInputI2S2;
+#endif
+using TeensyAudioConnection = AudioConnection;
+
+// Wrapper classes add virtual destructors so they are safe for shared_ptr.
+class AudioInputI2S : public TeensyAudioInputI2S {
+public:
+    virtual ~AudioInputI2S() = default;
+};
+
+#if defined(FL_IS_TEENSY_4X)
+class AudioInputI2S2 : public TeensyAudioInputI2S2 {
+public:
+    virtual ~AudioInputI2S2() = default;
+};
+#endif
+
+class FastLEDTeensyAudioConnection : public TeensyAudioConnection {
+public:
+    FastLEDTeensyAudioConnection(AudioStream& source, unsigned char sourceOutput,
+                                 AudioStream& destination, unsigned char destinationInput)
+        : TeensyAudioConnection(source, sourceOutput, destination, destinationInput) {}
+    virtual ~FastLEDTeensyAudioConnection() = default;
+};
+
+// TeensyAudioRecorder: AudioStream subclass that queues audio blocks for FastLED
+// This class receives audio blocks from FastLED's private I2S layer via update()
+// callback and queues them for consumption by Teensy_I2S_Audio::read()
+class TeensyAudioRecorder : public AudioStream {
+public:
+    TeensyAudioRecorder() FL_NO_EXCEPT;
+    virtual ~TeensyAudioRecorder() = default;
+
+    void reset() FL_NO_EXCEPT;
+
+    // Called by the I2S layer when a new audio block is available
+    // This runs in interrupt context - keep it fast!
+    void update() FL_NO_EXCEPT override;
+
+    // Queue a block for later consumption
+    // Returns true if queued, false if queue is full
+    bool queueBlock(const audio_block_t* block, u8 channel) FL_NO_EXCEPT;
+
+    // Dequeue oldest block
+    bool dequeueBlock(fl::vector<fl::i16>& samples, u8& channel, u32& timestamp) FL_NO_EXCEPT;
+
+    fl::size getQueueSize() const { return mBlockQueue.size(); }
+    u64 getTotalBlocksReceived() const { return mTotalBlocksReceived; }
+    u64 getTotalBlocksDropped() const { return mTotalBlocksDropped; }
+
+private:
+    struct QueuedBlock {
+        fl::i16 samples[AUDIO_BLOCK_SAMPLES];  // 128 samples
+        u8 channel;   // 0=Left, 1=Right
+        u32 timestamp;
+    };
+
+    audio_block_t* inputQueueArray[2];  // Required by AudioStream constructor
+    fl::vector<QueuedBlock> mBlockQueue;
+    u64 mTotalBlocksReceived;
+    u64 mTotalBlocksDropped;
+};
+
+// Teensy I2S Audio Input Implementation
+// Uses FastLED's private AudioInputI2S or AudioInputI2S2 classes
+// to capture audio from I2S microphones (INMP441, ICS43432, SPH0645LM4H, etc.)
+//
+// Key characteristics:
+// - Fixed hardware pins (cannot be changed in software)
+// - 128-sample blocks @ 44.1kHz (2.9ms per block)
+// - Accumulates 4 blocks to emit 512 samples (matching ESP32 buffer size)
+// - Mono output: single channel (Left/Right) or stereo downmix (Both)
+// - DMA-based buffering (managed by FastLED's private I2S layer)
+//
+// Architecture:
+// - AudioInputI2S/I2S2 captures audio from hardware
+// - AudioConnection routes audio to TeensyAudioRecorder
+// - TeensyAudioRecorder (AudioStream subclass) queues 128-sample blocks
+// - Teensy_I2S_Audio::read() accumulates 4 blocks → 512 mono samples
+//   - Left/Right mode: 4 blocks from selected channel
+//   - Both mode: 4 pairs of L/R blocks, downmixed to mono (L+R)/2
+class Teensy_I2S_Audio : public audio::IInput {
+public:
+    static constexpr int BLOCKS_TO_ACCUMULATE = 4;  // 4 * 128 = 512 mono samples
+    static constexpr int TARGET_BUFFER_SIZE = AUDIO_BLOCK_SAMPLES * BLOCKS_TO_ACCUMULATE;
+
+    Teensy_I2S_Audio(const audio::ConfigI2S& config) FL_NO_EXCEPT;
+    ~Teensy_I2S_Audio() override;
+
+    void start() FL_NO_EXCEPT override;
+    void stop() FL_NO_EXCEPT override;
+    bool error(fl::string* msg = nullptr) FL_NO_EXCEPT override;
+    audio::Sample read() FL_NO_EXCEPT override;
+
+private:
+    audio::ConfigI2S mConfig;
+    bool mHasError;
+    fl::string mErrorMessage;
+    u64 mTotalSamplesRead;
+    bool mInitialized;
+
+    // I2S input objects (created based on port selection)
+    fl::shared_ptr<AudioInputI2S> mI2sInput;
+#if defined(FL_IS_TEENSY_4X)
+    fl::shared_ptr<AudioInputI2S2> mI2sInput2;
+#endif
+
+    // Audio recorder and connections
+    fl::shared_ptr<TeensyAudioRecorder> mRecorder;
+    fl::shared_ptr<FastLEDTeensyAudioConnection> mConnectionLeft;
+    fl::shared_ptr<FastLEDTeensyAudioConnection> mConnectionRight;
+
+    // Sample accumulation for 512-sample buffer
+    fl::vector<fl::i16> mAccumulatedSamples;
+    int mBlocksAccumulated;
+};
+
+} // namespace teensy
+} // namespace platforms
+
+#endif // TEENSY_AUDIO_LIBRARY_AVAILABLE
+
+// Platform-specific audio input creation function for Teensy
+fl::shared_ptr<audio::IInput> teensy_create_audio_input(
+    const audio::Config& config,
+    fl::string* error_message
+) FL_NO_EXCEPT;
+
+} // namespace fl

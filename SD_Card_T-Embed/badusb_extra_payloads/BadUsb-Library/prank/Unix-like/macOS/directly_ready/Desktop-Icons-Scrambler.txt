@@ -1,0 +1,28 @@
+REM Title: macOS Desktop Icons Scrambler
+REM Author: BadUSB Library
+REM Description: Scrambles desktop icons randomly
+REM Target: macOS 10.15+
+REM Category: Prank
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Scramble desktop icons
+STRING osascript -e 'tell application "Finder" to set desktop arrangement to not arranged'
+ENTER
+DELAY 2000
+
+STRING osascript -e 'tell application "System Events" to tell process "Finder" to set value of slider 1 of group 1 of window 1 to (random number from 1 to 100)'
+ENTER
+DELAY 2000
+
+REM Change desktop background to random color
+STRING osascript -e 'tell application "System Events" to tell every desktop to set picture to "/System/Library/Desktop Pictures/Solid Colors/Solid Gray Pro Ultra Dark.png"'
+ENTER
+DELAY 2000

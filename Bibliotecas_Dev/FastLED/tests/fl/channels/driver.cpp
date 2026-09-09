@@ -1,0 +1,727 @@
+/// @file driver.cpp
+/// @brief Tests for the Channel and IChannelDriver API
+
+#include "FastLED.h"
+#include "fl/channels/channel.h"
+#include "fl/channels/config.h"
+#include "fl/channels/driver.h"
+#include "fl/channels/data.h"
+#include "fl/channels/manager.h"
+#include "fl/chipsets/chipset_timing_config.h"
+#include "fl/stl/vector.h"
+#include "fl/stl/move.h"
+#include "fl/gfx/fill.h"
+#include "fl/stl/new.h"
+#include "colorutils.h"
+#include "crgb.h"
+#include "test.h"
+#include "eorder.h"
+#include "fl/channels/options.h"
+#include "fl/chipsets/led_timing.h"
+#include "fl/gfx/eorder.h"
+#include "fl/log/log.h"
+#include "fl/gfx/crgb.h"
+#include "fl/stl/span.h"
+#include "fl/stl/allocator.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/strstream.h"
+#include "fl/system/engine_events.h"
+#include "fl/math/xymap.h"
+#include "fl/math/screenmap.h"
+#include "fl/chipsets/spi.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+namespace channel_engine_test {
+
+using namespace fl;
+
+/// Mock IChannelDriver for testing
+class MockEngine : public IChannelDriver {
+public:
+    explicit MockEngine(const char* name = "MOCK") : mName(name) {}
+
+    int transmitCount = 0;
+    int lastChannelCount = 0;
+    int enqueueCount = 0;
+    int showCount = 0;
+    fl::vector<ChannelDataPtr> mEnqueuedChannels;
+    fl::vector<ChannelDataPtr> mTransmittingChannels;
+
+    bool canHandle(const ChannelDataPtr& data) const override {
+        (void)data;
+        return true;  // Test driver accepts all channel types
+    }
+
+    void enqueue(ChannelDataPtr channelData) override {
+        if (channelData) {
+            enqueueCount++;
+            mEnqueuedChannels.push_back(channelData);
+        }
+    }
+
+    void show() override {
+        showCount++;
+        if (!mEnqueuedChannels.empty()) {
+            mTransmittingChannels = fl::move(mEnqueuedChannels);
+            mEnqueuedChannels.clear();
+            beginTransmission(mTransmittingChannels);
+        }
+    }
+
+    DriverState poll() override {
+        // Mock implementation: always return READY after transmission
+        if (!mTransmittingChannels.empty()) {
+            mTransmittingChannels.clear();
+        }
+        return DriverState::READY;
+    }
+
+    fl::string getName() const override { return mName; }
+
+    Capabilities getCapabilities() const override {
+        return Capabilities(true, true);  // Mock accepts both clockless and SPI
+    }
+
+private:
+    void beginTransmission(fl::span<const ChannelDataPtr> channels) {
+        transmitCount++;
+        lastChannelCount = channels.size();
+    }
+
+    fl::string mName;
+};
+
+FL_TEST_CASE("Channel basic operations") {
+    auto mockEngine = fl::make_shared<MockEngine>("MOCK_1");
+
+    // Register mock driver with ChannelManager for testing
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(1000, mockEngine);  // High priority to ensure selection
+
+    CRGB leds[10];
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions options;
+
+    ChannelConfig config(1, timing, fl::span<CRGB>(leds, 10), RGB, options);
+    auto channel = Channel::create(config);
+
+    FL_REQUIRE(channel != nullptr);
+    FL_CHECK(channel->getPin() == 1);
+    FL_CHECK(channel->size() == 10);
+
+    // Clean up: disable mock driver after test
+    manager.setDriverEnabled("MOCK_1", false);  // Match driver name
+}
+
+FL_TEST_CASE("Channel transmission") {
+    auto mockEngine = fl::make_shared<MockEngine>("MOCK_TX");
+
+    // Register mock driver with ChannelManager for testing
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(1000, mockEngine);  // High priority to ensure selection
+
+    CRGB leds[5];
+    fill_solid(leds, 5, CRGB::Red);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions options;
+    ChannelConfig config(1, timing, fl::span<CRGB>(leds, 5), RGB, options);
+    auto channel = Channel::create(config);
+
+    // Direct show should encode, enqueue, and flush via frame-end events.
+    channel->showLeds(255);
+
+    FL_CHECK(mockEngine->transmitCount == 1);
+    FL_CHECK(mockEngine->lastChannelCount == 1);
+    FL_CHECK(mockEngine->showCount >= 1);
+
+    // Clean up: disable mock driver after test
+    manager.setDriverEnabled("MOCK_TX", false);
+}
+
+FL_TEST_CASE("CLEDController direct showLeds flushes channel drivers") {
+    auto mockEngine = fl::make_shared<MockEngine>("MOCK_DIRECT_CTL");
+
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(1000, mockEngine);
+
+    CRGB leds[5];
+    fill_solid(leds, 5, CRGB::Green);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions options;
+    ChannelConfig config(2, timing, fl::span<CRGB>(leds, 5), RGB, options);
+    auto channel = Channel::create(config);
+
+    CLEDController* controller = channel->asController();
+    controller->showLeds(255);
+
+    FL_CHECK_EQ(mockEngine->enqueueCount, 1);
+    FL_CHECK_EQ(mockEngine->transmitCount, 1);
+    FL_CHECK_EQ(mockEngine->lastChannelCount, 1);
+    FL_CHECK(mockEngine->mEnqueuedChannels.empty());
+
+    manager.removeDriver(mockEngine);
+}
+
+FL_TEST_CASE("CLEDController clearLeds flushes cleared channel data") {
+    auto mockEngine = fl::make_shared<MockEngine>("MOCK_DIRECT_CLEAR");
+
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(1000, mockEngine);
+
+    CRGB leds[5];
+    fill_solid(leds, 5, CRGB::White);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions options;
+    ChannelConfig config(3, timing, fl::span<CRGB>(leds, 5), RGB, options);
+    auto channel = Channel::create(config);
+
+    CLEDController* controller = channel->asController();
+    controller->clearLeds();
+
+    FL_CHECK_EQ(mockEngine->enqueueCount, 1);
+    FL_CHECK_EQ(mockEngine->transmitCount, 1);
+    FL_CHECK_EQ(mockEngine->lastChannelCount, 1);
+    for (const CRGB& led : leds) {
+        FL_CHECK(led == CRGB::Black);
+    }
+
+    manager.removeDriver(mockEngine);
+}
+
+FL_TEST_CASE("FastLED.show() with channels") {
+    auto mockEngine = fl::make_shared<MockEngine>("MOCK_FASTLED");
+
+    // Register mock driver with ChannelManager for testing
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(1000, mockEngine);  // High priority to ensure selection
+
+    CRGB leds[5];
+    fill_solid(leds, 5, CRGB::Blue);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions options;
+    ChannelConfig config(1, timing, fl::span<CRGB>(leds, 5), RGB, options);
+    auto channel = Channel::create(config);
+
+    FastLED.add(channel);
+
+    int before = mockEngine->transmitCount;
+    int enqueueBefore = mockEngine->enqueueCount;
+    FastLED.show();
+    int enqueueAfter = mockEngine->enqueueCount;
+
+    FL_CHECK(enqueueAfter > enqueueBefore);
+    FL_CHECK(mockEngine->transmitCount > before);
+
+    // Clean up
+    channel->removeFromDrawList();
+    manager.setDriverEnabled("MOCK_FASTLED", false);
+}
+
+//=============================================================================
+// Test Suite: Channel Enqueue Count Verification
+//=============================================================================
+
+FL_TEST_CASE("Channel Engine: 8 channels → exactly 8 enqueues (no accumulation)") {
+    auto mockEngine = fl::make_shared<MockEngine>("ENQUEUE_TEST_1");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2000, mockEngine);
+
+    static constexpr size_t NUM_CHANNELS = 8;
+    static constexpr size_t NUM_LEDS = 10;
+    static CRGB leds[NUM_CHANNELS][NUM_LEDS];
+
+    fl::vector<ChannelPtr> channels;
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+
+    for (size_t i = 0; i < NUM_CHANNELS; i++) {
+        fl::fill_solid(leds[i], NUM_LEDS, CRGB::Red);
+
+        ChannelOptions opts;
+        ChannelConfig config(
+            static_cast<int>(i + 1),  // Pin 1-8
+            timing,
+            fl::span<CRGB>(leds[i], NUM_LEDS),
+            GRB,
+            opts
+        );
+
+        auto channel = Channel::create(config);
+        FastLED.add(channel);
+        channels.push_back(channel);
+    }
+
+    // Reset counter before show
+    mockEngine->enqueueCount = 0;
+    mockEngine->mEnqueuedChannels.clear();
+    mockEngine->mTransmittingChannels.clear();
+
+    // Trigger show (enqueues all channels to driver)
+    // FastLED.show() internally calls driver->show() and driver->poll()
+    // This completes the full transmission cycle
+    FastLED.show();
+
+    // Verify EXACTLY 8 enqueues happened (one per channel, no accumulation)
+    FL_CHECK_EQ(mockEngine->enqueueCount, NUM_CHANNELS);
+    // Verify transmission happened with the correct channel count
+    FL_CHECK_EQ(mockEngine->lastChannelCount, static_cast<int>(NUM_CHANNELS));
+    FL_CHECK_EQ(mockEngine->transmitCount, 1);
+
+    // Cleanup
+    for (auto& channel : channels) {
+        FastLED.remove(channel);
+    }
+    mockEngine->poll();  // Clear transmitting channels
+    manager.removeDriver(mockEngine);
+}
+
+FL_TEST_CASE("Channel Engine: Multiple show() calls don't accumulate channels") {
+    auto mockEngine = fl::make_shared<MockEngine>("ENQUEUE_TEST_2");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2001, mockEngine);
+
+    static constexpr size_t NUM_CHANNELS = 4;
+    static constexpr size_t NUM_LEDS = 5;
+    static CRGB leds[NUM_CHANNELS][NUM_LEDS];
+
+    fl::vector<ChannelPtr> channels;
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+
+    for (size_t i = 0; i < NUM_CHANNELS; i++) {
+        fl::fill_solid(leds[i], NUM_LEDS, CRGB::Blue);
+
+        ChannelOptions opts;
+        ChannelConfig config(
+            static_cast<int>(i + 10),  // Pin 10-13
+            timing,
+            fl::span<CRGB>(leds[i], NUM_LEDS),
+            RGB,
+            opts
+        );
+
+        auto channel = Channel::create(config);
+        FastLED.add(channel);
+        channels.push_back(channel);
+    }
+
+    // Call show() THREE times - should get same channel count each time
+    for (size_t iteration = 0; iteration < 3; iteration++) {
+        mockEngine->enqueueCount = 0;
+        mockEngine->transmitCount = 0;
+        mockEngine->mEnqueuedChannels.clear();
+        mockEngine->mTransmittingChannels.clear();
+
+        // FastLED.show() internally calls driver->show() and driver->poll()
+        // This completes the full transmission cycle
+        FastLED.show();
+
+        // Each iteration should enqueue exactly NUM_CHANNELS (no accumulation)
+        int expectedCount = static_cast<int>(NUM_CHANNELS);
+        if (mockEngine->enqueueCount != expectedCount) {
+            FL_WARN("Iteration " << iteration << ": Enqueued " << mockEngine->enqueueCount
+                    << " channels (expected " << expectedCount << ") - accumulation bug detected!");
+        }
+        FL_CHECK_EQ(mockEngine->enqueueCount, expectedCount);
+        // Verify transmission happened with the correct channel count
+        FL_CHECK_EQ(mockEngine->lastChannelCount, expectedCount);
+        FL_CHECK_EQ(mockEngine->transmitCount, 1);
+    }
+
+    // Cleanup
+    for (auto& channel : channels) {
+        FastLED.remove(channel);
+    }
+    mockEngine->poll();  // Clear transmitting channels
+    manager.removeDriver(mockEngine);
+}
+
+FL_TEST_CASE("Channel Engine: Adding/removing channels updates enqueue count correctly") {
+    auto mockEngine = fl::make_shared<MockEngine>("ENQUEUE_TEST_3");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2002, mockEngine);
+
+    static constexpr size_t NUM_LEDS = 10;
+    static CRGB leds1[NUM_LEDS];
+    static CRGB leds2[NUM_LEDS];
+    static CRGB leds3[NUM_LEDS];
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions opts;
+
+    // Start with 2 channels
+    ChannelConfig config1(20, timing, fl::span<CRGB>(leds1, NUM_LEDS), GRB, opts);
+    ChannelConfig config2(21, timing, fl::span<CRGB>(leds2, NUM_LEDS), GRB, opts);
+
+    auto ch1 = Channel::create(config1);
+    auto ch2 = Channel::create(config2);
+    FastLED.add(ch1);
+    FastLED.add(ch2);
+
+    mockEngine->enqueueCount = 0;
+    mockEngine->mEnqueuedChannels.clear();
+    FastLED.show();
+    FL_CHECK_EQ(mockEngine->enqueueCount, 2);  // 2 channels
+
+    // Add a third channel
+    ChannelConfig config3(22, timing, fl::span<CRGB>(leds3, NUM_LEDS), GRB, opts);
+    auto ch3 = Channel::create(config3);
+    FastLED.add(ch3);
+
+    mockEngine->enqueueCount = 0;
+    mockEngine->mEnqueuedChannels.clear();
+    FastLED.show();
+    FL_CHECK_EQ(mockEngine->enqueueCount, 3);  // 3 channels
+
+    // Remove one channel
+    FastLED.remove(ch2);
+
+    mockEngine->enqueueCount = 0;
+    mockEngine->mEnqueuedChannels.clear();
+    FastLED.show();
+    FL_CHECK_EQ(mockEngine->enqueueCount, 2);  // Back to 2 channels
+
+    // Cleanup
+    FastLED.remove(ch1);
+    FastLED.remove(ch3);
+    manager.setDriverEnabled("ENQUEUE_TEST_3", false);
+}
+
+FL_TEST_CASE("Channel Engine: ChannelData isInUse flag managed correctly") {
+    auto mockEngine = fl::make_shared<MockEngine>("ENQUEUE_TEST_4");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2003, mockEngine);
+
+    static constexpr size_t NUM_LEDS = 5;
+    static CRGB leds[NUM_LEDS];
+
+    fl::fill_solid(leds, NUM_LEDS, CRGB::Green);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions opts;
+    ChannelConfig config(30, timing, fl::span<CRGB>(leds, NUM_LEDS), RGB, opts);
+    auto channel = Channel::create(config);
+
+    FastLED.add(channel);
+
+    // First show() should succeed (data not in use)
+    FastLED.show();
+
+    // Wait for transmission to complete
+    manager.waitForReady();
+
+    // After poll() returns READY, data should be marked as not in use
+    // So calling show() again should succeed (no assertion failure)
+    FastLED.show();
+
+    // Cleanup
+    FastLED.remove(channel);
+    manager.setDriverEnabled("ENQUEUE_TEST_4", false);
+
+    // If we got here without assertion failures, the isInUse flag is managed correctly
+    FL_CHECK(true);  // Test passed
+}
+
+FL_TEST_CASE("Channel Events: onChannelDataEncoded fires after encoding") {
+    // Setup mock driver
+    auto mockEngine = fl::make_shared<MockEngine>("EVENT_ENCODED_TEST");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2007, mockEngine);
+
+    static constexpr size_t NUM_LEDS = 10;
+    static CRGB leds[NUM_LEDS];
+    fl::fill_solid(leds, NUM_LEDS, CRGB::Red);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions opts;
+
+    ChannelConfig config(5, timing, fl::span<CRGB>(leds, NUM_LEDS), GRB, opts);
+    auto channel = Channel::create(config);
+
+    // Register event listener
+    bool eventFired = false;
+    size_t encodedDataSize = 0;
+    auto& events = ChannelEvents::instance();
+    int listenerId = events.onChannelDataEncoded.add([&](const IChannel& ch, const ChannelData& chData) {
+        eventFired = true;
+        encodedDataSize = chData.getData().size();
+        FL_CHECK(&ch == channel.get());  // Verify channel reference is correct
+    });
+
+    // Add channel and trigger encoding
+    FastLED.add(channel);
+    FastLED.show();
+
+    // Verify event fired
+    FL_CHECK(eventFired);
+    FL_CHECK(encodedDataSize > 0);  // Should have encoded some data
+
+    // Cleanup
+    FastLED.remove(channel);
+    events.onChannelDataEncoded.remove(listenerId);
+    manager.setDriverEnabled("EVENT_ENCODED_TEST", false);
+}
+
+FL_TEST_CASE("Channel: Guard against double-encoding within single FastLED.show()") {
+    // This test guards against a degenerate behavior where a single call to
+    // FastLED.show() could cause the same channel to encode its data twice.
+    //
+    // This could happen if:
+    // - Channel is accidentally added to controller list twice
+    // - showPixels() is called recursively
+    // - Some other bug causes double-encoding
+    //
+    // Expected: Within ONE FastLED.show() call, each channel encodes exactly ONCE.
+
+    // Setup mock driver
+    auto mockEngine = fl::make_shared<MockEngine>("DOUBLE_ENCODE_TEST");
+    ChannelManager& manager = ChannelManager::instance();
+    manager.addDriver(2008, mockEngine);
+
+    static constexpr size_t NUM_LEDS = 10;
+    static CRGB leds[NUM_LEDS];
+    fl::fill_solid(leds, NUM_LEDS, CRGB::Blue);
+
+    auto timing = makeTimingConfig<TIMING_WS2812_800KHZ>();
+    ChannelOptions opts;
+
+    ChannelConfig config(5, timing, fl::span<CRGB>(leds, NUM_LEDS), GRB, opts);
+    auto channel = Channel::create(config);
+    FastLED.add(channel);
+
+    // Track how many times encoding happens
+    int encodeCount = 0;
+    auto& events = ChannelEvents::instance();
+    int listenerId = events.onChannelDataEncoded.add([&](const IChannel&, const ChannelData&) {
+        encodeCount++;
+    });
+
+    // Call FastLED.show() ONCE - should encode exactly once
+    FastLED.show();
+
+    // Verify encoding happened exactly once (not zero, not two or more)
+    FL_CHECK_EQ(encodeCount, 1);  // Should encode exactly once
+
+    // Verify enqueued exactly once
+    FL_CHECK_EQ(mockEngine->enqueueCount, 1);  // Should enqueue exactly once
+
+    // Cleanup
+    FastLED.remove(channel);
+    events.onChannelDataEncoded.remove(listenerId);
+    manager.setDriverEnabled("DOUBLE_ENCODE_TEST", false);
+}
+
+// ============ Screen Map Broadcaster Tests ============
+// Tests for Channel::setScreenMap() broadcaster integration
+// Verifies that when a Channel's screen map is set, the EngineEvents
+// broadcaster correctly notifies all registered listeners (e.g., JS canvas).
+
+/// Mock listener that captures onCanvasUiSet() events
+class MockCanvasListener : public EngineEvents::Listener {
+public:
+    struct Event {
+        CLEDController* controller;
+        ScreenMap screenmap;
+
+        Event(CLEDController* ctl, const ScreenMap& map)
+            : controller(ctl), screenmap(map) {}
+    };
+
+    fl::vector<Event> events;
+    bool fired = false;
+
+    void onCanvasUiSet(CLEDController* strip, const ScreenMap& screenmap) override {
+        events.emplace_back(strip, screenmap);
+        fired = true;
+    }
+
+    void clear() {
+        events.clear();
+        fired = false;
+    }
+};
+
+FL_TEST_CASE("Channel::setScreenMap from XYMap broadcasts to EngineEvents listener") {
+    const int NUM_LEDS = 256;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::apa102();
+    SpiChipsetConfig spiConfig{5, 6, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    // Create and register mock listener
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+
+    FL_CHECK_FALSE(listener.fired);
+    FL_CHECK_EQ(listener.events.size(), 0);
+
+    // Call setScreenMap with XYMap
+    fl::XYMap xymap = fl::XYMap::constructSerpentine(16, 16);
+    channel->setScreenMap(xymap, 0.5f);
+
+    // Verify listener received event
+    FL_CHECK(listener.fired);
+    FL_CHECK_EQ(listener.events.size(), 1);
+    FL_CHECK_EQ(listener.events[0].controller, channel->asController());
+    FL_CHECK_EQ(listener.events[0].screenmap.getLength(), 256);
+    FL_CHECK_EQ(listener.events[0].screenmap.getDiameter(), 0.5f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+FL_TEST_CASE("Channel::setScreenMap from ScreenMap broadcasts to listener") {
+    const int NUM_LEDS = 100;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::sk9822();
+    SpiChipsetConfig spiConfig{10, 11, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+    listener.clear();
+
+    // Create a ScreenMap directly
+    fl::ScreenMap screenmap(100, 0.3f);
+    channel->setScreenMap(screenmap);
+
+    // Verify listener received event
+    FL_CHECK(listener.fired);
+    FL_CHECK_EQ(listener.events.size(), 1);
+    FL_CHECK_EQ(listener.events[0].controller, channel->asController());
+    FL_CHECK_EQ(listener.events[0].screenmap.getLength(), 100);
+    FL_CHECK_EQ(listener.events[0].screenmap.getDiameter(), 0.3f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+FL_TEST_CASE("Channel::setScreenMap from dimensions broadcasts event") {
+    const int NUM_LEDS = 64;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::apa102();
+    SpiChipsetConfig spiConfig{7, 8, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+    listener.clear();
+
+    // Call setScreenMap with dimensions
+    channel->setScreenMap(8, 8, 0.25f);
+
+    // Verify listener received event
+    FL_CHECK(listener.fired);
+    FL_CHECK_EQ(listener.events.size(), 1);
+    FL_CHECK_EQ(listener.events[0].controller, channel->asController());
+    FL_CHECK_EQ(listener.events[0].screenmap.getLength(), 64);
+    FL_CHECK_EQ(listener.events[0].screenmap.getDiameter(), 0.25f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+FL_TEST_CASE("Channel::setScreenMap with default diameter uses 0.15f") {
+    const int NUM_LEDS = 128;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::apa102();
+    SpiChipsetConfig spiConfig{9, 10, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+    listener.clear();
+
+    // Call setScreenMap without diameter (defaults to -1.f)
+    fl::XYMap xymap = fl::XYMap::constructRectangularGrid(16, 8);
+    channel->setScreenMap(xymap);
+
+    // Verify default diameter was applied
+    FL_CHECK(listener.fired);
+    FL_CHECK_EQ(listener.events[0].screenmap.getDiameter(), 0.15f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+FL_TEST_CASE("Channel::hasScreenMap and getScreenMap after setScreenMap") {
+    const int NUM_LEDS = 50;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::sk9822();
+    SpiChipsetConfig spiConfig{3, 4, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    // Initially no screenmap
+    FL_CHECK_FALSE(channel->hasScreenMap());
+    FL_CHECK_EQ(channel->getScreenMap().getLength(), 0);
+
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+
+    // Set screenmap
+    fl::XYMap xymap = fl::XYMap::constructRectangularGrid(10, 5);
+    channel->setScreenMap(xymap, 0.2f);
+
+    // Now should have screenmap
+    FL_CHECK(channel->hasScreenMap());
+    const ScreenMap& retrieved = channel->getScreenMap();
+    FL_CHECK_EQ(retrieved.getLength(), 50);
+    FL_CHECK_EQ(retrieved.getDiameter(), 0.2f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+FL_TEST_CASE("Multiple setScreenMap calls generate multiple broadcaster events") {
+    const int NUM_LEDS = 32;
+    CRGB leds[NUM_LEDS];
+
+    SpiEncoder encoder = SpiEncoder::apa102();
+    SpiChipsetConfig spiConfig{11, 12, encoder};
+    ChannelConfig config(spiConfig, fl::span<CRGB>(leds, NUM_LEDS), RGB);
+
+    auto channel = Channel::create(config);
+    FL_CHECK(channel != nullptr);
+
+    MockCanvasListener listener;
+    EngineEvents::addListener(&listener);
+
+    // Call setScreenMap three times with different inputs
+    fl::XYMap xymap1 = fl::XYMap::constructSerpentine(8, 4);
+    channel->setScreenMap(xymap1, 0.1f);
+
+    fl::ScreenMap screenmap2(32, 0.2f);
+    channel->setScreenMap(screenmap2);
+
+    channel->setScreenMap(4, 8, 0.3f);
+
+    // Verify all three events were received
+    FL_CHECK_EQ(listener.events.size(), 3);
+    FL_CHECK_EQ(listener.events[0].screenmap.getDiameter(), 0.1f);
+    FL_CHECK_EQ(listener.events[1].screenmap.getDiameter(), 0.2f);
+    FL_CHECK_EQ(listener.events[2].screenmap.getDiameter(), 0.3f);
+
+    EngineEvents::removeListener(&listener);
+}
+
+} // namespace channel_engine_test
+
+} // FL_TEST_FILE

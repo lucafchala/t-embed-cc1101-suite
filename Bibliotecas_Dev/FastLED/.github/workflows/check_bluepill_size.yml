@@ -1,0 +1,31 @@
+name: check_stm32f103c8_bluepill_size
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/check_bluepill_size.yml'
+      - '.github/workflows/build_template_binary_size.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template_binary_size.yml
+    with:
+      board: stm32f103c8
+      # FROZEN SIZE THRESHOLD — DO NOT RAISE TO MAKE CI GREEN.
+      # Mirror-locked by ci/lint/check_size_thresholds.py. Raising a value
+      # here without updating the frozen-list constant in that script will
+      # fail `bash lint`. Fix the regression instead.
+      max_size: 55000
+      max_size_apa102: 45000

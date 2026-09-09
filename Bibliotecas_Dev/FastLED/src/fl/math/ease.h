@@ -1,0 +1,298 @@
+#pragma once
+
+/*
+This are accurate and tested easing functions.
+
+Note that the easing functions in lib8tion.h are tuned are implemented wrong, such as easeInOutCubic8 and easeInOutCubic16.
+Modern platforms are so fast that the extra performance is not needed, but accuracy is important.
+
+*/
+
+#include "fl/stl/int.h"
+#include "fl/stl/span.h"
+#include "fl/stl/shared_ptr.h"  // IWYU pragma: keep
+#include "fl/math/fixed_point.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+// LUT for 8-bit to 16-bit gamma correction at pow(x, 2.8)
+u16 gamma_2_8(u8 value) FL_NO_EXCEPT;
+
+// Direct access to the 64-byte aligned gamma 2.8 LUT (256 entries, u16).
+// Use with FL_PGM_READ_WORD_ALIGNED for fast reads in hot loops.
+extern const u16 GAMMA_2_8_LUT[256];
+
+
+enum class EaseType {
+    EASE_NONE,
+    EASE_IN_QUAD,
+    EASE_OUT_QUAD,
+    EASE_IN_OUT_QUAD,
+    EASE_IN_CUBIC,
+    EASE_OUT_CUBIC,
+    EASE_IN_OUT_CUBIC,
+    EASE_IN_SINE,
+    EASE_OUT_SINE,
+    EASE_IN_OUT_SINE,
+};
+
+// 8-bit easing functions
+/// 8-bit quadratic ease-in function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// The curve starts slow and accelerates (ease-in only)
+u8 easeInQuad8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit quadratic ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// The curve starts fast and decelerates (ease-out only)
+u8 easeOutQuad8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit quadratic ease-in/ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// The curve starts slow, accelerates in the middle, then slows down again
+u8 easeInOutQuad8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit cubic ease-in function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// More pronounced acceleration than quadratic
+u8 easeInCubic8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit cubic ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// More pronounced deceleration than quadratic
+u8 easeOutCubic8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit cubic ease-in/ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// More pronounced easing curve than quadratic
+u8 easeInOutCubic8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit sine ease-in function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// Smooth sinusoidal acceleration
+u8 easeInSine8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit sine ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// Smooth sinusoidal deceleration
+u8 easeOutSine8(u8 i) FL_NO_EXCEPT;
+
+/// 8-bit sine ease-in/ease-out function
+/// Takes an input value 0-255 and returns an eased value 0-255
+/// Smooth sinusoidal acceleration and deceleration
+u8 easeInOutSine8(u8 i) FL_NO_EXCEPT;
+
+
+// 16-bit easing functions
+/// 16-bit quadratic ease-in function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInQuad16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit quadratic ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeOutQuad16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit quadratic ease-in/ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInOutQuad16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit cubic ease-in function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInCubic16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit cubic ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeOutCubic16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit cubic ease-in/ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInOutCubic16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit sine ease-in function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInSine16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit sine ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeOutSine16(u16 i) FL_NO_EXCEPT;
+
+/// 16-bit sine ease-in/ease-out function
+/// Takes an input value 0-65535 and returns an eased value 0-65535
+u16 easeInOutSine16(u16 i) FL_NO_EXCEPT;
+
+u16 ease16(EaseType type, u16 i) FL_NO_EXCEPT;
+void ease16(EaseType type, u16* src, u16* dst, u16 count) FL_NO_EXCEPT;
+u8 ease8(EaseType type, u8 i) FL_NO_EXCEPT;
+void ease8(EaseType type, u8* src, u8* dst, u8 count) FL_NO_EXCEPT;
+
+
+//////// INLINE FUNCTIONS ////////
+
+inline u16 ease16(EaseType type, u16 i) FL_NO_EXCEPT {
+    switch (type) {
+        case EaseType::EASE_NONE: return i;
+        case EaseType::EASE_IN_QUAD: return easeInQuad16(i);
+        case EaseType::EASE_OUT_QUAD: return easeOutQuad16(i);
+        case EaseType::EASE_IN_OUT_QUAD: return easeInOutQuad16(i);
+        case EaseType::EASE_IN_CUBIC: return easeInCubic16(i);
+        case EaseType::EASE_OUT_CUBIC: return easeOutCubic16(i);
+        case EaseType::EASE_IN_OUT_CUBIC: return easeInOutCubic16(i);
+        case EaseType::EASE_IN_SINE: return easeInSine16(i);
+        case EaseType::EASE_OUT_SINE: return easeOutSine16(i);
+        case EaseType::EASE_IN_OUT_SINE: return easeInOutSine16(i);
+        default: return i;
+    }
+}
+
+inline void ease16(EaseType type, u16* src, u16* dst, u16 count) FL_NO_EXCEPT {
+    switch (type) {
+        case EaseType::EASE_NONE: return;
+        case EaseType::EASE_IN_QUAD: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeInQuad16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_QUAD: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeOutQuad16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_QUAD: {
+            for (u16 i = 0; i < count; i++) {  
+                dst[i] = easeInOutQuad16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_CUBIC: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeInCubic16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_CUBIC: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeOutCubic16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_CUBIC: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeInOutCubic16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_SINE: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeInSine16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_SINE: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeOutSine16(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_SINE: {
+            for (u16 i = 0; i < count; i++) {
+                dst[i] = easeInOutSine16(src[i]);
+            }
+            break;
+        }
+    }
+}
+
+inline u8 ease8(EaseType type, u8 i) FL_NO_EXCEPT {
+    switch (type) {
+        case EaseType::EASE_NONE: return i;
+        case EaseType::EASE_IN_QUAD: return easeInQuad8(i);
+        case EaseType::EASE_OUT_QUAD: return easeOutQuad8(i);
+        case EaseType::EASE_IN_OUT_QUAD: return easeInOutQuad8(i);
+        case EaseType::EASE_IN_CUBIC: return easeInCubic8(i);
+        case EaseType::EASE_OUT_CUBIC: return easeOutCubic8(i);
+        case EaseType::EASE_IN_OUT_CUBIC: return easeInOutCubic8(i);
+        case EaseType::EASE_IN_SINE: return easeInSine8(i);
+        case EaseType::EASE_OUT_SINE: return easeOutSine8(i);
+        case EaseType::EASE_IN_OUT_SINE: return easeInOutSine8(i);
+        default: return i;
+    }
+}
+
+inline void ease8(EaseType type, u8* src, u8* dst, u8 count) FL_NO_EXCEPT {
+    switch (type) {
+        case EaseType::EASE_NONE: return;
+        case EaseType::EASE_IN_QUAD: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInQuad8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_QUAD: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeOutQuad8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_QUAD: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInOutQuad8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_CUBIC: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInCubic8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_CUBIC: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeOutCubic8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_CUBIC: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInOutCubic8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_SINE: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInSine8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_OUT_SINE: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeOutSine8(src[i]);
+            }
+            break;
+        }
+        case EaseType::EASE_IN_OUT_SINE: {
+            for (u8 i = 0; i < count; i++) {
+                dst[i] = easeInOutSine8(src[i]);
+            }
+            break;
+        }
+    }
+}
+
+// Gamma8: cached 8-bit to 16-bit gamma correction with 64-byte aligned LUT.
+// Use getOrCreate(gamma) to obtain a shared instance. Instances with the
+// same gamma value are deduplicated via an internal weak_ptr cache that
+// automatically expires when all callers release their shared_ptr.
+class Gamma8 {
+public:
+    static fl::shared_ptr<const Gamma8> getOrCreate(float gamma) FL_NO_EXCEPT;
+    virtual ~Gamma8() FL_NO_EXCEPT = default;
+
+    virtual void convert(fl::span<const u8> input, fl::span<u16> output) const FL_NO_EXCEPT = 0;
+    virtual void convert(fl::span<const fl::ufixed_point<8, 8>> input, fl::span<u16> output) const FL_NO_EXCEPT = 0;
+    virtual void convert(fl::span<const fl::ufixed_point<8, 8>> input, fl::span<fl::ufixed_point<8, 8>> output) const FL_NO_EXCEPT = 0;
+};
+
+} // namespace fl

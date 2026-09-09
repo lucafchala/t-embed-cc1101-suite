@@ -1,0 +1,99 @@
+/// @file i2s_lcd_cam_peripheral_esp.h
+/// @brief ESP32-S3 I2S LCD_CAM peripheral implementation
+///
+/// This is the real hardware implementation of II2sLcdCamPeripheral for ESP32-S3.
+/// It wraps ESP-IDF LCD I80 bus APIs with the minimal necessary abstraction.
+
+#pragma once
+
+// IWYU pragma: private
+
+#include "platforms/esp/is_esp.h"
+#include "fl/stl/has_include.h"
+
+// Only compile for ESP32-S3 with LCD I80 support
+#if defined(FL_IS_ESP_32S3) && FL_HAS_INCLUDE("esp_lcd_panel_io.h")
+
+#include "platforms/esp/32/drivers/i2s/ii2s_lcd_cam_peripheral.h"
+#include "fl/stl/noexcept.h"
+#include "esp_lcd_panel_io.h"
+
+namespace fl {
+// Forward declaration for friend
+template<typename T, int N>
+class Singleton;
+namespace detail {
+
+/// @brief ESP32-S3 I2S LCD_CAM peripheral implementation
+///
+/// Thin wrapper around ESP-IDF LCD I80 bus APIs. This class handles:
+/// - LCD I80 bus creation and configuration
+/// - DMA buffer allocation (PSRAM or internal)
+/// - Frame transfer via tx_color()
+/// - Callback registration for transfer completion
+class I2sLcdCamPeripheralEsp : public II2sLcdCamPeripheral {
+public:
+    /// @brief Get singleton instance
+    /// @return Reference to singleton
+    ///
+    /// ESP32-S3 has only one LCD_CAM peripheral, so we use singleton pattern.
+    static I2sLcdCamPeripheralEsp& instance() FL_NO_EXCEPT;
+
+    ~I2sLcdCamPeripheralEsp() override;
+
+    //=========================================================================
+    // II2sLcdCamPeripheral Implementation
+    //=========================================================================
+
+    bool initialize(const I2sLcdCamConfig& config) FL_NO_EXCEPT override;
+    void deinitialize() FL_NO_EXCEPT override;
+    bool isInitialized() const FL_NO_EXCEPT override;
+
+    u16* allocateBuffer(size_t size_bytes) FL_NO_EXCEPT override;
+    void freeBuffer(u16* buffer) FL_NO_EXCEPT override;
+
+    bool transmit(const u16* buffer, size_t size_bytes) FL_NO_EXCEPT override;
+    bool waitTransmitDone(u32 timeout_ms) FL_NO_EXCEPT override;
+    bool isBusy() const FL_NO_EXCEPT override;
+
+    bool registerTransmitCallback(void* callback, void* user_ctx) FL_NO_EXCEPT override;
+    const I2sLcdCamConfig& getConfig() const FL_NO_EXCEPT override;
+
+    u64 getMicroseconds() FL_NO_EXCEPT override;
+    void delay(u32 ms) FL_NO_EXCEPT override;
+
+private:
+    // Allow Singleton to call private constructor
+    template<typename T, int N>
+    friend class ::fl::Singleton;
+
+    // Allow ISR callback to access members
+    friend bool i2s_lcd_cam_flush_ready( // ok no noexcept
+        esp_lcd_panel_io_handle_t panel_io,
+        esp_lcd_panel_io_event_data_t* edata,
+        void* user_ctx);
+
+    I2sLcdCamPeripheralEsp() FL_NO_EXCEPT;
+
+    // Non-copyable
+    I2sLcdCamPeripheralEsp(const I2sLcdCamPeripheralEsp&) = delete;
+    I2sLcdCamPeripheralEsp& operator=(const I2sLcdCamPeripheralEsp&) = delete;
+
+    // State
+    bool mInitialized;
+    I2sLcdCamConfig mConfig;
+    esp_lcd_i80_bus_handle_t mI80Bus;
+    esp_lcd_panel_io_handle_t mPanelIo;
+
+    // Callback storage
+    void* mCallback;
+    void* mUserCtx;
+
+    // Transfer state
+    volatile bool mBusy;
+};
+
+} // namespace detail
+} // namespace fl
+
+#endif // CONFIG_IDF_TARGET_ESP32S3 && esp_lcd_panel_io.h

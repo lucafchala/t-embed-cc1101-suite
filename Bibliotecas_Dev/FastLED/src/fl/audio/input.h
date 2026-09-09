@@ -1,0 +1,320 @@
+#pragma once
+
+#include "fl/audio/audio.h"
+#include "fl/audio/mic_profiles.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/int.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/variant.h"
+#include "fl/stl/vector.h"
+#include "platforms/audio.h"
+
+#ifndef FASTLED_HAS_AUDIO_INPUT
+#error "platforms/audio.h must define FASTLED_HAS_AUDIO_INPUT"
+#endif
+
+#define I2S_AUDIO_BUFFER_LEN 512
+#define AUDIO_DEFAULT_SAMPLE_RATE 44100ul
+#define AUDIO_DEFAULT_BIT_RESOLUTION 16
+#define AUDIO_DMA_BUFFER_COUNT 8
+
+namespace fl {
+namespace audio {
+
+// Note: Right now these are esp specific, but they are designed to migrate to a
+// common api.
+
+enum class AudioChannel {
+    Left = 0,
+    Right = 1,
+    Both = 2, // Two microphones can be used to capture both channels with one
+              // AudioSource.
+};
+
+enum class I2SCommFormat {
+    Philips = 0X01,  // I2S communication I2S Philips standard, data launch at
+                     // second BCK
+    MSB = 0X02,      // I2S communication MSB alignment standard, data launch at
+                     // first BCK
+    PCMShort = 0x04, // PCM Short standard, also known as DSP mode. The period
+                     // of synchronization signal (WS) is 1 bck cycle.
+    PCMLong = 0x0C,  // PCM Long standard. The period of synchronization signal
+                     // (WS) is channel_bit*bck cycles.
+    Max = 0x0F,      // standard max
+};
+
+struct ConfigI2S {
+    int mPinWs;
+    int mPinSd;
+    int mPinClk;
+    int mI2sNum;
+    AudioChannel mAudioChannel;
+    u16 mSampleRate;
+    u8 mBitResolution;
+    I2SCommFormat mCommFormat;
+    bool mInvert;
+    ConfigI2S(int pin_ws, int pin_sd, int pin_clk, int i2s_num,
+              AudioChannel mic_channel, u16 sample_rate, u8 bit_resolution,
+              I2SCommFormat comm_format = I2SCommFormat::Philips,
+              bool invert = false) FL_NO_EXCEPT : mPinWs(pin_ws),
+                                                 mPinSd(pin_sd),
+                                                 mPinClk(pin_clk),
+                                                 mI2sNum(i2s_num),
+                                                 mAudioChannel(mic_channel),
+                                                 mSampleRate(sample_rate),
+                                                 mBitResolution(bit_resolution),
+                                                 mCommFormat(comm_format),
+                                                 mInvert(invert) {}
+};
+
+struct ConfigPdm {
+    int mPinDin;
+    int mPinClk;
+    int mI2sNum;
+    u16 mSampleRate;
+    bool mInvert = false;
+
+    ConfigPdm(int pin_din, int pin_clk, int i2s_num,
+              u16 sample_rate = AUDIO_DEFAULT_SAMPLE_RATE,
+              bool invert = false) FL_NO_EXCEPT : mPinDin(pin_din),
+                                                 mPinClk(pin_clk),
+                                                 mI2sNum(i2s_num),
+                                                 mSampleRate(sample_rate),
+                                                 mInvert(invert) {}
+};
+
+// Teensy Audio Library configuration helpers
+// Note: Teensy uses FIXED hardware pins that cannot be changed in software.
+// Pin assignments vary by board model - see Teensy Audio Library documentation.
+//
+// Teensy 3.x I2S pins (only I2S1 available):
+//   BCLK=9, MCLK=11, RX=13, LRCLK=23
+//
+// Teensy 4.x I2S1 pins:
+//   BCLK=21, MCLK=23, RX=8, LRCLK=20
+//
+// Teensy 4.x I2S2 pins:
+//   BCLK=4, MCLK=33, RX=5, LRCLK=3
+namespace TeensyI2S {
+enum class I2SPort {
+    I2S1 = 0, // Primary I2S (available on all Teensy 3.x and 4.x)
+    I2S2 = 1  // Secondary I2S (Teensy 4.x only)
+};
+
+// Get LRCLK (WS) pin for given I2S port
+constexpr int getPinWS(I2SPort port) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY_3X) || defined(FL_IS_TEENSY_35) ||                    \
+    defined(FL_IS_TEENSY_36)
+    // Teensy 3.x - only I2S1 available
+    return (port == I2SPort::I2S1) ? 23 : -1;
+#elif defined(FL_IS_TEENSY_4X)
+    // Teensy 4.x - I2S1 and I2S2 available
+    return (port == I2SPort::I2S1) ? 20 : 3;
+#else
+    // Unknown platform - evaluate parameter to avoid unused warning
+    return (port == I2SPort::I2S1 || port == I2SPort::I2S2) ? -1 : -1;
+#endif
+}
+
+// Get RX (SD) pin for given I2S port
+constexpr int getPinSD(I2SPort port) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY_3X) || defined(FL_IS_TEENSY_35) ||                    \
+    defined(FL_IS_TEENSY_36)
+    // Teensy 3.x
+    return (port == I2SPort::I2S1) ? 13 : -1;
+#elif defined(FL_IS_TEENSY_4X)
+    // Teensy 4.x
+    return (port == I2SPort::I2S1) ? 8 : 5;
+#else
+    // Unknown platform - evaluate parameter to avoid unused warning
+    return (port == I2SPort::I2S1 || port == I2SPort::I2S2) ? -1 : -1;
+#endif
+}
+
+// Get BCLK pin for given I2S port
+constexpr int getPinCLK(I2SPort port) FL_NO_EXCEPT {
+#if defined(FL_IS_TEENSY_3X) || defined(FL_IS_TEENSY_35) ||                    \
+    defined(FL_IS_TEENSY_36)
+    // Teensy 3.x
+    return (port == I2SPort::I2S1) ? 9 : -1;
+#elif defined(FL_IS_TEENSY_4X)
+    // Teensy 4.x
+    return (port == I2SPort::I2S1) ? 21 : 4;
+#else
+    // Unknown platform - evaluate parameter to avoid unused warning
+    return (port == I2SPort::I2S1 || port == I2SPort::I2S2) ? -1 : -1;
+#endif
+}
+} // namespace TeensyI2S
+
+class Config : public fl::variant<ConfigI2S, ConfigPdm> {
+  public:
+    // The most common microphone on Amazon as of 2025-September.
+    static Config CreateInmp441(int pin_ws, int pin_sd, int pin_clk,
+                                AudioChannel channel, u16 sample_rate = 44100ul,
+                                int i2s_num = 0) FL_NO_EXCEPT {
+        ConfigI2S config(pin_ws, pin_sd, pin_clk, i2s_num, channel, sample_rate,
+                         16);
+        Config out(config);
+        out.setMicProfile(MicProfile::INMP441);
+        return out;
+    }
+
+    // ICS-43434 I2S MEMS microphone (TDK InvenSense).
+    static Config CreateIcs43434(int pin_ws, int pin_sd, int pin_clk,
+                                 AudioChannel channel,
+                                 u16 sample_rate = 44100ul,
+                                 int i2s_num = 0) FL_NO_EXCEPT {
+        ConfigI2S config(pin_ws, pin_sd, pin_clk, i2s_num, channel, sample_rate,
+                         16);
+        Config out(config);
+        out.setMicProfile(MicProfile::ICS43434);
+        return out;
+    }
+
+    // Generic I2S MEMS microphone (applies average MEMS correction).
+    static Config CreateGenericMEMS(int pin_ws, int pin_sd, int pin_clk,
+                                    AudioChannel channel,
+                                    u16 sample_rate = 44100ul,
+                                    int i2s_num = 0) FL_NO_EXCEPT {
+        ConfigI2S config(pin_ws, pin_sd, pin_clk, i2s_num, channel, sample_rate,
+                         16);
+        Config out(config);
+        out.setMicProfile(MicProfile::GenericMEMS);
+        return out;
+    }
+
+    // Factory method for Teensy I2S microphones (INMP441, ICS43432,
+    // SPH0645LM4H, etc.) Teensy uses fixed hardware pins - see TeensyI2S
+    // namespace for pin assignments. Example: auto config =
+    // AudioConfig::CreateTeensyI2S(TeensyI2S::I2S1, Right, 44100);
+    static Config CreateTeensyI2S(
+        TeensyI2S::I2SPort port = TeensyI2S::I2SPort::I2S1,
+        AudioChannel channel = AudioChannel::Right,
+        u16 sample_rate = AUDIO_DEFAULT_SAMPLE_RATE,
+        u8 bit_resolution = AUDIO_DEFAULT_BIT_RESOLUTION,
+        MicProfile profile = MicProfile::GenericMEMS) FL_NO_EXCEPT {
+        ConfigI2S config(
+            TeensyI2S::getPinWS(port),  // pin_ws (LRCLK)
+            TeensyI2S::getPinSD(port),  // pin_sd (RX)
+            TeensyI2S::getPinCLK(port), // pin_clk (BCLK)
+            static_cast<int>(port),     // i2s_num
+            channel, sample_rate, bit_resolution,
+            I2SCommFormat::Philips, // comm_format (Teensy uses I2S Philips)
+            false                   // invert
+        );
+        Config out(config);
+        out.setMicProfile(profile);
+        return out;
+    }
+
+    // SPM1423 PDM microphone (Knowles, common on ESP32-S3 Sense boards).
+    static Config CreateSpm1423Pdm(int pin_din, int pin_clk,
+                                   u16 sample_rate = AUDIO_DEFAULT_SAMPLE_RATE,
+                                   int i2s_num = 0,
+                                   bool invert = false) FL_NO_EXCEPT {
+        Config out(ConfigPdm(pin_din, pin_clk, i2s_num, sample_rate, invert));
+        out.setMicProfile(MicProfile::SPM1423);
+        return out;
+    }
+
+    // Generic PDM microphone factory method.
+    // pin_din: PDM data in pin, pin_clk: PDM clock pin.
+    static Config CreatePdm(int pin_din, int pin_clk,
+                            u16 sample_rate = AUDIO_DEFAULT_SAMPLE_RATE,
+                            int i2s_num = 0, bool invert = false,
+                            MicProfile profile = MicProfile::None) FL_NO_EXCEPT {
+        Config out(
+            ConfigPdm(pin_din, pin_clk, i2s_num, sample_rate, invert));
+        out.setMicProfile(profile);
+        return out;
+    }
+
+    Config(const ConfigI2S &config) FL_NO_EXCEPT
+        : fl::variant<ConfigI2S, ConfigPdm>(config) {}
+    Config(const ConfigPdm &config) FL_NO_EXCEPT
+        : fl::variant<ConfigI2S, ConfigPdm>(config) {}
+
+    /// Digital gain applied to all input samples. Default 1.0 (no change).
+    void setGain(float gain) FL_NO_EXCEPT { mGain = gain; }
+    float getGain() const FL_NO_EXCEPT { return mGain; }
+
+    /// Microphone pink noise correction profile.
+    /// Compensates for the frequency response of specific microphones.
+    void setMicProfile(MicProfile profile) FL_NO_EXCEPT {
+        mMicProfile = profile;
+    }
+    MicProfile getMicProfile() const FL_NO_EXCEPT { return mMicProfile; }
+
+  private:
+    float mGain = 1.0f;
+    MicProfile mMicProfile = MicProfile::None;
+};
+
+class IInput {
+  public:
+    // This is the single factory function for creating the audio source. If the
+    // creation was successful, then the return value will be non-null. If the
+    // creation was not successful, then the return value will be null and the
+    // error_message will be set to a non-empty string. Keep in mind that the
+    // Config is a variant type. Many esp types do not support all the types in
+    // the variant. For example, the ConfigPdm is not supported on the ESP32-C3
+    // and in this case it will return a null pointer and the error_message will
+    // be set to a non-empty string. Implimentation notes:
+    //   It's very important that the implimentation uses a esp task / interrupt
+    //   to fill in the buffer. The reason is that there will be looooong delays
+    //   during FastLED show() on some esp platforms, for example idf 4.4. If we
+    //   do poll only, then audio buffers can be dropped. However if using a
+    //   task then the audio buffers will be set internally via an interrupt /
+    //   queue and then they can just be popped off the queue.
+    static fl::shared_ptr<IInput>
+    create(const Config &config,
+           fl::string *error_message = nullptr) FL_NO_EXCEPT;
+
+    virtual ~IInput() FL_NO_EXCEPT = default;
+    // Starts the audio source.
+    virtual void start() FL_NO_EXCEPT = 0;
+    // Stops the audio source, call this before light sleep.
+    virtual void stop() FL_NO_EXCEPT = 0;
+
+    virtual bool error(fl::string *msg = nullptr)
+        FL_NO_EXCEPT = 0; // if an error occured then query it here.
+    // Read audio data and return as Sample with calculated timestamp.
+    // Returns invalid Sample on error or when no data is available.
+    virtual Sample read() FL_NO_EXCEPT = 0;
+
+    /// Digital gain applied to raw PCM samples. Default 1.0 (no change).
+    void setGain(float gain) FL_NO_EXCEPT { mGain = gain; }
+    float getGain() const FL_NO_EXCEPT { return mGain; }
+
+    // Read all available audio data and return as Sample. All AudioSamples
+    // returned by this will be valid. Gain is applied to each sample.
+    size_t readAll(fl::vector_inlined<Sample, 16> *out) FL_NO_EXCEPT {
+        size_t count = 0;
+        while (true) {
+            Sample sample = read();
+            if (sample.isValid()) {
+                if (mGain != 1.0f) {
+                    sample.applyGain(mGain);
+                }
+                out->push_back(sample);
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count;
+    }
+
+  private:
+    float mGain = 1.0f;
+};
+
+// Free function for audio input creation - can be overridden by
+// platform-specific implementations
+fl::shared_ptr<IInput> platform_create_audio_input(
+    const Config &config,
+    fl::string *error_message = nullptr) FL_NO_EXCEPT FL_LINK_WEAK;
+
+} // namespace audio
+} // namespace fl

@@ -1,0 +1,33 @@
+
+
+#pragma once
+
+#include "fl/fx/2d/blend.h"
+#include "fl/fx/2d/wave.h"
+#include "fl/fx/fx2d.h"
+#include "fl/gfx/raster.h"
+
+
+struct WaveEffect {
+    fl::WaveFxPtr wave_fx_low;
+    fl::WaveFxPtr wave_fx_high;
+    fl::Blend2dPtr blend_stack;
+    void draw(fl::Fx::DrawContext context) { blend_stack->draw(context); }
+    void addf(size_t x, size_t y, float value) {
+        wave_fx_low->addf(x, y, value);
+        wave_fx_high->addf(x, y, value);
+    }
+};
+
+struct DrawRasterToWaveSimulator {
+    DrawRasterToWaveSimulator(WaveEffect* wave_fx) : mWaveFx(wave_fx) {}
+    void draw(const fl::vec2<int> &pt, uint32_t /*index*/, uint8_t value) {
+        float valuef = value / 255.0f;
+        int xx = pt.x;
+        int yy = pt.y;
+        mWaveFx->addf(xx, yy, valuef);
+    }
+    WaveEffect* mWaveFx;
+};
+
+WaveEffect NewWaveSimulation2D(const fl::XYMap& xymap);

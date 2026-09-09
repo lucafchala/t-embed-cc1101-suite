@@ -1,0 +1,39 @@
+
+
+#include "fl/math/math.h"
+
+#include "fl/stl/assert.h"
+#include "fl/log/log.h"
+#include "fl/gfx/xypath.h"
+#include "fl/gfx/xypath_renderer.h"
+#include "fl/gfx/splat.h"
+
+namespace fl {
+
+XYPathRenderer::XYPathRenderer(XYPathGeneratorPtr path,
+                               TransformFloat transform)
+    : mPath(path), mTransform(transform) {}
+
+vec2f XYPathRenderer::compute_float(float alpha, const TransformFloat &tx) {
+    vec2f xy = mPath->compute(alpha);
+    vec2f out = tx.transform(xy);
+    out = mGridTransform.transform(out);
+    return out;
+}
+
+Tile2x2_u8 XYPathRenderer::at_subpixel(float alpha) {
+    // 1) continuous point, in “pixel‐centers” coordinates [0.5 … W–0.5]
+    if (!mDrawBoundsSet) {
+        FL_WARN_F("XYPathRenderer::at_subpixel: draw bounds not set");
+        return Tile2x2_u8();
+    }
+    vec2f xy = at(alpha);
+
+    // 1) shift back so whole‐pixels go 0…W–1, 0…H–1
+    xy.x -= 0.5f;
+    xy.y -= 0.5f;
+
+    return splat(xy);
+}
+
+} // namespace fl

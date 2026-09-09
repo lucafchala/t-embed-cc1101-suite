@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")"
+
+# Usage: ./wasm [example_name] [additional_args...]
+# Example: ./wasm Blink
+# Default: ./wasm (compiles and tests examples/wasm)
+
+EXAMPLE="${1:-wasm}"
+shift || true  # Remove first argument if it exists, continue if it doesn't
+
+# Run with --run flag to automatically compile + test + exit
+uv run ci/wasm_compile.py "examples/$EXAMPLE" --run "$@"

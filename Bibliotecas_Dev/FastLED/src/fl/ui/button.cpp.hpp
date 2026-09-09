@@ -1,0 +1,57 @@
+#include "fl/ui/button.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+UIButton::UIButton(const char *name) FL_NO_EXCEPT : mImpl(name), mListener(this) {
+    mListener.addToEngineEventsOnce();
+}
+
+UIButton::~UIButton() FL_NO_EXCEPT {}
+
+int UIButton::clickedCount() const FL_NO_EXCEPT {
+    return mImpl.clickedCount() + mListener.realButtonClickCount();
+}
+
+void UIButton::Listener::onBeginFrame() FL_NO_EXCEPT {
+    bool clicked_this_frame = mOwner->clicked();
+    bool pressed_this_frame = mOwner->isPressed();
+
+    // Check the real button if one is attached (via IButtonInput interface)
+    if (mOwner->mButtonInput) {
+        // Edge-detect rising transitions of mButtonInput->clicked() so
+        // clickedCount() reflects real-button presses on platforms where
+        // UIButtonImpl::clickedCount() is a no-op stub.
+        const bool real_clicked = mOwner->mButtonInput->clicked();
+        if (real_clicked && !mRealButtonClickedLastFrame) {
+            ++mRealButtonClickCount;
+        }
+        mRealButtonClickedLastFrame = real_clicked;
+
+        if (mOwner->mButtonInput->isPressed()) {
+            clicked_this_frame = true;
+            pressed_this_frame = true;
+        }
+    }
+
+    // Detect press event (was not pressed, now is pressed)
+    if (pressed_this_frame && !mPressedLastFrame) {
+        mOwner->mPressCallbacks.invoke();
+    }
+
+    // Detect release event (was pressed, now is not pressed)
+    if (!pressed_this_frame && mPressedLastFrame) {
+        mOwner->mReleaseCallbacks.invoke();
+    }
+
+    mPressedLastFrame = pressed_this_frame;
+
+    const bool clicked_changed = (clicked_this_frame != mClickedLastFrame);
+    mClickedLastFrame = clicked_this_frame;
+    if (clicked_changed) {
+        mOwner->mCallbacks.invoke(*mOwner);
+    }
+}
+
+} // namespace fl

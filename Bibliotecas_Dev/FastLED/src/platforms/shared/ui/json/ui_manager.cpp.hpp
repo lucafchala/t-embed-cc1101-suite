@@ -1,0 +1,214 @@
+// IWYU pragma: private
+
+#include "fl/stl/json.h"
+#include "fl/stl/json.h"
+#include "fl/stl/map.h"
+#include "fl/stl/mutex.h"
+#include "platforms/shared/ui/json/ui_manager.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/log/log.h"
+#include "fl/log/log.h"
+#include "fl/stl/assert.h"
+#include "fl/stl/string.h"
+#include "fl/stl/noexcept.h"
+
+
+FL_DISABLE_WARNING(deprecated-declarations)
+namespace fl {
+
+
+// Constructor is inline in header, just add logging to destructor
+JsonUiManager::JsonUiManager(Callback updateJs) FL_NO_EXCEPT : mUpdateJs(updateJs) {
+    fl::EngineEvents::addListener(this);
+}
+
+
+JsonUiManager::~JsonUiManager() {
+    // FL_WARN("*** JsonUiManager: DESTRUCTOR CALLED ***");
+    // FL_WARN("*************************************************************");
+    // FL_WARN("*** CRITICAL ERROR: JsonUiManager DESTRUCTOR IS RUNNING! ***");
+    // FL_WARN("*** THIS SHOULD NOT HAPPEN DURING UI UPDATES!             ***");
+    // FL_WARN("*** THE UI MANAGER IS BEING DESTROYED AND RECREATED!      ***");
+    // FL_WARN("*** THIS IS THE ROOT CAUSE OF THE UI UPDATE BUG!          ***");
+    // FL_WARN("*************************************************************");
+    // // FL_WARN("*** STACK TRACE: JsonUiManager destructor at " << this);
+    // FL_WARN("*** Component count being lost: " << mComponents.size());
+    // FL_WARN("*************************************************************");
+    // FL_ASSERT(false, "JsonUiManager destructor should not be running during UI updates");
+    fl::EngineEvents::removeListener(this);
+}
+
+void JsonUiManager::addComponent(fl::weak_ptr<JsonUiInternal> component) FL_NO_EXCEPT {
+    //FL_WARN("*** JsonUiManager::addComponent ENTRY ***");
+    fl::unique_lock<fl::mutex> lock(mMutex);
+    mComponents.insert(component);
+    mItemsAdded = true;
+    
+    // Mark the component as changed so it gets sent to the frontend initially
+    if (auto ptr = component.lock()) {
+        ptr->markChanged();
+        //FL_WARN("*** COMPONENT REGISTERED: ID " << ptr->id() << " name=" << ptr->name() << " (Total: " << mComponents.size() << ")");
+    }
+}
+
+void JsonUiManager::removeComponent(fl::weak_ptr<JsonUiInternal> component) FL_NO_EXCEPT {
+    fl::unique_lock<fl::mutex> lock(mMutex);
+    mComponents.erase(component);
+}
+
+void JsonUiManager::processPendingUpdates() FL_NO_EXCEPT {
+    // Force immediate processing of pending updates (for testing)
+
+    if (mHasPendingUpdate) {
+        executeUiUpdates(mPendingJsonUpdate);
+        mPendingJsonUpdate = fl::json(); // Clear the pending update
+        mHasPendingUpdate = false;
+    }
+
+
+    bool shouldUpdate = false;
+    {
+        fl::unique_lock<fl::mutex> lock(mMutex);
+        // Check if new components were added
+        shouldUpdate = mItemsAdded;
+        mItemsAdded = false;
+
+        // Poll all components for changes (eliminates need for manual notifications)
+        if (!shouldUpdate) {
+            for (auto &componentRef : mComponents) {
+                if (auto component = componentRef.lock()) {
+                    if (component->hasChanged()) {
+                        shouldUpdate = true;
+                        break; // Found at least one change, no need to check more
+                    }
+                }
+            }
+        }
+    }
+
+    if (shouldUpdate) {
+        fl::json doc = fl::json::array();
+        toJson(doc);
+        fl::string jsonStr = doc.to_string();
+        //FL_WARN("*** SENDING UI TO FRONTEND: " << jsonStr.substr(0, 100).c_str() << "...");
+        mUpdateJs(jsonStr.c_str());
+
+        // Clear the changed flag for all components after sending the update
+        fl::unique_lock<fl::mutex> lock(mMutex); // Acquire lock again for modifying mComponents
+        for (auto &componentRef : mComponents) {
+            if (auto component = componentRef.lock()) {
+                component->clearChanged();
+            }
+        }
+    }
+
+
+
+
+
+
+}
+
+fl::vector<JsonUiInternalPtr> JsonUiManager::getComponents() FL_NO_EXCEPT {
+    fl::unique_lock<fl::mutex> lock(mMutex);
+    fl::vector<JsonUiInternalPtr> out;
+    for (auto &component : mComponents) {
+        if (auto ptr = component.lock()) {
+            out.push_back(ptr);
+        } else {
+            FL_WARN_F("*** WARNING: Component weak_ptr is expired, skipping");
+        }
+    }
+    // Sort components by ID to ensure consistent serialization order
+    fl::sort(out.begin(), out.end(), [](const JsonUiInternalPtr& a, const JsonUiInternalPtr& b) FL_NO_EXCEPT {
+        return a->id() < b->id();
+    });
+    return out;
+}
+
+JsonUiInternalPtr JsonUiManager::findUiComponent(const char* id_or_name) FL_NO_EXCEPT {
+    auto components = getComponents();
+    
+    for (auto &component : components) {
+        int id = component->id();
+        string componentIdStr;
+        componentIdStr.append(id);
+        
+        if (fl::string::strcmp(componentIdStr.c_str(), id_or_name) == 0) {
+            //FL_WARN("*** Found component with ID " << id);
+            return component;
+        }
+    }
+
+    // If we didn't find it by id, try to find it by name
+    for (auto &component : components) {
+        if (fl::string::strcmp(component->name().c_str(), id_or_name) == 0) {
+            return component;
+        }
+    }
+    
+    return JsonUiInternalPtr(); // Return null pointer if not found
+}
+
+void JsonUiManager::updateUiComponents(const char* jsonStr) FL_NO_EXCEPT {
+    //FL_WARN("*** JsonUiManager::updateUiComponents ENTRY ***");
+    // FL_WARN("*** INCOMING JSON: " << (jsonStr ? jsonStr : "nullptr"));
+    // FL_WARN("*** JSON LENGTH: " << (jsonStr ? strlen(jsonStr) : 0));
+    // FL_WARN("*** CURRENT COMPONENT COUNT: " << mComponents.size());
+    
+    if (!jsonStr) {
+        FL_ASSERT(false, "*** JsonUiManager::updateUiComponents: nullptr JSON string provided");
+        return;
+    }
+
+    // FL_WARN("*** BACKEND RECEIVED UI UPDATE: " << (jsonStr ? jsonStr : "nullptr"));
+    // FL_WARN("*** JsonUiManager pointer: " << this);
+    // FL_WARN("*** BEFORE: mHasPendingUpdate=" << (mHasPendingUpdate ? "true" : "false"));
+    
+    mPendingJsonUpdate = fl::json::parse(jsonStr);
+    mHasPendingUpdate = true;
+    // FL_WARN("*** AFTER: mHasPendingUpdate=" << (mHasPendingUpdate ? "true" : "false"));
+    // FL_WARN("*** BACKEND SET mHasPendingUpdate = true, waiting for onEndFrame()");
+}
+
+
+void JsonUiManager::executeUiUpdates(const fl::json &doc) FL_NO_EXCEPT {
+
+    if (doc.is_object()) {
+
+        // Iterate through all keys in the JSON object
+        for (auto key : doc.keys()) {
+            const char* id_or_name = key.c_str();
+
+            auto component = findUiComponent(id_or_name);
+            if (component) {
+                const fl::json v = doc[key.c_str()];
+                component->updateInternal(v);
+            } else {
+                FL_ERROR_F("could not find component with ID or name: %s", id_or_name);
+            }
+        }
+    } else {
+        // Debug: Show what we actually received instead of just asserting
+        fl::string debugJson = doc.to_string();
+        FL_WARN_F("*** UI UPDATE ERROR: Expected JSON object but got %s: %s...", (doc.is_array() ? "array" : "non-object"), debugJson.substr(0, 200).c_str());
+        
+        // Use a warning instead of assertion to prevent crashes
+        // FL_ASSERT(false, "JSON document is not an object, cannot execute UI updates");
+    }
+}
+
+void JsonUiManager::onEndFrame() FL_NO_EXCEPT {
+    processPendingUpdates();
+}
+
+void JsonUiManager::toJson(fl::json &doc) FL_NO_EXCEPT {
+    auto components = getComponents();
+    for (const auto &component : components) {
+        fl::json componentJson = fl::json::object();
+        component->toJson(componentJson);
+        doc.push_back(componentJson);
+    }
+}
+
+} // namespace fl

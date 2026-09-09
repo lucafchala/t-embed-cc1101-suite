@@ -1,0 +1,67 @@
+// IWYU pragma: private
+
+
+// ok no namespace fl
+#ifdef FASTLED_STUB_IMPL  // Only use this if explicitly defined.
+
+#include "platforms/stub/time_stub.h"
+#include "fl/stl/function.h"
+
+#if defined(FASTLED_USE_PTHREAD_YIELD)
+#include <sched.h>
+#endif
+
+#include "platforms/wasm/is_wasm.h"
+#ifndef FL_IS_WASM
+#include "fl/stl/thread.h"
+#include "fl/stl/noexcept.h"
+#endif
+
+// Global delay function override for fast testing (accessed from CoroutineRuntimeStub)
+fl::function<void(fl::u32)> g_delay_override;
+
+extern "C" {
+
+#if !defined(FL_IS_WASM) && !defined(FASTLED_NO_ARDUINO_STUBS)
+// STUB timing functions - excluded for WASM builds which provide their own implementations
+// Also excluded when FASTLED_NO_ARDUINO_STUBS is defined (for compatibility with ArduinoFake, etc.)
+
+// Global millis() and micros() forward to fl:: layer (which handles time injection in tests)
+// These are needed for Arduino API compatibility
+fl::u32 millis() FL_NO_EXCEPT {
+    return fl::millis();
+}
+
+fl::u32 micros() FL_NO_EXCEPT {
+    return fl::micros();
+}
+
+void yield() FL_NO_EXCEPT {
+#ifdef FASTLED_USE_PTHREAD_YIELD
+    // POSIX thread yield to allow other threads to run
+    sched_yield();
+#else
+    fl::this_thread::yield();
+#endif
+}
+
+#endif // !FL_IS_WASM && !FASTLED_NO_ARDUINO_STUBS
+
+} // extern "C"
+
+// Function to set delay override (C++ linkage for test runner)
+void setDelayFunction(const fl::function<void(fl::u32)>& delayFunc) FL_NO_EXCEPT {
+    g_delay_override = delayFunc;
+}
+
+// Clear the delay override (must be called before unloading DLLs that set it)
+void clearDelayFunction() FL_NO_EXCEPT {
+    g_delay_override.clear();
+}
+
+// Check if delay override is active
+bool isDelayOverrideActive(void) FL_NO_EXCEPT {
+    return static_cast<bool>(g_delay_override);
+}
+
+#endif  // FASTLED_STUB_IMPL

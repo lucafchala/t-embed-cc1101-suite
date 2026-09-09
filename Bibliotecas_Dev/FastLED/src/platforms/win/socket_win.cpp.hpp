@@ -1,0 +1,307 @@
+// IWYU pragma: private
+
+#include "platforms/win/is_win.h"
+
+#ifdef FASTLED_HAS_NETWORKING
+#ifdef FL_IS_WIN
+
+#include "platforms/win/socket_win.h"
+
+// Additional includes for platform functions
+#include "fl/stl/shared_ptr.h"
+
+// Additional Windows header isolation for implementation
+#ifndef NOMSG
+#define NOMSG
+#endif
+#ifndef NOWINSTYLES
+#define NOWINSTYLES
+#endif
+#ifndef NOSYSMETRICS
+#define NOSYSMETRICS
+#endif
+#ifndef NOCLIPBOARD
+#define NOCLIPBOARD
+#endif
+#ifndef NOCOLOR
+#define NOCOLOR
+#endif
+#ifndef NOKERNEL
+#define NOKERNEL
+#endif
+#ifndef NONLS
+#define NONLS
+#endif
+#ifndef NOMEMMGR
+#define NOMEMMGR
+#endif
+#ifndef NOMETAFILE
+#define NOMETAFILE
+#endif
+#ifndef NOOPENFILE
+#define NOOPENFILE
+#endif
+#ifndef NOSCROLL
+#define NOSCROLL
+#endif
+#ifndef NOTEXTMETRIC
+#define NOTEXTMETRIC
+#endif
+#ifndef NOWH
+#define NOWH
+#endif
+#ifndef NOWINOFFSETS
+#define NOWINOFFSETS
+#endif
+#ifndef NOKANJI
+#define NOKANJI
+#endif
+#ifndef NOICONS
+#define NOICONS
+#endif
+#ifndef NORASTEROPS
+#define NORASTEROPS
+#endif
+#ifndef NOSHOWWINDOW
+#define NOSHOWWINDOW
+#endif
+#ifndef OEMRESOURCE
+#define OEMRESOURCE
+#endif
+#ifndef NOATOM
+#define NOATOM
+#endif
+#ifndef NOCTLMGR
+#define NOCTLMGR
+#endif
+#ifndef NODRAWTEXT
+#define NODRAWTEXT
+#endif
+
+// Additional includes for implementation
+// IWYU pragma: begin_keep
+#include <sys/types.h>
+#include <cstdarg>  // For va_list in fcntl emulation
+#include "fl/stl/noexcept.h"
+// IWYU pragma: end_keep
+
+namespace fl {
+
+//=============================================================================
+// Helper Functions for Windows Socket Normalization
+//=============================================================================
+
+bool initialize_winsock() FL_NO_EXCEPT {
+    static bool initialized = false;
+    if (!initialized) {
+        WSADATA wsaData;
+        int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        initialized = (result == 0);
+    }
+    return initialized;
+}
+
+void cleanup_winsock() FL_NO_EXCEPT {
+    WSACleanup();
+}
+
+int translate_windows_error(int wsa_error) FL_NO_EXCEPT {
+    switch (wsa_error) {
+        case WSAEWOULDBLOCK: return EWOULDBLOCK;
+        case WSAECONNREFUSED: return ECONNREFUSED;
+        case WSAETIMEDOUT: return ETIMEDOUT;
+        case WSAENETUNREACH: return ENETUNREACH;
+        case WSAEACCES: return EACCES;
+        case WSAEADDRINUSE: return EADDRINUSE;
+        case WSAEINVAL: return EINVAL;
+        case WSAENOTCONN: return ENOTCONN;
+        case WSAECONNRESET: return ECONNRESET;
+        case WSAECONNABORTED: return ECONNABORTED;
+        default: return wsa_error;
+    }
+}
+
+//=============================================================================
+// Normalized POSIX-Style Socket API Functions
+//=============================================================================
+
+// Core Socket Operations
+int socket(int domain, int type, int protocol) FL_NO_EXCEPT {
+    if (!initialize_winsock()) {
+        return -1;
+    }
+    SOCKET sock = ::socket(domain, type, protocol);
+    return (sock == INVALID_SOCKET) ? -1 : static_cast<int>(sock);
+}
+
+int socketpair(int domain, int type, int protocol, int sv[2]) FL_NO_EXCEPT {
+    // Windows doesn't support socketpair - return error
+    (void)domain; (void)type; (void)protocol; (void)sv;
+    WSASetLastError(WSAEAFNOSUPPORT);
+    return -1;
+}
+
+// Addressing
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::bind(sock, reinterpret_cast<const ::sockaddr*>(addr), addrlen); // ok reinterpret cast
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::connect(sock, reinterpret_cast<const ::sockaddr*>(addr), addrlen); // ok reinterpret cast
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int listen(int sockfd, int backlog) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::listen(sock, backlog);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen) FL_NO_EXCEPT {
+    SOCKET server_sock = static_cast<SOCKET>(sockfd);
+    int addr_len = addrlen ? static_cast<int>(*addrlen) : 0;
+    SOCKET client_sock = ::accept(server_sock, reinterpret_cast<::sockaddr*>(addr), &addr_len); // ok reinterpret cast
+    if (addrlen) *addrlen = static_cast<socklen_t>(addr_len);
+    return (client_sock == INVALID_SOCKET) ? -1 : static_cast<int>(client_sock);
+}
+
+// Data Transfer
+ssize_t send(int sockfd, const void *buf, size_t len, int flags) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::send(sock, static_cast<const char*>(buf), static_cast<int>(len), flags);
+    if (result == SOCKET_ERROR) {
+        // Capture Windows error immediately before it can be overwritten
+        int wsa_error = WSAGetLastError();
+        // Set errno so error_code::from_errno() can translate it
+        errno = translate_windows_error(wsa_error);
+        return -1;
+    }
+    return static_cast<ssize_t>(result);
+}
+
+ssize_t recv(int sockfd, void *buf, size_t len, int flags) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::recv(sock, static_cast<char*>(buf), static_cast<int>(len), flags);
+    if (result == SOCKET_ERROR) {
+        // Capture Windows error immediately before it can be overwritten
+        int wsa_error = WSAGetLastError();
+        // Set errno so error_code::from_errno() can translate it
+        errno = translate_windows_error(wsa_error);
+        return -1;
+    }
+    return static_cast<ssize_t>(result);
+}
+
+ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,
+               const struct sockaddr *dest_addr, socklen_t addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::sendto(sock, static_cast<const char*>(buf), static_cast<int>(len), flags,
+                         reinterpret_cast<const ::sockaddr*>(dest_addr), addrlen); // ok reinterpret cast
+    return (result == SOCKET_ERROR) ? -1 : static_cast<ssize_t>(result);
+}
+
+ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,
+                 struct sockaddr *src_addr, socklen_t *addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int addr_len = addrlen ? static_cast<int>(*addrlen) : 0;
+    int result = ::recvfrom(sock, static_cast<char*>(buf), static_cast<int>(len), flags,
+                           reinterpret_cast<::sockaddr*>(src_addr), &addr_len); // ok reinterpret cast
+    if (addrlen) *addrlen = static_cast<socklen_t>(addr_len);
+    return (result == SOCKET_ERROR) ? -1 : static_cast<ssize_t>(result);
+}
+
+// Connection Teardown
+int shutdown(int sockfd, int how) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int result = ::shutdown(sock, how);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int close(int fd) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(fd);
+    int result = ::closesocket(sock);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+// Socket Options
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    
+    // Handle SO_REUSEPORT specially - not supported on Windows
+    if (level == SOL_SOCKET && optname == SO_REUSEPORT) {
+        WSASetLastError(WSAENOPROTOOPT);
+        return -1;
+    }
+    
+    int result = ::setsockopt(sock, level, optname, static_cast<const char*>(optval), optlen);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int len = optlen ? static_cast<int>(*optlen) : 0;
+    int result = ::getsockopt(sock, level, optname, static_cast<char*>(optval), &len);
+    if (optlen) *optlen = static_cast<socklen_t>(len);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+// Address Information
+int getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int len = addrlen ? static_cast<int>(*addrlen) : 0;
+    int result = ::getpeername(sock, reinterpret_cast<::sockaddr*>(addr), &len); // ok reinterpret cast
+    if (addrlen) *addrlen = static_cast<socklen_t>(len);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(sockfd);
+    int len = addrlen ? static_cast<int>(*addrlen) : 0;
+    int result = ::getsockname(sock, reinterpret_cast<::sockaddr*>(addr), &len); // ok reinterpret cast
+    if (addrlen) *addrlen = static_cast<socklen_t>(len);
+    return (result == SOCKET_ERROR) ? -1 : 0;
+}
+
+// Address Resolution (simplified - Windows has these functions)
+int inet_pton(int af, const char *src, void *dst) FL_NO_EXCEPT {
+    return ::inet_pton(af, src, dst);
+}
+
+const char* inet_ntop(int af, const void *src, char *dst, socklen_t size) FL_NO_EXCEPT {
+    return ::inet_ntop(af, src, dst, static_cast<size_t>(size));
+}
+
+// fcntl emulation for non-blocking sockets
+int fcntl(int fd, int cmd, ...) FL_NO_EXCEPT {
+    SOCKET sock = static_cast<SOCKET>(fd);
+    
+    if (cmd == F_GETFL) {
+        // Windows doesn't provide a way to query non-blocking status
+        // Return 0 (blocking) as default
+        return 0;
+    } else if (cmd == F_SETFL) {
+        va_list args;
+        va_start(args, cmd);
+        int flags = va_arg(args, int);
+        va_end(args);
+        
+        u_long mode = (flags & O_NONBLOCK) ? 1 : 0;
+        int result = ioctlsocket(sock, FIONBIO, &mode);
+        return (result == SOCKET_ERROR) ? -1 : 0;
+    }
+    
+    WSASetLastError(WSAEINVAL);
+    return -1;
+}
+
+// Note: get_errno() is provided by fl/stl/cerrno.h
+// Note: Platform abstraction functions (create_platform_socket, etc.) are not needed
+//       for basic HTTP server - HTTP server uses the socket API functions directly
+
+} // namespace fl
+
+#endif // FL_IS_WIN
+#endif // FASTLED_HAS_NETWORKING 

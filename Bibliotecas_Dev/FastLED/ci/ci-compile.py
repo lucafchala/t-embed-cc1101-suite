@@ -1,0 +1,477 @@
+from __future__ import annotations
+
+
+#!/usr/bin/env python3
+"""
+FastLED Example Compiler
+
+Streamlined compiler that uses the PioCompiler to build FastLED examples for various boards.
+This replaces the previous complex compilation system with a simpler approach using the Pio compiler.
+
+ESP32 QEMU builds use ``ci/stage_fbuild_project.py`` followed by fbuild's
+native ``test-emu`` command. This compiler does not assemble emulator images.
+"""
+
+import os
+import sys
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from ci.compiler.argument_parser import CompilationConfig
+
+
+# handle_docker_compilation() removed in #2812 — compilation Docker has been
+# decommissioned. The niteris/fastled-compiler-* image family that wrapped
+# `bash compile --docker` was a stop-gap against PlatformIO self-poisoning;
+# fbuild does not self-poison and has been the default backend for some time.
+
+
+def _wasm_fast_path() -> int | None:
+    """Detect 'wasm' in argv and short-circuit to wasm_compile without heavy imports.
+
+    Returns exit code if handled, None to fall through to full argument parser.
+    Saves ~130ms by skipping CompilationArgumentParser and its 62 transitive imports.
+    """
+    # argv: ci-compile.py wasm ExampleName [--clean] [--run] [--defines ...]
+    args = sys.argv[1:]
+    has_clean = "--clean" in args
+    if has_clean:
+        args = [arg for arg in args if arg != "--clean"]
+    if not args or args[0].lower() != "wasm":
+        return None
+    rest = args[1:]
+
+    # Extract example name (first positional, skipping flags)
+    example = None
+    has_run = False
+    has_check = False
+    has_verbose = False
+    defines: list[str] = []
+    index = 0
+    while index < len(rest):
+        a = rest[index]
+        if a == "--run":
+            has_run = True
+        elif a == "--check":
+            has_check = True
+        elif a in ("-v", "--verbose"):
+            has_verbose = True
+        elif a == "--just-compile":
+            pass  # ignored, kept for compat
+        elif a == "--examples" and index + 1 < len(rest):
+            index += 1
+            example = rest[index]
+        elif a.startswith("--examples="):
+            example = a.split("=", 1)[1]
+        elif a == "--defines" and index + 1 < len(rest):
+            index += 1
+            defines.extend(item for item in rest[index].split(",") if item)
+        elif a.startswith("--defines="):
+            defines.extend(item for item in a.split("=", 1)[1].split(",") if item)
+        elif not a.startswith("-") and example is None:
+            example = a
+        index += 1
+
+    if example is None:
+        example = "wasm"
+
+    if has_verbose:
+        os.environ["VERBOSE"] = "1"
+
+    if has_run or has_check:
+        # --run/--check need wasm_compile for Playwright orchestration.
+        saved_argv = sys.argv
+        sys.argv = ["ci.wasm_compile", f"examples/{example}"]
+        if has_clean:
+            sys.argv.append("--force")
+        if defines:
+            sys.argv.extend(["--defines", ",".join(defines)])
+        sys.argv.append("--check" if has_check else "--run")
+        try:
+            from ci.wasm_compile import main as wasm_compile_main
+
+            return wasm_compile_main(None)
+        finally:
+            sys.argv = saved_argv
+
+    # Compile-only fast path: call wasm_build.build() directly,
+    # skipping both wasm_compile and argparse (~47ms saved)
+    from pathlib import Path
+
+    from ci.wasm_build import resolve_example_dir
+
+    output_dir = resolve_example_dir(example) / "fastled_js"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_js = output_dir / "fastled.js"
+
+    from ci.wasm_build import build as wasm_build
+
+    if defines:
+        rc = wasm_build(
+            example=example,
+            output=output_js.as_posix(),
+            verbose=has_verbose,
+            force=has_clean,
+            defines=defines,
+        )
+    else:
+        rc = wasm_build(
+            example=example,
+            output=output_js.as_posix(),
+            verbose=has_verbose,
+            force=has_clean,
+        )
+    if rc == 0:
+        print("WASM compilation successful")
+    else:
+        print("WASM compilation failed")
+    return rc
+
+
+def main() -> int:
+    """Main function."""
+    # WASM fast path: bypass full argument parser + heavy imports (~150ms saved)
+    wasm_rc = _wasm_fast_path()
+    if wasm_rc is not None:
+        return wasm_rc
+
+    # Non-WASM path: load stdlib + heavy imports (~25ms + ~350ms)
+    import time
+    from pathlib import Path
+    from typing import Optional
+
+    from ci.util.global_interrupt_handler import install_signal_handler
+
+    install_signal_handler()
+
+    # Parse arguments using new CompilationArgumentParser
+    from ci.compiler.argument_parser import CompilationArgumentParser, WorkflowType
+
+    # Compilation Docker has been decommissioned (#2812). Project root is
+    # always derived from this file's location.
+    project_root = Path(__file__).parent.parent.absolute()
+    parser = CompilationArgumentParser(project_root)
+
+    # First check if --supported-boards was requested before full parsing
+    if "--supported-boards" in sys.argv:
+        from ci.compiler.board_example_utils import get_default_boards
+
+        print(",".join(get_default_boards()))
+        return 0
+
+    config = parser.parse()
+
+    # Handle verbose mode
+    if config.verbose:
+        os.environ["VERBOSE"] = "1"
+
+    # Handle default boards if none specified
+    if not config.boards:
+        from ci.boards import Board, create_board
+        from ci.compiler.board_example_utils import get_default_boards
+
+        board_names = get_default_boards()
+        boards: list[Board] = []
+        for board_name in board_names:
+            try:
+                board = create_board(board_name, no_project_options=False)
+                boards.append(board)
+            except KeyboardInterrupt as ki:
+                from ci.util.global_interrupt_handler import handle_keyboard_interrupt
+
+                handle_keyboard_interrupt(ki)
+                raise
+            except Exception as e:
+                print(f"ERROR: Failed to get board '{board_name}': {e}")
+                return 1
+        # Create new config with default boards
+        from ci.compiler.argument_parser import CompilationConfig
+
+        config = CompilationConfig(
+            boards=boards,
+            examples=config.examples,
+            workflow=config.workflow,
+            defines=config.defines,
+            extra_packages=config.extra_packages,
+            verbose=config.verbose,
+            output_path=config.output_path,
+            log_failures=config.log_failures,
+            max_failures=config.max_failures,
+            wasm_run=config.wasm_run,
+            global_cache_dir=config.global_cache_dir,
+            skip_filters=config.skip_filters,
+            no_parallel=config.no_parallel,
+            backend=config.backend,
+        )
+
+    # The "auto-detect Docker availability + force --local on GitHub Actions"
+    # block that lived here was removed in #2812. With compilation Docker
+    # decommissioned, native compilation is the only path — no auto-detection
+    # or CI override needed.
+
+    # Handle WASM compilation by delegating to wasm_compile.py
+    if config.workflow == WorkflowType.WASM:
+        if len(config.boards) > 1:
+            print("ERROR: WASM compilation cannot be combined with other boards")
+            return 1
+
+        examples = config.examples
+        if not examples:
+            examples = ["wasm"]
+
+        if len(examples) != 1:
+            print(
+                f"ERROR: WASM compilation requires exactly one example, got {len(examples)}: {examples}"
+            )
+            return 1
+
+        # Call wasm_compile in-process to avoid ~180ms Python spawn overhead
+        example = examples[0]
+        saved_argv = sys.argv
+        sys.argv = ["ci.wasm_compile", f"examples/{example}"]
+        if config.defines:
+            sys.argv.extend(["--defines", ",".join(config.defines)])
+        if config.wasm_run:
+            sys.argv.append("--run")
+        try:
+            from ci.wasm_compile import main as wasm_compile_main
+
+            return wasm_compile_main(None)
+        finally:
+            sys.argv = saved_argv
+
+    # --- PlatformIO path: lazy-import heavy deps (~350ms) ---
+    from ci.compiler.board_example_utils import resolve_example_path
+    from ci.compiler.compilation_orchestrator import (
+        compile_board_examples,
+        format_elapsed_time,
+    )
+    from ci.compiler.formatting_utils import red_text, yellow_text
+    from ci.compiler.output_utils import copy_build_artifact, validate_output_path
+
+    # Get boards and examples from config
+    boards = config.boards
+    examples = config.examples
+
+    # Validate examples exist
+    for example in examples:
+        try:
+            resolve_example_path(example)
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}")
+            return 1
+
+    # Validate the output path if specified
+    if config.output_path:
+        sketch_name = examples[0]
+        board = boards[0]
+        validate_result = validate_output_path(
+            str(config.output_path), sketch_name, board
+        )
+        if not validate_result.is_valid:
+            print(f"ERROR: {validate_result.error_message}")
+            return 1
+
+    # Set up defines (make a mutable copy)
+    defines = list(config.defines)
+
+    # Check if we're compiling Esp32C3_SPI_ISR and auto-enable validation
+    for example in examples:
+        if "Esp32C3_SPI_ISR" in example and len(examples) == 1:
+            if "FL_SPI_ISR_VALIDATE" not in defines:
+                defines.append("FL_SPI_ISR_VALIDATE")
+                print(
+                    yellow_text(
+                        "⚠️  Auto-enabling FL_SPI_ISR_VALIDATE for Esp32C3_SPI_ISR validation testing"
+                    )
+                )
+            break
+
+    # Start compilation
+    start_time = time.time()
+    print(
+        f"Starting compilation for {len(boards)} boards with {len(examples)} examples"
+    )
+
+    # Signal the orchestrator that the user has explicitly opted into the
+    # PlatformIO comparison backend. Without this env var, any programmatic
+    # ``use_fbuild=False`` would be rejected by
+    # ``_assert_explicit_platformio_backend`` — see #3279 (Phase 3).
+    from ci.compiler.argument_parser import BuildBackend as _BuildBackend
+    from ci.compiler.compilation_orchestrator import (
+        PLATFORMIO_BACKEND_OPT_IN_ENV as _PLATFORMIO_OPT_IN,
+    )
+
+    if config.backend == _BuildBackend.PLATFORMIO:
+        os.environ[_PLATFORMIO_OPT_IN] = "1"
+        print(
+            yellow_text(
+                "⚠️  --backend platformio: PlatformIO `pio run` is a "
+                "comparison-only tool. Use ONLY to compare fbuild output "
+                "and find gaps; production CI always uses fbuild."
+            )
+        )
+
+    compilation_errors: list[str] = []
+    failed_example_names: list[str] = []
+    failure_logs_dir: Optional[Path] = config.log_failures
+    stopped_early: bool = False
+
+    # Compile for each board
+    for board in boards:
+        from ci.compiler.argument_parser import BuildBackend
+
+        result = compile_board_examples(
+            board=board,
+            examples=examples,
+            defines=defines,
+            verbose=config.verbose,
+            global_cache_dir=config.global_cache_dir,
+            extra_packages=config.extra_packages if config.extra_packages else None,
+            max_failures=config.max_failures,
+            skip_filters=config.skip_filters,
+            use_fbuild=(config.backend == BuildBackend.FBUILD),
+        )
+
+        if not result.ok:
+            # Record board-level error
+            compilation_errors.append(f"Board {board.board_name} failed")
+            print(red_text(f"ERROR: Compilation failed for board {board.board_name}"))
+            # Print each failing sketch's stdout and collect names for summary
+            for sketch in result.sketch_results:
+                if not sketch.success:
+                    if sketch.example and sketch.example not in failed_example_names:
+                        failed_example_names.append(sketch.example)
+                    # Write per-example failure logs when requested
+                    if failure_logs_dir is not None:
+                        try:
+                            failure_logs_dir.mkdir(parents=True, exist_ok=True)
+                            safe_name = f"{sketch.example}.log"
+                            log_path = failure_logs_dir / safe_name
+                            with log_path.open(
+                                "a", encoding="utf-8", errors="ignore"
+                            ) as f:
+                                f.write(sketch.output)
+                                f.write("\n")
+                        except KeyboardInterrupt:
+                            print("Keyboard interrupt detected, cancelling builds")
+                            import _thread
+
+                            _thread.interrupt_main()
+                            raise
+                        except Exception as e:
+                            print(
+                                f"Warning: Could not write failure log for {sketch.example}: {e}"
+                            )
+                    print(f"\n{'-' * 60}")
+                    print(f"Sketch: {sketch.example}")
+                    print(f"{'-' * 60}")
+                    # Print the collected output for this sketch
+                    print(sketch.output)
+
+            # Check if compilation stopped early due to max_failures
+            if result.stopped_early:
+                stopped_early = True
+                break
+
+            # Continue with other boards instead of stopping
+        else:
+            # Compilation succeeded - handle -o/--out option if specified
+            if config.output_path:
+                sketch_name = examples[0]  # We already validated there's exactly one
+                copy_validate_result = validate_output_path(
+                    str(config.output_path), sketch_name, board
+                )
+                if copy_validate_result.is_valid:
+                    # Find the build directory for this board
+                    project_root = Path(__file__).parent.parent.resolve()
+                    build_dir = project_root / ".build" / "pio" / board.board_name
+
+                    if not copy_build_artifact(
+                        build_dir,
+                        board,
+                        sketch_name,
+                        copy_validate_result.resolved_path,
+                    ):
+                        compilation_errors.append(
+                            f"Failed to copy artifact for {board.board_name}"
+                        )
+                        print(
+                            red_text(
+                                f"ERROR: Failed to copy build artifact for {board.board_name}"
+                            )
+                        )
+                        return 1
+
+    # Report results
+    elapsed_time = time.time() - start_time
+    time_str = format_elapsed_time(elapsed_time)
+
+    if compilation_errors:
+        print(
+            f"\nCompilation finished in {time_str} with {len(compilation_errors)} error(s):"
+        )
+        for error in compilation_errors:
+            print(f"  - {error}")
+        if failed_example_names:
+            print("")
+            print(red_text(f"ERROR! There were {len(failed_example_names)} failures:"))
+            # Sort for stable output
+            for name in sorted(failed_example_names):
+                # print(f"  {name}")
+                # same but in red
+                print(red_text(f"  {name}"))
+            print("")
+        if stopped_early:
+            print(
+                yellow_text(
+                    f"⚠️  Compilation stopped early after {len(failed_example_names)} failures (--max-failures={config.max_failures})"
+                )
+            )
+            print("")
+        return 1
+    else:
+        print(f"\nAll compilations completed successfully in {time_str}")
+
+        # Write build info to file if requested
+        if config.build_info and boards and examples:
+            import json
+            import shutil
+
+            board_name = boards[0].board_name
+            example_name = examples[0]
+            # Build info is generated per-example at .build/pio/<board>/build_info_<example>.json
+            build_info_path = (
+                Path(".build") / "pio" / board_name / f"build_info_{example_name}.json"
+            )
+
+            try:
+                if build_info_path.exists():
+                    shutil.copy(build_info_path, config.build_info)
+                    print(f"Build info written to: {config.build_info}")
+                else:
+                    with open(config.build_info, "w") as f:
+                        json.dump(
+                            {"error": f"Build info not found at {build_info_path}"},
+                            f,
+                            indent=2,
+                        )
+                    print(
+                        yellow_text(
+                            f"Warning: Build info not found at {build_info_path}"
+                        )
+                    )
+            except OSError as e:
+                print(red_text(f"ERROR: Failed to write build info: {e}"))
+                return 1
+
+        return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:  # noqa: KBI002 - top-level handler, just exit cleanly
+        print("Ctrl-c pressed, exiting...")
+        sys.exit(130)

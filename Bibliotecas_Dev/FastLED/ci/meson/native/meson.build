@@ -1,0 +1,585 @@
+# ============================================================================
+# NATIVE BUILD CONFIGURATION
+# ============================================================================
+# This section defines all compilation and linking flags for native (non-WASM)
+# builds. These settings ensure ABI compatibility between the FastLED library,
+# unit tests, and examples.
+#
+# Configuration hierarchy:
+#   base_compile_args        → Shared by all targets (ABI-critical)
+#   test_specific_args       → Additional flags for unit tests only
+#   unit_test_compile_args   → base + test_specific + platform-specific
+#   example_compile_args     → base (same as base_compile_args)
+#
+#   base_link_args           → Shared platform-specific linking (stdlib, threading)
+#   test_link_args           → base + test-specific additions (debug libs)
+# ============================================================================
+
+# ============================================================================
+# Base compilation flags - organized into three groups for clarity
+# ============================================================================
+# CRITICAL: These flags ensure ABI compatibility between libfastled.a and executables
+
+# Group 1: Preprocessor defines (platform and feature configuration)
+base_defines = shared_defines + [
+  '-DSTUB_PLATFORM',
+  '-DARDUINO=10808',
+  '-DFASTLED_USE_STUB_ARDUINO',
+  '-DSKETCH_HAS_LARGE_MEMORY=1',
+  '-DSKETCH_HAS_HUGE_MEMORY=1',
+  '-DFASTLED_STUB_IMPL',
+  '-DFASTLED_TESTING',           # CRITICAL: Controls InlinedMemoryBlock layout (adds __data pointer)
+  '-DFASTLED_STUB_MAIN_FAST_EXIT',  # Fast exit from stub_main after 5 loop iterations
+  '-DFASTLED_NO_AUTO_NAMESPACE',
+  '-DFASTLED_NO_PINMAP',
+  '-DHAS_HARDWARE_PIN_SUPPORT',
+  '-DFASTLED_DEBUG_LEVEL=1',
+  '-DFASTLED_NO_ATEXIT=1',
+  '-DENABLE_CRASH_HANDLER',
+  '-DFASTLED_HAS_NETWORKING',    # Enable networking APIs (HTTP server, fetch client, sockets)
+  '-DFASTLED_DEBUG_STACK_TRACE',  # Enable stack tracing (must be in base for PCH compatibility)
+  '-DFASTLED_RGBW_COLORIMETRIC=1', # Exercise the real RGBW/RGBWW colorimetric path in native tests.
+]
+
+# Group 2: Warning and error flags (code quality enforcement)
+base_warnings = [
+  '-Wall',
+  '-Wextra',
+  '-Wno-deprecated-register',
+  '-Wno-backslash-newline-escape',
+  '-Wno-narrowing',
+  '-Wno-macro-redefined',      # Suppress redefinition warnings (libc++ hardening mode conflict)
+  '-Werror=unused-variable',
+  '-Werror=unused-but-set-variable',  # Treat set-but-unused variables as errors
+  '-Werror=unused-function',
+  '-Werror=c++14-extensions',  # Enforce C++11 compatibility
+  '-Werror=c++17-extensions',  # Enforce C++11 compatibility
+  '-Werror=unused-result',     # Treat ignored FL_NODISCARD return values as errors
+  '-Werror=switch',            # Treat missing switch cases as errors
+  '-Werror=shift-negative-value',  # Treat negative left shifts as errors (undefined behavior)
+  '-Werror=shift-count-overflow',  # Shift count >= type width (undefined on AVR/8-bit)
+  '-Werror=shift-count-negative',  # Negative shift count (undefined behavior)
+  '-Werror=division-by-zero',      # Division by zero (undefined behavior)
+  '-Werror=return-type',           # Missing return statements (undefined behavior)
+]
+
+# Add GCC-specific warnings (maybe-uninitialized is GCC-only, not available in Clang)
+if cpp_compiler.get_id() == 'gcc'
+  base_warnings += ['-Werror=maybe-uninitialized']
+endif
+
+# Add Clang-specific warnings (unused-private-field is Clang-only, not available in GCC)
+if cpp_compiler.get_id() == 'clang'
+  base_warnings += ['-Werror=unused-private-field']
+endif
+
+# Group 3: Optimization and code generation flags (mode-dependent)
+# Common flags present in all modes (ABI-critical)
+base_common = [
+  '-std=gnu++11',              # GNU C++11 standard
+  '-march=native',             # Use host CPU's full instruction set (AVX2, BMI, etc.)
+] + shared_no_exception_flags + [
+  '-fno-strict-aliasing',      # Prevent strict aliasing optimizations
+]
+
+# Stack trace preservation flags (used in debug and quick modes only)
+stack_trace_flags = [
+  '-fno-omit-frame-pointer',      # Keep frame pointers for stack traces
+  '-fno-optimize-sibling-calls',  # Preserve tail call frames for complete stack traces
+]
+# Add GCC-specific stack trace flag (not supported by Clang)
+if cpp_compiler.get_id() == 'gcc'
+  stack_trace_flags += ['-fno-inline-small-functions']  # Preserve function names (GCC only)
+endif
+
+# Mode-specific optimization flags
+if build_mode == 'debug'
+  # Debug mode: Debug-optimized, full debug symbols, sanitizers
+  # -Og enables optimizations that don't interfere with debugging (variables
+  # remain visible, stepping works). This also allows Clang's __attribute__((hot))
+  # and #pragma clang optimize on to have meaningful effect — at -O0 these are
+  # no-ops because Clang marks every function optnone.
+  base_optimization = base_common + stack_trace_flags + [
+    '-Og',                      # Optimize for debugging (basic opts, good debug experience)
+    '-g3',                      # Full debug symbols (variables, macros, everything)
+    '-fsanitize=address',       # Address sanitizer (detect memory errors)
+    '-fsanitize=undefined',     # Undefined behavior sanitizer
+  ]
+elif build_mode == 'quick'
+  # Quick mode: Default mode for fast development iteration
+  # No optimization, no debug symbols, no sanitizers
+  # Prioritizes fastest compilation for iteration cycles
+  # Frame pointers preserved for stack traces; function names available from symbol table
+  base_optimization = base_common + stack_trace_flags + [
+    '-O0',                      # No optimization (fastest compilation)
+    '-g0',                      # No debug symbols (fastest compilation)
+  ]
+elif build_mode == 'release'
+  # Release mode: Optimized production build with thin LTO (no stack trace preservation)
+  base_optimization = base_common + [
+    '-O3',                      # Aggressive optimization for maximum performance
+    '-DNDEBUG',                 # Disable assertions
+    '-flto=thin',               # Thin LTO for smaller binaries and better cross-module optimization
+  ]
+elif build_mode == 'profile'
+  # Profile mode: Size-optimized with debug symbols for callgrind profiling
+  # Matches embedded target optimization (-Os) while preserving function names
+  # -gdwarf-4: Force DWARF4 for compatibility with Valgrind 3.19 (Debian Bookworm)
+  # Stack trace flags: Preserve frame pointers for accurate callgrind attribution
+  base_optimization = base_common + stack_trace_flags + [
+    '-O1',                      # Light optimization (better than -Os for callgrind attribution)
+    '-g',                       # Standard debug symbols (function names + lines)
+    '-gdwarf-4',                # DWARF4 format (compatible with Valgrind 3.19)
+  ]
+else
+  error('Invalid build_mode: @0@. Must be one of: debug, quick, release, profile'.format(build_mode))
+endif
+
+# Windows-specific workaround for Clang 19 AVX-512 intrinsics bugs
+# Prevent immintrin.h from including buggy AVX-512 headers that use unavailable builtins
+windows_avx_workaround = []
+if build_machine.system() == 'windows'
+  windows_avx_workaround = [
+    '-D__AVX512BITALG__',
+    '-D__AVX512VPOPCNTDQ__',
+  ]
+endif
+
+# Assemble base_compile_args from organized groups
+base_compile_args = base_optimization + base_defines + base_warnings + windows_avx_workaround
+
+# Unit test-specific compilation flags (only used for test executables)
+test_specific_args = [
+  '-DFASTLED_UNIT_TEST=1',
+  '-DFASTLED_USE_JSON_UI=1',
+  '-DDOCTEST_CONFIG_NO_EXCEPTIONS_BUT_WITH_ALL_ASSERTS',
+]
+
+# Profile test-specific compilation flags
+# Stack trace preservation for debugger attachment (deadlock detector)
+# Note: These flags have ~1-5% performance overhead but are critical for debugging hung tests.
+# The overhead affects absolute timings but relative comparisons remain valid.
+profile_stacktrace_args = [
+  '-fno-omit-frame-pointer',      # Preserve frame pointers for complete backtraces (~1-3% overhead)
+  '-fno-optimize-sibling-calls',  # Preserve tail call frames in stack traces (~0.5-1% overhead)
+]
+
+# Profile test compilation flags
+# Always include debug symbols (-g) for function names in stack traces
+# Conditionally include stack trace preservation flags in debug/quick modes only
+profile_specific_args = [
+  '-g',  # Always on: function names + line numbers
+  '-DFL_DISABLE_OPTIMIZATION',  # Disable FastLED optimization macros for accurate profiling
+]
+if build_mode == 'debug' or build_mode == 'quick'
+  # Debug/quick modes: Add stack trace preservation (helps deadlock detector)
+  profile_specific_args += profile_stacktrace_args
+endif
+# Release/profile modes: Skip stack trace flags for accurate performance measurement
+
+# Construct final compile args for tests and examples
+unit_test_compile_args = base_compile_args + test_specific_args
+profile_test_compile_args = base_compile_args + profile_specific_args
+example_compile_args = base_compile_args
+
+# ============================================================================
+# UNIFIED LINK CONFIGURATION
+# ============================================================================
+# clang-tool-chain provides uniform GNU-style behavior across platforms. Apple
+# debug builds use the selected Xcode compiler/runtime together because macOS
+# 26.4 requires the fixed compiler-rt shipped with Xcode 26.4+.
+
+# Detect platform for the few remaining differences
+is_windows = build_machine.system() == 'windows'
+is_macos = build_machine.system() == 'darwin'
+
+# macOS uses ld64 or ld64.lld, neither of which accepts GNU-style --no-undefined.
+# On macOS the linker errors on undefined symbols by default, so we just
+# omit the flag there. Windows and Linux LLD accept it as expected.
+# See FastLED #2612 and PR #2567.
+if is_macos
+  no_undefined_link_args = []
+else
+  no_undefined_link_args = ['-Wl,--no-undefined']
+endif
+
+# ============================================================================
+# Detect if clang-tool-chain Python wrapper is being used
+# ============================================================================
+# clang-tool-chain's Python wrapper commands (clang-tool-chain-cpp)
+# support --deploy-dependencies which copies
+# runtime DLLs. Raw clang++ binaries (even from .clang-tool-chain/ directory)
+# don't support this flag. We check for the wrapper executable name, not the
+# directory path.
+cpp_cmd_array = cpp_compiler.cmd_array()
+is_clang_tool_chain_wrapper = false
+foreach cmd_part : cpp_cmd_array
+  if cmd_part.contains('clang-tool-chain-cpp') or cmd_part.contains('clang-tool-chain-c') or cmd_part.contains('ctc-clang')
+    is_clang_tool_chain_wrapper = true
+  endif
+endforeach
+
+# ============================================================================
+# Core link arguments (shared by all targets)
+# ============================================================================
+core_link_args = ['-fuse-ld=lld']
+if is_macos and build_mode == 'debug'
+  core_link_args = []
+endif
+if build_mode == 'release'
+  # Enable thin LTO at link time for release builds
+  core_link_args += ['-flto=thin']
+endif
+
+# --deploy-dependencies copies runtime DLLs next to the output binary.
+# Only needed for runner executables and fastled.dll — NOT for test/example
+# DLLs, which find runtime DLLs via PATH set by the test runner.
+# Skipping this for ~270 DLLs avoids per-link overhead from ctc-clang++.
+deploy_link_args = []
+if is_clang_tool_chain_wrapper
+  deploy_link_args += ['--deploy-dependencies']
+endif
+
+# Sanitizer link flags (used in debug mode)
+sanitizer_link_args = []
+if build_mode == 'debug'
+  sanitizer_link_args = [
+    '-fsanitize=address',
+    '-fsanitize=undefined',
+  ]
+  if not is_macos
+    # Darwin only supports its shared sanitizer runtime and selects it by
+    # default. Other platforms need this explicit flag for the DLL architecture.
+    sanitizer_link_args += ['-shared-libasan']
+  endif
+endif
+
+# ============================================================================
+# DLL/shared library link arguments
+# ============================================================================
+# Used for test DLLs and example DLLs. Minimal linking - heavy deps in runner.
+#
+# NOTE: On Windows, each DLL must link its own dependencies (ws2_32.lib).
+# Windows DLLs have import tables built at link time - symbols can't be
+# "provided" by the runner at load time like Unix shared libraries.
+# ws2_32.lib is an import library (~100KB stubs), not actual code.
+# All DLLs import from the same system ws2_32.dll - no code duplication.
+#
+# IMPORTANT: We do NOT add -Wl,--no-undefined to DLLs because:
+# - On Unix: Sanitizers (debug mode) have symbols resolved at runtime by runner
+dll_link_args = core_link_args + sanitizer_link_args
+if is_windows
+  # NOTE: Do NOT use -static-libgcc/-static-libstdc++ here.
+  # All DLLs in the process must share the same C++ runtime to avoid
+  # cross-DLL heap corruption (memory allocated in fastled.dll freed in test.dll).
+  dll_link_args += [
+    '-mconsole',
+    '-Wl,--stack,16777216',
+    '-lws2_32',  # Socket library (import library, not code - all DLLs share system ws2_32.dll)
+  ]
+else
+  dll_link_args += ['-rdynamic']
+  # In debug mode with sanitizers, shared libraries need to allow undefined symbols
+  # that will be provided by the sanitizer runtime when the runner loads them.
+  # LLD-ELF (Linux) defaults to allowing undefined symbols in shared libraries but
+  # we set the flag explicitly for compatibility with GNU-ld. macOS's ld64.lld
+  # uses Mach-O semantics and does NOT understand `--allow-shlib-undefined`
+  # (it errors out — see FastLED #2612). On Mach-O the equivalent semantic is
+  # `-undefined dynamic_lookup`, which is not needed because Mach-O resolves
+  # undefined symbols at runtime by default.
+  if build_mode == 'debug' and not is_macos
+    dll_link_args += ['-Wl,--allow-shlib-undefined']
+  endif
+endif
+
+# ============================================================================
+# FastLED shared library link arguments
+# ============================================================================
+# Used for building fastled.dll/libfastled.so itself.
+# Similar to DLL args but without consumer-specific flags like -mconsole.
+fastled_shared_link_args = core_link_args + deploy_link_args + sanitizer_link_args
+if is_windows
+  # NOTE: Do NOT use -static-libgcc/-static-libstdc++ here.
+  # fastled.dll and consumer DLLs must share the same C++ runtime heap.
+  fastled_shared_link_args += [
+    '-Wl,--export-all-symbols',  # Export all symbols without __declspec annotations
+    '-lws2_32',
+  ]
+else
+  # macOS ld64.lld rejects `--allow-shlib-undefined` (it's an ELF-only flag).
+  # See FastLED #2612 and the comment above on `dll_link_args`.
+  if build_mode == 'debug' and not is_macos
+    fastled_shared_link_args += ['-Wl,--allow-shlib-undefined']
+  endif
+endif
+
+# ============================================================================
+# Runner executable link arguments (shared by tests and examples)
+# ============================================================================
+# The runner loads DLLs and provides system libraries (pthread, dbghelp, etc.)
+# In debug mode: dynamic linking (required for sanitizers)
+# In quick mode: dynamic linking on Unix, static on Windows
+# In release mode: static linking on Windows, dynamic on Unix
+#
+# NOTE: -lunwind is added conditionally below after checking availability.
+# NOTE: -Wl,--no-undefined (via no_undefined_link_args) is added in
+# quick/release modes to catch missing libraries early. It's NOT added in:
+#   - debug mode: sanitizers (ASan/UBSan) resolve symbols at runtime
+#     (https://github.com/google/sanitizers/issues/380)
+#   - macOS: ld64.lld doesn't accept the flag; error-on-undefined is default
+if build_mode == 'debug'
+  # Debug mode: dynamic linking required for sanitizers
+  # No --no-undefined: sanitizers resolve symbols at runtime
+  runner_link_args = core_link_args + deploy_link_args + sanitizer_link_args + ['-pthread']
+  if is_windows
+    runner_link_args += ['-ldbghelp', '-lpsapi', '-lws2_32']
+  endif
+  # Note: -lunwind is added conditionally below after checking availability
+elif build_mode == 'quick'
+  # Quick mode: static linking on Windows, dynamic on Unix
+  # NOTE: Linux with glibc doesn't support static linking + dlopen() properly.
+  # When a statically linked executable loads shared libraries via dlopen(),
+  # there are conflicts with thread-local storage and other glibc internals
+  # that cause SIGSEGV crashes. Use dynamic linking on Linux like macOS.
+  if is_windows
+    # Windows: static linking works well with LoadLibrary
+    runner_link_args = core_link_args + deploy_link_args + no_undefined_link_args + [
+      '-static',
+      '-static-libgcc',
+      '-static-libstdc++',
+      '-pthread',
+      '-ldbghelp', '-lpsapi', '-lws2_32',
+    ]
+  else
+    # macOS and Linux: dynamic linking (glibc doesn't support static + dlopen)
+    # Note: -lunwind is added conditionally below after checking availability
+    # no_undefined_link_args is empty on macOS (ld64.lld rejects the GNU flag;
+    # Mach-O defaults to erroring on undefined symbols anyway).
+    # See FastLED #2612 and PR #2567.
+    runner_link_args = core_link_args + deploy_link_args + no_undefined_link_args + [
+      '-pthread',
+    ]
+  endif
+else
+  # Release mode: static linking on Windows, dynamic on Unix
+  # NOTE: Linux with glibc doesn't support static linking + dlopen() properly.
+  if is_windows
+    # Windows: static linking works well with LoadLibrary
+    runner_link_args = core_link_args + deploy_link_args + no_undefined_link_args + [
+      '-static',
+      '-static-libgcc',
+      '-static-libstdc++',
+      '-pthread',
+      '-ldbghelp', '-lpsapi', '-lws2_32',
+    ]
+  else
+    # macOS and Linux: dynamic linking (glibc doesn't support static + dlopen)
+    # Note: -lunwind is added conditionally below after checking availability
+    # no_undefined_link_args is empty on macOS (ld64.lld rejects the GNU flag);
+    # see comment above.
+    runner_link_args = core_link_args + deploy_link_args + no_undefined_link_args + [
+      '-pthread',
+    ]
+  endif
+endif
+
+# ============================================================================
+# Runner executable compile arguments
+# ============================================================================
+# Shared by both test runner and example runner. Uses same optimization as rest of app.
+runner_cpp_args = [
+  '-std=c++11',
+  '-DFASTLED_STUB_IMPL',
+  '-Wno-pragma-pack',
+]
+if build_mode == 'debug'
+  runner_cpp_args += stack_trace_flags + [
+    '-O0',
+    '-g3',
+    '-fsanitize=address',
+    '-fsanitize=undefined',
+  ]
+elif build_mode == 'quick'
+  runner_cpp_args += stack_trace_flags + [
+    '-O1',
+    '-g1',
+  ]
+elif build_mode == 'release'
+  runner_cpp_args += [
+    '-O2',
+    '-DNDEBUG',
+  ]
+elif build_mode == 'profile'
+  runner_cpp_args += [
+    '-Os',
+    '-g',
+    '-gdwarf-4',
+  ]
+endif
+
+# The Apple runner watchdog can interrupt dyld while sanitizer initialization
+# holds loader locks. Compile its complete call chain without instrumentation so
+# the SIGALRM handler remains limited to async-signal-safe system calls.
+apple_runner_watchdog_libs = []
+if is_macos
+  apple_runner_watchdog_lib = static_library('apple_runner_watchdog',
+    files('../../../tests/shared/apple_runner_watchdog.cpp'),
+    cpp_args: runner_cpp_args + [
+      path_norm_I_src,
+      '-fno-sanitize=all',
+    ],
+    implicit_include_directories: false,
+    install: false
+  )
+  apple_runner_watchdog_libs += [apple_runner_watchdog_lib]
+endif
+
+# ============================================================================
+# Legacy aliases for backward compatibility
+# ============================================================================
+unit_test_link_args = dll_link_args
+
+# ============================================================================
+# libunwind for enhanced stack traces (Unix only)
+# ============================================================================
+# libunwind provides detailed stack unwinding for crash handlers on Unix systems.
+# When available, it's explicitly linked via -lunwind in runner_link_args.
+# On systems where libunwind is not installed, we gracefully degrade to basic
+# crash handling (crash_handler_noop.h).
+#
+# libunwind is typically provided by:
+#   - System: libunwind-dev (Ubuntu/Debian), libunwind-devel (Fedora/RHEL)
+#   - clang-tool-chain: bundled LLVM distribution (adds -L to find libunwind.a)
+#
+has_libunwind = false
+if not is_windows
+  cpp_compiler = meson.get_compiler('cpp')
+  libunwind_dep = cpp_compiler.find_library('unwind', required: false)
+  if libunwind_dep.found()
+    message('libunwind found - enhanced stack traces enabled')
+    has_libunwind = true
+    base_defines += ['-DUSE_LIBUNWIND']
+    runner_link_args += ['-lunwind']
+  else
+    message('libunwind NOT found - stack traces in crash handler will be limited')
+    message('Install libunwind-dev (Ubuntu/Debian) or libunwind-devel (Fedora/RHEL) for enhanced stack traces')
+  endif
+endif
+
+# ============================================================================
+# SHARED CRASH HANDLER (used by both test runner and example runner)
+# ============================================================================
+# Build crash handler library once - provides crash handler setup that runs
+# BEFORE any DLL is loaded. Links to dbghelp/psapi on Windows.
+# On Unix, libunwind is conditionally linked via -lunwind in runner_link_args
+# when libunwind is available (see has_libunwind check above).
+# Absolute include args for crash handler — use cpp_args instead of
+# include_directories to prevent Meson from propagating backslash
+# relative -I paths to consumer targets (tests, examples), which breaks
+# #pragma once across PCH boundaries on Windows.
+crash_handler_abs_include_args = [
+  path_norm_I_root,
+  path_norm_I_tests,
+  path_norm_I_src,
+]
+
+crash_handler_cpp_args = ['-DENABLE_CRASH_HANDLER', '-DFASTLED_STUB_IMPL'] + crash_handler_abs_include_args
+# Note: -DUSE_LIBUNWIND is added here separately from base_defines because crash_handler_lib
+# uses its own cpp_args and does not inherit base_defines (which is used for test/example targets).
+if has_libunwind
+  crash_handler_cpp_args += ['-DUSE_LIBUNWIND']
+endif
+
+crash_handler_lib = static_library('crash_handler',
+  files('../../../tests/shared/crash_handler_main.cpp'),
+  cpp_args: crash_handler_cpp_args,
+  implicit_include_directories: false,
+  install: false
+)
+
+# Build main FastLED static library (includes ALL sources EXCEPT platforms/shared)
+# platforms/shared files are intentionally excluded to avoid weak/strong symbol conflicts
+# CRITICAL ABI REQUIREMENT: Must use base_compile_args (NOT unit_test_compile_args)
+# to ensure binary compatibility with both unit tests and examples.
+# Unit tests add their specific flags when compiling test sources.
+
+# Build FastLED as a shared library (DLL/SO)
+# All consumer DLLs (tests, examples) link against this single shared library,
+# dramatically reducing disk usage and link times (~17x reduction).
+# platforms_shared_files are merged directly into the shared library to avoid
+# -fPIC issues with link_whole: on static→shared boundaries.
+# Use absolute -I paths in cpp_args instead of include_directories to prevent
+# Meson from propagating backslash relative -I paths to consumer targets,
+# which breaks #pragma once across PCH boundaries on Windows.
+fastled_lib_abs_include_args = [
+  path_norm_I_src,
+  path_norm_I_stub,
+]
+
+fastled_lib = shared_library('fastled',
+  fastled_sources + platforms_shared_files,
+  cpp_args: base_compile_args + ['-DFASTLED_BUILDING_DLL'] + fastled_lib_abs_include_args,
+  link_args: fastled_shared_link_args,
+  name_prefix: '',  # Produce 'fastled.dll' not 'libfastled.dll'
+  implicit_include_directories: false,
+  install: false
+)
+
+# Export the directory containing fastled.dll for consumer DLLs to find at runtime
+fastled_lib_dir = meson.current_build_dir()
+
+# ============================================================================
+# CLANG-TOOL-CHAIN RUNTIME DLL PATHS — removed as probe (#3129 A6)
+# ============================================================================
+# This block used to populate `runtime_dll_paths` by invoking
+# `ci/meson/get_runtime_dll_paths.py` and prepending its output to the test
+# environment's PATH in three call sites (tests/meson.build x2, examples/
+# meson.build x1). The upstream-blessed replacement is the
+# `ZCCACHE_LINK_DEPLOY_CMD=clang-tool-chain-libdeploy` env var (set at
+# ci/meson/runner_helpers.py:374-375 — zccache#33). Per #3129 A6 the local
+# PATH injection is belt-and-suspenders that may now be redundant; this
+# branch is the probe. The script itself
+# (ci/meson/get_runtime_dll_paths.py) is left in place in case revert is
+# needed.
+runtime_dll_paths = []
+
+# ============================================================================
+# FASTLED PRECOMPILED HEADER (shared by tests and examples)
+# ============================================================================
+# Build a PCH containing only FastLED.h, compiled with base_compile_args
+# (NOT test-specific args) for ABI compatibility with both tests and examples.
+# Tests chain their test_pch on top of this; examples use it directly.
+
+# Absolute include paths — must match between PCH and consumer compilation so
+# that #pragma once recognises headers from both contexts as the same file.
+fastled_pch_abs_include_args = [
+  path_norm_I_src,
+  path_norm_I_stub,
+]
+
+fastled_pch = custom_target('fastled_pch',
+  input: meson.project_source_root() / 'src' / 'FastLED.h',
+  output: 'FastLED.h.pch',
+  depfile: 'FastLED.h.d',
+  command: [
+    uv_prog, 'run', 'python',
+    meson.project_source_root() / 'ci/compile_pch.py',
+    cpp_compiler.cmd_array(),
+    '-c',                            # Suppress linker step (MinGW driver adds link job without -c)
+    '-x', 'c++-header',
+    '@INPUT@',
+    '-o', '@OUTPUT@',
+    '-MD', '-MF', '@DEPFILE@',
+    get_option('cpp_args'),          # Includes native-file SDK selection on Apple debug
+    base_compile_args,
+    '-fPIC',
+    fastled_pch_abs_include_args,
+    '-Werror=invalid-pch',
+    '-verify-pch',
+    '-fpch-validate-input-files-content',
+    '-fpch-instantiate-templates',
+  ],
+  install: false
+)
+
+fastled_pch_dir = meson.current_build_dir()

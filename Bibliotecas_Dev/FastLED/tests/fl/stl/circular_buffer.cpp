@@ -1,0 +1,504 @@
+#include "fl/stl/circular_buffer.h"
+#include "test.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+using namespace fl;
+
+FL_TEST_CASE("fl::circular_buffer - basic operations") {
+    FL_SUBCASE("constructor creates empty buffer") {
+        circular_buffer<int, 5> buffer;
+        FL_CHECK(buffer.empty());
+        FL_CHECK_EQ(buffer.size(), 0);
+        FL_CHECK_EQ(buffer.capacity(), 5);
+        FL_CHECK_FALSE(buffer.full());
+    }
+
+    FL_SUBCASE("push and pop single element") {
+        circular_buffer<int, 5> buffer;
+        buffer.push(42);
+        FL_CHECK_FALSE(buffer.empty());
+        FL_CHECK_EQ(buffer.size(), 1);
+
+        int value;
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 42);
+        FL_CHECK(buffer.empty());
+        FL_CHECK_EQ(buffer.size(), 0);
+    }
+
+    FL_SUBCASE("push multiple elements") {
+        circular_buffer<int, 5> buffer;
+        buffer.push(1);
+        buffer.push(2);
+        buffer.push(3);
+        FL_CHECK_EQ(buffer.size(), 3);
+
+        int value;
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 1);
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 2);
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 3);
+        FL_CHECK(buffer.empty());
+    }
+
+    FL_SUBCASE("fill to capacity") {
+        circular_buffer<int, 5> buffer;
+        for (int i = 0; i < 5; i++) {
+            buffer.push(i);
+        }
+        FL_CHECK_EQ(buffer.size(), 5);
+        FL_CHECK(buffer.full());
+        FL_CHECK_FALSE(buffer.empty());
+    }
+
+    FL_SUBCASE("overflow behavior - overwrites oldest") {
+        circular_buffer<int, 3> buffer;
+        buffer.push(1);
+        buffer.push(2);
+        buffer.push(3);
+        FL_CHECK(buffer.full());
+
+        // Push 4th element - should overwrite 1
+        buffer.push(4);
+        FL_CHECK_EQ(buffer.size(), 3);
+        FL_CHECK(buffer.full());
+
+        int value;
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 2); // 1 was overwritten
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 3);
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK_EQ(value, 4);
+        FL_CHECK(buffer.empty());
+    }
+}
+
+FL_TEST_CASE("fl::circular_buffer - clear operation") {
+    circular_buffer<int, 5> buffer;
+    buffer.push(1);
+    buffer.push(2);
+    buffer.push(3);
+    FL_CHECK_EQ(buffer.size(), 3);
+
+    buffer.clear();
+    FL_CHECK(buffer.empty());
+    FL_CHECK_EQ(buffer.size(), 0);
+    FL_CHECK_FALSE(buffer.full());
+}
+
+FL_TEST_CASE("fl::circular_buffer - pop from empty buffer") {
+    circular_buffer<int, 5> buffer;
+    int value = 999;
+    FL_CHECK_FALSE(buffer.pop(value));
+    FL_CHECK_EQ(value, 999); // Value should not be modified
+}
+
+FL_TEST_CASE("fl::circular_buffer - wraparound behavior") {
+    circular_buffer<int, 4> buffer;
+
+    // Fill buffer
+    for (int i = 0; i < 4; i++) {
+        buffer.push(i);
+    }
+
+    // Pop some elements
+    int value;
+    buffer.pop(value); // Pop 0
+    buffer.pop(value); // Pop 1
+
+    // Push more elements (should wrap around)
+    buffer.push(10);
+    buffer.push(11);
+
+    // Verify order
+    FL_CHECK(buffer.pop(value));
+    FL_CHECK_EQ(value, 2);
+    FL_CHECK(buffer.pop(value));
+    FL_CHECK_EQ(value, 3);
+    FL_CHECK(buffer.pop(value));
+    FL_CHECK_EQ(value, 10);
+    FL_CHECK(buffer.pop(value));
+    FL_CHECK_EQ(value, 11);
+    FL_CHECK(buffer.empty());
+}
+
+FL_TEST_CASE("fl::circular_buffer - different types") {
+    FL_SUBCASE("double type") {
+        circular_buffer<double, 3> buffer;
+        buffer.push(3.14);
+        buffer.push(2.71);
+
+        double value;
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK(value == doctest::Approx(3.14));
+        FL_CHECK(buffer.pop(value));
+        FL_CHECK(value == doctest::Approx(2.71));
+    }
+
+    FL_SUBCASE("struct type") {
+        struct Point { int x, y; };
+        circular_buffer<Point, 3> buffer;
+
+        buffer.push({1, 2});
+        buffer.push({3, 4});
+
+        Point p;
+        FL_CHECK(buffer.pop(p));
+        FL_CHECK_EQ(p.x, 1);
+        FL_CHECK_EQ(p.y, 2);
+        FL_CHECK(buffer.pop(p));
+        FL_CHECK_EQ(p.x, 3);
+        FL_CHECK_EQ(p.y, 4);
+    }
+}
+
+FL_TEST_CASE("fl::circular_buffer - basic operations") {
+    FL_SUBCASE("constructor creates empty buffer") {
+        circular_buffer<int> buffer(5);
+        FL_CHECK(buffer.empty());
+        FL_CHECK_EQ(buffer.size(), 0);
+        FL_CHECK_EQ(buffer.capacity(), 5);
+        FL_CHECK_FALSE(buffer.full());
+    }
+
+    FL_SUBCASE("push_back and pop_front") {
+        circular_buffer<int> buffer(5);
+        FL_CHECK(buffer.push_back(42));
+        FL_CHECK_FALSE(buffer.empty());
+        FL_CHECK_EQ(buffer.size(), 1);
+
+        int value;
+        FL_CHECK(buffer.pop_front(&value));
+        FL_CHECK_EQ(value, 42);
+        FL_CHECK(buffer.empty());
+    }
+
+    FL_SUBCASE("pop_front without destination") {
+        circular_buffer<int> buffer(3);
+        buffer.push_back(1);
+        buffer.push_back(2);
+        FL_CHECK_EQ(buffer.size(), 2);
+
+        FL_CHECK(buffer.pop_front()); // Pop without retrieving value
+        FL_CHECK_EQ(buffer.size(), 1);
+
+        int value;
+        FL_CHECK(buffer.pop_front(&value));
+        FL_CHECK_EQ(value, 2);
+    }
+
+    FL_SUBCASE("push_front and pop_back") {
+        circular_buffer<int> buffer(5);
+        FL_CHECK(buffer.push_front(42));
+        FL_CHECK_EQ(buffer.size(), 1);
+
+        int value;
+        FL_CHECK(buffer.pop_back(&value));
+        FL_CHECK_EQ(value, 42);
+        FL_CHECK(buffer.empty());
+    }
+
+    FL_SUBCASE("multiple push_back operations") {
+        circular_buffer<int> buffer(5);
+        for (int i = 0; i < 5; i++) {
+            buffer.push_back(i);
+        }
+        FL_CHECK(buffer.full());
+        FL_CHECK_EQ(buffer.size(), 5);
+
+        for (int i = 0; i < 5; i++) {
+            int value;
+            FL_CHECK(buffer.pop_front(&value));
+            FL_CHECK_EQ(value, i);
+        }
+        FL_CHECK(buffer.empty());
+    }
+
+    FL_SUBCASE("overflow - push_back overwrites oldest") {
+        circular_buffer<int> buffer(3);
+        buffer.push_back(1);
+        buffer.push_back(2);
+        buffer.push_back(3);
+        buffer.push_back(4); // Should overwrite 1
+
+        FL_CHECK_EQ(buffer.size(), 3);
+        int value;
+        buffer.pop_front(&value);
+        FL_CHECK_EQ(value, 2); // 1 was overwritten
+    }
+
+    FL_SUBCASE("overflow - push_front overwrites oldest") {
+        circular_buffer<int> buffer(3);
+        buffer.push_front(1);
+        buffer.push_front(2);
+        buffer.push_front(3);
+        buffer.push_front(4); // Should overwrite oldest
+
+        FL_CHECK_EQ(buffer.size(), 3);
+    }
+}
+
+FL_TEST_CASE("fl::circular_buffer - front and back access") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(10);
+    buffer.push_back(20);
+    buffer.push_back(30);
+
+    FL_CHECK_EQ(buffer.front(), 10);
+    FL_CHECK_EQ(buffer.back(), 30);
+
+    // Modify through references
+    buffer.front() = 100;
+    buffer.back() = 300;
+
+    FL_CHECK_EQ(buffer.front(), 100);
+    FL_CHECK_EQ(buffer.back(), 300);
+}
+
+FL_TEST_CASE("fl::circular_buffer - const front and back access") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(10);
+    buffer.push_back(20);
+
+    const circular_buffer<int>& const_buffer = buffer;
+    FL_CHECK_EQ(const_buffer.front(), 10);
+    FL_CHECK_EQ(const_buffer.back(), 20);
+}
+
+FL_TEST_CASE("fl::circular_buffer - operator[] access") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(10);
+    buffer.push_back(20);
+    buffer.push_back(30);
+    buffer.push_back(40);
+
+    FL_CHECK_EQ(buffer[0], 10);
+    FL_CHECK_EQ(buffer[1], 20);
+    FL_CHECK_EQ(buffer[2], 30);
+    FL_CHECK_EQ(buffer[3], 40);
+
+    // Modify through operator[]
+    buffer[1] = 200;
+    FL_CHECK_EQ(buffer[1], 200);
+}
+
+FL_TEST_CASE("fl::circular_buffer - const operator[] access") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(10);
+    buffer.push_back(20);
+
+    const circular_buffer<int>& const_buffer = buffer;
+    FL_CHECK_EQ(const_buffer[0], 10);
+    FL_CHECK_EQ(const_buffer[1], 20);
+}
+
+FL_TEST_CASE("fl::circular_buffer - clear operation") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(1);
+    buffer.push_back(2);
+    buffer.push_back(3);
+    FL_CHECK_EQ(buffer.size(), 3);
+
+    buffer.clear();
+    FL_CHECK(buffer.empty());
+    FL_CHECK_EQ(buffer.size(), 0);
+}
+
+FL_TEST_CASE("fl::circular_buffer - pop from empty buffer") {
+    circular_buffer<int> buffer(5);
+    int value = 999;
+    FL_CHECK_FALSE(buffer.pop_front(&value));
+    FL_CHECK_EQ(value, 999); // Value should not be modified
+
+    FL_CHECK_FALSE(buffer.pop_back(&value));
+    FL_CHECK_EQ(value, 999);
+}
+
+FL_TEST_CASE("fl::circular_buffer - wraparound with operator[]") {
+    circular_buffer<int> buffer(4);
+
+    // Fill buffer
+    for (int i = 0; i < 4; i++) {
+        buffer.push_back(i);
+    }
+
+    // Pop some and push more to cause wraparound
+    buffer.pop_front();
+    buffer.pop_front();
+    buffer.push_back(10);
+    buffer.push_back(11);
+
+    // Verify access through operator[]
+    FL_CHECK_EQ(buffer[0], 2);
+    FL_CHECK_EQ(buffer[1], 3);
+    FL_CHECK_EQ(buffer[2], 10);
+    FL_CHECK_EQ(buffer[3], 11);
+}
+
+FL_TEST_CASE("fl::circular_buffer - bidirectional operations") {
+    circular_buffer<int> buffer(5);
+
+    // Mix push_back, push_front, pop_front, pop_back
+    buffer.push_back(5);
+    buffer.push_front(3);
+    buffer.push_back(7);
+    buffer.push_front(1);
+
+    // Buffer should be: 1, 3, 5, 7
+    FL_CHECK_EQ(buffer.size(), 4);
+    FL_CHECK_EQ(buffer[0], 1);
+    FL_CHECK_EQ(buffer[1], 3);
+    FL_CHECK_EQ(buffer[2], 5);
+    FL_CHECK_EQ(buffer[3], 7);
+
+    int value;
+    buffer.pop_back(&value);
+    FL_CHECK_EQ(value, 7);
+    buffer.pop_front(&value);
+    FL_CHECK_EQ(value, 1);
+
+    // Buffer should be: 3, 5
+    FL_CHECK_EQ(buffer.size(), 2);
+    FL_CHECK_EQ(buffer.front(), 3);
+    FL_CHECK_EQ(buffer.back(), 5);
+}
+
+FL_TEST_CASE("fl::circular_buffer - different types") {
+    FL_SUBCASE("double type") {
+        circular_buffer<double> buffer(3);
+        buffer.push_back(3.14);
+        buffer.push_back(2.71);
+
+        double value;
+        buffer.pop_front(&value);
+        FL_CHECK(value == doctest::Approx(3.14));
+        buffer.pop_front(&value);
+        FL_CHECK(value == doctest::Approx(2.71));
+    }
+
+    FL_SUBCASE("struct type") {
+        struct Point { int x, y; };
+        circular_buffer<Point> buffer(3);
+
+        buffer.push_back({1, 2});
+        buffer.push_back({3, 4});
+
+        Point p;
+        buffer.pop_front(&p);
+        FL_CHECK_EQ(p.x, 1);
+        FL_CHECK_EQ(p.y, 2);
+        buffer.pop_front(&p);
+        FL_CHECK_EQ(p.x, 3);
+        FL_CHECK_EQ(p.y, 4);
+    }
+}
+
+FL_TEST_CASE("fl::circular_buffer - dynamic mode") {
+    circular_buffer<int> buffer(5);
+    buffer.push_back(42);
+
+    int value;
+    FL_CHECK(buffer.pop_front(&value));
+    FL_CHECK_EQ(value, 42);
+}
+
+FL_TEST_CASE("fl::circular_buffer - capacity check") {
+    circular_buffer<int, 10> buffer;
+    FL_CHECK_EQ(buffer.capacity(), 10);
+}
+
+FL_TEST_CASE("fl::circular_buffer - stress test with many operations") {
+    circular_buffer<int> buffer(100);
+
+    // Push many elements
+    for (int i = 0; i < 100; i++) {
+        buffer.push_back(i);
+    }
+    FL_CHECK(buffer.full());
+    FL_CHECK_EQ(buffer.size(), 100);
+
+    // Pop half
+    for (int i = 0; i < 50; i++) {
+        int value;
+        buffer.pop_front(&value);
+        FL_CHECK_EQ(value, i);
+    }
+    FL_CHECK_EQ(buffer.size(), 50);
+
+    // Push more
+    for (int i = 100; i < 150; i++) {
+        buffer.push_back(i);
+    }
+    FL_CHECK(buffer.full());
+
+    // Verify contents
+    for (int i = 0; i < 100; i++) {
+        FL_CHECK_EQ(buffer[i], 50 + i);
+    }
+}
+
+FL_TEST_CASE("fl::circular_buffer - single element capacity") {
+    circular_buffer<int, 1> buffer;
+    FL_CHECK_EQ(buffer.capacity(), 1);
+
+    buffer.push(42);
+    FL_CHECK(buffer.full());
+    FL_CHECK_EQ(buffer.size(), 1);
+
+    int value;
+    FL_CHECK(buffer.pop(value));
+    FL_CHECK_EQ(value, 42);
+    FL_CHECK(buffer.empty());
+}
+
+FL_TEST_CASE("fl::circular_buffer - single element capacity") {
+    circular_buffer<int> buffer(1);
+    FL_CHECK_EQ(buffer.capacity(), 1);
+
+    buffer.push_back(42);
+    FL_CHECK(buffer.full());
+    FL_CHECK_EQ(buffer.size(), 1);
+
+    int value;
+    FL_CHECK(buffer.pop_front(&value));
+    FL_CHECK_EQ(value, 42);
+    FL_CHECK(buffer.empty());
+}
+
+FL_TEST_CASE("fl::circular_buffer - operator[] and back()") {
+    circular_buffer<int, 4> buffer;
+    buffer.push(10);
+    buffer.push(20);
+    buffer.push(30);
+
+    FL_CHECK_EQ(buffer[0], 10);
+    FL_CHECK_EQ(buffer[1], 20);
+    FL_CHECK_EQ(buffer[2], 30);
+    FL_CHECK_EQ(buffer.back(), 30);
+
+    // Modify through operator[]
+    buffer[1] = 200;
+    FL_CHECK_EQ(buffer[1], 200);
+
+    // Wraparound: pop two, push three more
+    int value;
+    buffer.pop(value);
+    buffer.pop(value);
+    buffer.push(40);
+    buffer.push(50);
+    buffer.push(60);
+
+    // Buffer should contain: 30, 40, 50, 60
+    FL_CHECK_EQ(buffer[0], 30);
+    FL_CHECK_EQ(buffer[1], 40);
+    FL_CHECK_EQ(buffer[2], 50);
+    FL_CHECK_EQ(buffer[3], 60);
+    FL_CHECK_EQ(buffer.front(), 30);
+    FL_CHECK_EQ(buffer.back(), 60);
+}
+
+} // FL_TEST_FILE

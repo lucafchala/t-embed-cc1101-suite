@@ -1,0 +1,152 @@
+/// @file    BeatDetection.ino
+/// @brief   Simple real-time beat detection with LED visualization
+/// @example BeatDetection.ino
+///
+/// Demonstrates beat detection using the Processor facade.
+/// Visualizes beats and tempo on an LED strip - flashes on beat detection.
+
+// @filter: (memory is large)
+
+#include <FastLED.h>
+
+#if defined(FL_IS_TEENSY)
+// Keep fbuild's library scanner aware of PJRC Audio sources for Teensy.
+#include <Audio.h>
+#endif
+
+#if !SKETCH_HAS_LARGE_MEMORY
+// Platform does not have enough memory
+void setup() {}
+void loop() {}
+#else
+
+#include "fl/audio/audio_processor.h"
+#include "fl/ui/ui.h"
+
+// LED Configuration
+#define NUM_LEDS 60
+#define DATA_PIN 3
+#define BRIGHTNESS 128
+
+fl::CRGB leds[NUM_LEDS];
+
+// Audio input
+fl::UIAudio audio("Audio Input");
+
+// Audio processor with beat detection
+fl::audio::Processor audioProcessor;
+
+// Beat detection state
+float currentBPM = 0.0f;
+uint32_t lastBeatTime = 0;
+uint32_t beatCount = 0;
+uint32_t onsetCount = 0;
+
+// Get color based on BPM (blue=slow, green=medium, red=fast)
+fl::CRGB getBPMColor(float bpm) {
+    if (bpm < 90.0f) {
+        return fl::CRGB::Blue;
+    } else if (bpm < 130.0f) {
+        return fl::CRGB::Green;
+    } else {
+        return fl::CRGB::Red;
+    }
+}
+
+void setup() {
+    Serial.begin(115200);
+    delay(1000);
+
+    Serial.println("Beat Detection Example");
+    Serial.println("=====================");
+
+    // Initialize LED strip with screen map for visualization
+    fl::ScreenMap screenMap = fl::ScreenMap::DefaultStrip(NUM_LEDS, 1.5f, 0.5f);
+    FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS)
+        .setScreenMap(screenMap);
+    FastLED.setBrightness(BRIGHTNESS);
+    FastLED.clear();
+    FastLED.show();
+
+    // Set up beat detection callbacks
+    audioProcessor.onBeat([]() {
+        beatCount++;
+        lastBeatTime = fl::millis();
+        Serial.print("BEAT #");
+        Serial.println(beatCount);
+    });
+
+    audioProcessor.onOnset([](float strength) {
+        onsetCount++;
+        Serial.print("Onset strength=");
+        Serial.println(strength);
+    });
+
+    audioProcessor.onTempoChange([](float bpm, float confidence) {
+        currentBPM = bpm;
+        Serial.print("Tempo: ");
+        Serial.print(bpm);
+        Serial.print(" BPM (confidence: ");
+        Serial.print(confidence);
+        Serial.println(")");
+    });
+
+    Serial.println("Beat detector initialized");
+    Serial.println("Playing audio will trigger beat detection...");
+}
+
+void loop() {
+    // Get audio sample
+    fl::audio::Sample sample = audio.next();
+
+    if (sample.isValid()) {
+        // Process audio through the audio processor
+        audioProcessor.update(sample);
+    }
+
+    // Visualize beats on LED strip
+    uint32_t timeSinceBeat = fl::millis() - lastBeatTime;
+
+    if (timeSinceBeat < 100) {
+        // Flash bright on beat
+        fl::CRGB beatColor = getBPMColor(currentBPM);
+        fill_solid(leds, NUM_LEDS, beatColor);
+    } else if (timeSinceBeat < 200) {
+        // Fade out
+        fl::CRGB beatColor = getBPMColor(currentBPM);
+        beatColor.fadeToBlackBy(128);
+        fill_solid(leds, NUM_LEDS, beatColor);
+    } else {
+        // Idle: dim pulse at detected tempo
+        if (currentBPM > 0) {
+            // Pulse frequency based on BPM
+            float period_ms = (60000.0f / currentBPM);
+            float phase = fl::fmod(static_cast<float>(fl::millis()), period_ms) / period_ms;
+            uint8_t brightness = static_cast<uint8_t>((fl::sin(phase * 2.0f * 3.14159f) + 1.0f) * 32.0f);
+
+            fl::CRGB idleColor = getBPMColor(currentBPM);
+            idleColor.fadeToBlackBy(255 - brightness);
+            fill_solid(leds, NUM_LEDS, idleColor);
+        } else {
+            // No tempo detected yet
+            FastLED.clear();
+        }
+    }
+
+    FastLED.show();
+
+    // Print stats periodically
+    EVERY_N_SECONDS(10) {
+        Serial.println();
+        Serial.println("=== Beat Detection Stats ===");
+        Serial.print("Onsets: ");
+        Serial.print(onsetCount);
+        Serial.print(" | Beats: ");
+        Serial.println(beatCount);
+        Serial.print("Current BPM: ");
+        Serial.println(currentBPM);
+        Serial.println("============================");
+    }
+}
+
+#endif

@@ -1,0 +1,336 @@
+// IWYU pragma: private
+
+/// @file lcd_spi_peripheral_mock.cpp
+/// @brief Mock LCD_CAM SPI peripheral implementation for unit testing
+
+#include "platforms/is_platform.h"
+#if defined(FASTLED_STUB_IMPL) || \
+    (!defined(ARDUINO) &&          \
+     (defined(FL_IS_LINUX) || defined(FL_IS_APPLE) || defined(FL_IS_WIN)))
+
+#include "platforms/esp/32/drivers/lcd_spi/lcd_spi_peripheral_mock.h"
+#include "fl/log/log.h"
+#include "fl/stl/cstring.h"
+#include "fl/stl/singleton.h"
+#include "fl/stl/noexcept.h"
+
+// IWYU pragma: begin_keep
+#include "fl/stl/cstdlib.h"
+// IWYU pragma: end_keep
+
+namespace fl {
+namespace detail {
+
+class LcdSpiPeripheralMockImpl : public LcdSpiPeripheralMock {
+  public:
+    LcdSpiPeripheralMockImpl() FL_NO_EXCEPT;
+    ~LcdSpiPeripheralMockImpl() override;
+
+    bool initialize(const LcdSpiConfig &config) FL_NO_EXCEPT override;
+    void deinitialize() FL_NO_EXCEPT override;
+    bool isInitialized() const FL_NO_EXCEPT override;
+
+    u16 *allocateBuffer(size_t size_bytes) FL_NO_EXCEPT override;
+    void freeBuffer(u16 *buffer) FL_NO_EXCEPT override;
+
+    bool transmit(const u16 *buffer, size_t size_bytes) FL_NO_EXCEPT override;
+    bool waitTransmitDone(u32 timeout_ms) FL_NO_EXCEPT override;
+    bool isBusy() const FL_NO_EXCEPT override;
+
+    bool registerTransmitCallback(void *callback,
+                                  void *user_ctx) FL_NO_EXCEPT override;
+    const LcdSpiConfig &getConfig() const FL_NO_EXCEPT override;
+
+    u64 getMicroseconds() FL_NO_EXCEPT override;
+    void delay(u32 ms) FL_NO_EXCEPT override;
+
+    void simulateTransmitComplete() FL_NO_EXCEPT override;
+    void setTransmitFailure(bool should_fail) FL_NO_EXCEPT override;
+    void setTransmitDelay(u32 microseconds) FL_NO_EXCEPT override;
+    void setAutoComplete(bool auto_complete) FL_NO_EXCEPT override;
+    const fl::vector<TransmitRecord> &
+    getTransmitHistory() const FL_NO_EXCEPT override;
+    void clearTransmitHistory() FL_NO_EXCEPT override;
+    fl::span<const u16> getLastTransmitData() const FL_NO_EXCEPT override;
+    bool isEnabled() const FL_NO_EXCEPT override;
+    size_t getTransmitCount() const FL_NO_EXCEPT override;
+    size_t getDeinitCount() const FL_NO_EXCEPT override;
+    void reset() FL_NO_EXCEPT override;
+
+  private:
+    void pumpDeferredCallbacks() FL_NO_EXCEPT;
+    void fireCallback() FL_NO_EXCEPT;
+
+    bool mInitialized;
+    bool mEnabled;
+    bool mBusy;
+    size_t mTransmitCount;
+    LcdSpiConfig mConfig;
+    void *mCallback;
+    void *mUserCtx;
+    u32 mTransmitDelayUs;
+    bool mShouldFailTransmit;
+    fl::vector<TransmitRecord> mHistory;
+    size_t mPendingTransmits;
+    u64 mSimulatedTimeUs;
+    bool mFiringCallbacks;
+    size_t mDeferredCallbackCount;
+    bool mAutoComplete;
+    size_t mDeinitCount;
+};
+
+LcdSpiPeripheralMock &LcdSpiPeripheralMock::instance() FL_NO_EXCEPT {
+    return Singleton<LcdSpiPeripheralMockImpl>::instance();
+}
+
+LcdSpiPeripheralMockImpl::LcdSpiPeripheralMockImpl() FL_NO_EXCEPT
+    : mInitialized(false), mEnabled(false), mBusy(false), mTransmitCount(0),
+      mConfig(), mCallback(nullptr), mUserCtx(nullptr), mTransmitDelayUs(0),
+      mShouldFailTransmit(false), mHistory(), mPendingTransmits(0),
+      mSimulatedTimeUs(0), mFiringCallbacks(false), mDeferredCallbackCount(0),
+      mAutoComplete(false), mDeinitCount(0) {
+}
+
+LcdSpiPeripheralMockImpl::~LcdSpiPeripheralMockImpl() {}
+
+bool LcdSpiPeripheralMockImpl::initialize(
+    const LcdSpiConfig &config) FL_NO_EXCEPT {
+    if (config.num_lanes == 0 || config.num_lanes > 16) {
+        FL_WARN_F("LcdSpiPeripheralMock: Invalid num_lanes: %s", config.num_lanes);
+        return false;
+    }
+    // Issue #2270: mirror the real peripheral's owner-aware teardown so
+    // host tests can exercise the cross-driver switch path.
+    const bool sameOwner =
+        (config.owner == mConfig.owner) ||
+        (config.owner == LcdSpiOwnerDriver::NONE);
+    if (mInitialized && !sameOwner) {
+        deinitialize();
+    }
+    mConfig = config;
+    mInitialized = true;
+    mEnabled = true;
+    return true;
+}
+
+void LcdSpiPeripheralMockImpl::deinitialize() FL_NO_EXCEPT {
+    mInitialized = false;
+    mEnabled = false;
+    mBusy = false;
+    mPendingTransmits = 0;
+    mDeinitCount++;
+}
+
+bool LcdSpiPeripheralMockImpl::isInitialized() const FL_NO_EXCEPT {
+    return mInitialized;
+}
+
+u16 *LcdSpiPeripheralMockImpl::allocateBuffer(size_t size_bytes) FL_NO_EXCEPT {
+    size_t aligned_size = ((size_bytes + 63) / 64) * 64;
+    void *buffer = nullptr;
+#ifdef FL_IS_WIN
+    buffer = _aligned_malloc(aligned_size, 64);
+#else
+    buffer = aligned_alloc(64, aligned_size);
+#endif
+    if (buffer == nullptr) {
+        FL_WARN_F("LcdSpiPeripheralMock: Failed to allocate buffer (%s bytes)", aligned_size);
+    }
+    return static_cast<u16 *>(buffer);
+}
+
+void LcdSpiPeripheralMockImpl::freeBuffer(u16 *buffer) FL_NO_EXCEPT {
+    if (buffer != nullptr) {
+#ifdef FL_IS_WIN
+        _aligned_free(buffer);
+#else
+        fl::free(buffer);
+#endif
+    }
+}
+
+bool LcdSpiPeripheralMockImpl::transmit(const u16 *buffer,
+                                        size_t size_bytes) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        FL_WARN_F("LcdSpiPeripheralMock: Cannot transmit - not initialized");
+        return false;
+    }
+    if (mShouldFailTransmit) {
+        return false;
+    }
+
+    TransmitRecord record;
+    size_t word_count = size_bytes / 2;
+    record.buffer_copy.resize(word_count);
+    fl::memcpy(record.buffer_copy.data(), buffer, size_bytes);
+    record.size_bytes = size_bytes;
+    record.timestamp_us = mSimulatedTimeUs;
+    mHistory.push_back(fl::move(record));
+
+    mTransmitCount++;
+    mBusy = true;
+    mPendingTransmits++;
+    if (mAutoComplete) {
+        mDeferredCallbackCount++;
+        pumpDeferredCallbacks();
+    }
+    return true;
+}
+
+bool LcdSpiPeripheralMockImpl::waitTransmitDone(u32 timeout_ms) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+    (void)timeout_ms;
+    if (mPendingTransmits == 0) {
+        mBusy = false;
+        return true;
+    }
+    return false;
+}
+
+bool LcdSpiPeripheralMockImpl::isBusy() const FL_NO_EXCEPT { return mBusy; }
+
+bool LcdSpiPeripheralMockImpl::registerTransmitCallback(
+    void *callback, void *user_ctx) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+    mCallback = callback;
+    mUserCtx = user_ctx;
+    return true;
+}
+
+const LcdSpiConfig &LcdSpiPeripheralMockImpl::getConfig() const FL_NO_EXCEPT {
+    return mConfig;
+}
+
+u64 LcdSpiPeripheralMockImpl::getMicroseconds() FL_NO_EXCEPT {
+    return mSimulatedTimeUs;
+}
+
+void LcdSpiPeripheralMockImpl::delay(u32 ms) FL_NO_EXCEPT {
+    mSimulatedTimeUs += static_cast<u64>(ms) * 1000;
+}
+
+void LcdSpiPeripheralMockImpl::simulateTransmitComplete() FL_NO_EXCEPT {
+    if (mPendingTransmits == 0) {
+        return;
+    }
+
+    // Drain the entire ISR callback chain. When a callback calls transmit()
+    // (to submit the next DMA chunk), mPendingTransmits increments again.
+    // The loop continues until no more chunks are queued.
+    // This simulates instant DMA completion for all chunks in the stream.
+    //
+    // For single-shot transmissions (no callback registered), the loop
+    // fires once and exits — behavior is identical to the old code.
+    while (mPendingTransmits > 0) {
+        mPendingTransmits--;
+        if (mPendingTransmits == 0) {
+            mBusy = false;
+        }
+        if (mCallback != nullptr) {
+            using CallbackType = bool (*)(void *, const void *, void *);
+            auto cb =
+                reinterpret_cast<CallbackType>(mCallback); // ok reinterpret cast
+            cb(nullptr, nullptr, mUserCtx);
+        }
+    }
+}
+
+void LcdSpiPeripheralMockImpl::setTransmitFailure(
+    bool should_fail) FL_NO_EXCEPT {
+    mShouldFailTransmit = should_fail;
+}
+
+void LcdSpiPeripheralMockImpl::setTransmitDelay(
+    u32 microseconds) FL_NO_EXCEPT {
+    mTransmitDelayUs = microseconds;
+}
+
+void LcdSpiPeripheralMockImpl::setAutoComplete(
+    bool auto_complete) FL_NO_EXCEPT {
+    mAutoComplete = auto_complete;
+}
+
+const fl::vector<LcdSpiPeripheralMock::TransmitRecord> &
+LcdSpiPeripheralMockImpl::getTransmitHistory() const FL_NO_EXCEPT {
+    return mHistory;
+}
+
+void LcdSpiPeripheralMockImpl::clearTransmitHistory() FL_NO_EXCEPT {
+    mHistory.clear();
+    mPendingTransmits = 0;
+    mBusy = false;
+}
+
+fl::span<const u16>
+LcdSpiPeripheralMockImpl::getLastTransmitData() const FL_NO_EXCEPT {
+    if (mHistory.empty()) {
+        return fl::span<const u16>();
+    }
+    return fl::span<const u16>(mHistory.back().buffer_copy);
+}
+
+bool LcdSpiPeripheralMockImpl::isEnabled() const FL_NO_EXCEPT {
+    return mEnabled;
+}
+
+size_t LcdSpiPeripheralMockImpl::getTransmitCount() const FL_NO_EXCEPT {
+    return mTransmitCount;
+}
+
+size_t LcdSpiPeripheralMockImpl::getDeinitCount() const FL_NO_EXCEPT {
+    return mDeinitCount;
+}
+
+void LcdSpiPeripheralMockImpl::reset() FL_NO_EXCEPT {
+    mInitialized = false;
+    mEnabled = false;
+    mBusy = false;
+    mTransmitCount = 0;
+    mConfig = LcdSpiConfig();
+    mCallback = nullptr;
+    mUserCtx = nullptr;
+    mTransmitDelayUs = 0;
+    mShouldFailTransmit = false;
+    mHistory.clear();
+    mPendingTransmits = 0;
+    mSimulatedTimeUs = 0;
+    mFiringCallbacks = false;
+    mDeferredCallbackCount = 0;
+    mAutoComplete = false;
+    mDeinitCount = 0;
+}
+
+void LcdSpiPeripheralMockImpl::pumpDeferredCallbacks() FL_NO_EXCEPT {
+    if (mFiringCallbacks) {
+        return;
+    }
+    mFiringCallbacks = true;
+    while (mDeferredCallbackCount > 0) {
+        mDeferredCallbackCount--;
+        fireCallback();
+    }
+    mFiringCallbacks = false;
+}
+
+void LcdSpiPeripheralMockImpl::fireCallback() FL_NO_EXCEPT {
+    if (mPendingTransmits > 0) {
+        mPendingTransmits--;
+    }
+    if (mPendingTransmits == 0) {
+        mBusy = false;
+    }
+    if (mCallback != nullptr) {
+        using CallbackType = bool (*)(void *, const void *, void *);
+        auto cb = reinterpret_cast<CallbackType>(mCallback); // ok reinterpret cast
+        cb(nullptr, nullptr, mUserCtx);
+    }
+}
+
+} // namespace detail
+} // namespace fl
+
+#endif // FASTLED_STUB_IMPL || host platform

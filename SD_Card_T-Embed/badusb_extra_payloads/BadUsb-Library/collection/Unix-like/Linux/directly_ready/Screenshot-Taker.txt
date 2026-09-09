@@ -1,0 +1,24 @@
+REM Title: Linux Screenshot Taker
+REM Author: BadUSB Library
+REM Description: Takes screenshots using scrot
+REM Target: Linux
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Take screenshot with scrot
+STRING scrot ~/Desktop/screenshot_$(date +%Y%m%d_%H%M%S).png
+ENTER
+DELAY 2000
+
+REM Alternative with import (ImageMagick)
+STRING import -window root ~/Desktop/screenshot_import_$(date +%Y%m%d_%H%M%S).png
+ENTER
+DELAY 2000

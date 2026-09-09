@@ -1,0 +1,32 @@
+name: attiny88
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'examples/**'
+      - 'ci/**'
+      - '.github/workflows/build_attiny88.yml'
+      - '.github/workflows/build_template.yml'
+      - 'CMakeLists.txt'
+      - 'platformio.ini'
+      - 'library.json'
+      - 'library.properties'
+      - 'pyproject.toml'
+      - 'uv.lock'
+jobs:
+  build:
+    uses: ./.github/workflows/build_template.yml
+    with:
+      # RGBWColorimetric hits the SK6812 clockless_blocking timing floor
+      # (T3 >= 3 cycles ~= 375ns at 8 MHz, SK6812 T3 = 300ns) — the
+      # FL_STATIC_ASSERT in src/platforms/avr/attiny/clockless_blocking.h
+      # fires at compile time. Exclude the one example, keep the other 31
+      # in the sweep.
+      args: attiny88 all --exclude-examples RGBWColorimetric

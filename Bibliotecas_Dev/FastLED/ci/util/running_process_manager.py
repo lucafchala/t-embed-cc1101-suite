@@ -1,0 +1,65 @@
+import threading
+from typing import Optional
+
+# Import at runtime since this module is part of util package and used broadly
+from running_process import RunningProcess
+
+from ci.util.global_interrupt_handler import handle_keyboard_interrupt
+
+
+class RunningProcessManager:
+    """Thread-safe registry of currently running processes for diagnostics."""
+
+    def __init__(self) -> None:
+        self._lock = threading.RLock()
+        self._processes: list[RunningProcess] = []
+
+    def register(self, proc: RunningProcess) -> None:
+        with self._lock:
+            if proc not in self._processes:
+                self._processes.append(proc)
+
+    def unregister(self, proc: RunningProcess) -> None:
+        with self._lock:
+            try:
+                self._processes.remove(proc)
+            except ValueError:
+                pass
+
+    def list_active(self) -> list[RunningProcess]:
+        with self._lock:
+            return [p for p in self._processes if not p.finished]
+
+    def dump_active(self) -> None:
+        active: list[RunningProcess] = self.list_active()
+        if not active:
+            print("\nNO ACTIVE SUBPROCESSES DETECTED - MAIN PROCESS LIKELY HUNG")
+            return
+
+        print("\nSTUCK SUBPROCESS COMMANDS:")
+        import time
+
+        now = time.time()
+        for idx, p in enumerate(active, 1):
+            pid: Optional[int] = None
+            try:
+                if p.proc is not None:
+                    pid = p.proc.pid
+            except KeyboardInterrupt as ki:
+                handle_keyboard_interrupt(ki)
+                raise
+            except Exception:
+                pid = None
+
+            start = p.start_time
+            duration_str = f"{(now - start):.1f}s" if start is not None else "?"
+            has_output = bool(p.stdout) if p.finished or p.is_running() else False
+            since_out_str = "has-output" if has_output else "no-output"
+
+            print(
+                f"  {idx}. cmd={p.command} pid={pid} duration={duration_str} last_output={since_out_str}"
+            )
+
+
+# Global singleton instance for convenient access
+RunningProcessManagerSingleton = RunningProcessManager()

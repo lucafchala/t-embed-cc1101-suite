@@ -1,0 +1,27 @@
+REM Title: macOS System Monitor
+REM Author: BadUSB Library
+REM Description: Shows system performance information
+REM Target: macOS 10.15+
+REM Category: Utilities
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Show system info
+STRING top -l 1
+ENTER
+DELAY 2000
+
+STRING df -h
+ENTER
+DELAY 2000
+
+STRING ps aux | head -20
+ENTER
+DELAY 2000

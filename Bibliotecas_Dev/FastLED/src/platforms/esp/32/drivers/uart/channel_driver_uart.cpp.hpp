@@ -1,0 +1,362 @@
+// IWYU pragma: private
+
+/// @file channel_driver_uart.cpp
+/// @brief UART implementation of ChannelEngine for ESP32
+///
+/// Uses wave10 encoding with dynamic LUT generation from chipset timing.
+/// Supports multi-timing by reinitializing the UART peripheral when the
+/// baud rate changes between chipset groups.
+
+#include "platforms/esp/32/drivers/uart/channel_driver_uart.h"
+#include "fl/chipsets/chipset_timing_config.h"
+#include "fl/system/delay.h"
+#include "fl/log/log.h"
+#include "fl/task/executor.h"
+#include "fl/log/log.h"
+#include "fl/stl/algorithm.h"
+#include "fl/stl/charconv.h"
+#include "fl/system/trace.h"
+#include "fl/log/log.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+//=============================================================================
+// Constructor / Destructor
+//=============================================================================
+
+ChannelEngineUART::ChannelEngineUART(fl::shared_ptr<IUartPeripheral> peripheral,
+                                     int uart_num) FL_NO_EXCEPT
+    : mPeripheral(fl::move(peripheral)),
+      mInitialized(false),
+      mCurrentBaudRate(0),
+      mCurrentDataBits(0),
+      mUartNum(uart_num),
+      mCurrentGroupIndex(0) {
+    if (!mPeripheral) {
+        FL_WARN_F("UART: Null peripheral pointer in constructor");
+    }
+}
+
+ChannelEngineUART::~ChannelEngineUART() {
+    // Wait for any active transmissions to complete
+    while (poll() == DriverState::BUSY || poll() == DriverState::DRAINING) {
+        task::run(250, task::ExecFlags::SYSTEM);
+    }
+
+    // Deinitialize peripheral
+    if (mPeripheral && mPeripheral->isInitialized()) {
+        mPeripheral->deinitialize();
+    }
+
+    // Clear state
+    mScratchBuffer.clear();
+    mEncodedBuffer.clear();
+    mEnqueuedChannels.clear();
+    mTransmittingChannels.clear();
+    mChipsetGroups.clear();
+    mLutCache.clear();
+    mCurrentGroupIndex = 0;
+}
+
+bool ChannelEngineUART::canHandle(const ChannelDataPtr& data) const FL_NO_EXCEPT {
+    if (!data) {
+        return false;
+    }
+    // Reject SPI chipsets
+    if (data->isSpi()) {
+        return false;
+    }
+    // Validate that the chipset's timing is representable via UART wave10
+    const ChipsetTimingConfig& timing = data->getTiming();
+    return canRepresentTiming(timing);
+}
+
+//=============================================================================
+// Public Interface - IChannelDriver Implementation
+//=============================================================================
+
+void ChannelEngineUART::enqueue(ChannelDataPtr channelData) FL_NO_EXCEPT {
+    if (channelData) {
+        mEnqueuedChannels.push_back(channelData);
+    }
+}
+
+void ChannelEngineUART::show() FL_NO_EXCEPT {
+    FL_SCOPED_TRACE;
+
+    if (!mEnqueuedChannels.empty()) {
+        // Move enqueued channels to transmitting channels
+        mTransmittingChannels = fl::move(mEnqueuedChannels);
+        mEnqueuedChannels.clear();
+
+        // Group channels by chipset timing configuration
+        mChipsetGroups.clear();
+        mCurrentGroupIndex = 0;
+
+        for (size_t i = 0; i < mTransmittingChannels.size(); i++) {
+            const ChannelDataPtr& channel = mTransmittingChannels[i];
+            const ChipsetTimingConfig& timing = channel->getTiming();
+
+            // Find existing group with matching timing
+            bool found = false;
+            for (size_t j = 0; j < mChipsetGroups.size(); j++) {
+                if (mChipsetGroups[j].mTiming == timing) {
+                    mChipsetGroups[j].mChannels.push_back(channel);
+                    found = true;
+                    break;
+                }
+            }
+
+            // Create new group if no match found
+            if (!found) {
+                ChipsetGroup newGroup{timing, {}};
+                newGroup.mChannels.push_back(channel);
+                mChipsetGroups.push_back(fl::move(newGroup));
+            }
+        }
+
+        // Sort groups by transmission time (fastest first)
+        fl::sort(mChipsetGroups.begin(), mChipsetGroups.end(),
+                 [](const ChipsetGroup& a, const ChipsetGroup& b) FL_NO_EXCEPT {
+                     size_t maxSizeA = 0;
+                     for (const auto& channel : a.mChannels) {
+                         size_t size = channel->getSize();
+                         if (size > maxSizeA) {
+                             maxSizeA = size;
+                         }
+                     }
+
+                     size_t maxSizeB = 0;
+                     for (const auto& channel : b.mChannels) {
+                         size_t size = channel->getSize();
+                         if (size > maxSizeB) {
+                             maxSizeB = size;
+                         }
+                     }
+
+                     u64 transmissionTimeA =
+                         static_cast<u64>(maxSizeA) *
+                         a.mTiming.total_period_ns();
+                     u64 transmissionTimeB =
+                         static_cast<u64>(maxSizeB) *
+                         b.mTiming.total_period_ns();
+
+                     return transmissionTimeA < transmissionTimeB;
+                 });
+
+        // UART is single-lane: flatten multi-channel groups into sequential transmissions
+        fl::vector<ChannelDataPtr> flatChannelList;
+        for (const auto& group : mChipsetGroups) {
+            for (const auto& channel : group.mChannels) {
+                flatChannelList.push_back(channel);
+            }
+        }
+
+        // Replace chipset groups with single-channel "groups" for sequential transmission
+        mChipsetGroups.clear();
+        for (const auto& channel : flatChannelList) {
+            ChipsetGroup singleChannelGroup{channel->getTiming(), {}};
+            singleChannelGroup.mChannels.push_back(channel);
+            mChipsetGroups.push_back(fl::move(singleChannelGroup));
+        }
+
+        // Begin transmission of first channel
+        if (!mChipsetGroups.empty()) {
+            beginTransmission(fl::span<const ChannelDataPtr>(
+                mChipsetGroups[0].mChannels.data(),
+                mChipsetGroups[0].mChannels.size()));
+        }
+    }
+}
+
+IChannelDriver::DriverState ChannelEngineUART::poll() FL_NO_EXCEPT {
+    // If not initialized, we're ready (no hardware to poll)
+    if (!mInitialized) {
+        return DriverState::READY;
+    }
+
+    // Poll UART peripheral state
+    bool busy = mPeripheral->isBusy();
+
+    if (!busy) {
+        // Current group completed - check if more groups need transmission
+        if (!mChipsetGroups.empty() &&
+            mCurrentGroupIndex < mChipsetGroups.size() - 1) {
+            // More groups remaining - start next group
+            mCurrentGroupIndex++;
+
+            bool is_last_group =
+                (mCurrentGroupIndex == mChipsetGroups.size() - 1);
+
+            beginTransmission(fl::span<const ChannelDataPtr>(
+                mChipsetGroups[mCurrentGroupIndex].mChannels.data(),
+                mChipsetGroups[mCurrentGroupIndex].mChannels.size()));
+
+            return is_last_group ? DriverState::DRAINING : DriverState::READY;
+        }
+
+        // All groups completed - clear state and return READY
+        mTransmittingChannels.clear();
+        mChipsetGroups.clear();
+        mCurrentGroupIndex = 0;
+        return DriverState::READY;
+    }
+
+    // Transmission in progress - return DRAINING
+    return DriverState::DRAINING;
+}
+
+//=============================================================================
+// Private Methods - LUT Cache
+//=============================================================================
+
+const Wave10Lut& ChannelEngineUART::getOrBuildLut(const ChipsetTimingConfig& timing) FL_NO_EXCEPT {
+    // Search cache
+    for (const auto& entry : mLutCache) {
+        if (entry.mTiming == timing) {
+            return entry.mLut;
+        }
+    }
+
+    // Build and cache new LUT
+    LutCacheEntry newEntry;
+    newEntry.mTiming = timing;
+    newEntry.mLut = buildWave10Lut(timing);
+    newEntry.mBaudRate = newEntry.mLut.baudRate(timing);
+    mLutCache.push_back(newEntry);
+    return mLutCache.back().mLut;
+}
+
+//=============================================================================
+// Private Methods - Transmission
+//=============================================================================
+
+void ChannelEngineUART::beginTransmission(
+    fl::span<const ChannelDataPtr> channelData) FL_NO_EXCEPT {
+
+    FL_DBG_F("UART: beginTransmission() called with %s channel(s)", channelData.size());
+
+    if (channelData.size() == 0) {
+        FL_DBG_F("UART: No channels to transmit (size==0)");
+        return;
+    }
+
+    // UART is single-lane only - show() guarantees single channel per transmission
+    if (channelData.size() != 1) {
+        FL_WARN_F("UART: Expected exactly 1 channel, got %s (internal error)", channelData.size());
+        return;
+    }
+
+    const ChannelDataPtr& channel = channelData[0];
+    int pin = channel->getPin();
+    const ChipsetTimingConfig& timing = channel->getTiming();
+    size_t dataSize = channel->getSize();
+
+    FL_DBG_F("UART: Channel pin=%s, dataSize=%s", pin, dataSize);
+
+    if (dataSize == 0) {
+        return;
+    }
+
+    // Get or build the wave LUT for this timing FIRST — the selected
+    // frame geometry (wave10 = 8 data bits @ 5 pulses/bit, wave8-frame
+    // = 6 data bits @ 4 pulses/bit) determines both the baud rate and
+    // the UART word length.
+    const Wave10Lut& lut = getOrBuildLut(timing);
+    if (lut.pulses_per_bit == 0) {
+        FL_WARN_F("UART: timing not representable by any wave geometry");
+        return;
+    }
+    const u32 required_baud = lut.baudRate(timing);
+    const u8 required_data_bits = lut.dataBits();
+
+    // Initialize or reinitialize UART peripheral if needed
+    if (!mInitialized || mCurrentBaudRate != required_baud ||
+        mCurrentDataBits != required_data_bits) {
+        if (mInitialized) {
+            // Reinitialize with new baud rate / word length
+            FL_DBG_F("UART: Reinitializing peripheral (baud change: %s -> %s)", mCurrentBaudRate, required_baud);
+            mPeripheral->deinitialize();
+            mInitialized = false;
+        }
+
+        FL_DBG_F("UART: Initializing peripheral with baud=%s, pin=%s", required_baud, pin);
+
+        UartPeripheralConfig config(
+            required_baud,      // mBaudRate (derived from timing + geometry)
+            pin,                // mTxPin
+            -1,                 // mRxPin (not used)
+            4096,               // mTxBufferSize (4 KB for DMA)
+            256,                // mRxBufferSize (minimum required by ESP-IDF)
+            1,                  // mStopBits (N1)
+            mUartNum,           // which UART block (1 or 2 — FastLED#3576 Phase 2)
+            required_data_bits  // mDataBits (8 = wave10, 6 = wave8-frame)
+        );
+
+        if (!mPeripheral->initialize(config)) {
+            FL_WARN_F("UART: Peripheral initialization failed");
+            return;
+        }
+
+        FL_DBG_F("UART: Peripheral initialized successfully");
+        mInitialized = true;
+        mCurrentBaudRate = required_baud;
+        mCurrentDataBits = required_data_bits;
+    }
+
+    // Prepare scratch buffer (copy LED RGB data)
+    prepareScratchBuffer(channelData, dataSize);
+
+    // Encode LED data to UART bytes using wave10 encoding
+    size_t required_encoded_size = calculateUartBufferSize(dataSize);
+    mEncodedBuffer.resize(required_encoded_size);
+
+    size_t encoded_bytes = encodeLedsToUart(
+        mScratchBuffer.data(),
+        dataSize,
+        mEncodedBuffer.data(),
+        mEncodedBuffer.size(),
+        lut);
+
+    FL_DBG_F("UART: Encoded %s bytes from %s LED bytes", encoded_bytes, dataSize);
+
+    if (encoded_bytes == 0) {
+        FL_WARN_F("UART: Encoding failed (required=%s bytes)", required_encoded_size);
+        return;
+    }
+
+    // Submit encoded data to UART peripheral
+    FL_DBG_F("UART: Writing %s bytes to peripheral", encoded_bytes);
+    if (!mPeripheral->writeBytes(mEncodedBuffer.data(), encoded_bytes)) {
+        FL_WARN_F("UART: Write failed (size=%s bytes)", encoded_bytes);
+        return;
+    }
+
+    FL_DBG_F("UART: Write successful, transmission started (non-blocking DMA)");
+}
+
+void ChannelEngineUART::prepareScratchBuffer(
+    fl::span<const ChannelDataPtr> channelData,
+    size_t maxChannelSize) FL_NO_EXCEPT {
+
+    mScratchBuffer.resize(maxChannelSize);
+
+    const auto& srcData = channelData[0]->getData();
+    fl::memcpy(mScratchBuffer.data(), srcData.data(), maxChannelSize);
+}
+
+//=============================================================================
+// Factory Function
+//=============================================================================
+
+fl::shared_ptr<IChannelDriver> createUartEngine(int uart_num,
+                                                int tx_pin,
+                                                u32 baud_rate) FL_NO_EXCEPT {
+    (void)uart_num;
+    (void)tx_pin;
+    (void)baud_rate;
+    return nullptr;
+}
+
+} // namespace fl

@@ -1,0 +1,337 @@
+// AutoResearchSpiDma.h — LPC845 SPI + DMA async driver AutoResearch
+// validation harness (FastLED #3456, Phase 1 of #3453 bench bring-up).
+//
+// Device-side RPC handlers that exercise the LPC845 SPI-with-DMA0
+// async driver (`ARMHardwareSPIOutputDMA<>` from
+// `platforms/arm/lpc/spi_arm_lpc_dma.h`, PR #3454) on real silicon.
+//
+// Gated on `FL_IS_ARM_LPC_845 && FASTLED_LPC_SPI_DMA`. The earlier
+// LPC804 widening (#3505) was reverted after empirical evidence
+// confirmed LPC804 silicon has no DMA peripheral — see
+// `agents/docs/peripheral-existence.md` "Historical anti-example".
+// LPC845 F_CPU = 24 MHz → default harness divider 6 gives ~4 MHz SCK.
+// The whole file compiles out on any other build target.
+//
+// **Sibling of `AutoResearchPwmDmaClockless.h`** (#3468) — same
+// architectural shape, different peripheral. The two must not be
+// compiled into the same build (both claim DMA0 channels and the
+// LowMemory flash budget doesn't fit both). Enforced host-side by
+// `bash autoresearch` refusing `--dma-spi --pwm-dma-cl` together.
+//
+// Handlers registered (call `autoresearch::dma_spi::bind(remote)` from
+// AutoResearchLowMemory.h when `FASTLED_LPC_SPI_DMA` is defined):
+//
+//   `dmaSpiTransferOnce(byte_count, byte_pattern)`
+//     Fill an `byte_count`-byte buffer with `byte_pattern`, call
+//     `kickDmaStream()`, wait for `done()`, return CSV
+//     `"success,started_us,done_us,cpu_busy_bit"`. `cpu_busy_bit` is
+//     always 0 in this handler (we wait on the CPU); the async proof
+//     is via `dmaSpiTransferOverlap` below.
+//
+//   `dmaSpiTransferOverlap(byte_count, byte_pattern)`
+//     Kick the same stream but run a tight beacon-toggle counter
+//     between `kickDmaStream()` and `done() == true`. Reports CSV
+//     `"success,total_us,toggle_count"`. Non-zero `toggle_count`
+//     under DMA load is the affirmative async claim — the CPU was
+//     free to run application code while the DMA0 channel drove
+//     SPI TX.
+//
+//   `dmaSpiMeasureSck(divider)`
+//     Emits a short burst at the passed divider; returns
+//     `"success,total_us,byte_count"` so the host can compute the
+//     effective SCK rate via `SCK_hz = byte_count * 8 / total_s`.
+//     No SCT input capture on the SCK pin (that's issue #3015 Phase 3
+//     territory — the SCT capture backend is opt-in and doesn't ship
+//     the mux configuration for arbitrary SPI pins yet); the host
+//     compares the measured effective rate against the requested
+//     divider band as a first-order sanity check.
+//
+// Buffer sizing: the harness reuses the driver's static encode buffer
+// (`FASTLED_LPC_SPI_DMA_MAX_BYTES`, default 2048). Requests larger
+// than that are clamped by the driver.
+
+#pragma once
+
+#include <FastLED.h>
+
+#if defined(FL_IS_ARM_LPC_845) && defined(FASTLED_LPC_SPI_DMA)
+
+#include "fl/remote/remote.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/singleton.h"
+#include "fl/stl/sstream.h"
+#include "platforms/arm/lpc/spi_arm_lpc_dma.h" // ok platform headers — AutoResearch driver-specific test needs the concrete SPI DMA driver
+
+namespace autoresearch {
+namespace dma_spi {
+
+// Default pin assignment matches the LPC845-BRK SPI0 typical routing.
+// Since #3580 the driver's init() owns the full peripheral plumbing —
+// SPI clock enable, FCLKSEL function-clock select, reset release, and
+// SWM routing of SCK/MOSI to these pins. No startup-code cooperation
+// is required.
+//
+// If the user needs to move pins, override at compile time via
+// `-DFASTLED_LPC_SPI_DMA_HARNESS_DATA_PIN=<N>` /
+// `-DFASTLED_LPC_SPI_DMA_HARNESS_CLOCK_PIN=<N>` /
+// `-DFASTLED_LPC_SPI_DMA_HARNESS_DIVIDER=<N>`.
+#ifndef FASTLED_LPC_SPI_DMA_HARNESS_DATA_PIN
+#define FASTLED_LPC_SPI_DMA_HARNESS_DATA_PIN 17
+#endif
+#ifndef FASTLED_LPC_SPI_DMA_HARNESS_CLOCK_PIN
+#define FASTLED_LPC_SPI_DMA_HARNESS_CLOCK_PIN 13
+#endif
+#ifndef FASTLED_LPC_SPI_DMA_HARNESS_DIVIDER
+// 24 MHz core / 6 → 4 MHz SCK. Fast enough that a 256-byte transfer
+// completes in ~0.5 ms — well inside the RPC response window.
+#define FASTLED_LPC_SPI_DMA_HARNESS_DIVIDER 6
+#endif
+
+using HarnessDriver = fl::ARMHardwareSPIOutputDMA<
+    static_cast<fl::u8>(FASTLED_LPC_SPI_DMA_HARNESS_DATA_PIN),
+    static_cast<fl::u8>(FASTLED_LPC_SPI_DMA_HARNESS_CLOCK_PIN),
+    static_cast<fl::u32>(FASTLED_LPC_SPI_DMA_HARNESS_DIVIDER)>;
+
+struct SpiDmaHarnessState {
+    fl::u8 buffer[FASTLED_LPC_SPI_DMA_MAX_BYTES];
+    HarnessDriver driver;
+    bool initialized;
+
+    SpiDmaHarnessState() : initialized(false) {}
+};
+
+#if FASTLED_LPC_DMA_ISR
+struct SpiDmaStreamState {
+    fl::u8 source[FASTLED_LPC_SPI_DMA_STREAM_BYTES];
+};
+
+inline SpiDmaStreamState& spiDmaStreamState() FL_NO_EXCEPT {
+    return fl::SingletonShared<SpiDmaStreamState>::instance();
+}
+#endif
+
+inline SpiDmaHarnessState& spiDmaHarnessState() FL_NO_EXCEPT {
+    return fl::SingletonShared<SpiDmaHarnessState>::instance();
+}
+
+// Bench buffer: sized to the driver's encode-buffer capacity so callers
+// can hit the widest DMA descriptor the driver will accept.
+inline fl::u8* harnessBuffer() FL_NO_EXCEPT {
+    return spiDmaHarnessState().buffer;
+}
+
+// Lazy driver instantiation — first RPC call configures SPI+DMA once.
+inline HarnessDriver& harnessDriver() FL_NO_EXCEPT {
+    SpiDmaHarnessState& state = spiDmaHarnessState();
+    if (!state.initialized) {
+        state.driver.init();
+        state.initialized = true;
+    }
+    return state.driver;
+}
+
+// Bounds guard for host-supplied lengths — matches
+// FASTLED_LPC_SPI_DMA_MAX_BYTES so we can't overflow the static
+// encode buffer even if the host misbehaves.
+inline int clampByteCount(int n) FL_NO_EXCEPT {
+    if (n <= 0) return 0;
+    const int cap = static_cast<int>(FASTLED_LPC_SPI_DMA_MAX_BYTES);
+    return (n > cap) ? cap : n;
+}
+
+// One-shot DMA transfer with CPU wait. CSV: "success,started_us,done_us,cpu_busy".
+inline fl::string transferOnceHandler(int byte_count, int byte_pattern) FL_NO_EXCEPT {
+    const int len = clampByteCount(byte_count);
+    if (len == 0) return fl::string("0,0,0,0");
+    fl::u8* buf = harnessBuffer();
+    const fl::u8 pat = static_cast<fl::u8>(byte_pattern & 0xFF);
+    for (int i = 0; i < len; ++i) buf[i] = pat;
+
+    HarnessDriver& drv = harnessDriver();
+    // Ensure prior stream has drained before we time this one.
+    drv.waitFully();
+
+    const fl::u32 t_start = micros();
+    HarnessDriver::kickDmaStream(buf, static_cast<fl::u32>(len));
+    // Poll for done() without WFI so the elapsed measurement matches
+    // the CPU-busy-wait cost path. (Callers wanting the WFI sleep path
+    // use `waitDma()` — that's not what we're measuring here.)
+    //
+    // Bounded spin (#3580 diagnosis): a healthy 512-byte stream at 4 MHz
+    // SCK completes in ~1 ms; 2M iterations ≈ 1 s at 24 MHz. On timeout,
+    // return a register snapshot instead of wedging into the watchdog:
+    //   "0,dma_active,chan_xfercfg,chan_ctlstat,spi_stat,dma_errint"
+    fl::u32 spins = 0;
+    while (!HarnessDriver::done()) {
+        if (++spins > 2000000u) {
+            fl::sstream d;
+            d << 0 << ','
+              << DMA0->COMMON[0].ACTIVE << ','
+              << DMA0->CHANNEL[FASTLED_LPC_SPI_DMA_CHANNEL].XFERCFG << ','
+              << DMA0->CHANNEL[FASTLED_LPC_SPI_DMA_CHANNEL].CTLSTAT << ','
+              << SPI0->STAT << ','
+              << DMA0->COMMON[0].ERRINT;
+            return d.str();
+        }
+    }
+    const fl::u32 t_end = micros();
+
+    fl::sstream s;
+    s << 1 << ',' << t_start << ',' << t_end << ',' << 0;
+    return s.str();
+}
+
+// Async proof — kick and beacon-toggle a counter while DMA runs.
+// CSV: "success,total_us,toggle_count". Non-zero toggle_count is the
+// affirmative async claim.
+inline fl::string transferOverlapHandler(int byte_count, int byte_pattern) FL_NO_EXCEPT {
+    const int len = clampByteCount(byte_count);
+    if (len == 0) return fl::string("0,0,0");
+    fl::u8* buf = harnessBuffer();
+    const fl::u8 pat = static_cast<fl::u8>(byte_pattern & 0xFF);
+    for (int i = 0; i < len; ++i) buf[i] = pat;
+
+    HarnessDriver& drv = harnessDriver();
+    drv.waitFully();
+
+    const fl::u32 t_start = micros();
+    HarnessDriver::kickDmaStream(buf, static_cast<fl::u32>(len));
+
+    // Beacon-toggle loop. Volatile counter forces the compiler to
+    // emit real memory ops each iteration — otherwise the loop
+    // collapses and the "async proof" becomes an over-optimized nop.
+    volatile fl::u32 toggle_count = 0;
+    while (!HarnessDriver::done()) {
+        ++toggle_count;
+    }
+    const fl::u32 t_end = micros();
+    const fl::u32 total_us = t_end - t_start;
+
+    fl::sstream s;
+    s << 1 << ',' << total_us << ',' << toggle_count;
+    return s.str();
+}
+
+// SCK measurement via wall-clock timing. CSV: "success,total_us,byte_count".
+// Host computes effective SCK from `byte_count * 8 / total_us`. The
+// `divider_hint` parameter is echoed back for the log — the compile-time
+// driver divider is what actually runs (`FASTLED_LPC_SPI_DMA_HARNESS_DIVIDER`).
+inline fl::string measureSckHandler(int divider_hint) FL_NO_EXCEPT {
+    (void)divider_hint;
+    // 512 bytes @ 4 MHz SCK ≈ 1.024 ms — small enough for RPC latency,
+    // big enough that the timer resolution isn't the dominant term.
+    constexpr int kBenchBytes = 512;
+    fl::u8* buf = harnessBuffer();
+    for (int i = 0; i < kBenchBytes; ++i) buf[i] = 0xA5;
+
+    HarnessDriver& drv = harnessDriver();
+    drv.waitFully();
+
+    const fl::u32 t_start = micros();
+    HarnessDriver::kickDmaStream(buf, static_cast<fl::u32>(kBenchBytes));
+    while (!HarnessDriver::done()) {
+        // spin
+    }
+    // Include the SPI master shift-register drain so the wire time
+    // covers full byte delivery (kickDmaStream returns when DMA is
+    // drained, but the SPI master can still be clocking out the
+    // final byte in the shift register).
+    drv.waitFully();
+    const fl::u32 t_end = micros();
+    const fl::u32 total_us = t_end - t_start;
+
+    fl::sstream s;
+    s << 1 << ',' << total_us << ',' << kBenchBytes;
+    return s.str();
+}
+
+// Bind the three handlers on the passed-in `Remote`. Call from
+// AutoResearchLowMemory.h under `#if defined(FASTLED_LPC_SPI_DMA)`.
+#if FASTLED_LPC_DMA_ISR
+// ISR-refilled streaming proof (#3453 follow-up). Streams a frame larger
+// than the whole encode buffer (multi-chunk, ping-pong ISR refill) while
+// beacon-toggling on the main thread. CSV: "success,total_us,toggle_count".
+// A stalled refill chain times out into a register-snapshot CSV.
+//
+// RAM budget (#3585): the LPC845-BRK AutoResearch build's JSON-RPC stack
+// leaves only ~3 KB shared between heap and stack on the 16 KB part. The
+// DMA completion ISR (encode + descriptor arm) preempts that stack at its
+// deepest point; a large `stream_src` static shrank the gap until the ISR
+// pushed the stack into the heap and corrupted a return address (wild-PC
+// HardFault, not a driver logic bug — the ping-pong is correct). 512 bytes
+// is a genuine multi-chunk stream (2 chunks + 1 ISR refill at kHalfCap=256)
+// and keeps enough headroom. Do NOT raise this on the 16 KB bench build.
+#ifndef FASTLED_LPC_SPI_DMA_STREAM_BYTES
+#define FASTLED_LPC_SPI_DMA_STREAM_BYTES 512
+#endif
+inline fl::string streamOverlapHandler(int byte_count, int byte_pattern) FL_NO_EXCEPT {
+    fl::u8* stream_src = spiDmaStreamState().source;
+    int len = byte_count;
+    if (len <= 0) return fl::string("0,0,0");
+    if (len > FASTLED_LPC_SPI_DMA_STREAM_BYTES)
+        len = FASTLED_LPC_SPI_DMA_STREAM_BYTES;
+    const fl::u8 pat = static_cast<fl::u8>(byte_pattern & 0xFF);
+    for (int i = 0; i < len; ++i) stream_src[i] = pat;
+
+    HarnessDriver& drv = harnessDriver();
+    drv.waitFully();
+
+    const fl::u32 t_start = micros();
+    if (!HarnessDriver::kickDmaStreamAsync(stream_src,
+                                           static_cast<fl::u32>(len))) {
+        return fl::string("0,kick_refused,0");
+    }
+    volatile fl::u32 toggle_count = 0;
+    fl::u32 spins = 0;
+    while (!HarnessDriver::streamDone()) {
+        ++toggle_count;
+        if (++spins > 4000000u) {
+            fl::sstream d;
+            d << 0 << ',' << DMA0->COMMON[0].ACTIVE << ','
+              << DMA0->CHANNEL[FASTLED_LPC_SPI_DMA_CHANNEL].CTLSTAT << ','
+              << SPI0->STAT;
+            return d.str();
+        }
+    }
+    const fl::u32 total_us = micros() - t_start;
+
+    fl::sstream s;
+    s << 1 << ',' << total_us << ',' << toggle_count;
+    return s.str();
+}
+#endif  // FASTLED_LPC_DMA_ISR
+
+// Args arrive as a JSON array (the house RpcClient convention — a single
+// `const fl::json&` param that IS the positional-arg array). Read
+// `args[N]` positionally. This is what lets the bench run over fbuild's
+// Rust serial monitor (ci.rpc_client.RpcClient) instead of raw pyserial;
+// see agents/docs/hardware-autoresearch.md "Device serial".
+inline int argInt(const fl::json& args, fl::size i, int fallback) FL_NO_EXCEPT {
+    return static_cast<int>(args[i].as_int().value_or(fallback));
+}
+
+inline void bind(fl::Remote& remote) FL_NO_EXCEPT {
+    remote.bind("dmaSpiTransferOnce",
+        [](const fl::json& args) -> fl::string {
+            return transferOnceHandler(argInt(args, 0, 0), argInt(args, 1, 0));
+        });
+#if FASTLED_LPC_DMA_ISR
+    remote.bind("dmaSpiStreamOverlap",
+        [](const fl::json& args) -> fl::string {
+            return streamOverlapHandler(argInt(args, 0, 0), argInt(args, 1, 0));
+        });
+#endif
+    remote.bind("dmaSpiTransferOverlap",
+        [](const fl::json& args) -> fl::string {
+            return transferOverlapHandler(argInt(args, 0, 0), argInt(args, 1, 0));
+        });
+    remote.bind("dmaSpiMeasureSck",
+        [](const fl::json& args) -> fl::string {
+            return measureSckHandler(argInt(args, 0, 6));
+        });
+}
+
+}  // namespace dma_spi
+}  // namespace autoresearch
+
+#endif  // FL_IS_ARM_LPC_845 && FASTLED_LPC_SPI_DMA

@@ -1,0 +1,112 @@
+// IWYU pragma: private
+
+/*
+
+// ok no namespace fl
+  FastLED — Parallel Soft-SPI Host Simulation Layer
+  --------------------------------------------------
+  Ring buffer implementation for capturing GPIO events during host-side testing.
+  Allows unit tests to verify ISR behavior without hardware.
+
+  License: MIT (FastLED)
+*/
+
+#include "platforms/shared/spi_bitbang/spi_platform.h"
+#include "platforms/shared/spi_bitbang/host_sim.h"
+
+// Compile for host simulation OR stub platform (includes tests)
+// STUB_PLATFORM now always gets real ISR implementations instead of stubs
+#if defined(FASTLED_SPI_HOST_SIMULATION) || defined(STUB_PLATFORM)
+#include "fl/stl/stdint.h"
+#include "fl/stl/cstring.h"
+#include "fl/stl/singleton.h"
+#include "fl/stl/noexcept.h"
+
+/* Ring buffer for capturing GPIO events */
+#define FL_GPIO_SIM_RING_SIZE 4096
+
+typedef struct {
+    FL_GPIO_Event events[FL_GPIO_SIM_RING_SIZE];
+    fl::u32 write_pos;
+    fl::u32 read_pos;
+    fl::u32 tick_counter;
+    fl::u32 overflow_count;
+} FL_GPIO_RingBuffer;
+
+static FL_GPIO_RingBuffer& g_gpio_ring() FL_NO_EXCEPT {
+    return fl::Singleton<FL_GPIO_RingBuffer>::instance();
+}
+
+extern "C" {
+
+/* Initialize ring buffer */
+void fl_gpio_sim_init(void) FL_NO_EXCEPT {
+    fl::memset(&g_gpio_ring(), 0, sizeof(g_gpio_ring()));
+}
+
+/* Capture SET event */
+void fl_gpio_sim_write_set(fl::u32 mask) FL_NO_EXCEPT {
+    fl::u32 pos = g_gpio_ring().write_pos;
+    g_gpio_ring().events[pos].event_type = 0;  /* SET */
+    g_gpio_ring().events[pos].gpio_mask = mask;
+    g_gpio_ring().events[pos].timestamp = g_gpio_ring().tick_counter;
+
+    g_gpio_ring().write_pos = (pos + 1) % FL_GPIO_SIM_RING_SIZE;
+    if (g_gpio_ring().write_pos == g_gpio_ring().read_pos) {
+        g_gpio_ring().overflow_count++;
+    }
+}
+
+/* Capture CLEAR event */
+void fl_gpio_sim_write_clear(fl::u32 mask) FL_NO_EXCEPT {
+    fl::u32 pos = g_gpio_ring().write_pos;
+    g_gpio_ring().events[pos].event_type = 1;  /* CLEAR */
+    g_gpio_ring().events[pos].gpio_mask = mask;
+    g_gpio_ring().events[pos].timestamp = g_gpio_ring().tick_counter;
+
+    g_gpio_ring().write_pos = (pos + 1) % FL_GPIO_SIM_RING_SIZE;
+    if (g_gpio_ring().write_pos == g_gpio_ring().read_pos) {
+        g_gpio_ring().overflow_count++;
+    }
+}
+
+/* Advance simulation time (called by test harness) */
+void fl_gpio_sim_tick(void) FL_NO_EXCEPT {
+    g_gpio_ring().tick_counter++;
+}
+
+/* Read event from ring buffer (returns false if empty) */
+bool fl_gpio_sim_read_event(FL_GPIO_Event* out) FL_NO_EXCEPT {
+    if (g_gpio_ring().read_pos == g_gpio_ring().write_pos) {
+        return false;  /* Empty */
+    }
+
+    *out = g_gpio_ring().events[g_gpio_ring().read_pos];
+    g_gpio_ring().read_pos = (g_gpio_ring().read_pos + 1) % FL_GPIO_SIM_RING_SIZE;
+    return true;
+}
+
+/* Get event count */
+fl::u32 fl_gpio_sim_get_event_count(void) FL_NO_EXCEPT {
+    if (g_gpio_ring().write_pos >= g_gpio_ring().read_pos) {
+        return g_gpio_ring().write_pos - g_gpio_ring().read_pos;
+    } else {
+        return FL_GPIO_SIM_RING_SIZE - g_gpio_ring().read_pos + g_gpio_ring().write_pos;
+    }
+}
+
+/* Clear ring buffer */
+void fl_gpio_sim_clear(void) FL_NO_EXCEPT {
+    g_gpio_ring().write_pos = 0;
+    g_gpio_ring().read_pos = 0;
+    g_gpio_ring().overflow_count = 0;
+}
+
+/* Get overflow count (for diagnostics) */
+fl::u32 fl_gpio_sim_get_overflow_count(void) FL_NO_EXCEPT {
+    return g_gpio_ring().overflow_count;
+}
+
+}  // extern "C"
+
+#endif /* FASTLED_SPI_HOST_SIMULATION */

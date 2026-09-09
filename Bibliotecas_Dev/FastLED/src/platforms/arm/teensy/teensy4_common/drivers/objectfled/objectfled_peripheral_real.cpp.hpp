@@ -1,0 +1,137 @@
+// IWYU pragma: private
+
+/// @file objectfled_peripheral_real.cpp.hpp
+/// @brief Real ObjectFLED peripheral implementation for Teensy 4.x
+
+#include "platforms/arm/teensy/is_teensy.h"
+
+#if defined(FL_IS_TEENSY_4X)
+
+#include "platforms/arm/teensy/teensy4_common/drivers/objectfled/iobjectfled_peripheral.h"
+#include "platforms/arm/teensy/teensy4_common/drivers/objectfled/objectfled_diagnostics.h"
+
+#include "fl/stl/cstring.h"
+// IWYU pragma: begin_keep
+#include "third_party/object_fled/src/ObjectFLED.h"
+#include "third_party/object_fled/src/ObjectFLEDDmaManager.h"
+#include "third_party/object_fled/src/ObjectFLEDPinValidation.h"
+// IWYU pragma: end_keep
+
+namespace fl {
+
+// ============================================================================
+// ObjectFLEDInstanceReal: wraps a real ObjectFLED instance
+// ============================================================================
+
+class ObjectFLEDInstanceReal : public IObjectFLEDInstance {
+public:
+    ObjectFLEDInstanceReal(ObjectFLED* ofled, u32 totalBytes, const u8* pins,
+                           u32 pinCount)
+        : mObjectFLED(ofled), mTotalBytes(totalBytes),
+          mPinCount(pinCount < kMaxCapturedPins ? pinCount : kMaxCapturedPins) {
+        if (pins != nullptr && mPinCount > 0) {
+            fl::memcpy(mPins, pins, mPinCount);
+        }
+    }
+
+    ~ObjectFLEDInstanceReal() override {
+        objectFledDiagnosticsRecord("beforeDestroy", mPins, mPinCount);
+        delete mObjectFLED;  // ok bare allocation
+        mObjectFLED = nullptr;
+        objectFledDiagnosticsRecord("afterDestroy", mPins, mPinCount);
+    }
+
+    u8* getFrameBuffer() override {
+        return mObjectFLED->frameBufferLocal;
+    }
+
+    u32 getFrameBufferSize() const override {
+        return mTotalBytes;
+    }
+
+    void show() override {
+        updateBusyState();
+        objectFledDiagnosticsRecord("beforeShow", mPins, mPinCount);
+        mObjectFLED->showRawFrameBuffer();
+        updateBusyState();
+        objectFledDiagnosticsRecord("afterShowReturn", mPins, mPinCount);
+    }
+
+    bool isBusy() override {
+        return updateBusyState();
+    }
+
+private:
+    bool updateBusyState() {
+        if (mObjectFLED == nullptr) {
+            objectFledDiagnosticsSetBusyState(false, false);
+            return false;
+        }
+        const bool latchBusy = mObjectFLED->busy() != 0;
+        const bool dmaBusy = ObjectFLEDDmaManager::getInstance().isBusy();
+        objectFledDiagnosticsSetBusyState(dmaBusy, latchBusy);
+        return latchBusy || dmaBusy;
+    }
+
+    static constexpr u32 kMaxCapturedPins = 16;
+    ObjectFLED* mObjectFLED;
+    u32 mTotalBytes;
+    u8 mPins[kMaxCapturedPins] = {};
+    u32 mPinCount = 0;
+};
+
+// ============================================================================
+// ObjectFLEDPeripheralReal: factory/validator for real hardware
+// ============================================================================
+
+class ObjectFLEDPeripheralReal : public IObjectFLEDPeripheral {
+public:
+    ObjectFLEDPeripheralReal() = default;
+    ~ObjectFLEDPeripheralReal() override = default;
+
+    ObjectFLEDPinResult validatePin(u8 pin) const override {
+        auto result = objectfled::validate_teensy4_pin(pin);
+        return {result.valid, result.error_message};
+    }
+
+    fl::unique_ptr<IObjectFLEDInstance> createInstance(
+            int totalLeds, bool isRgbw, u32 numPins, const u8* pinList,
+            u32 t1_ns, u32 t2_ns, u32 t3_ns, u32 reset_us) override {
+
+        auto* ofled = new ObjectFLED(  // ok bare allocation
+            totalLeds,
+            nullptr,  // ObjectFLED allocates frameBufferLocal
+            isRgbw ? CORDER_RGBW : CORDER_RGB,
+            static_cast<u8>(numPins),
+            pinList,
+            0  // No serpentine
+        );
+
+        objectFledDiagnosticsRecord("beforeBegin", pinList, numPins);
+        ofled->begin(
+            static_cast<u16>(t1_ns),
+            static_cast<u16>(t2_ns),
+            static_cast<u16>(t3_ns),
+            static_cast<u16>(reset_us)
+        );
+        objectFledDiagnosticsRecord("afterBegin", pinList, numPins);
+
+        int bytesPerLed = isRgbw ? 4 : 3;
+        u32 totalBytes = static_cast<u32>(totalLeds * bytesPerLed);
+
+        // Clear frame buffer for padding
+        fl::memset(ofled->frameBufferLocal, 0, totalBytes);
+
+        return fl::make_unique<ObjectFLEDInstanceReal>(
+            ofled, totalBytes, pinList, numPins);
+    }
+};
+
+// Factory: create real peripheral on Teensy 4.x
+fl::shared_ptr<IObjectFLEDPeripheral> IObjectFLEDPeripheral::create() {
+    return fl::make_shared<ObjectFLEDPeripheralReal>();
+}
+
+} // namespace fl
+
+#endif // FL_IS_TEENSY_4X

@@ -1,0 +1,48 @@
+#pragma once
+
+// IWYU pragma: private
+
+/// @file bus_traits.h
+/// @brief BusTraits<Bus::RMT> specialization for the ESP-IDF 5.x RMT5 driver.
+
+#include "fl/stl/compiler_control.h"
+#include "platforms/is_platform.h"
+
+#if defined(FL_IS_ESP32)
+#include "platforms/esp/32/feature_flags/enabled.h"
+#endif
+
+#if defined(FL_IS_ESP32) && FASTLED_ESP32_HAS_RMT && (FASTLED_ESP32_RMT5_ONLY_PLATFORM || FASTLED_RMT5)
+
+#include "fl/channels/bus.h"
+#include "fl/channels/bus_priorities.h"
+#include "fl/channels/bus_traits.h"
+#include "fl/channels/config.h"
+#include "fl/channels/manager.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/type_traits.h"
+#include "platforms/esp/32/drivers/rmt/rmt_5/channel_driver_rmt.h"
+
+namespace fl {
+
+template<> struct BusTraits<Bus::RMT> {
+    using Driver = ChannelEngineRMT;
+
+    /// @brief Lazy singleton — naming this is what links the RMT5 TU.
+    static fl::shared_ptr<Driver> instancePtr() FL_NO_EXCEPT {
+        static fl::shared_ptr<Driver> gHolder = ChannelEngineRMT::create();
+        return gHolder;
+    }
+
+    static Driver& instance() FL_NO_EXCEPT { return *instancePtr(); }
+
+    static void registerWithManager() FL_NO_EXCEPT {
+        ChannelManager::instance().addDriver(default_bus_priority(Bus::RMT, 0), instancePtr());
+    }
+};
+
+template<> struct BusSupports<Bus::RMT, ClocklessChipset> : fl::true_type {};
+
+}  // namespace fl
+
+#endif  // FL_IS_ESP32 && FASTLED_ESP32_HAS_RMT && RMT5 path

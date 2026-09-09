@@ -1,0 +1,348 @@
+// IWYU pragma: private
+
+/// @file lcd_rgb_peripheral_esp.cpp
+/// @brief ESP32-P4 LCD RGB peripheral implementation
+
+#include "platforms/is_platform.h"
+#if defined(FL_IS_ESP32)
+
+#include "fl/stl/has_include.h"
+#include "sdkconfig.h"
+
+#if defined(FL_IS_ESP_32P4) && FL_HAS_INCLUDE("esp_lcd_panel_rgb.h")
+
+#include "platforms/esp/32/drivers/lcd_cam/lcd_rgb_peripheral_esp.h"
+#include "fl/stl/singleton.h"
+#include "fl/task/executor.h"
+#include "fl/log/log.h"
+
+// IWYU pragma: begin_keep
+#include "freertos/FreeRTOS.h"
+// IWYU pragma: end_keep
+// IWYU pragma: begin_keep
+#include "freertos/semphr.h"
+// IWYU pragma: end_keep
+#include "esp_lcd_panel_rgb.h"
+#include "esp_heap_caps.h"
+#include "esp_timer.h"
+#include "esp_attr.h"
+#include "platforms/esp/esp_version.h"
+#include "fl/stl/noexcept.h"
+
+// Alignment for DMA buffers
+#ifndef LCD_DRIVER_PSRAM_DATA_ALIGNMENT
+#define LCD_DRIVER_PSRAM_DATA_ALIGNMENT 64
+#endif
+
+namespace fl {
+namespace detail {
+
+//=============================================================================
+// Singleton Instance
+//=============================================================================
+
+LcdRgbPeripheralEsp& LcdRgbPeripheralEsp::instance() FL_NO_EXCEPT {
+    return Singleton<LcdRgbPeripheralEsp>::instance();
+}
+
+//=============================================================================
+// Constructor / Destructor
+//=============================================================================
+
+LcdRgbPeripheralEsp::LcdRgbPeripheralEsp()
+    : mInitialized(false),
+      mConfig(),
+      mPanelHandle(nullptr),
+      mCallback(nullptr),
+      mUserCtx(nullptr),
+      mBusy(false) {
+}
+
+LcdRgbPeripheralEsp::~LcdRgbPeripheralEsp() {
+    deinitialize();
+}
+
+//=============================================================================
+// Lifecycle Methods
+//=============================================================================
+
+bool LcdRgbPeripheralEsp::initialize(const LcdRgbPeripheralConfig& config) FL_NO_EXCEPT {
+    if (mInitialized) {
+        FL_WARN_F("LcdRgbPeripheralEsp: Already initialized");
+        return false;
+    }
+
+    mConfig = config;
+
+    // Validate configuration
+    if (config.num_lanes < 1 || config.num_lanes > 16) {
+        FL_WARN_F("LcdRgbPeripheralEsp: Invalid num_lanes: %s", config.num_lanes);
+        return false;
+    }
+
+    if (config.pclk_hz == 0) {
+        FL_WARN_F("LcdRgbPeripheralEsp: Invalid pclk_hz: 0");
+        return false;
+    }
+
+    // Create RGB LCD panel configuration
+    esp_lcd_rgb_panel_config_t panel_config = {};
+    panel_config.clk_src = LCD_CLK_SRC_DEFAULT;
+    panel_config.data_width = 16;
+    panel_config.bits_per_pixel = 16;
+
+    // DMA configuration (IDF version dependent)
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(5, 3, 0)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    panel_config.psram_trans_align = LCD_DRIVER_PSRAM_DATA_ALIGNMENT;
+#pragma GCC diagnostic pop
+#else
+    panel_config.dma_burst_size = 64;
+#endif
+
+    panel_config.num_fbs = 1;  // Panel needs at least 1 FB for DMA; draw_bitmap copies our data to it
+
+    // Timing parameters
+    panel_config.timings.pclk_hz = config.pclk_hz;
+    panel_config.timings.h_res = config.h_res;
+    panel_config.timings.v_res = config.v_res;
+    panel_config.timings.hsync_pulse_width = 1;
+    panel_config.timings.hsync_back_porch = 0;
+    panel_config.timings.hsync_front_porch = 0;
+    panel_config.timings.vsync_pulse_width = 1;
+    panel_config.timings.vsync_back_porch = 1;
+    panel_config.timings.vsync_front_porch = config.vsync_front_porch;
+
+    // GPIO configuration
+    panel_config.pclk_gpio_num = config.pclk_gpio;
+    panel_config.hsync_gpio_num = config.hsync_gpio;
+    panel_config.vsync_gpio_num = config.vsync_gpio;
+    panel_config.de_gpio_num = config.de_gpio;
+    panel_config.disp_gpio_num = config.disp_gpio;
+
+    // Data GPIO pins
+    for (int i = 0; i < 16; i++) {
+        if (i < static_cast<int>(config.num_lanes)) {
+            panel_config.data_gpio_nums[i] = config.data_gpios[i];
+        } else {
+            panel_config.data_gpio_nums[i] = -1;
+        }
+    }
+
+    // Flags
+    panel_config.flags.fb_in_psram = config.use_psram ? 1 : 0;
+    panel_config.flags.refresh_on_demand = 1;
+
+    // Create RGB panel
+    esp_err_t err = esp_lcd_new_rgb_panel(&panel_config, &mPanelHandle);
+    if (err != ESP_OK) {
+        FL_WARN_F("LcdRgbPeripheralEsp: Failed to create RGB panel: %s", err);
+        return false;
+    }
+
+    // Initialize panel
+    err = esp_lcd_panel_init(mPanelHandle);
+    if (err != ESP_OK) {
+        FL_WARN_F("LcdRgbPeripheralEsp: Failed to initialize panel: %s", err);
+        esp_lcd_panel_del(mPanelHandle);
+        mPanelHandle = nullptr;
+        return false;
+    }
+
+    mInitialized = true;
+    return true;
+}
+
+void LcdRgbPeripheralEsp::deinitialize() FL_NO_EXCEPT {
+    if (mPanelHandle != nullptr) {
+        esp_lcd_panel_del(mPanelHandle);
+        mPanelHandle = nullptr;
+    }
+    mInitialized = false;
+    mCallback = nullptr;
+    mUserCtx = nullptr;
+    mBusy = false;
+}
+
+bool LcdRgbPeripheralEsp::isInitialized() const FL_NO_EXCEPT {
+    return mInitialized;
+}
+
+//=============================================================================
+// Buffer Management
+//=============================================================================
+
+u16* LcdRgbPeripheralEsp::allocateFrameBuffer(size_t size_bytes) FL_NO_EXCEPT {
+    // Round up to 64-byte alignment
+    size_t aligned_size = ((size_bytes + 63) / 64) * 64;
+
+    u32 alloc_caps;
+    if (mConfig.use_psram) {
+        alloc_caps = MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA | MALLOC_CAP_8BIT;
+    } else {
+        alloc_caps = MALLOC_CAP_DMA | MALLOC_CAP_8BIT;
+    }
+
+    void* buffer = heap_caps_aligned_alloc(
+        LCD_DRIVER_PSRAM_DATA_ALIGNMENT,
+        aligned_size,
+        alloc_caps
+    );
+
+    // Fallback to internal DMA RAM if PSRAM allocation failed
+    if (buffer == nullptr && mConfig.use_psram) {
+        buffer = heap_caps_aligned_alloc(
+            LCD_DRIVER_PSRAM_DATA_ALIGNMENT,
+            aligned_size,
+            MALLOC_CAP_DMA | MALLOC_CAP_8BIT
+        );
+    }
+
+    return static_cast<u16*>(buffer);
+}
+
+void LcdRgbPeripheralEsp::freeFrameBuffer(u16* buffer) FL_NO_EXCEPT {
+    if (buffer != nullptr) {
+        heap_caps_free(buffer);
+    }
+}
+
+//=============================================================================
+// Transmission Methods
+//=============================================================================
+
+bool LcdRgbPeripheralEsp::drawFrame(const u16* buffer, size_t size_bytes) FL_NO_EXCEPT {
+    if (!mInitialized || mPanelHandle == nullptr) {
+        return false;
+    }
+
+    mBusy = true;
+
+    // Calculate width in pixels (each pixel is 2 bytes)
+    size_t width = size_bytes / 2;
+
+    esp_err_t err = esp_lcd_panel_draw_bitmap(
+        mPanelHandle,
+        0, 0,           // x, y offset
+        width, 1,       // width (pixels), height
+        buffer
+    );
+
+    if (err != ESP_OK) {
+        mBusy = false;
+        return false;
+    }
+
+    // With refresh_on_demand=1, draw_bitmap only copies data to the panel's
+    // internal frame buffer. We must explicitly trigger the DMA refresh.
+    err = esp_lcd_rgb_panel_refresh(mPanelHandle);
+    if (err != ESP_OK) {
+        mBusy = false;
+        return false;
+    }
+
+    return true;
+}
+
+bool LcdRgbPeripheralEsp::waitFrameDone(u32 timeout_ms) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return false;
+    }
+
+    // Simple polling wait (callback will clear mBusy)
+    u32 start = (u32)(esp_timer_get_time() / 1000);
+    while (mBusy) {
+        if (timeout_ms > 0) {
+            u32 now = (u32)(esp_timer_get_time() / 1000);
+            if ((now - start) >= timeout_ms) {
+                return false;  // Timeout
+            }
+        }
+        task::run(250, task::ExecFlags::SYSTEM);  // OS yield
+    }
+    return true;
+}
+
+bool LcdRgbPeripheralEsp::isBusy() const FL_NO_EXCEPT {
+    return mBusy;
+}
+
+//=============================================================================
+// Callback Registration
+//=============================================================================
+
+// Callback data passed to VSYNC ISR - must outlive registration
+struct VsyncCallbackData {
+    LcdRgbPeripheralEsp* self;
+    void* user_callback;
+    void* user_ctx;
+};
+
+// Static storage for callback data (singleton peripheral, so one instance suffices)
+// FL_LINT_ALLOW_GLOBAL(Tier 2c: LCD_CAM VSYNC ISR callback state — pending migration to Singleton<T> per FastLED#3491, needs cached-pointer-in-IRAM pattern for ISR safety)
+static VsyncCallbackData s_vsync_cb_data;
+
+// VSYNC ISR callback - must be in IRAM for ESP-IDF
+static bool IRAM_ATTR vsyncIsrCallback( // ok no noexcept
+        esp_lcd_panel_handle_t panel,
+        const esp_lcd_rgb_panel_event_data_t* edata,
+        void* ctx) {
+    VsyncCallbackData* data = static_cast<VsyncCallbackData*>(ctx);
+    data->self->clearBusy();
+
+    // Call user callback if registered
+    if (data->user_callback) {
+        using CallbackType = bool (*)(void*, const void*, void*);
+        auto fn = reinterpret_cast<CallbackType>(data->user_callback); // ok reinterpret cast
+        return fn(panel, edata, data->user_ctx);
+    }
+    return false;
+}
+
+bool LcdRgbPeripheralEsp::registerDrawCallback(void* callback, void* user_ctx) FL_NO_EXCEPT {
+    if (!mInitialized || mPanelHandle == nullptr) {
+        return false;
+    }
+
+    mCallback = callback;
+    mUserCtx = user_ctx;
+
+    // Store callback info in static storage
+    s_vsync_cb_data.self = this;
+    s_vsync_cb_data.user_callback = callback;
+    s_vsync_cb_data.user_ctx = user_ctx;
+
+    // Register IRAM-safe callback with ESP-IDF
+    esp_lcd_rgb_panel_event_callbacks_t cbs = {};
+    cbs.on_vsync = vsyncIsrCallback;
+
+    esp_err_t err = esp_lcd_rgb_panel_register_event_callbacks(mPanelHandle, &cbs, &s_vsync_cb_data);
+    return err == ESP_OK;
+}
+
+//=============================================================================
+// State Inspection
+//=============================================================================
+
+const LcdRgbPeripheralConfig& LcdRgbPeripheralEsp::getConfig() const FL_NO_EXCEPT {
+    return mConfig;
+}
+
+//=============================================================================
+// Platform Utilities
+//=============================================================================
+
+u64 LcdRgbPeripheralEsp::getMicroseconds() FL_NO_EXCEPT {
+    return esp_timer_get_time();
+}
+
+void LcdRgbPeripheralEsp::delay(u32 ms) FL_NO_EXCEPT {
+    vTaskDelay(pdMS_TO_TICKS(ms));
+}
+
+} // namespace detail
+} // namespace fl
+
+#endif // CONFIG_IDF_TARGET_ESP32P4 && esp_lcd_panel_rgb.h
+#endif // FL_IS_ESP32

@@ -1,0 +1,56 @@
+#pragma once
+
+#include "fl/stl/stdint.h"
+#include "fl/stl/noexcept.h"
+namespace fl {
+/// @addtogroup FractionalTypes
+/// @{
+
+/// Template class for representing fractional ints.
+/// @tparam T underlying type for data storage
+/// @tparam F number of fractional bits
+/// @tparam I number of integer bits
+template<class T, int F, int I> class qfx {
+    T i:I;  ///< Integer value of number
+    T f:F;  ///< Fractional value of number
+public:
+    /// Constructor, storing a float as a fractional int
+    qfx(float fx) FL_NO_EXCEPT { i = fx; f = (fx-i) * (1<<F); }
+    /// Constructor, storing a fractional int directly
+    qfx(u8 _i, u8 _f) FL_NO_EXCEPT {i=_i; f=_f; }
+
+    /// Multiply the fractional int by a value
+    u32 operator*(u32 v) FL_NO_EXCEPT { return (v*i) + ((v*f)>>F); }
+    /// @copydoc operator*(uint32_t)
+    u16 operator*(u16 v) FL_NO_EXCEPT { return (v*i) + ((v*f)>>F); }
+    /// @copydoc operator*(uint32_t)
+    i32 operator*(i32 v) FL_NO_EXCEPT { return (v*i) + ((v*f)>>F); }
+    /// @copydoc operator*(uint32_t)
+    i16 operator*(i16 v) FL_NO_EXCEPT { return (v*i) + ((v*f)>>F); }
+#if (defined(FL_IS_ARM) || defined(FASTLED_RISCV) || defined(FASTLED_APOLLO3)) && !defined(ARDUINO_ARCH_ZEPHYR)
+    /// @copydoc operator*(uint32_t)
+    int operator*(int v) { return (v*i) + ((v*f)>>F); }
+#endif
+};
+
+template<class T, int F, int I> static u32 operator*(u32 v, qfx<T,F,I> & q) FL_NO_EXCEPT { return q * v; }
+template<class T, int F, int I> static u16 operator*(u16 v, qfx<T,F,I> & q) FL_NO_EXCEPT { return q * v; }
+template<class T, int F, int I> static i32 operator*(i32 v, qfx<T,F,I> & q) FL_NO_EXCEPT { return q * v; }
+template<class T, int F, int I> static i16 operator*(i16 v, qfx<T,F,I> & q) FL_NO_EXCEPT { return q * v; }
+#if (defined(FL_IS_ARM) || defined(FASTLED_RISCV) || defined(FASTLED_APOLLO3)) && !defined(ARDUINO_ARCH_ZEPHYR)
+template<class T, int F, int I> static int operator*(int v, qfx<T,F,I> & q) { return q * v; }
+#endif
+
+/// A 4.4 integer (4 bits integer, 4 bits fraction)
+typedef qfx<u8, 4,4> q44;
+/// A 6.2 integer (6 bits integer, 2 bits fraction)
+typedef qfx<u8, 6,2> q62;
+/// A 8.8 integer (8 bits integer, 8 bits fraction)
+typedef qfx<u16, 8,8> q88;
+/// A 12.4 integer (12 bits integer, 4 bits fraction)
+typedef qfx<u16, 12,4> q124;
+
+/// @} FractionalTypes
+}  // namespace fl
+
+// Fractional types are in namespace fl:: (q44, q62, q88, q124)

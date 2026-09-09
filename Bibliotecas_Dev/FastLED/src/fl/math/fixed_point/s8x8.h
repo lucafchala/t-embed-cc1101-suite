@@ -1,0 +1,415 @@
+#pragma once
+
+// Signed 8.8 fixed-point arithmetic and trigonometry.
+// All operations are integer-only in the hot path.
+
+#include "fl/stl/int.h"
+#include "fl/math/sin32.h"
+#include "fl/math/fixed_point/isqrt.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/math/fixed_point/traits.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/undef.h"  // Undefine abs/min/max macros from Arduino.h
+
+FL_OPTIMIZATION_LEVEL_O3_BEGIN
+
+namespace fl {
+
+// Signed 8.8 fixed-point value type.
+class s8x8 {
+  public:
+    static constexpr int INT_BITS = 8;
+    static constexpr int FRAC_BITS = 8;
+    static constexpr i32 SCALE = static_cast<i32>(1) << FRAC_BITS;
+
+    // ---- Construction ------------------------------------------------------
+
+    constexpr s8x8() FL_NO_EXCEPT = default;
+
+    explicit constexpr s8x8(float f) FL_NO_EXCEPT
+        : mValue(static_cast<i16>(f * (static_cast<i16>(1) << FRAC_BITS))) {}
+
+    // Integer constructor — any integer width (portable: AVR 16-bit int, ARM/x86 32-bit).
+    // Compile error if constexpr value exceeds INT_BITS range.
+    template <typename IntT, detail::enable_if_integer_t<IntT> = 0>
+    explicit constexpr s8x8(IntT n) FL_NO_EXCEPT
+        : mValue(detail::int_to_fixed<INT_BITS, FRAC_BITS>::from_signed(n)) {}
+
+    // Auto-promotion from other fixed-point types
+    template <typename OtherFP>
+    constexpr s8x8(const OtherFP& other,
+                   typename fl::enable_if<
+                       (OtherFP::INT_BITS <= INT_BITS) &&
+                       (OtherFP::FRAC_BITS <= FRAC_BITS) &&
+                       (OtherFP::INT_BITS != INT_BITS || OtherFP::FRAC_BITS != FRAC_BITS),
+                       int>::type = 0)
+ FL_NO_EXCEPT : mValue(static_cast<i16>(
+            static_cast<i32>(other.raw()) << (FRAC_BITS - OtherFP::FRAC_BITS))) {}
+
+    // Raw constructor for C++11 constexpr from_raw
+    struct RawTag {};
+    constexpr explicit s8x8(i16 raw, RawTag) FL_NO_EXCEPT : mValue(raw) {}
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 from_raw(i16 raw) FL_NO_EXCEPT {
+        return s8x8(raw, RawTag());
+    }
+
+    // ---- Access ------------------------------------------------------------
+
+    constexpr i16 raw() const FL_NO_EXCEPT { return mValue; }
+    constexpr i16 to_int() const FL_NO_EXCEPT { return mValue >> FRAC_BITS; }
+    constexpr float to_float() const FL_NO_EXCEPT { return static_cast<float>(mValue) / (static_cast<i16>(1) << FRAC_BITS); }
+
+    // ---- Fixed-point arithmetic --------------------------------------------
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator*(s8x8 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(
+            (static_cast<i32>(mValue) * b.mValue) >> FRAC_BITS));
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator/(s8x8 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(
+            (static_cast<i32>(mValue) * (SCALE)) / b.mValue));
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator+(s8x8 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(
+            static_cast<u16>(mValue) + static_cast<u16>(b.mValue)));
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator-(s8x8 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(
+            static_cast<u16>(mValue) - static_cast<u16>(b.mValue)));
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator-() const FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(
+            static_cast<u16>(0) - static_cast<u16>(mValue)));
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator>>(int shift) const FL_NO_EXCEPT {
+        return from_raw(mValue >> shift);
+    }
+
+    // ---- Scalar multiply (no fixed-point shift) ----------------------------
+
+    constexpr FASTLED_FORCE_INLINE s8x8 operator*(i16 scalar) const FL_NO_EXCEPT {
+        return from_raw(mValue * scalar);
+    }
+
+    friend constexpr s8x8 operator*(i16 scalar, s8x8 fp) FL_NO_EXCEPT {
+        return s8x8::from_raw(scalar * fp.mValue);
+    }
+
+    // ---- Comparisons -------------------------------------------------------
+
+    constexpr bool operator<(s8x8 b) const FL_NO_EXCEPT { return mValue < b.mValue; }
+    constexpr bool operator>(s8x8 b) const FL_NO_EXCEPT { return mValue > b.mValue; }
+    constexpr bool operator<=(s8x8 b) const FL_NO_EXCEPT { return mValue <= b.mValue; }
+    constexpr bool operator>=(s8x8 b) const FL_NO_EXCEPT { return mValue >= b.mValue; }
+    constexpr bool operator==(s8x8 b) const FL_NO_EXCEPT { return mValue == b.mValue; }
+    constexpr bool operator!=(s8x8 b) const FL_NO_EXCEPT { return mValue != b.mValue; }
+
+    // ---- Math ---------------------------------------------------------------
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 mod(s8x8 a, s8x8 b) FL_NO_EXCEPT {
+        return from_raw(a.mValue % b.mValue);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 floor(s8x8 x) FL_NO_EXCEPT {
+        return from_raw(x.mValue & ~(i16((SCALE) - 1)));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 ceil(s8x8 x) FL_NO_EXCEPT {
+        return from_raw((x.mValue & ~(i16((SCALE) - 1))) +
+                        ((x.mValue & i16((SCALE) - 1)) ? (SCALE) : 0));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 fract(s8x8 x) FL_NO_EXCEPT {
+        return from_raw(x.mValue & i16((SCALE) - 1));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 abs(s8x8 x) FL_NO_EXCEPT {
+        return from_raw(x.mValue < 0 ? -x.mValue : x.mValue);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE int sign(s8x8 x) FL_NO_EXCEPT {
+        return x.mValue > 0 ? 1 : (x.mValue < 0 ? -1 : 0);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 lerp(s8x8 a, s8x8 b, s8x8 t) FL_NO_EXCEPT {
+        return a + (b - a) * t;
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 clamp(s8x8 x, s8x8 lo, s8x8 hi) FL_NO_EXCEPT {
+        return x < lo ? lo : (x > hi ? hi : x);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 step(s8x8 edge, s8x8 x) FL_NO_EXCEPT {
+        return x < edge ? s8x8() : s8x8(1.0f);
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 smoothstep(s8x8 edge0, s8x8 edge1, s8x8 x) FL_NO_EXCEPT {
+        constexpr s8x8 zero(0.0f);
+        constexpr s8x8 one(1.0f);
+        constexpr s8x8 two(2.0f);
+        constexpr s8x8 three(3.0f);
+        s8x8 t = clamp((x - edge0) / (edge1 - edge0), zero, one);
+        return t * t * (three - two * t);
+    }
+
+    // ---- Inverse Trigonometry (pure fixed-point) ----------------------------
+
+    static FASTLED_FORCE_INLINE s8x8 atan(s8x8 x) FL_NO_EXCEPT {
+        constexpr s8x8 one(1.0f);
+        constexpr s8x8 pi_over_2(1.5707963f);
+        bool neg = x.mValue < 0;
+        s8x8 ax = abs(x);
+        s8x8 result;
+        if (ax <= one) {
+            result = atan_unit(ax);
+        } else {
+            result = pi_over_2 - atan_unit(one / ax);
+        }
+        return neg ? -result : result;
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 atan2(s8x8 y, s8x8 x) FL_NO_EXCEPT {
+        constexpr s8x8 pi(3.1415926f);
+        constexpr s8x8 pi_over_2(1.5707963f);
+        if (x.mValue == 0 && y.mValue == 0) return s8x8();
+        if (x.mValue == 0) return y.mValue > 0 ? pi_over_2 : -pi_over_2;
+        if (y.mValue == 0) return x.mValue > 0 ? s8x8() : pi;
+        s8x8 ax = abs(x);
+        s8x8 ay = abs(y);
+        s8x8 a;
+        if (ax >= ay) {
+            a = atan_unit(ay / ax);
+        } else {
+            a = pi_over_2 - atan_unit(ax / ay);
+        }
+        if (x.mValue < 0) a = pi - a;
+        if (y.mValue < 0) a = -a;
+        return a;
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 asin(s8x8 x) FL_NO_EXCEPT {
+        constexpr s8x8 one(1.0f);
+        return atan2(x, sqrt(one - x * x));
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 acos(s8x8 x) FL_NO_EXCEPT {
+        constexpr s8x8 one(1.0f);
+        return atan2(sqrt(one - x * x), x);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 sqrt(s8x8 x) FL_NO_EXCEPT {
+        return x.mValue <= 0 ? s8x8() : from_raw(static_cast<i16>(
+            fl::isqrt32(static_cast<u32>(x.mValue) << FRAC_BITS)));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE s8x8 rsqrt(s8x8 x) FL_NO_EXCEPT {
+        return sqrt(x).mValue == 0
+            ? s8x8()
+            : from_raw(SCALE) / sqrt(x);
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 pow(s8x8 base, s8x8 exp) FL_NO_EXCEPT {
+        if (base.mValue <= 0) return s8x8();
+        constexpr s8x8 one(1.0f);
+        if (exp.mValue == 0) return one;
+        if (base == one) return one;
+        // Snap base values within ~2 ULPs of 1.0 to exactly 1.0 to dodge the
+        // log2(1+t) minimax polynomial's upper-endpoint residual (#2969).
+        constexpr i16 kOneRaw = static_cast<i16>(SCALE);
+        if (base.mValue >= static_cast<i16>(kOneRaw - 2) &&
+            base.mValue <= kOneRaw) {
+            return one;
+        }
+        return exp2_fp(exp * log2_fp(base));
+    }
+
+    // ---- Member function versions (operate on *this) -----------------------
+
+    constexpr FASTLED_FORCE_INLINE s8x8 floor() const FL_NO_EXCEPT {
+        return floor(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 ceil() const FL_NO_EXCEPT {
+        return ceil(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 fract() const FL_NO_EXCEPT {
+        return fract(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 abs() const FL_NO_EXCEPT {
+        return abs(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE int sign() const FL_NO_EXCEPT {
+        return sign(*this);
+    }
+
+    FASTLED_FORCE_INLINE s8x8 sin() const FL_NO_EXCEPT {
+        return sin(*this);
+    }
+
+    FASTLED_FORCE_INLINE s8x8 cos() const FL_NO_EXCEPT {
+        return cos(*this);
+    }
+
+    FASTLED_FORCE_INLINE s8x8 atan() const FL_NO_EXCEPT {
+        return atan(*this);
+    }
+
+    FASTLED_FORCE_INLINE s8x8 asin() const FL_NO_EXCEPT {
+        return asin(*this);
+    }
+
+    FASTLED_FORCE_INLINE s8x8 acos() const FL_NO_EXCEPT {
+        return acos(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 sqrt() const FL_NO_EXCEPT {
+        return sqrt(*this);
+    }
+
+    constexpr FASTLED_FORCE_INLINE s8x8 rsqrt() const FL_NO_EXCEPT {
+        return rsqrt(*this);
+    }
+
+    // ---- Trigonometry ------------------------------------------------------
+
+    static FASTLED_FORCE_INLINE s8x8 sin(s8x8 angle) FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(fl::sin32(angle_to_a24(angle)) >> 23));
+    }
+
+    static FASTLED_FORCE_INLINE s8x8 cos(s8x8 angle) FL_NO_EXCEPT {
+        return from_raw(static_cast<i16>(fl::cos32(angle_to_a24(angle)) >> 23));
+    }
+
+    // Combined sin+cos from s8x8 radians. Output in s8x8 [-1, 1].
+    static FASTLED_FORCE_INLINE void sincos(s8x8 angle, s8x8 &out_sin,
+                                            s8x8 &out_cos) FL_NO_EXCEPT {
+        u32 a24 = angle_to_a24(angle);
+        out_sin = from_raw(static_cast<i16>(fl::sin32(a24) >> 23));
+        out_cos = from_raw(static_cast<i16>(fl::cos32(a24) >> 23));
+    }
+
+  private:
+    i16 mValue = 0;
+
+    // Returns 0-based position of highest set bit, or -1 if v==0.
+    static constexpr FASTLED_FORCE_INLINE int highest_bit(u32 v) FL_NO_EXCEPT {
+        return v == 0 ? -1 : _highest_bit_step(v, 0);
+    }
+
+    static constexpr int _highest_bit_step(u32 v, int r) FL_NO_EXCEPT {
+        return (v & 0xFFFF0000u) ? _highest_bit_step(v >> 16, r + 16)
+             : (v & 0x0000FF00u) ? _highest_bit_step(v >> 8,  r + 8)
+             : (v & 0x000000F0u) ? _highest_bit_step(v >> 4,  r + 4)
+             : (v & 0x0000000Cu) ? _highest_bit_step(v >> 2,  r + 2)
+             : (v & 0x00000002u) ? r + 1
+             : r;
+    }
+
+    // Fixed-point log base 2 for positive values.
+    // Uses 4-term minimax polynomial for log2(1+t), t in [0,1).
+    // Horner evaluation uses i32 intermediates (16 frac bits) to minimize
+    // rounding error, then converts back to 8 frac bits.
+    static FASTLED_FORCE_INLINE s8x8 log2_fp(s8x8 x) FL_NO_EXCEPT {
+        u32 val = static_cast<u32>(x.mValue);
+        int msb = highest_bit(val);
+        i32 int_part = msb - FRAC_BITS;
+        i32 t;
+        if (msb >= FRAC_BITS) {
+            t = static_cast<i32>(
+                (val >> (msb - FRAC_BITS)) - (SCALE));
+        } else {
+            t = static_cast<i32>(
+                (val << (FRAC_BITS - msb)) - (SCALE));
+        }
+        // 4-term minimax coefficients for log2(1+t), t in [0,1).
+        // Stored as i32 with 16 fractional bits. Max product ~2^29, fits i32 after shift.
+        constexpr int IFRAC = 16;
+        constexpr i32 c0 = 94528;    // 1.44179 * 2^16
+        constexpr i32 c1 = -45814;   // -0.69907 * 2^16
+        constexpr i32 c2 = 23821;    // 0.36348 * 2^16
+        constexpr i32 c3 = -6986;    // -0.10660 * 2^16
+        // Extend t from 8 to 16 frac bits.
+        i32 t16 = static_cast<i32>(t) << (IFRAC - FRAC_BITS);
+        // Horner: t * (c0 + t * (c1 + t * (c2 + t * c3)))
+        i32 acc = c3;
+        acc = c2 + static_cast<i32>((static_cast<i64>(acc) * t16) >> IFRAC);
+        acc = c1 + static_cast<i32>((static_cast<i64>(acc) * t16) >> IFRAC);
+        acc = c0 + static_cast<i32>((static_cast<i64>(acc) * t16) >> IFRAC);
+        i32 frac_part = static_cast<i32>((static_cast<i64>(acc) * t16) >> IFRAC);
+        // Convert from 16 frac bits back to 8.
+        i16 frac8 = static_cast<i16>(frac_part >> (IFRAC - FRAC_BITS));
+        // Use multiplication instead of shift to avoid UB with negative int_part
+        return from_raw(static_cast<i16>(int_part * SCALE + frac8));
+    }
+
+    // Fixed-point 2^x. Uses 4-term minimax polynomial for 2^t, t in [0,1).
+    // Horner evaluation uses i32 intermediates (16 frac bits) to minimize
+    // rounding error, then converts back to 8 frac bits.
+    static FASTLED_FORCE_INLINE s8x8 exp2_fp(s8x8 x) FL_NO_EXCEPT {
+        s8x8 fl_val = floor(x);
+        s8x8 fr = x - fl_val;
+        i32 n = fl_val.mValue >> FRAC_BITS;
+        if (n >= INT_BITS - 1) return from_raw(0x7FFF);
+        if (n < -FRAC_BITS) return s8x8();
+        i32 int_pow;
+        if (n >= 0) {
+            int_pow = static_cast<i32>(SCALE) << n;
+        } else {
+            int_pow = static_cast<i32>(SCALE) >> (-n);
+        }
+        // 4-term minimax coefficients for 2^t - 1, t in [0,1).
+        // Stored as i32 with 16 fractional bits.
+        constexpr int IFRAC = 16;
+        constexpr i32 d0 = 45427;    // 0.69316 * 2^16
+        constexpr i32 d1 = 15775;    // 0.24071 * 2^16
+        constexpr i32 d2 = 3497;     // 0.05336 * 2^16
+        constexpr i32 d3 = 836;      // 0.01276 * 2^16
+        // Extend fr from 8 to 16 frac bits.
+        i32 fr16 = static_cast<i32>(fr.mValue) << (IFRAC - FRAC_BITS);
+        // Horner: 1 + fr * (d0 + fr * (d1 + fr * (d2 + fr * d3)))
+        i32 acc = d3;
+        acc = d2 + static_cast<i32>((static_cast<i64>(acc) * fr16) >> IFRAC);
+        acc = d1 + static_cast<i32>((static_cast<i64>(acc) * fr16) >> IFRAC);
+        acc = d0 + static_cast<i32>((static_cast<i64>(acc) * fr16) >> IFRAC);
+        constexpr i32 one16 = static_cast<i32>(1) << IFRAC;
+        i32 frac_pow16 = one16 + static_cast<i32>((static_cast<i64>(acc) * fr16) >> IFRAC);
+        // Convert from 16 frac bits to 8 frac bits, then scale by int_pow.
+        i32 frac_pow8 = frac_pow16 >> (IFRAC - FRAC_BITS);
+        i32 result =
+            (int_pow * frac_pow8) >> FRAC_BITS;
+        return from_raw(static_cast<i16>(result));
+    }
+
+    // Converts s8x8 radians to sin32/cos32 input format.
+    // 256/(2*PI) — converts radians to sin32/cos32 format.
+    static constexpr i32 RAD_TO_24 = 2670177;
+    static constexpr FASTLED_FORCE_INLINE u32 angle_to_a24(s8x8 angle) FL_NO_EXCEPT {
+        return static_cast<u32>(
+            (static_cast<i64>(angle.mValue) * RAD_TO_24) >> FRAC_BITS);
+    }
+
+    // Polynomial atan for t in [0, 1]. Returns [0, π/4].
+    // 7th-order minimax: atan(t) ≈ t * (c0 + t² * (c1 + t² * (c2 + t² * c3)))
+    // Coefficients optimized via coordinate descent on s16x16 quantization grid.
+    static FASTLED_FORCE_INLINE s8x8 atan_unit(s8x8 t) FL_NO_EXCEPT {
+        constexpr s8x8 c0(0.9998779297f);
+        constexpr s8x8 c1(-0.3269348145f);
+        constexpr s8x8 c2(0.1594085693f);
+        constexpr s8x8 c3(-0.0472106934f);
+        s8x8 t2 = t * t;
+        return t * (c0 + t2 * (c1 + t2 * (c2 + t2 * c3)));
+    }
+};
+
+} // namespace fl
+
+FL_OPTIMIZATION_LEVEL_O3_END

@@ -1,0 +1,352 @@
+#include "fl/stl/cstddef.h"
+#include "fl/stl/stdint.h"
+#include "test.h"
+#include "stdint.h" // ok include - testing FL types against standard
+#include "fl/stl/static_assert.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+// Test that fl/stl/stdint.h provides standard integer types without including <stdint.h>
+// This header is critical for FastLED's fast compilation strategy
+// ok INT_MAX (this file tests that the numeric limit macros are properly defined)
+
+FL_TEST_CASE("stdint type definitions") {
+    FL_SUBCASE("uint8_t and int8_t") {
+        // Verify 8-bit types exist and have correct size
+        uint8_t u8 = 255;
+        int8_t i8 = -128;
+
+        FL_CHECK_EQ(sizeof(uint8_t), 1);
+        FL_CHECK_EQ(sizeof(int8_t), 1);
+        FL_CHECK_EQ(u8, 255);
+        FL_CHECK_EQ(i8, -128);
+
+        // Test wraparound behavior
+        u8 = 255;
+        u8++;
+        FL_CHECK_EQ(u8, 0);
+
+        // Note: signed overflow is UB, so we test wraparound via unsigned arithmetic
+        uint8_t u8_temp = 127;
+        u8_temp++;
+        i8 = static_cast<int8_t>(u8_temp);
+        FL_CHECK_EQ(i8, -128);
+    }
+
+    FL_SUBCASE("uint16_t and int16_t") {
+        // Verify 16-bit types exist and have correct size
+        uint16_t u16 = 65535;
+        int16_t i16 = -32768;
+
+        FL_CHECK_EQ(sizeof(uint16_t), 2);
+        FL_CHECK_EQ(sizeof(int16_t), 2);
+        FL_CHECK_EQ(u16, 65535);
+        FL_CHECK_EQ(i16, -32768);
+
+        // Test wraparound behavior
+        u16 = 65535;
+        u16++;
+        FL_CHECK_EQ(u16, 0);
+
+        // Note: signed overflow is UB, so we test wraparound via unsigned arithmetic
+        uint16_t u16_temp = 32767;
+        u16_temp++;
+        i16 = static_cast<int16_t>(u16_temp);
+        FL_CHECK_EQ(i16, -32768);
+    }
+
+    FL_SUBCASE("uint32_t and int32_t") {
+        // Verify 32-bit types exist and have correct size
+        uint32_t u32 = 4294967295U;
+        int32_t i32 = -2147483647 - 1;
+
+        FL_CHECK_EQ(sizeof(uint32_t), 4);
+        FL_CHECK_EQ(sizeof(int32_t), 4);
+        FL_CHECK_EQ(u32, 4294967295U);
+        FL_CHECK_EQ(i32, -2147483648);
+
+        // Test wraparound behavior
+        u32 = 4294967295U;
+        u32++;
+        FL_CHECK_EQ(u32, 0U);
+
+        // Note: signed overflow is UB, so we test wraparound via unsigned arithmetic
+        // then convert to signed
+        uint32_t u32_temp = 2147483647;
+        u32_temp++;
+        i32 = static_cast<int32_t>(u32_temp);
+        FL_CHECK_EQ(i32, -2147483648);
+    }
+
+    FL_SUBCASE("uint64_t and int64_t") {
+        // Verify 64-bit types exist and have correct size
+        uint64_t u64 = 18446744073709551615ULL;
+        int64_t i64 = -9223372036854775807LL - 1;
+
+        FL_CHECK_EQ(sizeof(uint64_t), 8);
+        FL_CHECK_EQ(sizeof(int64_t), 8);
+        FL_CHECK_EQ(u64, 18446744073709551615ULL);
+        FL_CHECK_EQ(i64, -9223372036854775807LL - 1);
+
+        // Test large values
+        u64 = 0xFFFFFFFFFFFFFFFFULL;
+        FL_CHECK_EQ(u64, 18446744073709551615ULL);
+
+        i64 = 0x7FFFFFFFFFFFFFFFLL;
+        FL_CHECK_EQ(i64, 9223372036854775807LL);
+    }
+
+    FL_SUBCASE("size_t") {
+        // size_t should be an unsigned type large enough for array indexing
+        size_t sz = 100;
+        FL_CHECK(sz > 0);
+        FL_CHECK_EQ(sizeof(size_t), sizeof(void*));
+
+        // Test that size_t can hold pointer values
+        int dummy;
+        size_t ptr_as_size = reinterpret_cast<size_t>(&dummy);
+        FL_CHECK(ptr_as_size != 0);
+    }
+
+    FL_SUBCASE("uintptr_t and intptr_t") {
+        // Pointer-sized integer types
+        int dummy;
+        uintptr_t uptr = reinterpret_cast<uintptr_t>(&dummy);
+        intptr_t iptr = reinterpret_cast<intptr_t>(&dummy);
+
+        FL_CHECK_EQ(sizeof(uintptr_t), sizeof(void*));
+        FL_CHECK_EQ(sizeof(intptr_t), sizeof(void*));
+
+        // Verify pointer round-trip
+        int* recovered_ptr = reinterpret_cast<int*>(uptr);
+        FL_CHECK_EQ(recovered_ptr, &dummy);
+
+        recovered_ptr = reinterpret_cast<int*>(iptr);
+        FL_CHECK_EQ(recovered_ptr, &dummy);
+    }
+
+    FL_SUBCASE("ptrdiff_t") {
+        // Signed type for pointer arithmetic
+        int arr[10];
+        ptrdiff_t diff = &arr[5] - &arr[2];
+
+        FL_CHECK_EQ(sizeof(ptrdiff_t), sizeof(void*));
+        FL_CHECK_EQ(diff, 3);
+
+        // Test negative difference
+        diff = &arr[2] - &arr[5];
+        FL_CHECK_EQ(diff, -3);
+    }
+}
+
+FL_TEST_CASE("stdint limit macros") {
+    FL_SUBCASE("INT8_MIN and INT8_MAX") {
+        FL_CHECK_EQ(INT8_MIN, -128);
+        FL_CHECK_EQ(INT8_MAX, 127);
+
+        // Verify these are the actual limits
+        int8_t min_val = INT8_MIN;
+        int8_t max_val = INT8_MAX;
+        FL_CHECK_EQ(min_val, -128);
+        FL_CHECK_EQ(max_val, 127);
+    }
+
+    FL_SUBCASE("INT16_MIN and INT16_MAX") {
+        FL_CHECK_EQ(INT16_MIN, -32768);
+        FL_CHECK_EQ(INT16_MAX, 32767);
+
+        int16_t min_val = INT16_MIN;
+        int16_t max_val = INT16_MAX;
+        FL_CHECK_EQ(min_val, -32768);
+        FL_CHECK_EQ(max_val, 32767);
+    }
+
+    FL_SUBCASE("INT32_MIN and INT32_MAX") {
+        FL_CHECK_EQ(INT32_MIN, -2147483648);
+        FL_CHECK_EQ(INT32_MAX, 2147483647);
+
+        int32_t min_val = INT32_MIN;
+        int32_t max_val = INT32_MAX;
+        FL_CHECK_EQ(min_val, -2147483648);
+        FL_CHECK_EQ(max_val, 2147483647);
+    }
+
+    FL_SUBCASE("INT64_MIN and INT64_MAX") {
+        FL_CHECK_EQ(INT64_MIN, -9223372036854775807LL - 1);
+        FL_CHECK_EQ(INT64_MAX, 9223372036854775807LL);
+
+        int64_t min_val = INT64_MIN;
+        int64_t max_val = INT64_MAX;
+        FL_CHECK_EQ(min_val, -9223372036854775807LL - 1);
+        FL_CHECK_EQ(max_val, 9223372036854775807LL);
+    }
+
+    FL_SUBCASE("UINT8_MAX") {
+        FL_CHECK_EQ(UINT8_MAX, 0xFF);
+        FL_CHECK_EQ(UINT8_MAX, 255);
+
+        uint8_t max_val = UINT8_MAX;
+        FL_CHECK_EQ(max_val, 255);
+    }
+
+    FL_SUBCASE("UINT16_MAX") {
+        FL_CHECK_EQ(UINT16_MAX, 0xFFFF);
+        FL_CHECK_EQ(UINT16_MAX, 65535);
+
+        uint16_t max_val = UINT16_MAX;
+        FL_CHECK_EQ(max_val, 65535);
+    }
+
+    FL_SUBCASE("UINT32_MAX") {
+        FL_CHECK_EQ(UINT32_MAX, 0xFFFFFFFFU);
+        FL_CHECK_EQ(UINT32_MAX, 4294967295U);
+
+        uint32_t max_val = UINT32_MAX;
+        FL_CHECK_EQ(max_val, 4294967295U);
+    }
+
+    FL_SUBCASE("UINT64_MAX") {
+        FL_CHECK_EQ(UINT64_MAX, 0xFFFFFFFFFFFFFFFFULL);
+        FL_CHECK_EQ(UINT64_MAX, 18446744073709551615ULL);
+
+        uint64_t max_val = UINT64_MAX;
+        FL_CHECK_EQ(max_val, 18446744073709551615ULL);
+    }
+}
+
+FL_TEST_CASE("stdint type relationships") {
+    FL_SUBCASE("signed and unsigned relationships") {
+        // Unsigned types should have twice the positive range
+        FL_CHECK_EQ(static_cast<uint8_t>(UINT8_MAX), 255);
+        FL_CHECK_EQ(INT8_MAX, 127);
+        FL_CHECK(UINT8_MAX > static_cast<unsigned>(INT8_MAX));
+
+        FL_CHECK_EQ(static_cast<uint16_t>(UINT16_MAX), 65535);
+        FL_CHECK_EQ(INT16_MAX, 32767);
+        FL_CHECK(UINT16_MAX > static_cast<unsigned>(INT16_MAX));
+
+        FL_CHECK_EQ(UINT32_MAX, 4294967295U);
+        FL_CHECK_EQ(INT32_MAX, 2147483647);
+        FL_CHECK(UINT32_MAX > static_cast<uint32_t>(INT32_MAX));
+
+        FL_CHECK_EQ(UINT64_MAX, 18446744073709551615ULL);
+        FL_CHECK_EQ(INT64_MAX, 9223372036854775807LL);
+        FL_CHECK(UINT64_MAX > static_cast<uint64_t>(INT64_MAX));
+    }
+
+    FL_SUBCASE("size progression") {
+        // Each size should be double the previous
+        FL_CHECK_EQ(sizeof(uint16_t), sizeof(uint8_t) * 2);
+        FL_CHECK_EQ(sizeof(uint32_t), sizeof(uint16_t) * 2);
+        FL_CHECK_EQ(sizeof(uint64_t), sizeof(uint32_t) * 2);
+
+        FL_CHECK_EQ(sizeof(int16_t), sizeof(int8_t) * 2);
+        FL_CHECK_EQ(sizeof(int32_t), sizeof(int16_t) * 2);
+        FL_CHECK_EQ(sizeof(int64_t), sizeof(int32_t) * 2);
+    }
+
+    FL_SUBCASE("pointer-sized types") {
+        // size_t, uintptr_t, intptr_t, and ptrdiff_t should all be pointer-sized
+        FL_CHECK_EQ(sizeof(size_t), sizeof(void*));
+        FL_CHECK_EQ(sizeof(uintptr_t), sizeof(void*));
+        FL_CHECK_EQ(sizeof(intptr_t), sizeof(void*));
+        FL_CHECK_EQ(sizeof(ptrdiff_t), sizeof(void*));
+    }
+}
+
+FL_TEST_CASE("stdint arithmetic operations") {
+    FL_SUBCASE("8-bit arithmetic") {
+        uint8_t u8 = 100;
+        u8 += 50;
+        FL_CHECK_EQ(u8, 150);
+
+        u8 += 200;  // Should wrap
+        FL_CHECK_EQ(u8, 94);  // (150 + 200) % 256 = 350 % 256 = 94
+
+        // Test signed arithmetic (avoid UB overflow, use explicit wrapping)
+        int8_t i8 = 50;
+        i8 += 50;
+        FL_CHECK_EQ(i8, 100);
+
+        // Signed overflow is UB, so use unsigned arithmetic and cast
+        uint8_t u8_temp2 = static_cast<uint8_t>(i8) + 50;
+        i8 = static_cast<int8_t>(u8_temp2);
+        FL_CHECK_EQ(i8, -106);  // (100 + 50) = 150, reinterpreted as int8_t = -106
+    }
+
+    FL_SUBCASE("16-bit arithmetic") {
+        uint16_t u16 = 60000;
+        u16 += 10000;
+        FL_CHECK_EQ(u16, 4464);  // (70000) % 65536 = 4464
+
+        // Signed overflow is UB, use unsigned arithmetic and cast
+        int16_t i16 = 30000;
+        uint16_t u16_temp = static_cast<uint16_t>(i16) + 5000;
+        i16 = static_cast<int16_t>(u16_temp);
+        FL_CHECK_EQ(i16, -30536);  // (35000) reinterpreted as int16_t = -30536
+    }
+
+    FL_SUBCASE("32-bit arithmetic") {
+        uint32_t u32 = 4000000000U;
+        u32 += 500000000U;
+        FL_CHECK_EQ(u32, 205032704U);  // Wraps around
+
+        // Signed overflow is UB, use unsigned arithmetic and cast
+        int32_t i32 = 2000000000;
+        uint32_t u32_temp = static_cast<uint32_t>(i32) + 500000000;
+        i32 = static_cast<int32_t>(u32_temp);
+        FL_CHECK_EQ(i32, -1794967296);  // (2500000000) reinterpreted as int32_t
+    }
+
+    FL_SUBCASE("bitwise operations") {
+        uint32_t mask = 0xFF00FF00U;
+        uint32_t value = 0x12345678U;
+
+        uint32_t masked = value & mask;
+        FL_CHECK_EQ(masked, 0x12005600U);
+
+        uint32_t combined = value | mask;
+        FL_CHECK_EQ(combined, 0xFF34FF78U);
+
+        uint32_t toggled = value ^ mask;
+        FL_CHECK_EQ(toggled, 0xED34A978U);
+    }
+}
+
+FL_TEST_CASE("stdint constexpr compatibility") {
+    // Test that limit macros can be used in constexpr contexts
+    FL_SUBCASE("compile-time constants") {
+        constexpr int8_t min8 = INT8_MIN;
+        constexpr int8_t max8 = INT8_MAX;
+        constexpr uint8_t umax8 = UINT8_MAX;
+
+        FL_CHECK_EQ(min8, -128);
+        FL_CHECK_EQ(max8, 127);
+        FL_CHECK_EQ(umax8, 255);
+
+        constexpr int32_t min32 = INT32_MIN;
+        constexpr int32_t max32 = INT32_MAX;
+        constexpr uint32_t umax32 = UINT32_MAX;
+
+        FL_CHECK_EQ(min32, -2147483648);
+        FL_CHECK_EQ(max32, 2147483647);
+        FL_CHECK_EQ(umax32, 4294967295U);
+    }
+
+    FL_SUBCASE("static assertions") {
+        // These should compile successfully
+        FL_STATIC_ASSERT(sizeof(uint8_t) == 1, "uint8_t should be 1 byte");
+        FL_STATIC_ASSERT(sizeof(uint16_t) == 2, "uint16_t should be 2 bytes");
+        FL_STATIC_ASSERT(sizeof(uint32_t) == 4, "uint32_t should be 4 bytes");
+        FL_STATIC_ASSERT(sizeof(uint64_t) == 8, "uint64_t should be 8 bytes");
+
+        FL_STATIC_ASSERT(INT8_MAX == 127, "INT8_MAX should be 127");
+        FL_STATIC_ASSERT(UINT8_MAX == 255, "UINT8_MAX should be 255");
+        FL_STATIC_ASSERT(INT16_MAX == 32767, "INT16_MAX should be 32767");
+        FL_STATIC_ASSERT(UINT16_MAX == 65535, "UINT16_MAX should be 65535");
+        FL_STATIC_ASSERT(INT32_MAX == 2147483647, "INT32_MAX should be 2147483647");
+        FL_STATIC_ASSERT(UINT32_MAX == 4294967295U, "UINT32_MAX should be 4294967295U");
+    }
+}
+
+} // FL_TEST_FILE

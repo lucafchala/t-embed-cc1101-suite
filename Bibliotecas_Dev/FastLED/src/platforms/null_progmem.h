@@ -1,0 +1,82 @@
+// ok no namespace fl
+#pragma once
+
+#include "fl/stl/compiler_control.h"  // for FL_BUILTIN_MEMCPY
+#include "fl/stl/int.h"  // for FastLED integer types
+#include "platforms/avr/is_avr.h"  // for FL_IS_AVR
+
+// Guard against PROGMEM redefinition on platforms that have their own definition
+#if !defined(PROGMEM) && !defined(__IMXRT1062__) && !defined(__MK20DX128__) && !defined(__MK20DX256__) && !defined(__MK66FX1M0__) && !defined(__MK64FX512__) && !defined(__MKL26Z64__)
+#define PROGMEM
+#endif
+
+#if !defined(FL_PROGMEM)
+// Teensy 4.x (`__IMXRT1062__`) workaround: Teensy core defines `PROGMEM` as
+// `__attribute__((section(".progmem")))`, which causes GCC to emit "section
+// type conflict" errors when a single translation unit contains FL_PROGMEM
+// variables of different types (e.g. `CRGB`, `i32`, `float`) — see the
+// fl.fx+ unity build that aggregates `colorpalettes.h`, `sin32.h`, and
+// `mic_response_data.h`. Teensy 4 has a unified linear address space and
+// places `const` data in `.rodata` (flash) automatically via the linker
+// script, so the section attribute is unnecessary on this platform.
+// Mirrors the same special case in `fastled_progmem.h` so it applies
+// regardless of which inclusion path defines FL_PROGMEM first.
+#if defined(__IMXRT1062__)
+#define FL_PROGMEM
+// Ensure PROGMEM is available before using it
+#elif defined(PROGMEM)
+#define FL_PROGMEM PROGMEM
+#if defined(FL_IS_AVR)
+// IWYU pragma: begin_keep
+#include <avr/pgmspace.h>
+#include "fl/stl/noexcept.h"
+// IWYU pragma: end_keep
+#endif
+#else
+// Fallback for platforms without PROGMEM - just use empty attribute
+#define FL_PROGMEM
+#endif
+#endif
+
+// Safe PROGMEM read macros.
+// On non-AVR platforms, PROGMEM data lives in normal RAM — direct dereference
+// is correct and compiles to a single load instruction with zero overhead.
+// On AVR, pgm_read_*_near uses special LPM instructions to read from flash.
+#if !(defined(FL_IS_AVR))
+#define FL_PGM_READ_BYTE_NEAR(x) (*((const fl::u8*)(x)))
+#define FL_PGM_READ_WORD_NEAR(x) (*((const fl::u16*)(x)))
+#define FL_PGM_READ_DWORD_NEAR(x) (*((const fl::u32*)(x)))
+#else
+#define FL_PGM_READ_BYTE_NEAR(x) (pgm_read_byte_near(x))
+#define FL_PGM_READ_WORD_NEAR(x) (pgm_read_word_near(x))
+#define FL_PGM_READ_DWORD_NEAR(x) (pgm_read_dword_near(x))
+#endif // !(defined(FL_IS_AVR))
+
+// On x86/WASM (platforms without PROGMEM), alignment is useful for cache-line optimization
+// Use alignas(N) in C++ or __attribute__((aligned(N))) for maximum compatibility
+#define FL_ALIGN_PROGMEM(N) __attribute__((aligned(N)))
+
+// Aligned PROGMEM reads. On non-AVR/non-flash platforms, data lives in
+// normal memory. Uses FL_BUILTIN_MEMCPY (compiler intrinsic) which always
+// lowers to a single load instruction — unlike fl::memcpy which is a
+// cross-TU call that the compiler cannot inline without LTO.
+#if !(defined(FL_IS_AVR))
+static inline fl::u16 _fl_progmem_aligned_read_2(const void* addr) FL_NO_EXCEPT {
+    fl::u16 result;
+    FL_BUILTIN_MEMCPY(&result, addr, 2);
+    return result;
+}
+static inline fl::u32 _fl_progmem_aligned_read_4(const void* addr) FL_NO_EXCEPT {
+    fl::u32 result;
+    FL_BUILTIN_MEMCPY(&result, addr, 4);
+    return result;
+}
+#define FL_PGM_READ_WORD_ALIGNED(addr) (_fl_progmem_aligned_read_2(addr))
+#define FL_PGM_READ_DWORD_ALIGNED(addr) (_fl_progmem_aligned_read_4(addr))
+#else
+// On AVR, we must use the standard pgm_read_* for PROGMEM data in flash.
+#define FL_PGM_READ_WORD_ALIGNED(addr) FL_PGM_READ_WORD_NEAR(addr)
+#define FL_PGM_READ_DWORD_ALIGNED(addr) FL_PGM_READ_DWORD_NEAR(addr)
+#endif // !(defined(FL_IS_AVR))
+
+#define FL_PROGMEM_USES_NULL 1

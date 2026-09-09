@@ -1,0 +1,6 @@
+{
+  "_description": "Compilation performance thresholds for FastLED headers",
+  "_note": "Only aggregate/total compile time is checked. Individual header times can vary between compilations due to caching and other factors.",
+
+  "total_compile_time_ms": 2000
+}

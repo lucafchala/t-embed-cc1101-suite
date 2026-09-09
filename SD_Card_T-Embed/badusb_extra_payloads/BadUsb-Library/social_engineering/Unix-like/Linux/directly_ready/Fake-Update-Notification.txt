@@ -1,0 +1,32 @@
+REM Title: Linux Fake Update Notification
+REM Author: BadUSB Library
+REM Description: Shows fake system update notification
+REM Target: Linux
+REM Category: Social Engineering
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Show fake update notification (GNOME)
+STRING notify-send "System Update Available" "Important security updates are available. Click to install now." -i system-software-update
+ENTER
+DELAY 3000
+
+REM Show fake update dialog
+STRING zenity --info --text="System Update Required
+
+Your system needs to be updated to continue.
+Click OK to install the latest security updates." --title="System Update"
+ENTER
+DELAY 3000
+
+REM Show fake progress
+STRING zenity --progress --text="Installing updates..." --percentage=0 --auto-close
+ENTER
+DELAY 3000

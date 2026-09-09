@@ -1,0 +1,697 @@
+#include "fl/stl/istream.h"
+#include "fl/stl/stdint.h"
+#include "fl/stl/new.h"
+#include "test.h"
+#include "fl/log/log.h"
+#include "fl/stl/cstring.h"
+#include "fl/stl/function.h"
+#include "fl/stl/move.h"
+#include "fl/stl/string.h"
+#include "fl/stl/strstream.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+
+// Test that fl::cin and fl::istream compile without errors
+
+FL_TEST_CASE("fl::istream basic instantiation compiles") {
+    // Test that we can create an istream instance
+    fl::istream test_stream;
+    
+    // Test that global cin exists
+    fl::istream* cin_ptr = &fl::cin;
+    FL_CHECK(cin_ptr != nullptr);
+    
+    // Test basic state methods compile
+    bool good = test_stream.good();
+    bool fail = test_stream.fail();
+    bool eof = test_stream.eof();
+    test_stream.clear();
+    
+    // Suppress unused variable warnings
+    (void)good;
+    (void)fail;
+    (void)eof;
+    
+    FL_CHECK(true); // If we got here, compilation succeeded
+}
+
+FL_TEST_CASE("fl::cin_real global instance compiles") {
+    // Test that we can use the fl::cin_real() function
+    fl::istream_real* cin_real_ptr = &fl::cin_real();
+    FL_CHECK(cin_real_ptr != nullptr);
+    
+    // Test that we can call methods on cin_real()
+    bool cin_real_good = fl::cin_real().good();
+    bool cin_real_fail = fl::cin_real().fail();
+    bool cin_real_eof = fl::cin_real().eof();
+    fl::cin_real().clear();
+    
+    // Suppress unused variable warnings
+    (void)cin_real_good;
+    (void)cin_real_fail;
+    (void)cin_real_eof;
+    
+    FL_CHECK(true); // If we got here, cin_real() compiled and is accessible
+}
+
+FL_TEST_CASE("fl::istream input operators compile") {
+    fl::istream test_stream;
+    
+    // Test all input operator overloads compile
+    fl::string str_val;
+    char char_val;
+    int8_t int8_val;
+    uint8_t uint8_val;
+    int16_t int16_val;
+    uint16_t uint16_val;
+    int32_t int32_val;
+    uint32_t uint32_val;
+    float float_val;
+    double double_val;
+    
+    // These should compile even though they won't read anything without input
+    test_stream >> str_val;
+    test_stream >> char_val;
+    test_stream >> int8_val;
+    test_stream >> uint8_val;
+    test_stream >> int16_val;
+    test_stream >> uint16_val;
+    test_stream >> int32_val;
+    test_stream >> uint32_val;
+    test_stream >> float_val;
+    test_stream >> double_val;
+    
+    fl::size size_val;
+    test_stream >> size_val;
+    (void)size_val;
+    
+    // Suppress unused variable warnings
+    (void)str_val;
+    (void)char_val;
+    (void)int8_val;
+    (void)uint8_val;
+    (void)int16_val;
+    (void)uint16_val;
+    (void)int32_val;
+    (void)uint32_val;
+    (void)float_val;
+    (void)double_val;
+    
+    FL_CHECK(true); // If we got here, all operators compiled
+}
+
+FL_TEST_CASE("fl::istream chaining operations compile") {
+    fl::istream test_stream;
+    
+    // Test that chaining input operations compiles
+    int32_t a, b, c;
+    fl::string str1, str2;
+    
+    // This should compile (chain of >> operators)
+    test_stream >> a >> b >> c;
+    test_stream >> str1 >> str2;
+    test_stream >> str1 >> a >> str2 >> b;
+    
+    // Suppress unused variable warnings
+    (void)a;
+    (void)b;
+    (void)c;
+    (void)str1;
+    (void)str2;
+    
+    FL_CHECK(true); // If we got here, chaining compiled
+}
+
+FL_TEST_CASE("fl::istream additional methods compile") {
+    fl::istream test_stream;
+    
+    // Test getline method compiles
+    fl::string line;
+    test_stream.getline(line);
+    
+    // Test get/peek/putback methods compile
+    int ch = test_stream.get();
+    int peek_ch = test_stream.peek();
+    test_stream.putback('A');
+    
+    // Suppress unused variable warnings
+    (void)line;
+    (void)ch;
+    (void)peek_ch;
+    
+    FL_CHECK(true); // If we got here, all methods compiled
+}
+
+FL_TEST_CASE("fl::cin global instance compiles") {
+    // Test that we can use the global fl::cin instance
+    fl::string test_str;
+    int32_t test_int;
+    char test_char;
+    
+    // These operations should compile
+    // (They won't read anything in the test environment, but should compile)
+    fl::cin >> test_str;
+    fl::cin >> test_int;
+    fl::cin >> test_char;
+    
+    // Test chaining with global cin
+    fl::cin >> test_str >> test_int >> test_char;
+    
+    // Test state checking
+    bool cin_good = fl::cin.good();
+    bool cin_fail = fl::cin.fail();
+    bool cin_eof = fl::cin.eof();
+    fl::cin.clear();
+    
+    // Test getline with global cin
+    fl::string line;
+    fl::cin.getline(line);
+    
+    // Suppress unused variable warnings
+    (void)test_str;
+    (void)test_int;
+    (void)test_char;
+    (void)cin_good;
+    (void)cin_fail;
+    (void)cin_eof;
+    (void)line;
+    
+    FL_CHECK(true); // If we got here, global cin compiled
+}
+
+FL_TEST_CASE("fl::istream state management compiles") {
+    fl::istream test_stream;
+    
+    // Test all state management methods
+    FL_CHECK_FALSE(test_stream.fail()); // Initially should not fail
+    FL_CHECK(test_stream.good()); // Initially should be good
+    
+    // Test that we can call clear to reset state
+    test_stream.clear();
+    FL_CHECK_FALSE(test_stream.fail());
+    FL_CHECK(test_stream.good());
+    
+    // Test eof checking (should not be EOF initially when no input attempted)
+    bool eof_result = test_stream.eof();
+    (void)eof_result; // Suppress unused warning
+    
+    FL_CHECK(true); // State management compiled and basic checks passed
+}
+
+FL_TEST_CASE("fl::istream types match expected interfaces") {
+    // Verify that istream has the expected interface similar to std::istream
+    
+    // Test return type of operators is istream& (for chaining)
+    fl::istream test_stream;
+    fl::string str;
+    int32_t num;
+    
+    // This tests that >> returns istream& by allowing chaining
+    auto& result1 = (test_stream >> str);
+    auto& result2 = (result1 >> num);
+    
+    // Test that the return is the same object (reference)
+    FL_CHECK(&result1 == &test_stream);
+    FL_CHECK(&result2 == &test_stream);
+    
+    // Test that getline returns istream&
+    auto& result3 = test_stream.getline(str);
+    FL_CHECK(&result3 == &test_stream);
+    
+    // Test that putback returns istream&
+    auto& result4 = test_stream.putback('X');
+    FL_CHECK(&result4 == &test_stream);
+    
+    // Suppress unused variable warnings
+    (void)str;
+    (void)num;
+}
+
+#ifdef FASTLED_TESTING
+
+// Helper class to mock input data for testing
+class InputMocker {
+private:
+    fl::string mData;
+    fl::size mPos;
+
+public:
+    InputMocker(const char* input_data) : mData(input_data), mPos(0) {}
+
+    int available() {
+        return (mPos < mData.size()) ? (mData.size() - mPos) : 0;
+    }
+
+    int read() {
+        if (mPos < mData.size()) {
+            return static_cast<int>(static_cast<unsigned char>(mData[mPos++]));
+        }
+        return -1;
+    }
+
+    void reset() {
+        mPos = 0;
+    }
+};
+
+FL_TEST_CASE("fl::istream handler injection test") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Test basic handler injection") {
+        // Test that we can inject handlers and they work
+        bool available_called = false;
+        bool read_called = false;
+        
+        fl::inject_available_handler([&available_called]() { 
+            available_called = true;
+            return 5; 
+        });
+        fl::inject_read_handler([&read_called]() { 
+            read_called = true;
+            return 'H'; 
+        });
+        
+        // Call the functions and verify handlers are called
+        int avail = fl::available();
+        int ch = fl::read();
+        
+        FL_CHECK(available_called);
+        FL_CHECK(read_called);
+        FL_CHECK(avail == 5);
+        FL_CHECK(ch == 'H');
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream simple debug test") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Simple single word parsing") {
+        InputMocker mocker("Hello");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string word;
+        
+        test_stream >> word;
+        
+        // Debug output
+        FL_WARN("Parsed word: '" << word.c_str() << "'");
+        FL_WARN("Word length: " << word.size());
+        FL_WARN("Stream good: " << test_stream.good());
+        FL_WARN("Stream fail: " << test_stream.fail());
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(word.size() == 5);
+        FL_CHECK(fl::strcmp(word.c_str(), "Hello") == 0);
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream integer parsing with mock input") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Parse positive integer from 'Number: 10'") {
+        InputMocker mocker("Number: 10");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int32_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "Number:");
+        FL_CHECK(number == 10);
+    }
+    
+    FL_SUBCASE("Parse negative integer from 'Value: -42'") {
+        InputMocker mocker("Value: -42");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int32_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "Value:");
+        FL_CHECK(number == -42);
+    }
+    
+    FL_SUBCASE("Parse unsigned integer from 'count: 255'") {
+        InputMocker mocker("count: 255");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        uint32_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "count:");
+        FL_CHECK(number == 255);
+    }
+    
+    FL_SUBCASE("Parse int8_t from 'byte: 127'") {
+        InputMocker mocker("byte: 127");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int8_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "byte:");
+        FL_CHECK(number == 127);
+    }
+    
+    FL_SUBCASE("Parse int16_t from 'short: -1000'") {
+        InputMocker mocker("short: -1000");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int16_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "short:");
+        FL_CHECK(number == -1000);
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream float parsing with mock input") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Parse float from 'number: 1.0f'") {
+        InputMocker mocker("number: 1.0f");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        float number = 0.0f;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "number:");
+        FL_CHECK(number == doctest::Approx(1.0f));
+    }
+    
+    FL_SUBCASE("Parse float from 'pi: 3.14159'") {
+        InputMocker mocker("pi: 3.14159");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        float number = 0.0f;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "pi:");
+        FL_CHECK(number == doctest::Approx(3.14159f));
+    }
+    
+    FL_SUBCASE("Parse negative float from 'temp: -25.5'") {
+        InputMocker mocker("temp: -25.5");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        float number = 0.0f;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "temp:");
+        FL_CHECK(number == doctest::Approx(-25.5f));
+    }
+    
+    FL_SUBCASE("Parse double from 'precision: 123.456789'") {
+        InputMocker mocker("precision: 123.456789");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        double number = 0.0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "precision:");
+        FL_CHECK(number == doctest::Approx(123.456789));
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream string and character parsing with mock input") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Parse string from 'name: FastLED'") {
+        InputMocker mocker("name: FastLED");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label, value;
+        
+        test_stream >> label >> value;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "name:");
+        FL_CHECK(value == "FastLED");
+    }
+    
+    FL_SUBCASE("Parse character from 'letter: A'") {
+        InputMocker mocker("letter: A");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        char ch = 0;
+        
+        test_stream >> label >> ch;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label == "letter:");
+        FL_CHECK(ch == 'A');
+    }
+    
+    FL_SUBCASE("Parse multiple words with spaces") {
+        InputMocker mocker("Hello World Test 42");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string word1, word2, word3;
+        int32_t number = 0;
+        
+        test_stream >> word1 >> word2 >> word3 >> number;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(word1 == "Hello");
+        FL_CHECK(word2 == "World");
+        FL_CHECK(word3 == "Test");
+        FL_CHECK(number == 42);
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream mixed data type parsing") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Parse mixed types from 'LED strip: 144 brightness: 0.8 enabled: Y'") {
+        InputMocker mocker("LED strip: 144 brightness: 0.8 enabled: Y");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string led_label, strip_label, bright_label, enabled_label;
+        int32_t count = 0;
+        float brightness = 0.0f;
+        char enabled = 0;
+        
+        test_stream >> led_label >> strip_label >> count >> bright_label >> brightness >> enabled_label >> enabled;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(led_label == "LED");
+        FL_CHECK(strip_label == "strip:");
+        FL_CHECK(count == 144);
+        FL_CHECK(bright_label == "brightness:");
+        FL_CHECK(brightness == doctest::Approx(0.8f));
+        FL_CHECK(enabled_label == "enabled:");
+        FL_CHECK(enabled == 'Y');
+    }
+    
+    FL_SUBCASE("Parse configuration data 'width: 32 height: 16 fps: 60.0'") {
+        InputMocker mocker("width: 32 height: 16 fps: 60.0");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string width_label, height_label, fps_label;
+        uint16_t width = 0, height = 0;
+        float fps = 0.0f;
+        
+        test_stream >> width_label >> width >> height_label >> height >> fps_label >> fps;
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(width_label == "width:");
+        FL_CHECK(width == 32);
+        FL_CHECK(height_label == "height:");
+        FL_CHECK(height == 16);
+        FL_CHECK(fps_label == "fps:");
+        FL_CHECK(fps == doctest::Approx(60.0f));
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream error handling with mock input") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Invalid integer parsing") {
+        InputMocker mocker("value: abc");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int32_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(label == "value:");
+        FL_CHECK(test_stream.fail());
+        FL_CHECK_FALSE(test_stream.good());
+    }
+    
+    FL_SUBCASE("Integer overflow handling") {
+        InputMocker mocker("big: 999999999999999999999");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label;
+        int32_t number = 0;
+        
+        test_stream >> label >> number;
+        
+        FL_CHECK(label == "big:");
+        FL_CHECK(test_stream.fail());
+        FL_CHECK_FALSE(test_stream.good());
+    }
+    
+    FL_SUBCASE("Clear error state and continue") {
+        InputMocker mocker("bad: abc good: 123");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string label1, label2;
+        int32_t number1 = 0, number2 = 0;
+        
+        // First read should fail
+        test_stream >> label1 >> number1;
+        FL_CHECK(label1 == "bad:");
+        FL_CHECK(test_stream.fail());
+        
+        // Clear error state
+        test_stream.clear();
+        FL_CHECK(test_stream.good());
+        
+        // Continue reading should work
+        test_stream >> label2 >> number2;
+        FL_CHECK(test_stream.good());
+        FL_CHECK(label2 == "good:");
+        FL_CHECK(number2 == 123);
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+FL_TEST_CASE("fl::istream getline with mock input") {
+    // Clear any existing handlers first
+    fl::clear_io_handlers();
+    
+    FL_SUBCASE("Read full line with getline") {
+        InputMocker mocker("This is a complete line with spaces\nSecond line");
+        
+        fl::inject_available_handler([&mocker]() { return mocker.available(); });
+        fl::inject_read_handler([&mocker]() { return mocker.read(); });
+        
+        fl::istream test_stream;
+        fl::string line1, line2;
+        
+        test_stream.getline(line1);
+        test_stream.getline(line2);
+        
+        FL_CHECK(test_stream.good());
+        FL_CHECK(line1 == "This is a complete line with spaces");
+        FL_CHECK(line2 == "Second line");
+    }
+    
+    // Clean up handlers
+    fl::clear_io_handlers();
+}
+
+#endif // FASTLED_TESTING
+
+} // FL_TEST_FILE

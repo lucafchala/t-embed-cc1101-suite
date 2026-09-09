@@ -1,0 +1,59 @@
+
+// g++ --std=c++11 test.cpp
+
+
+#include "fl/fx/time.h"
+#include "test.h"
+
+FL_TEST_FILE(FL_FILEPATH) {
+using namespace fl;
+FL_TEST_CASE("TimeWarp basic functionality") {
+
+    FL_SUBCASE("Initialization and normal time progression") {
+        TimeWarp tw(1000, 1.0f); // 1000 ms is the start time, speed is set at 1x
+        FL_CHECK(tw.time() == 0);
+        FL_CHECK(tw.scale() == 1.0f);
+
+        tw.update(2000);
+        FL_CHECK(tw.time() == 1000);
+    }
+
+    FL_SUBCASE("Time scaling") {
+        TimeWarp tw(1000);
+        tw.setSpeed(2.0f);  // now we are at 2x speed.
+        FL_CHECK(tw.time() == 0);  // at t0 = 1000ms
+
+        tw.update(1500);  // we give 500 at 2x => add 1000 to time counter.
+        FL_CHECK(tw.time() == 1000);
+
+        tw.setSpeed(0.5f);  // Set half speed: 500ms.
+        FL_CHECK(tw.scale() == 0.5f);
+
+        tw.update(2500);
+        FL_CHECK(tw.time() == 1500);
+    }
+
+    FL_SUBCASE("Reset functionality") {
+        TimeWarp tw(1000, 1.0f);
+        tw.update(2000);
+        FL_CHECK(tw.time() == 1000);
+
+        tw.reset(3000);
+        FL_CHECK(tw.time() == 0);
+
+        tw.update(4000);
+        FL_CHECK(tw.time() == 1000);
+    }
+
+    FL_SUBCASE("Wrap-around protection - prevent from going below start time") {
+        TimeWarp tw(1000, 1.0f);
+        tw.update(1001);
+        FL_CHECK(tw.time() == 1);
+        tw.setSpeed(-1.0f);
+        tw.update(2000);
+        FL_CHECK_EQ(tw.time(), 0);
+    }
+
+}
+
+} // FL_TEST_FILE

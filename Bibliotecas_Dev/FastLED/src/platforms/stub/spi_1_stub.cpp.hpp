@@ -1,0 +1,187 @@
+// IWYU pragma: private
+
+/// @file spi_1_stub.cpp
+/// @brief Stub/Mock Single-SPI implementation for testing
+
+#if defined(FASTLED_TESTING) || defined(FASTLED_STUB_IMPL)
+
+#include "platforms/stub/spi_1_stub.h"
+#include "platforms/shared/spi_manager.h"  // For DMABuffer, TransmitMode, SPIError
+#include "fl/log/log.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+SpiHw1Stub::SpiHw1Stub(int bus_id, const char* name)
+ FL_NO_EXCEPT : mBusId(bus_id)
+    , mName(name)
+    , mInitialized(false)
+    , mClockSpeed(0)
+    , mTransmitCount(0)
+    , mCurrentBuffer()
+    , mBufferAcquired(false) {
+}
+
+bool SpiHw1Stub::begin(const SpiHw1::Config& config) FL_NO_EXCEPT {
+    if (mInitialized) {
+        return true;  // Already initialized
+    }
+
+    // Validate bus_num against mBusId if driver has pre-assigned ID
+    if (mBusId != -1 && config.bus_num != static_cast<u8>(mBusId)) {
+        return false;  // Mismatch
+    }
+
+    mClockSpeed = config.clock_speed_hz;
+    mInitialized = true;
+    return true;
+}
+
+void SpiHw1Stub::end() FL_NO_EXCEPT {
+    FL_LOG_SPI_F("SpiHw1Stub::end() called, mInitialized=%s", (mInitialized ? "true" : "false"));
+    if (!mInitialized) {
+        FL_LOG_SPI_F("SpiHw1Stub::end() already ended, returning");
+        return;  // Already ended - idempotent
+    }
+
+    FL_LOG_SPI_F("SpiHw1Stub::end() setting mInitialized=false");
+    mInitialized = false;
+    FL_LOG_SPI_F("SpiHw1Stub::end() clearing mLastBuffer");
+    mLastBuffer.clear();
+
+    FL_LOG_SPI_F("SpiHw1Stub::end() resetting mCurrentBuffer");
+    // Release current buffer
+    mCurrentBuffer.reset();
+    FL_LOG_SPI_F("SpiHw1Stub::end() setting mBufferAcquired=false");
+    mBufferAcquired = false;
+    FL_LOG_SPI_F("SpiHw1Stub::end() complete");
+}
+
+DMABuffer SpiHw1Stub::acquireDMABuffer(size_t bytes_per_lane) FL_NO_EXCEPT {
+    if (!mInitialized) {
+        return DMABuffer(SPIError::NOT_INITIALIZED);
+    }
+
+    // For single-lane SPI: num_lanes = 1
+    constexpr size_t num_lanes = 1;
+    const size_t total_size = bytes_per_lane * num_lanes;
+
+    // Create a new DMABuffer with the specified size
+    mCurrentBuffer = DMABuffer(total_size);
+
+    if (!mCurrentBuffer.ok()) {
+        return mCurrentBuffer;  // Return error
+    }
+
+    mBufferAcquired = true;
+
+    // Return a copy of the buffer (shared_ptr will be shared)
+    return mCurrentBuffer;
+}
+
+bool SpiHw1Stub::transmit(TransmitMode mode) FL_NO_EXCEPT {
+    (void)mode;  // Unused in stub
+
+    if (!mInitialized || !mBufferAcquired) {
+        return false;
+    }
+
+    if (!mCurrentBuffer.ok() || mCurrentBuffer.data().size() == 0) {
+        return true;  // Nothing to transmit
+    }
+
+    // Capture data for inspection (simulates blocking transmission)
+    mLastBuffer.clear();
+    fl::span<u8> buffer_span = mCurrentBuffer.data();
+    mLastBuffer.reserve(buffer_span.size());
+    for (size_t i = 0; i < buffer_span.size(); ++i) {
+        mLastBuffer.push_back(buffer_span[i]);
+    }
+
+    mTransmitCount++;
+
+    // Note: In real implementation, this is blocking, so transmission is already complete
+    return true;
+}
+
+bool SpiHw1Stub::waitComplete(u32 timeout_ms) FL_NO_EXCEPT {
+    (void)timeout_ms;  // Unused in stub (transmission already complete)
+
+    // AUTO-RELEASE DMA buffer
+    mBufferAcquired = false;
+
+    return true;
+}
+
+bool SpiHw1Stub::isBusy() const FL_NO_EXCEPT {
+    // Never busy since transmission is blocking
+    return false;
+}
+
+bool SpiHw1Stub::isInitialized() const FL_NO_EXCEPT {
+    return mInitialized;
+}
+
+int SpiHw1Stub::getBusId() const FL_NO_EXCEPT {
+    return mBusId;
+}
+
+const char* SpiHw1Stub::getName() const FL_NO_EXCEPT {
+    return mName;
+}
+
+const fl::vector<u8>& SpiHw1Stub::getLastTransmission() const FL_NO_EXCEPT {
+    return mLastBuffer;
+}
+
+u32 SpiHw1Stub::getTransmissionCount() const FL_NO_EXCEPT {
+    return mTransmitCount;
+}
+
+u32 SpiHw1Stub::getClockSpeed() const FL_NO_EXCEPT {
+    return mClockSpeed;
+}
+
+void SpiHw1Stub::reset() FL_NO_EXCEPT {
+    mLastBuffer.clear();
+    mTransmitCount = 0;
+}
+
+// ============================================================================
+// Instance Registration
+// ============================================================================
+
+namespace {
+// Singleton getters for mock controller instances (Meyer's Singleton pattern)
+fl::shared_ptr<SpiHw1Stub>& getController0_Spi1() FL_NO_EXCEPT {
+    static fl::shared_ptr<SpiHw1Stub> instance = fl::make_shared<SpiHw1Stub>(0, "MockSingle0");
+    return instance;
+}
+
+fl::shared_ptr<SpiHw1Stub>& getController1_Spi1() FL_NO_EXCEPT {
+    static fl::shared_ptr<SpiHw1Stub> instance = fl::make_shared<SpiHw1Stub>(1, "MockSingle1");
+    return instance;
+}
+}  // anonymous namespace
+
+}  // namespace fl
+
+// Platform-specific initialization for stub SPI hardware
+namespace fl {
+namespace platforms {
+
+/// @brief Initialize stub SpiHw1 instances for testing
+///
+/// Called lazily on first access to SpiHw1::getAll().
+/// Registers mock SpiHw1 controller instances for testing.
+void initSpiHw1Instances() FL_NO_EXCEPT {
+    FL_WARN_F("Registering SpiHw1 stub instances...");
+    SpiHw1::registerInstance(getController0_Spi1());
+    SpiHw1::registerInstance(getController1_Spi1());
+    FL_WARN_F("SpiHw1 stub instances registered!");
+}
+
+}  // namespace platforms
+}  // namespace fl
+
+#endif  // defined(FASTLED_TESTING) || defined(FASTLED_STUB_IMPL)

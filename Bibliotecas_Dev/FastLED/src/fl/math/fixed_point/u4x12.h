@@ -1,0 +1,277 @@
+#pragma once
+
+// Unsigned 4.12 fixed-point arithmetic.
+// All operations are integer-only in the hot path.
+
+#include "fl/stl/int.h"
+#include "fl/math/fixed_point/isqrt.h"
+#include "fl/stl/compiler_control.h"
+#include "fl/math/fixed_point/traits.h"
+#include "fl/stl/noexcept.h"
+#include "fl/stl/undef.h"  // Undefine abs/min/max macros from Arduino.h
+
+FL_OPTIMIZATION_LEVEL_O3_BEGIN
+
+namespace fl {
+
+// Unsigned 4.12 fixed-point value type.
+class u4x12 {
+  public:
+    static constexpr int INT_BITS = 4;
+    static constexpr int FRAC_BITS = 12;
+    static constexpr i32 SCALE = static_cast<i32>(1) << FRAC_BITS;
+
+    // ---- Construction ------------------------------------------------------
+
+    constexpr u4x12() FL_NO_EXCEPT = default;
+
+    explicit constexpr u4x12(float f) FL_NO_EXCEPT
+        : mValue(static_cast<u16>(f * (SCALE))) {}
+
+    // Integer constructor — any integer width (portable: AVR 16-bit int, ARM/x86 32-bit).
+    // Compile error if constexpr value exceeds INT_BITS range.
+    template <typename IntT, detail::enable_if_integer_t<IntT> = 0>
+    explicit constexpr u4x12(IntT n) FL_NO_EXCEPT
+        : mValue(detail::int_to_fixed<INT_BITS, FRAC_BITS>::from_unsigned(n)) {}
+
+    // Auto-promotion from other fixed-point types
+    template <typename OtherFP>
+    constexpr u4x12(const OtherFP& other,
+                    typename fl::enable_if<
+                        (OtherFP::INT_BITS <= INT_BITS) &&
+                        (OtherFP::FRAC_BITS <= FRAC_BITS) &&
+                        (OtherFP::INT_BITS != INT_BITS || OtherFP::FRAC_BITS != FRAC_BITS),
+                        int>::type = 0)
+ FL_NO_EXCEPT : mValue(static_cast<u16>(
+            static_cast<u32>(other.raw()) << (FRAC_BITS - OtherFP::FRAC_BITS))) {}
+
+    // Raw constructor for C++11 constexpr from_raw
+    struct RawTag {};
+    constexpr explicit u4x12(u16 raw, RawTag) FL_NO_EXCEPT : mValue(raw) {}
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 from_raw(u16 raw) FL_NO_EXCEPT {
+        return u4x12(raw, RawTag());
+    }
+
+    // ---- Access ------------------------------------------------------------
+
+    constexpr u16 raw() const FL_NO_EXCEPT { return mValue; }
+    constexpr u16 to_int() const FL_NO_EXCEPT { return mValue >> FRAC_BITS; }
+    constexpr float to_float() const FL_NO_EXCEPT { return static_cast<float>(mValue) / (SCALE); }
+
+    // ---- Fixed-point arithmetic --------------------------------------------
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator*(u4x12 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<u16>(
+            (static_cast<u32>(mValue) * b.mValue) >> FRAC_BITS));
+    }
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator/(u4x12 b) const FL_NO_EXCEPT {
+        return from_raw(static_cast<u16>(
+            (static_cast<u32>(mValue) * (static_cast<u32>(1) << FRAC_BITS)) / b.mValue));
+    }
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator+(u4x12 b) const FL_NO_EXCEPT {
+        return from_raw(mValue + b.mValue);
+    }
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator-(u4x12 b) const FL_NO_EXCEPT {
+        return from_raw(mValue - b.mValue);
+    }
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator>>(int shift) const FL_NO_EXCEPT {
+        return from_raw(mValue >> shift);
+    }
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator<<(int shift) const FL_NO_EXCEPT {
+        return from_raw(mValue << shift);
+    }
+
+    // ---- Scalar multiply (no fixed-point shift) ----------------------------
+
+    constexpr FASTLED_FORCE_INLINE u4x12 operator*(u16 scalar) const FL_NO_EXCEPT {
+        return from_raw(mValue * scalar);
+    }
+
+    friend constexpr u4x12 operator*(u16 scalar, u4x12 fp) FL_NO_EXCEPT {
+        return u4x12::from_raw(scalar * fp.mValue);
+    }
+
+    // ---- Comparisons -------------------------------------------------------
+
+    constexpr bool operator<(u4x12 b) const FL_NO_EXCEPT { return mValue < b.mValue; }
+    constexpr bool operator>(u4x12 b) const FL_NO_EXCEPT { return mValue > b.mValue; }
+    constexpr bool operator<=(u4x12 b) const FL_NO_EXCEPT { return mValue <= b.mValue; }
+    constexpr bool operator>=(u4x12 b) const FL_NO_EXCEPT { return mValue >= b.mValue; }
+    constexpr bool operator==(u4x12 b) const FL_NO_EXCEPT { return mValue == b.mValue; }
+    constexpr bool operator!=(u4x12 b) const FL_NO_EXCEPT { return mValue != b.mValue; }
+
+    // ---- Math ---------------------------------------------------------------
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 mod(u4x12 a, u4x12 b) FL_NO_EXCEPT {
+        return from_raw(a.mValue % b.mValue);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 floor(u4x12 x) FL_NO_EXCEPT {
+        return from_raw(x.mValue & ~(u16((SCALE) - 1)));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 ceil(u4x12 x) FL_NO_EXCEPT {
+        return from_raw((x.mValue & ~(u16((SCALE) - 1))) +
+                        ((x.mValue & u16((SCALE) - 1)) ? (SCALE) : 0));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 fract(u4x12 x) FL_NO_EXCEPT {
+        return from_raw(x.mValue & u16((SCALE) - 1));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 abs(u4x12 x) FL_NO_EXCEPT {
+        // For unsigned type, abs is identity
+        return x;
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 min(u4x12 a, u4x12 b) FL_NO_EXCEPT {
+        return a < b ? a : b;
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 max(u4x12 a, u4x12 b) FL_NO_EXCEPT {
+        return a > b ? a : b;
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 lerp(u4x12 a, u4x12 b, u4x12 t) FL_NO_EXCEPT {
+        return a + (b - a) * t;
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 clamp(u4x12 x, u4x12 lo, u4x12 hi) FL_NO_EXCEPT {
+        return x < lo ? lo : (x > hi ? hi : x);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 step(u4x12 edge, u4x12 x) FL_NO_EXCEPT {
+        return x < edge ? u4x12() : u4x12(1.0f);
+    }
+
+    static FASTLED_FORCE_INLINE u4x12 smoothstep(u4x12 edge0, u4x12 edge1, u4x12 x) FL_NO_EXCEPT {
+        constexpr u4x12 zero(0.0f);
+        constexpr u4x12 one(1.0f);
+        constexpr u4x12 two(2.0f);
+        constexpr u4x12 three(3.0f);
+        u4x12 t = clamp((x - edge0) / (edge1 - edge0), zero, one);
+        return t * t * (three - two * t);
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 sqrt(u4x12 x) FL_NO_EXCEPT {
+        return x.mValue == 0 ? u4x12() : from_raw(static_cast<u16>(
+            fl::isqrt32(static_cast<u32>(x.mValue) << FRAC_BITS)));
+    }
+
+    static constexpr FASTLED_FORCE_INLINE u4x12 rsqrt(u4x12 x) FL_NO_EXCEPT {
+        return sqrt(x).mValue == 0
+            ? u4x12()
+            : from_raw(static_cast<u16>(1) << FRAC_BITS) / sqrt(x);
+    }
+
+    static FASTLED_FORCE_INLINE u4x12 pow(u4x12 base, u4x12 exp) FL_NO_EXCEPT {
+        if (base.mValue == 0) return u4x12();
+        constexpr u4x12 one(1.0f);
+        if (exp.mValue == 0) return one;
+        if (base == one) return one;
+        // Snap base values within ~2 ULPs of 1.0 to exactly 1.0 to dodge the
+        // log2(1+t) minimax polynomial's upper-endpoint residual (#2969).
+        constexpr u16 kOneRaw = static_cast<u16>(SCALE);
+        if (base.mValue >= static_cast<u16>(kOneRaw - 2) &&
+            base.mValue <= kOneRaw) {
+            return one;
+        }
+        return exp2_fp(exp * log2_fp(base));
+    }
+
+  private:
+    u16 mValue = 0;
+
+    // Returns 0-based position of highest set bit, or -1 if v==0.
+    static constexpr FASTLED_FORCE_INLINE int highest_bit(u32 v) FL_NO_EXCEPT {
+        return v == 0 ? -1 : _highest_bit_step(v, 0);
+    }
+
+    static constexpr int _highest_bit_step(u32 v, int r) FL_NO_EXCEPT {
+        return (v & 0xFFFF0000u) ? _highest_bit_step(v >> 16, r + 16)
+             : (v & 0x0000FF00u) ? _highest_bit_step(v >> 8,  r + 8)
+             : (v & 0x000000F0u) ? _highest_bit_step(v >> 4,  r + 4)
+             : (v & 0x0000000Cu) ? _highest_bit_step(v >> 2,  r + 2)
+             : (v & 0x00000002u) ? r + 1
+             : r;
+    }
+
+    // Fixed-point log base 2 for positive values.
+    // Uses 4-term minimax polynomial for log2(1+t), t in [0,1).
+    // Horner evaluation uses i32 intermediates (20 frac bits) to minimize
+    // rounding error, then converts back to 12 frac bits.
+    static FASTLED_FORCE_INLINE u4x12 log2_fp(u4x12 x) FL_NO_EXCEPT {
+        u32 val = static_cast<u32>(x.mValue);
+        int msb = highest_bit(val);
+        i32 int_part = msb - FRAC_BITS;
+        i32 t;
+        if (msb >= FRAC_BITS) {
+            t = static_cast<i32>(
+                (val >> (msb - FRAC_BITS)) - (SCALE));
+        } else {
+            t = static_cast<i32>(
+                (val << (FRAC_BITS - msb)) - (SCALE));
+        }
+        // 4-term minimax coefficients for log2(1+t), t in [0,1).
+        // Stored as i32 with 20 fractional bits. Max product ~2^33, fits i64 intermediate.
+        constexpr int IFRAC = 20;
+        constexpr i32 c0 = 1512456;   // 1.44179 * 2^20
+        constexpr i32 c1 = -733024;   // -0.69907 * 2^20
+        constexpr i32 c2 = 381136;    // 0.36348 * 2^20
+        constexpr i32 c3 = -111776;   // -0.10660 * 2^20
+        // Extend t from 12 to 20 frac bits.
+        i32 t20 = static_cast<i32>(t) << (IFRAC - FRAC_BITS);
+        // Horner: t * (c0 + t * (c1 + t * (c2 + t * c3)))
+        i32 acc = c3;
+        acc = c2 + static_cast<i32>((static_cast<i64>(acc) * t20) >> IFRAC);
+        acc = c1 + static_cast<i32>((static_cast<i64>(acc) * t20) >> IFRAC);
+        acc = c0 + static_cast<i32>((static_cast<i64>(acc) * t20) >> IFRAC);
+        i32 frac_part = static_cast<i32>((static_cast<i64>(acc) * t20) >> IFRAC);
+        // Convert from 20 frac bits back to 12.
+        u16 frac12 = static_cast<u16>(frac_part >> (IFRAC - FRAC_BITS));
+        return from_raw(static_cast<u16>((static_cast<i32>(static_cast<u32>(int_part) << FRAC_BITS)) + frac12));
+    }
+
+    // Fixed-point 2^x. Uses 4-term minimax polynomial for 2^t, t in [0,1).
+    // Horner evaluation uses i32 intermediates (20 frac bits) to minimize
+    // rounding error, then converts back to 12 frac bits.
+    static FASTLED_FORCE_INLINE u4x12 exp2_fp(u4x12 x) FL_NO_EXCEPT {
+        u4x12 fl_val = floor(x);
+        u4x12 fr = x - fl_val;
+        i32 n = fl_val.mValue >> FRAC_BITS;
+        if (n >= INT_BITS) return from_raw(0xFFFF);
+        if (n < 0) return u4x12();
+        u32 int_pow = static_cast<u32>(SCALE) << n;
+        // 4-term minimax coefficients for 2^t - 1, t in [0,1).
+        // Stored as i32 with 20 fractional bits.
+        constexpr int IFRAC = 20;
+        constexpr i32 d0 = 726836;    // 0.69316 * 2^20
+        constexpr i32 d1 = 252400;    // 0.24071 * 2^20
+        constexpr i32 d2 = 55952;     // 0.05336 * 2^20
+        constexpr i32 d3 = 13376;     // 0.01276 * 2^20
+        // Extend fr from 12 to 20 frac bits.
+        i32 fr20 = static_cast<i32>(fr.mValue) << (IFRAC - FRAC_BITS);
+        // Horner: 1 + fr * (d0 + fr * (d1 + fr * (d2 + fr * d3)))
+        i32 acc = d3;
+        acc = d2 + static_cast<i32>((static_cast<i64>(acc) * fr20) >> IFRAC);
+        acc = d1 + static_cast<i32>((static_cast<i64>(acc) * fr20) >> IFRAC);
+        acc = d0 + static_cast<i32>((static_cast<i64>(acc) * fr20) >> IFRAC);
+        constexpr i32 one20 = static_cast<i32>(1) << IFRAC;
+        i32 frac_pow20 = one20 + static_cast<i32>((static_cast<i64>(acc) * fr20) >> IFRAC);
+        // Convert from 20 frac bits to 12 frac bits, then scale by int_pow.
+        u32 frac_pow12 = static_cast<u32>(frac_pow20) >> (IFRAC - FRAC_BITS);
+        u32 result =
+            (int_pow * frac_pow12) >> FRAC_BITS;
+        return from_raw(static_cast<u16>(result));
+    }
+};
+
+} // namespace fl
+
+FL_OPTIMIZATION_LEVEL_O3_END

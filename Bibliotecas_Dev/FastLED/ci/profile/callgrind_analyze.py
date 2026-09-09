@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+"""
+Run profiler under Valgrind callgrind and analyze hotspots.
+
+Usage:
+    python ci/profile/callgrind_analyze.py profile_sincos16
+"""
+
+import platform
+import sys
+from pathlib import Path
+from typing import Any
+
+from running_process import RunningProcess
+
+
+class CallgrindAnalyzer:
+    def __init__(self, profiler_binary: Path):
+        self.profiler_binary = profiler_binary
+        self.callgrind_out = Path("callgrind.out.profile")
+
+    def run_callgrind(self) -> bool:
+        """Run profiler under callgrind"""
+        # Check if running on Windows
+        if platform.system() == "Windows":
+            print("⚠️  ERROR: Callgrind (valgrind) is not available on Windows.")
+            print()
+            print("Run callgrind on a Linux host or inside WSL2 — the Docker")
+            print("profile path (`bash profile --docker`) was retired along with")
+            print("the rest of the host-Docker infrastructure.")
+            return False
+
+        cmd = [
+            "valgrind",
+            "--tool=callgrind",
+            f"--callgrind-out-file={self.callgrind_out}",
+            str(self.profiler_binary),
+            "baseline",
+        ]
+
+        try:
+            result = RunningProcess.run(cmd, cwd=None, check=False, timeout=300)
+            if result.returncode == 0:
+                return True
+            else:
+                print(f"Error running callgrind: exit code {result.returncode}")
+                return False
+        except RuntimeError as e:
+            print(f"Error running callgrind: {e}")
+            return False
+        except FileNotFoundError:
+            print("Error: valgrind not found. Please install valgrind.")
+            print("  On Ubuntu/Debian: sudo apt-get install valgrind")
+            print("  On macOS: brew install valgrind")
+            return False
+
+    def analyze_hotspots(self) -> list[dict[str, Any]]:
+        """Parse callgrind output and identify hot functions"""
+        cmd = ["callgrind_annotate", str(self.callgrind_out)]
+
+        try:
+            result = RunningProcess.run(cmd, cwd=None, check=False, timeout=30)
+            if result.returncode != 0:
+                print(
+                    f"Error running callgrind_annotate: exit code {result.returncode}"
+                )
+                return []
+        except RuntimeError as e:
+            print(f"Error running callgrind_annotate: {e}")
+            return []
+        except FileNotFoundError:
+            print("Error: callgrind_annotate not found (part of valgrind package)")
+            return []
+
+        # Parse output to find functions consuming >5% of time
+        hotspots: list[dict[str, Any]] = []
+        for line in result.stdout.split("\n"):
+            if "%" in line and "PROGRAM TOTALS" not in line:
+                parts = line.split()
+                if len(parts) >= 2:
+                    try:
+                        pct = float(parts[0].replace(",", ""))
+                        if pct > 5.0:
+                            func = " ".join(parts[1:])
+                            hotspots.append({"function": func, "percentage": pct})
+                    except ValueError:
+                        pass
+
+        return sorted(hotspots, key=lambda x: x["percentage"], reverse=True)
+
+    def generate_report(self, hotspots: list[dict[str, Any]]) -> str:
+        """Generate markdown report of hotspots"""
+        report = "# Callgrind Hotspot Analysis\n\n"
+
+        if not hotspots:
+            report += "No hotspots found (functions consuming >5% of time)\n"
+            return report
+
+        report += "| Function | % of Time |\n"
+        report += "|----------|----------|\n"
+
+        for h in hotspots[:10]:  # Top 10
+            report += f"| {h['function']} | {h['percentage']:.1f}% |\n"
+
+        report += "\n## Recommendations\n\n"
+        if hotspots and hotspots[0]["percentage"] > 30:
+            report += f"- **Focus on {hotspots[0]['function']}** (consumes {hotspots[0]['percentage']:.1f}% of time)\n"
+
+        return report
+
+
+def main() -> int:
+    if len(sys.argv) != 2:
+        print("Usage: callgrind_analyze.py <profiler_binary>")
+        return 1
+
+    profiler = Path(sys.argv[1])
+    if not profiler.exists():
+        print(f"Error: {profiler} not found")
+        return 1
+
+    analyzer = CallgrindAnalyzer(profiler)
+
+    print("Running callgrind (this may take a few minutes)...")
+    if not analyzer.run_callgrind():
+        return 1
+
+    print("Analyzing hotspots...")
+    hotspots = analyzer.analyze_hotspots()
+
+    print(analyzer.generate_report(hotspots))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

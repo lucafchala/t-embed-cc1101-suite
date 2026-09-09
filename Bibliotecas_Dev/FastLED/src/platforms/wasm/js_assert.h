@@ -1,0 +1,17 @@
+// ok no namespace fl
+#pragma once
+
+// IWYU pragma: private
+
+#include "fl/log/log.h"
+// IWYU pragma: begin_keep
+#include <emscripten.h>
+// IWYU pragma: end_keep
+
+#define FASTLED_ASSERT(x, MSG)                                                 \
+    do {                                                                       \
+        if (!(x)) {                                                            \
+            FL_WARN_F("%s", MSG);                                                 \
+            emscripten_debugger();                                             \
+        }                                                                      \
+    } while (0)

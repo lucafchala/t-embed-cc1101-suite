@@ -1,0 +1,246 @@
+// spi_isr_32.h — 32-way parallel soft-SPI ISR wrapper (platform-agnostic bitbanging)
+#pragma once
+
+// IWYU pragma: private
+
+#include "fl/stl/stdint.h"
+#include "fl/stl/static_assert.h"
+#include "fl/stl/cstddef.h"
+#include "fl/stl/bit_cast.h"
+#include "platforms/shared/spi_bitbang/spi_isr_engine.h"
+#include "fl/stl/noexcept.h"
+
+#ifdef FL_SPI_ISR_VALIDATE
+// C++ wrapper types for GPIO events (provides type safety and convenience methods)
+enum class GPIOEventType : fl::u8 {
+    StateStart  = FASTLED_GPIO_EVENT_STATE_START,
+    StateDone   = FASTLED_GPIO_EVENT_STATE_DONE,
+    SetBits     = FASTLED_GPIO_EVENT_SET_BITS,
+    ClearBits   = FASTLED_GPIO_EVENT_CLEAR_BITS,
+    ClockLow    = FASTLED_GPIO_EVENT_CLOCK_LOW,
+    ClockHigh   = FASTLED_GPIO_EVENT_CLOCK_HIGH
+};
+
+// C++ wrapper for FastLED_GPIO_Event (same memory layout, adds convenience methods)
+struct GPIOEvent {
+    fl::u8  event_type;
+    fl::u8  padding[3];
+    union {
+        fl::u32 gpio_mask;
+        fl::u32 state_info;
+    } payload;
+
+    GPIOEventType type() const { return static_cast<GPIOEventType>(event_type); }
+};
+
+// Verify memory layout matches between C and C++ structures
+// Use FL_OFFSETOF macro (defined in fl/cstddef.h) instead of <stddef.h>
+FL_STATIC_ASSERT(sizeof(GPIOEvent) == sizeof(FastLED_GPIO_Event),
+              "C++ GPIOEvent must match C FastLED_GPIO_Event layout");
+FL_STATIC_ASSERT(FL_OFFSETOF(GPIOEvent, event_type) == FL_OFFSETOF(FastLED_GPIO_Event, event_type),
+              "event_type offset must match");
+FL_STATIC_ASSERT(FL_OFFSETOF(GPIOEvent, payload) == FL_OFFSETOF(FastLED_GPIO_Event, payload),
+              "payload offset must match");
+#endif
+
+namespace fl {
+
+/**
+ * SpiIsr32 - High-priority 32-way parallel soft-SPI ISR driver (platform-agnostic bitbanging)
+ *
+ * This class provides a zero-volatile-read ISR-based parallel SPI implementation.
+ * It can operate at the highest available interrupt priority level for minimal jitter.
+ *
+ * Features:
+ * - 32-bit parallel data output + 1 clock pin
+ * - ISR performs only MMIO writes (no volatile reads)
+ * - Edge-triggered doorbell for producer/consumer synchronization
+ * - Two-phase bit driver (data+CLK low, then CLK high)
+ * - Platform-agnostic via abstraction layer
+ *
+ * Usage:
+ *   SpiIsr32 spi;
+ *   spi.setClockMask(1 << 32);  // Clock on GPIO32
+ *   spi.loadLUT(setMasks, clearMasks);  // Pin mapping
+ *   spi.setupISR(1600000);  // 1.6MHz timer (800kHz SPI)
+ *   spi.loadBuffer(data, len);
+ *   spi.arm();  // Start transfer
+ *   while(spi.isBusy()) { }
+ *   spi.stopISR();
+ */
+class SpiIsr32 {
+public:
+    /// Status bit definitions
+    static constexpr u32 STATUS_BUSY = 1u;
+    static constexpr u32 STATUS_DONE = 2u;
+
+    SpiIsr32() = default;
+    ~SpiIsr32() = default;
+
+    /**
+     * Configure GPIO clock mask (single bit for clock pin)
+     * Example: setClockMask(1 << 32) for GPIO32
+     */
+    void setClockMask(u32 mask) FL_NO_EXCEPT {
+        fl_spi_set_clock_mask(mask);
+    }
+
+    /**
+     * Set number of bytes to transmit in next burst
+     * Max: 256 bytes
+     */
+    void setTotalBytes(u16 n) FL_NO_EXCEPT {
+        fl_spi_set_total_bytes(n);
+    }
+
+    /**
+     * Set a single data byte at index i
+     */
+    void setDataByte(u16 i, u8 v) FL_NO_EXCEPT {
+        fl_spi_set_data_byte(i, v);
+    }
+
+    /**
+     * Set lookup table entry for a byte value
+     * @param value Byte value (0-255)
+     * @param setMask GPIO bits to set high
+     * @param clearMask GPIO bits to set low
+     */
+    void setLUTEntry(u8 value, u32 setMask, u32 clearMask) FL_NO_EXCEPT {
+        fl_spi_set_lut_entry(value, setMask, clearMask);
+    }
+
+    /**
+     * Bulk load data buffer
+     * @param data Pointer to data bytes
+     * @param n Number of bytes (max 256)
+     */
+    void loadBuffer(const u8* data, u16 n) FL_NO_EXCEPT {
+        if (!data) return;
+        if (n > 256) n = 256;
+        for (u16 i = 0; i < n; ++i) {
+            fl_spi_set_data_byte(i, data[i]);
+        }
+        fl_spi_set_total_bytes(n);
+    }
+
+    /**
+     * Bulk load pin lookup table
+     * @param setMasks Array of 256 set masks
+     * @param clearMasks Array of 256 clear masks
+     * @param count Number of entries to load (default 256)
+     */
+    void loadLUT(const u32* setMasks, const u32* clearMasks, size_t count = 256) FL_NO_EXCEPT {
+        if (!setMasks || !clearMasks) return;
+        if (count > 256) count = 256;
+        for (size_t v = 0; v < count; ++v) {
+            fl_spi_set_lut_entry(static_cast<u8>(v), setMasks[v], clearMasks[v]);
+        }
+    }
+
+    /**
+     * Setup ISR and timer
+     * @param timer_hz Timer frequency in Hz (should be 2× target SPI bit rate)
+     * @return 0 on success, error code on failure
+     */
+    int setupISR(u32 timer_hz) FL_NO_EXCEPT {
+        return fl_spi_platform_isr_start(timer_hz);
+    }
+
+    /**
+     * Stop ISR and timer
+     */
+    void stopISR() FL_NO_EXCEPT {
+        fl_spi_platform_isr_stop();
+    }
+
+    /**
+     * Arm a transfer (caller must ensure visibility delay first)
+     * Increments doorbell counter to trigger ISR edge detection
+     */
+    void arm() FL_NO_EXCEPT {
+        fl_spi_arm();
+    }
+
+    /**
+     * Check if ISR is currently transmitting
+     */
+    bool isBusy() const FL_NO_EXCEPT {
+        return (fl_spi_status_flags() & STATUS_BUSY) != 0;
+    }
+
+    /**
+     * Get raw status flags
+     */
+    u32 statusFlags() const FL_NO_EXCEPT {
+        return fl_spi_status_flags();
+    }
+
+    /**
+     * Acknowledge DONE flag (clears it)
+     */
+    void ackDone() FL_NO_EXCEPT {
+        fl_spi_ack_done();
+    }
+
+    /**
+     * Visibility delay (ensures memory writes are visible to ISR)
+     * Typical value: 10 microseconds
+     */
+    static void visibilityDelayUs(u32 us) FL_NO_EXCEPT {
+        fl_spi_visibility_delay_us(us);
+    }
+
+    /**
+     * Reset ISR state (between runs)
+     */
+    static void resetState() FL_NO_EXCEPT {
+        fl_spi_reset_state();
+    }
+
+    /**
+     * Get mutable reference to LUT array (256 entries)
+     * Allows direct initialization without individual setLUTEntry calls
+     *
+     * Example:
+     *   PinMaskEntry* lut = spi.getLUTArray();
+     *   for (int v = 0; v < 256; v++) {
+     *       lut[v].set_mask = ...;
+     *       lut[v].clear_mask = ...;
+     *   }
+     */
+    static PinMaskEntry* getLUTArray() FL_NO_EXCEPT {
+        return fl_spi_get_lut_array();
+    }
+
+    /**
+     * Get mutable reference to data buffer array (256 bytes)
+     * Allows direct buffer access without individual setDataByte calls
+     *
+     * Example:
+     *   uint8_t* data = spi.getDataArray();
+     *   memcpy(data, source, length);
+     */
+    static u8* getDataArray() FL_NO_EXCEPT {
+        return fl_spi_get_data_array();
+    }
+
+#ifdef FL_SPI_ISR_VALIDATE
+    /**
+     * Get GPIO event log (only available when FASTLED_SPI_VALIDATE is defined)
+     * Returns pointer to array of GPIO events captured during ISR execution
+     */
+    static const GPIOEvent* getValidationEvents() FL_NO_EXCEPT {
+        return fl::bit_cast<const GPIOEvent*>(fl_spi_get_validation_events());
+    }
+
+    /**
+     * Get number of GPIO events captured
+     */
+    static u16 getValidationEventCount() FL_NO_EXCEPT {
+        return fl_spi_get_validation_event_count();
+    }
+#endif
+};
+
+}  // namespace fl

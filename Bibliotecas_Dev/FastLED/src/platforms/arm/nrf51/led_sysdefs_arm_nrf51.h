@@ -1,0 +1,52 @@
+// IWYU pragma: private
+
+// ok no namespace fl
+#ifndef __LED_SYSDEFS_ARM_NRF51
+#define __LED_SYSDEFS_ARM_NRF51
+
+#include "platforms/arm/nrf52/is_nrf52.h"
+
+#define LED_TIMER NRF_TIMER1
+#define FASTLED_NO_PINMAP
+#define FL_CLOCKLESS_CONTROLLER_DEFINED
+
+#define FASTLED_SPI_BYTE_ONLY
+
+#include "platforms/arm/is_arm.h"
+
+#ifndef FL_IS_ARM
+#error "FL_IS_ARM must be defined before including this header. Ensure platforms/arm/is_arm.h is included first."
+#endif
+#define FL_IS_ARM_M0
+
+#ifndef F_CPU
+#define F_CPU 16000000
+#endif
+
+#include "fl/stl/stdint.h"
+// IWYU pragma: begin_keep
+#include <nrf51.h>
+#include <core_cm0.h>
+// IWYU pragma: end_keep
+typedef volatile fl::u32 RoReg;
+typedef volatile fl::u32 RwReg;
+typedef fl::u32 prog_uint32_t;
+typedef fl::u8 boolean;
+
+#define PROGMEM
+#define NO_PROGMEM
+#define NEED_CXX_BITS
+
+// Default to NOT using PROGMEM here
+#ifndef FASTLED_USE_PROGMEM
+#define FASTLED_USE_PROGMEM 0
+#endif
+
+#ifndef FASTLED_ALLOW_INTERRUPTS
+#define FASTLED_ALLOW_INTERRUPTS 1
+#endif
+
+#define cli()  __disable_irq();
+#define sei() __enable_irq();
+
+#endif

@@ -1,0 +1,105 @@
+/// @file parlio_peripheral_esp.h
+/// @brief Real ESP32 PARLIO peripheral interface (thin header)
+///
+/// This header provides a thin interface to the ESP32 PARLIO hardware.
+/// All implementation details and ESP-IDF dependencies are in the .cpp file.
+///
+/// ## Design Philosophy
+///
+/// This implementation follows the "thin wrapper" pattern:
+/// - NO business logic (pure delegation to ESP-IDF)
+/// - NO state validation beyond what ESP-IDF provides
+/// - NO performance overhead (inline-able calls)
+/// - ALL logic stays in ParlioEngine (testable via mock)
+///
+/// ## Thread Safety
+///
+/// Thread safety is inherited from ESP-IDF PARLIO driver:
+/// - initialize() NOT thread-safe (call once during setup)
+/// - transmit() can be called from ISR context (ISR-safe)
+/// - Other methods NOT thread-safe (caller synchronizes)
+///
+/// ## Error Handling
+///
+/// All methods return bool for success/failure:
+/// - true: Operation succeeded (ESP_OK)
+/// - false: Operation failed (any ESP-IDF error code)
+///
+/// Detailed error codes are NOT propagated through the interface.
+/// The ParlioEngine logs errors internally for debugging.
+
+#pragma once
+
+// IWYU pragma: private
+
+#include "platforms/esp/is_esp.h"
+
+#ifdef FL_IS_ESP32
+
+#include "platforms/esp/32/feature_flags/enabled.h"
+
+#if FASTLED_ESP32_HAS_PARLIO
+
+#include "platforms/esp/32/drivers/parlio/iparlio_peripheral.h"
+#include "fl/stl/singleton.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+namespace detail {
+
+// Forward declaration for Singleton friendship
+class ParlioPeripheralESPImpl;
+
+//=============================================================================
+// Real Hardware Peripheral Interface
+//=============================================================================
+
+/// @brief Real ESP32 PARLIO peripheral interface
+///
+/// Thin wrapper around ESP-IDF PARLIO TX APIs. All methods delegate
+/// directly to ESP-IDF with minimal overhead.
+///
+/// This is an abstract interface - use instance() to access the singleton.
+class ParlioPeripheralESP : public IParlioPeripheral {
+public:
+    /// @brief Get the singleton instance
+    /// @return Reference to the singleton peripheral
+    ///
+    /// Mirrors the hardware constraint that there is only one PARLIO peripheral.
+    static ParlioPeripheralESP& instance() FL_NO_EXCEPT;
+
+    /// @brief Destructor - frees ESP-IDF TX unit handle
+    ~ParlioPeripheralESP() override;
+
+    // Prevent copying (handle cannot be shared)
+    ParlioPeripheralESP(const ParlioPeripheralESP&) = delete;
+    ParlioPeripheralESP& operator=(const ParlioPeripheralESP&) = delete;
+
+    //=========================================================================
+    // IParlioPeripheral Interface Implementation
+    //=========================================================================
+
+    bool initialize(const ParlioPeripheralConfig& config) FL_NO_EXCEPT override = 0;
+    bool deinitialize() FL_NO_EXCEPT override = 0;
+    bool enable() FL_NO_EXCEPT override = 0;
+    bool disable() FL_NO_EXCEPT override = 0;
+    bool isInitialized() const FL_NO_EXCEPT override = 0;
+    bool transmit(const u8* buffer, size_t bit_count, u16 idle_value) FL_NO_EXCEPT override = 0;
+    bool waitAllDone(u32 timeout_ms) FL_NO_EXCEPT override = 0;
+    bool registerTxDoneCallback(void* callback, void* user_ctx) FL_NO_EXCEPT override = 0;
+    u8* allocateDmaBuffer(size_t size) FL_NO_EXCEPT override = 0;
+    void freeDmaBuffer(u8* buffer) FL_NO_EXCEPT override = 0;
+    void delay(u32 ms) FL_NO_EXCEPT override = 0;
+    u64 getMicroseconds() FL_NO_EXCEPT override = 0;
+    void freeDmaBuffer(void* ptr) FL_NO_EXCEPT override = 0;
+
+protected:
+    /// @brief Protected constructor for singleton
+    ParlioPeripheralESP() = default;
+};
+
+} // namespace detail
+} // namespace fl
+
+#endif // FASTLED_ESP32_HAS_PARLIO
+#endif // FL_IS_ESP32

@@ -1,0 +1,18 @@
+// IWYU pragma: private
+
+// ok no namespace fl
+#include "platforms/is_platform.h"
+#ifdef FL_IS_ESP32
+
+#include "platforms/esp/esp_version.h"
+#include "fl/system/sketch_macros.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/memory.h"
+#include "fl/stl/string.h"
+#include "platforms/audio_input_null.hpp"
+
+
+// This file is kept for potential future ESP32-specific audio implementations
+// The main audio creation logic is handled in src/fl/audio/audio_input.cpp
+
+#endif  // 

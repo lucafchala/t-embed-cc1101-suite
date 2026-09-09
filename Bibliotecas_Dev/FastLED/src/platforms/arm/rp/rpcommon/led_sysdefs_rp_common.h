@@ -1,0 +1,123 @@
+// IWYU pragma: private
+
+// ok no namespace fl
+#ifndef __INC_LED_SYSDEFS_RP_COMMON_H
+#define __INC_LED_SYSDEFS_RP_COMMON_H
+
+// Common LED system defines for all RP2xxx platforms (RP2040, RP2350, etc.)
+// Platform-specific files should include this and add platform-specific F_CPU defaults
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
+// IWYU pragma: begin_keep
+#include "hardware/sync.h"
+
+// Explicitly include fl/system/arduino.h (trampoline) here so any framework-specific defines take
+// priority, then are immediately cleaned up.
+// IWYU pragma: end_keep
+#ifdef ARDUINO
+// IWYU pragma: begin_keep
+#include "fl/system/arduino.h"
+// IWYU pragma: end_keep
+#include "platforms/arm/is_arm.h"
+
+#endif
+
+#ifndef FL_IS_ARM
+#error "FL_IS_ARM must be defined before including this header. Ensure platforms/arm/is_arm.h is included first."
+#endif
+
+// NOTE: FL_IS_ARM_M0_PLUS is now defined per-platform:
+// - RP2040: Cortex-M0+ → defined in led_sysdefs_arm_rp2040.h
+// - RP2350: Cortex-M33 → NOT defined (uses compiler's __ARM_ARCH_8M_MAIN__)
+
+// The legacy SPIOutput template remains software-only on RP2xxx. Public
+// APA102/SK9822 addLeds() calls are routed through the RP channel API by
+// FASTLED_SPI_USES_CHANNEL_API and use ChannelEngineRpSpi with PL022 SPI0/1.
+// Keep this define for callers that explicitly use the legacy SPI manager;
+// removing it would silently select an unimplemented legacy hardware backend.
+//#define FASTLED_SPI_BYTE_ONLY
+#define FASTLED_FORCE_SOFTWARE_SPI
+// Force FAST_SPI_INTERRUPTS_WRITE_PINS on becuase two cores running
+// simultaneously could lead to data races on GPIO.
+// This could potentially be optimised by adding a mask to FastPin's set and
+// fastset, but for now it's probably safe to call that out of scope.
+#ifndef FAST_SPI_INTERRUPTS_WRITE_PINS
+#define FAST_SPI_INTERRUPTS_WRITE_PINS 1
+#endif
+
+#define FASTLED_NO_PINMAP
+#include "fl/stl/stdint.h"
+
+typedef volatile fl::u32 RoReg;
+typedef volatile fl::u32 RwReg;
+
+// F_CPU is platform-specific and should be defined by the including platform header
+// RP2040: 125 MHz, RP2350: 150 MHz
+
+#ifndef VARIANT_MCK
+#define VARIANT_MCK F_CPU
+#endif
+
+// 8MHz for PIO
+// #define CLOCKLESS_FREQUENCY 8000000
+#define CLOCKLESS_FREQUENCY F_CPU
+
+// Default to allowing interrupts
+#ifndef FASTLED_ALLOW_INTERRUPTS
+#define FASTLED_ALLOW_INTERRUPTS 1
+#endif
+
+// not sure if this is wanted? but it probably is
+#if FASTLED_ALLOW_INTERRUPTS == 1
+#define FASTLED_ACCURATE_CLOCK
+#endif
+
+// Default to no PROGMEM
+#ifndef FASTLED_USE_PROGMEM
+#define FASTLED_USE_PROGMEM 0
+#endif
+
+// Default to non-blocking PIO-based implemnetation
+#ifndef FASTLED_RP2040_CLOCKLESS_PIO
+#define FASTLED_RP2040_CLOCKLESS_PIO 1
+#endif
+
+// Default to shared interrupt handler for clockless DMA
+#ifndef FASTLED_RP2040_CLOCKLESS_IRQ_SHARED
+#define FASTLED_RP2040_CLOCKLESS_IRQ_SHARED 1
+#endif
+
+// Default to disabling M0 assembly clockless implementation
+#ifndef FASTLED_RP2040_CLOCKLESS_M0_FALLBACK
+#define FASTLED_RP2040_CLOCKLESS_M0_FALLBACK 0
+#endif
+
+// SPI pin defs for old SDK ver
+#ifndef PICO_DEFAULT_SPI
+#define PICO_DEFAULT_SPI 0
+#endif
+#ifndef PICO_DEFAULT_SPI_SCK_PIN
+#define PICO_DEFAULT_SPI_SCK_PIN 18
+#endif
+#ifndef PICO_DEFAULT_SPI_TX_PIN
+#define PICO_DEFAULT_SPI_TX_PIN 19
+#endif
+#ifndef PICO_DEFAULT_SPI_RX_PIN
+#define PICO_DEFAULT_SPI_RX_PIN 16
+#endif
+#ifndef PICO_DEFAULT_SPI_CSN_PIN
+#define PICO_DEFAULT_SPI_CSN_PIN 17
+#endif
+
+#if !defined(cli) && !defined(sei)
+static fl::u32 saved_interrupt_status;
+#define cli() (saved_interrupt_status = save_and_disable_interrupts())
+#define sei() (restore_interrupts(saved_interrupt_status))
+#endif
+
+#pragma GCC diagnostic pop
+
+#endif // __INC_LED_SYSDEFS_RP_COMMON_H

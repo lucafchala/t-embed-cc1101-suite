@@ -1,0 +1,37 @@
+// IWYU pragma: private
+
+// src/platforms/esp/32/watchdog_esp32.cpp
+//
+// ESP32 Watchdog Timer Implementation - Trampoline Dispatcher
+//
+// FIXES WINDOWS USB DISCONNECT ISSUE. If the watchdog fires normally then the USB line
+// is not held low. This causes Windows to think the device is dead and won't reconnect.
+// This implementation fixes this by overriding the panic handler to perform a safe
+// USB disconnect sequence before reset.
+//
+// Provides a configurable proof-of-life watchdog. The unified Watchdog wrapper
+// subscribes and feeds the Arduino loop task explicitly; the ESP32 backend also
+// keeps idle-task monitoring active so CPU starvation is still caught.
+//
+// This file dispatches to IDF version-specific implementations:
+// - watchdog_esp32_idf4.hpp: ESP-IDF v4.x (weak symbol override)
+// - watchdog_esp32_idf5.hpp: ESP-IDF v5.x (official shutdown handler API)
+
+// ok no namespace fl (trampoline dispatcher - namespace defined in included implementations)
+
+#include "platforms/esp/32/watchdog_esp32.h"
+
+#include "platforms/esp/is_esp.h"
+
+#if defined(FL_IS_ESP32)
+
+#include "platforms/esp/esp_version.h"
+
+// Dispatch to IDF version-specific implementation
+#if ESP_IDF_VERSION_5_OR_HIGHER
+    #include "platforms/esp/32/watchdog_esp32_idf5.hpp"
+#else
+    #include "platforms/esp/32/watchdog_esp32_idf4.hpp"
+#endif
+
+#endif // FL_IS_ESP32

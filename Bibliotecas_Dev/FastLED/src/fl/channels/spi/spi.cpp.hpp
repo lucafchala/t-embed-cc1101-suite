@@ -1,0 +1,86 @@
+// ok no header
+#include "fl/channels/spi.h"
+#include "fl/channels/spi/multi_lane_device.h"
+#include "fl/log/log.h"
+#include "fl/log/log.h"
+#include "fl/stl/noexcept.h"
+
+namespace fl {
+
+// Out-of-line destructor: ensures unique_ptr<MultiLaneDevice> destruction
+// happens here (in fl.spi+), not in every TU that includes spi.h.
+Spi::~Spi() FL_NO_EXCEPT = default;
+
+// ============================================================================
+// Spi Constructors
+// ============================================================================
+
+Spi::Spi(int clock_pin, fl::span<const int> data_pins,
+         spi_output_mode_t output_mode,
+         u32 clock_speed_hz)
+    : Spi(SpiConfig(clock_pin, data_pins, clock_speed_hz, output_mode, 0)) {
+}
+
+Spi::Spi(const SpiConfig& config)
+    : is_ok(false), error_code(SPIError::NOT_INITIALIZED) {
+
+    // Validate number of lanes
+    size_t num_lanes = config.data_pins.size();
+    if (num_lanes < 1 || num_lanes > 8) {
+        FL_WARN_F("fl::Spi: Invalid number of data pins (%s), must be 1-8", num_lanes);
+        error_code = SPIError::NOT_INITIALIZED;
+        return;
+    }
+
+    // Convert SpiConfig to MultiLaneDevice::Config
+    spi::MultiLaneDevice::Config ml_config;
+    ml_config.clock_pin = static_cast<u8>(config.clock_pin);
+    ml_config.data_pins.resize(config.data_pins.size());
+    for (size_t i = 0; i < config.data_pins.size(); i++) {
+        ml_config.data_pins[i] = static_cast<u8>(config.data_pins[i]);
+    }
+    ml_config.clock_speed_hz = config.clock_speed_hz;
+    ml_config.mode = config.spi_mode;
+
+    // Create device
+    device = fl::make_unique<spi::MultiLaneDevice>(ml_config);
+    FL_DBG_F("fl::Spi: Created MultiLaneDevice with %s lane(s)", num_lanes);
+
+    // Initialize device
+    auto begin_result = device->begin();
+    if (begin_result) {
+        // begin() returned an error (optional has a value)
+        FL_WARN_F("fl::Spi: begin() failed");
+        error_code = SPIError::NOT_INITIALIZED;
+        device.reset();
+        return;
+    }
+
+    is_ok = true;
+}
+
+Spi::Spi(Spi&& other) FL_NO_EXCEPT
+    : device(fl::move(other.device))
+    , is_ok(other.is_ok)
+    , error_code(other.error_code) {
+    other.is_ok = false;
+}
+
+Spi& Spi::operator=(Spi&& other) FL_NO_EXCEPT {
+    if (this != &other) {
+        device = fl::move(other.device);
+        is_ok = other.is_ok;
+        error_code = other.error_code;
+        other.is_ok = false;
+    }
+    return *this;
+}
+
+bool Spi::wait(u32 timeout_ms) {
+    if (!device) {
+        return false;
+    }
+    return device->waitComplete(timeout_ms);
+}
+
+} // namespace fl

@@ -1,0 +1,97 @@
+/// @file platforms/arm/stm32/isr_stm32.hpp
+/// @brief STM32 ISR timer implementation using STM32 HAL
+
+#pragma once
+
+// IWYU pragma: private
+#include "platforms/arm/stm32/is_stm32.h"
+
+#ifdef FL_IS_STM32
+
+#include "fl/stl/isr/handler.h"
+#include "fl/log/log.h"
+#include "fl/log/log.h"
+
+// Global Interrupt Control (interruptsDisable/interruptsEnable)
+#include "platforms/arm/stm32/interrupts_stm32_inline.h"
+#include "fl/stl/noexcept.h"
+namespace fl {
+namespace isr {
+namespace platforms {
+
+// Platform ID for STM32
+// Platform ID registry: 0=STUB, 1=ESP32, 2=AVR, 3=NRF52, 4=RP2040, 5=Teensy, 6=STM32, 7=SAMD, 255=NULL
+constexpr u8 STM32_PLATFORM_ID = 6;
+
+int attach_timer_handler(const isr_config_t& config, isr_handle_t* out_handle) FL_NO_EXCEPT {
+    (void)config;
+    (void)out_handle;
+    FL_WARN_F("STM32 ISR: not yet implemented");
+    return -100;  // Not implemented
+}
+
+int attach_external_handler(u8 pin, const isr_config_t& config, isr_handle_t* out_handle) FL_NO_EXCEPT {
+    (void)pin;
+    (void)config;
+    (void)out_handle;
+    FL_WARN_F("STM32 ISR: not yet implemented");
+    return -100;  // Not implemented
+}
+
+int detach_handler(isr_handle_t& handle) FL_NO_EXCEPT {
+    (void)handle;
+    FL_WARN_F("STM32 ISR: not yet implemented");
+    return -100;  // Not implemented
+}
+
+int enable_handler(const isr_handle_t& handle) FL_NO_EXCEPT {
+    (void)handle;
+    FL_WARN_F("STM32 ISR: not yet implemented");
+    return -100;  // Not implemented
+}
+
+int disable_handler(const isr_handle_t& handle) FL_NO_EXCEPT {
+    (void)handle;
+    FL_WARN_F("STM32 ISR: not yet implemented");
+    return -100;  // Not implemented
+}
+
+bool is_handler_enabled(const isr_handle_t& handle) FL_NO_EXCEPT {
+    (void)handle;
+    return false;
+}
+
+const char* get_error_string(int error_code) FL_NO_EXCEPT {
+    switch (error_code) {
+        case 0: return "Success";
+        case -100: return "Not implemented";
+        default: return "Unknown error";
+    }
+}
+
+const char* get_platform_name() FL_NO_EXCEPT {
+    return "STM32 (stub)";
+}
+
+u32 get_max_timer_frequency() FL_NO_EXCEPT {
+    return 1000000;  // 1 MHz placeholder
+}
+
+u32 get_min_timer_frequency() FL_NO_EXCEPT {
+    return 1;  // 1 Hz placeholder
+}
+
+u8 get_max_priority() FL_NO_EXCEPT {
+    return 15;  // STM32 NVIC supports 16 priority levels (0-15)
+}
+
+bool requires_assembly_handler(u8 priority) FL_NO_EXCEPT {
+    (void)priority;
+    return false;
+}
+
+} // namespace platforms
+} // namespace isr
+} // namespace fl
+
+#endif // FL_IS_STM32

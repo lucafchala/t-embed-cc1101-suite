@@ -1,0 +1,24 @@
+REM Title: Linux Network Scanner
+REM Author: BadUSB Library
+REM Description: Scans local network for devices
+REM Target: Linux
+REM Category: Reconnaissance
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Get local network
+STRING LOCAL_IP=$(ip route | grep default | awk '{print $3}' | cut -d. -f1-3) && NETWORK=$LOCAL_IP
+ENTER
+DELAY 2000
+
+REM Scan network
+STRING for i in {1..254}; do ping -c 1 -W 1 $NETWORK.$i > /dev/null 2>&1 && echo "Host $NETWORK.$i is up"; done
+ENTER
+DELAY 5000

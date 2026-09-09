@@ -1,0 +1,123 @@
+name: Build Template
+
+on:
+  workflow_call:
+    inputs:
+      board:
+        type: string
+        required: true
+      max_size:
+        type: number
+        required: true
+      max_size_apa102:
+        type: number
+        required: true
+      extra_args:
+        type: string
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+  pull-requests: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # The ``FASTLED_FAIL_ON_ROOT_MERGE`` tripwire from #3278 was retired
+    # in #3279 Phase 4 along with the legacy merge code path it guarded.
+    # The merge function (``get_root_platformio_build_flags``) and the
+    # ``merge_root_platformio`` opt-in are gone — there is no longer any
+    # code path that can silently inject root ``platformio.ini`` flags
+    # into CI binaries, so the tripwire env var is no longer needed.
+    # The probe (``_probe_root_platformio_build_flags`` in pio.py) and
+    # the env-var hook are preserved for future diagnostic use.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install UV
+        run: pip install uv
+
+      - name: Check Compiled Program Size for ${{ inputs.board }}
+        run: uv run ci/ci-check-compiled-size.py ${{ inputs.board }} --max-size ${{ inputs.max_size }} --example Blink ${{ inputs.extra_args }}
+
+      - name: Inspect Binary
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_binary.py --first
+
+      - name: Inspect Elf
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_elf.py --first
+
+      - name: Symbol Analysis
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/symbol_analysis_runner.py --board ${{ inputs.board }} --example Blink --skip-on-failure
+
+      - name: Check Compiled Program Size for ${{ inputs.board }} (Apa102)
+        run: uv run ci/ci-check-compiled-size.py ${{ inputs.board }} --max-size ${{ inputs.max_size_apa102 }} --example Apa102 ${{ inputs.extra_args }}
+
+      - name: Inspect Binary
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_binary.py --first
+
+      - name: Inspect Elf
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_elf.py --first
+
+      - name: Symbol Analysis (Apa102)
+        if: always()
+        continue-on-error: true
+        run: |
+          uv run ci/symbol_analysis_runner.py --board ${{ inputs.board }} --example Apa102 --skip-on-failure
+
+      - name: Check Compiled Program Size for ${{ inputs.board }} (Apa102 with HD Color Mixing)
+        if: inputs.board == 'attiny85'
+        run: uv run ci/ci-check-compiled-size.py ${{ inputs.board }} --example Apa102 ${{ inputs.extra_args }} --defines FASTLED_HD_COLOR_MIXING=1
+
+      - name: Inspect Binary (HD Color Mixing)
+        if: inputs.board == 'attiny85'
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_binary.py --first
+
+      - name: Inspect Elf (HD Color Mixing)
+        if: inputs.board == 'attiny85'
+        continue-on-error: true
+        run: |
+          uv run ci/inspect_elf.py --first
+
+      - name: Generate timestamp and random hex
+        id: generate_id
+        run: |
+          echo "timestamp=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_OUTPUT
+          echo "random_hex=$(openssl rand -hex 3)" >> $GITHUB_OUTPUT
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ steps.generate_id.outputs.timestamp }}-${{ github.sha }}-${{ steps.generate_id.outputs.random_hex }}
+          path: build.log
+
+      - name: Check build status
+        if: failure()
+        run: exit 1

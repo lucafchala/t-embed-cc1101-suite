@@ -1,0 +1,186 @@
+/// @file data.h
+/// @brief Channel transmission data - lightweight DTO for driver transmission
+
+#pragma once
+
+#include "fl/stl/noexcept.h"
+
+#include "fl/stl/vector.h"
+#include "fl/stl/stdint.h"
+#include "fl/stl/shared_ptr.h"
+#include "fl/stl/function.h"
+#include "fl/stl/span.h"
+#include "fl/channels/config.h"
+
+namespace fl {
+
+class ChannelData;
+FASTLED_SHARED_PTR(ChannelData);
+
+/// @brief Pixel byte layout carried by encoded channel data.
+///
+/// ChannelData stores bytes that are already encoded for a driver. Consumers
+/// that need a bytes-per-pixel stride must use this metadata rather than
+/// guessing from total byte count.
+enum class ChannelPixelFormat : u8 {
+    Unknown = 0,
+    RGB = 3,
+    RGBW = 4,
+    RGBWW = 5,
+};
+
+inline u8 channelPixelFormatBytesPerPixel(ChannelPixelFormat format) FL_NO_EXCEPT {
+    return static_cast<u8>(format);
+}
+
+/// @brief Padding generator function type
+///
+/// Called by writeWithPadding() to write source data with padding to destination buffer.
+/// The function receives the original encoded data (src) and writes to the destination (dst)
+/// with any necessary padding applied (e.g., inserting zero bytes after a preamble for block alignment).
+///
+/// Default behavior (if no generator set): Left-pad with zeros, then memcopy data.
+/// Layout: [PADDING (zeros)][LED DATA] - padding bytes transmit to non-existent pixels first.
+///
+/// @param src Source encoded data (read-only)
+/// @param dst Destination buffer to write to (dst.size() >= src.size())
+using PaddingGenerator = fl::function<void(fl::span<const u8> src, fl::span<u8> dst)>;
+
+/// @brief Transmission data for a single LED channel
+///
+/// This lightweight data transfer object holds everything the driver needs
+/// to transmit LED data: pin number, timing configuration, and encoded bytes.
+/// Separated from Channel to allow concurrent transmission while channels
+/// prepare next frame.
+class ChannelData {
+public:
+    /// @brief Create channel transmission data (modern variant-based API)
+    /// @param chipset Chipset configuration (clockless or SPI)
+    /// @param encodedData Encoded byte stream ready for transmission (defaults to empty)
+    static ChannelDataPtr create(
+        const ChipsetVariant& chipset,
+        fl::vector_psram<u8>&& encodedData = fl::vector_psram<u8>(),
+        ChannelPixelFormat pixelFormat = ChannelPixelFormat::RGB
+    ) FL_NO_EXCEPT;
+
+    /// @brief Create channel transmission data (backwards compatibility)
+    /// @param pin GPIO pin number for this channel
+    /// @param timing Chipset timing configuration (T0H, T1H, T0L, reset)
+    /// @param encodedData Encoded byte stream ready for transmission (defaults to empty)
+    /// @deprecated Use variant-based create() instead
+    static ChannelDataPtr create(
+        int pin,
+        const ChipsetTimingConfig& timing,
+        fl::vector_psram<u8>&& encodedData = fl::vector_psram<u8>(),
+        ChannelPixelFormat pixelFormat = ChannelPixelFormat::RGB
+    ) FL_NO_EXCEPT;
+
+    /// @brief Get the GPIO pin number
+    int getPin() const FL_NO_EXCEPT;
+
+    /// @brief Get the chipset configuration variant
+    const ChipsetVariant& getChipset() const FL_NO_EXCEPT { return mChipset; }
+
+    /// @brief Check if this is a clockless chipset
+    bool isClockless() const FL_NO_EXCEPT { return mChipset.is<ClocklessChipset>(); }
+
+    /// @brief Check if this is an SPI chipset
+    bool isSpi() const FL_NO_EXCEPT { return mChipset.is<SpiChipsetConfig>(); }
+
+    /// @brief Get the timing configuration (clockless chipsets only)
+    /// @deprecated Use getChipset() instead
+    const ChipsetTimingConfig& getTiming() const FL_NO_EXCEPT;
+
+    /// @brief Get the encoded transmission data
+    const fl::vector_psram<u8>& getData() const FL_NO_EXCEPT { return mEncodedData; }
+
+    /// @brief Get the encoded transmission data (mutable)
+    fl::vector_psram<u8>& getData() FL_NO_EXCEPT { return mEncodedData; }
+
+    /// @brief Get explicit pixel byte layout for encoded data
+    ChannelPixelFormat getPixelFormat() const FL_NO_EXCEPT { return mPixelFormat; }
+
+    /// @brief Set explicit pixel byte layout for encoded data
+    void setPixelFormat(ChannelPixelFormat pixelFormat) FL_NO_EXCEPT {
+        mPixelFormat = pixelFormat;
+    }
+
+    /// @brief Get encoded bytes per pixel/element, or 0 if unknown
+    u8 getBytesPerPixel() const FL_NO_EXCEPT {
+        return channelPixelFormatBytesPerPixel(mPixelFormat);
+    }
+
+    /// @brief Get the data size in bytes
+    size_t getSize() const FL_NO_EXCEPT { return mEncodedData.size(); }
+
+    /// @brief Check if channel data is currently in use by the driver
+    /// @return true if driver is transmitting this data, false otherwise
+    bool isInUse() const FL_NO_EXCEPT { return mInUse; }
+
+    /// @brief Mark channel data as in use by the driver
+    /// @param inUse true to mark as in use, false to mark as available
+    void setInUse(bool inUse) FL_NO_EXCEPT { mInUse = inUse; }
+
+    /// @brief Set the padding generator for this channel
+    /// @param generator Function that writes data with padding to destination (nullptr for default left-padding)
+    void setPaddingGenerator(PaddingGenerator generator) FL_NO_EXCEPT {
+        mPaddingGenerator = fl::move(generator);
+    }
+
+    /// @brief Write encoded data with padding to destination buffer
+    ///
+    /// This method separates the concern of data preparation from memory format.
+    /// It writes the encoded data with padding applied to a caller-provided span,
+    /// allowing the caller to control the destination memory type (DRAM, DMA, etc.)
+    ///
+    /// @param dst Destination buffer to write to (size determines target padding size)
+    ///
+    /// The destination buffer size must be >= current data size. If a padding
+    /// generator is configured, it will be used to extend the data to fill the
+    /// entire destination buffer.
+    void writeWithPadding(fl::span<u8> dst) FL_NO_EXCEPT;
+
+    /// @brief Calculate the size needed for writeWithPadding() without allocating
+    ///
+    /// Returns the current data size without applying padding. The actual size
+    /// after writeWithPadding() will be dst.size() (fills entire destination).
+    ///
+    /// @return Current size of encoded data (minimum required dst size)
+    size_t getMinimumSize() const FL_NO_EXCEPT { return mEncodedData.size(); }
+
+    /// @brief Destructor with debug logging
+    ~ChannelData();
+
+private:
+    /// @brief Friend declaration for make_shared to access private constructor
+    template<typename T, typename... Args>
+    friend fl::shared_ptr<T> fl::make_shared(Args&&... args) FL_NO_EXCEPT;
+
+    /// @brief Private constructor - variant-based (modern API)
+    ChannelData(
+        const ChipsetVariant& chipset,
+        fl::vector_psram<u8>&& encodedData,
+        ChannelPixelFormat pixelFormat
+    ) FL_NO_EXCEPT;
+
+    /// @brief Private constructor - legacy API (backwards compatibility)
+    /// @deprecated Use variant-based constructor
+    ChannelData(
+        int pin,
+        const ChipsetTimingConfig& timing,
+        fl::vector_psram<u8>&& encodedData,
+        ChannelPixelFormat pixelFormat
+    ) FL_NO_EXCEPT;
+
+    // Non-copyable (move-only via shared_ptr)
+    ChannelData(const ChannelData&) FL_NO_EXCEPT = delete;
+    ChannelData& operator=(const ChannelData&) FL_NO_EXCEPT = delete;
+
+    ChipsetVariant mChipset;                ///< Chipset configuration (clockless or SPI)
+    ChannelPixelFormat mPixelFormat;        ///< Explicit byte layout for encoded data
+    PaddingGenerator mPaddingGenerator;     ///< Optional padding generator for block-size alignment
+    fl::vector_psram<u8> mEncodedData; ///< Encoded transmission bytes (PSRAM)
+    volatile bool mInUse = false;           ///< Engine is transmitting this data (prevents creator updates)
+};
+
+}  // namespace fl
