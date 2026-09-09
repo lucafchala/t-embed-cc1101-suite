@@ -1,5 +1,0 @@
-config LV_USE_SNAPSHOT
-	bool "Snapshot"
-	default n
-	help
-		Render a widget and its children into an image buffer with lv_snapshot_take().

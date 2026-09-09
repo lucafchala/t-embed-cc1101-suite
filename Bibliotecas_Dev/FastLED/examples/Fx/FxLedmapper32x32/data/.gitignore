@@ -1,3 +1,0 @@
-# Assets materialized from their .lnk / assets.json declarations at build time.
-# The declaration is committed; the payload never is.
-/video1.rgb

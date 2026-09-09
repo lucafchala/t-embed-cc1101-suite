@@ -1,3 +1,0 @@
-config LV_USE_DEMO_WIDGETS
-	bool "Widgets demo"
-	default n

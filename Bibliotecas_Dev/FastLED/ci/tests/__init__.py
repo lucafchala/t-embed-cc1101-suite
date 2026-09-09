@@ -1,1 +1,0 @@
-"""FastLED test suite."""

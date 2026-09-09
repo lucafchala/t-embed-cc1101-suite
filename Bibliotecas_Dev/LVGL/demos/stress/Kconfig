@@ -1,3 +1,0 @@
-config LV_USE_DEMO_STRESS
-	bool "Stress demo"
-	default n
