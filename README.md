@@ -78,7 +78,7 @@ bancos de dados extras.
 
 ## Estrutura do repositório
 
-\`\`\`
+```
 lilygo/
 ├── SD_Card_T-Embed/             → conteúdo a copiar para a raiz do cartão SD
 │   ├── UniversalIR/             → banco IR (curado)
@@ -94,15 +94,15 @@ lilygo/
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md / README.en.md
-\`\`\`
+```
 
 > Firmware (Launcher/Bruce), drivers, esptool, bibliotecas de desenvolvimento
 > e documentação de hardware **não são vendorizados** neste repositório —
 > ficam desatualizados rápido e a fonte oficial já resolve isso melhor. Veja
 > os links na seção [Quickstart](#quickstart--instalando-o-launcher-e-o-bruce) acima.
 
-Cada pasta principal tem seu próprio \`README.md\` com detalhes, contagem de
-arquivos e origem: [\`SD_Card_T-Embed/README.md\`](SD_Card_T-Embed/README.md).
+Cada pasta principal tem seu próprio `README.md` com detalhes, contagem de
+arquivos e origem: [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
 ## Proveniência e licenças
 
@@ -110,7 +110,7 @@ Este repositório **agrega conteúdo de múltiplos repositórios GitHub de terce
 cada um com sua própria licença. Nenhuma licença única cobre o conjunto todo.
 Antes de redistribuir, usar comercialmente, ou enviar PRs upstream, confira a
 licença original de cada fonte — a tabela completa de origem por pasta está em
-[\`CONTRIBUTING.md\`](CONTRIBUTING.md#proveniência-detalhada-por-pasta) e
+[`CONTRIBUTING.md`](CONTRIBUTING.md#proveniência-detalhada-por-pasta) e
 repetida no README de cada subpasta.
 
 Resumo das fontes principais:
@@ -122,7 +122,7 @@ Resumo das fontes principais:
 | Bancos Sub-GHz/IR/NFC/BadUSB extras | Múltiplos repositórios da comunidade Flipper Zero / Bruce                         | Variadas — ver [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Documentação de hardware da placa   | [Xinyuan-LilyGO/T-Embed-CC1101](https://github.com/Xinyuan-LilyGO/T-Embed-CC1101) | Ver repositório original                                                                     |
 
-Este README e os arquivos de documentação (\`*.md\`) neste repositório podem ser
+Este README e os arquivos de documentação (`*.md`) neste repositório podem ser
 usados livremente; o conteúdo agregado de terceiros segue suas licenças de origem.
 
 ## Aviso de uso
@@ -136,11 +136,11 @@ autorizado.
 
 ## Contribuindo
 
-Veja [\`CONTRIBUTING.md\`](CONTRIBUTING.md) para como propor adições aos bancos de
+Veja [`CONTRIBUTING.md`](CONTRIBUTING.md) para como propor adições aos bancos de
 dados, reportar duplicatas não removidas, ou sugerir novas fontes.
 
 ## Licença
 
-Ver [\`LICENSE\`](LICENSE) — cobre apenas os arquivos de documentação e organização
+Ver [`LICENSE`](LICENSE) — cobre apenas os arquivos de documentação e organização
 deste repositório. O conteúdo agregado de terceiros mantém suas licenças originais
 (tabela completa em [CONTRIBUTING.md](CONTRIBUTING.md)).

@@ -77,7 +77,7 @@ the extra databases.
 
 ## Repository structure
 
-\`\`\`
+```
 lilygo/
 ├── SD_Card_T-Embed/             → content to copy to the SD card root
 │   ├── UniversalIR/             → curated IR database
@@ -93,7 +93,7 @@ lilygo/
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md / README.en.md
-\`\`\`
+```
 
 > Firmware (Launcher/Bruce), drivers, esptool, development libraries, and
 > hardware documentation are **not vendored** in this repository — they go
@@ -101,8 +101,8 @@ lilygo/
 > links in the [Quickstart](#quickstart--installing-launcher-and-bruce)
 > section above.
 
-Each main folder has its own \`README.md\` with details, file counts, and
-provenance: [\`SD_Card_T-Embed/README.md\`](SD_Card_T-Embed/README.md).
+Each main folder has its own `README.md` with details, file counts, and
+provenance: [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
 ## Provenance and licenses
 
@@ -110,7 +110,7 @@ This repository **aggregates content from multiple third-party GitHub
 repositories**, each under its own license. No single license covers the
 whole set. Before redistributing, using commercially, or submitting upstream
 PRs, check the original license of each source — the full per-folder
-provenance table is in [\`CONTRIBUTING.md\`](CONTRIBUTING.md#detailed-provenance-by-folder)
+provenance table is in [`CONTRIBUTING.md`](CONTRIBUTING.md#detailed-provenance-by-folder)
 and repeated in each subfolder's README.
 
 Main sources summary:
@@ -122,7 +122,7 @@ Main sources summary:
 | Extra Sub-GHz/IR/NFC/BadUSB banks| Multiple repositories from the Flipper Zero / Bruce community                     | Varies — see [CONTRIBUTING.md](CONTRIBUTING.md)                                                  |
 | Board hardware documentation     | [Xinyuan-LilyGO/T-Embed-CC1101](https://github.com/Xinyuan-LilyGO/T-Embed-CC1101) | See original repository                                                                          |
 
-This README and the documentation files (\`*.md\`) in this repository may be
+This README and the documentation files (`*.md`) in this repository may be
 freely used; aggregated third-party content follows its original licenses.
 
 ## Usage notice
@@ -135,11 +135,11 @@ or authorized environment.
 
 ## Contributing
 
-See [\`CONTRIBUTING.md\`](CONTRIBUTING.md) for how to propose additions to the
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to propose additions to the
 databases, report duplicates that weren't removed, or suggest new sources.
 
 ## License
 
-See [\`LICENSE\`](LICENSE) — covers only this repository's documentation and
+See [`LICENSE`](LICENSE) — covers only this repository's documentation and
 organization files. Aggregated third-party content keeps its original
 licenses (full table in [CONTRIBUTING.md](CONTRIBUTING.md)).
