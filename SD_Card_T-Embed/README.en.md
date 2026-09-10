@@ -64,6 +64,14 @@ hash:
 
 Total: 8,008 files.
 
+> **Warning — `UberGuidoZ_H10301_RFID_Bruteforce/`**: unlike the rest of
+> this folder (dumps/replay of specific tags), this is a **physical
+> access control** bruteforcer (HID H10301 cards, Wiegand 26-bit) — it
+> systematically tries credential combinations against a real reader.
+> Category: **physical access control, active fuzzing/brute force,
+> authorized testing only**. Not equivalent to the regular NFC dumps in
+> this folder.
+
 ## themes/
 
 UI themes for Bruce:
@@ -166,8 +174,9 @@ Sources aggregated into this folder:
 
 Notable categories: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
 `Ceiling_Fans`, `Concert bracelet` (with a `CrowdLED_Wristbands/`
-subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`, among
-~65 others. Categories that came from different sources under different
+subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`,
+`Jamming`, `Car Key Jammer` and `OOK_bruteforce` (the last 3 carry their
+own usage warning below — not ordinary replay signals), among ~65 others. Categories that came from different sources under different
 spellings for the same name (e.g. `Ceiling Fans` vs `Ceiling_Fans`) were
 merged into a single folder, with content-hash dedup applied at merge time
 (identical file in both → kept once; same name but different content →

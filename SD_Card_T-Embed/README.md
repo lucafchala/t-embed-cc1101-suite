@@ -65,6 +65,14 @@ conteúdo:
 
 Total: 8.008 arquivos.
 
+> **Aviso — `UberGuidoZ_H10301_RFID_Bruteforce/`**: diferente do resto
+> desta pasta (dumps/replay de tags específicas), este é um bruteforcer
+> de **controle de acesso físico** (cartões HID H10301, Wiegand 26-bit) —
+> testa sistematicamente combinações de credencial contra uma leitora
+> real. Categoria: **controle de acesso físico, fuzzing/brute force
+> ativo, uso somente em teste autorizado**. Não é equivalente aos dumps
+> NFC normais desta pasta.
+
 ## themes/
 
 Temas de interface para o Bruce:
@@ -166,7 +174,9 @@ Fontes agregadas nesta pasta:
 
 Categorias notáveis: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
 `Ceiling_Fans`, `Concert bracelet` (com subpasta `CrowdLED_Wristbands/`),
-`Smart_Home_Remotes`, `Retekess pager system t119`, entre ~65 outras.
+`Smart_Home_Remotes`, `Retekess pager system t119`, `Jamming`,
+`Car Key Jammer` e `OOK_bruteforce` (as 3 últimas com aviso próprio de uso
+abaixo — não são sinais de replay comuns), entre ~65 outras.
 Categorias que vieram de fontes distintas com grafias diferentes pro mesmo
 nome (ex.: `Ceiling Fans` vs `Ceiling_Fans`) foram mescladas numa pasta só,
 com dedup por hash de conteúdo aplicado na própria fusão (arquivo idêntico
