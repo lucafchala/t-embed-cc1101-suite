@@ -1,0 +1,32 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 14 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 4D 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 0A 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 08 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 0C 00 00 00

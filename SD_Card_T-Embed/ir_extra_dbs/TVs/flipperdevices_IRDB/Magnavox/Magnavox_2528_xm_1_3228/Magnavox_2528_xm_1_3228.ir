@@ -1,0 +1,698 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: SAT Input_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: SmartSound
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F4 00 00 00
+# 
+name: pipinput
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: ch-_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: VCR Input_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 86 00 00 00
+# 
+name: SmartSound_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F4 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 59 00 00 00
+# 
+name: NextPicture_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F5 00 00 00
+# 
+name: options_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 40 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F7 00 00 00
+# 
+name: audio_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 4E 00 00 00
+# 
+name: yellow_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6F 00 00 00
+# 
+name: pipswap_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 63 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: program-guide_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: SmartPicture_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F3 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: dnr_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F9 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: teletext_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: cable
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: time_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 7F 00 00 00
+# 
+name: pip
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 63 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6F 00 00 00
+# 
+name: dvd_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 88 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 54 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: green
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6E 00 00 00
+# 
+name: time
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 7F 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: Surf
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 66 00 00 00
+# 
+name: cable_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: SAT Input
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: FreezeFrame_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: guide
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: PipToggle_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5D 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: clock_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 7F 00 00 00
+# 
+name: SmartPicture
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F3 00 00 00
+# 
+name: selection_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5C 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: green_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6E 00 00 00
+# 
+name: dnr
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F9 00 00 00
+# 
+name: surround
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 88 00 00 00
+# 
+name: pipinput_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: Surf_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 66 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: VCR Input
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 86 00 00 00
+# 
+name: surround_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: exit_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 54 00 00 00
+# 
+name: teletext
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: red
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6D 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 54 00 00 00
+# 
+name: pip_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 63 00 00 00
+# 
+name: blue
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 70 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: pipswap
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 63 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: PipToggle
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5D 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: freeze_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: guide_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: NextPicture
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F5 00 00 00
+# 
+name: clock
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 7F 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: options
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 40 00 00 00
+# 
+name: audio
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 4E 00 00 00
+# 
+name: blue_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 70 00 00 00
+# 
+name: set_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: set
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: favorite_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: D2 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: FreezeFrame
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: program-guide
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: selection
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5C 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: favorite
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: D2 00 00 00
+# 
+name: zoom_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F7 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 54 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 6D 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5A 00 00 00

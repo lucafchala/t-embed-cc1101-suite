@@ -1,0 +1,374 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: sv3
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2B 00 00 00
+# 
+name: side_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 05 00 00 00
+# 
+name: sv1_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 29 00 00 00
+# 
+name: sv4
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2C 00 00 00
+# 
+name: sv1
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 29 00 00 00
+# 
+name: video
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 04 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0B 00 00 00
+# 
+name: rf
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 26 00 00 00
+# 
+name: pro logic_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 31 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 39 00 00 00
+# 
+name: cv3
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2F 00 00 00
+# 
+name: music
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 33 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3C 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0D 00 00 00
+# 
+name: cv3_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2F 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0C 00 00 00
+# 
+name: music_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 33 00 00 00
+# 
+name: xlr_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 25 00 00 00
+# 
+name: cv1
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2D 00 00 00
+# 
+name: pro logic
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 31 00 00 00
+# 
+name: rear_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 02 00 00 00
+# 
+name: simulation
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0A 00 00 00
+# 
+name: balanced_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 06 00 00 00
+# 
+name: mode
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 09 00 00 00
+# 
+name: thx_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 32 00 00 00
+# 
+name: cv2
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2E 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0B 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0F 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 11 00 00 00
+# 
+name: cv4
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 30 00 00 00
+# 
+name: sv2
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2A 00 00 00
+# 
+name: balanced
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 06 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 11 00 00 00
+# 
+name: cv2_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2E 00 00 00
+# 
+name: center
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 06 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 39 00 00 00
+# 
+name: video_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 04 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3C 00 00 00
+# 
+name: master_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 08 00 00 00
+# 
+name: mode_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 09 00 00 00
+# 
+name: xlr
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 25 00 00 00
+# 
+name: cv4_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 30 00 00 00
+# 
+name: thx
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 32 00 00 00
+# 
+name: center_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 06 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 12 00 00 00
+# 
+name: sv3_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2B 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3C 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3D 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0D 00 00 00
+# 
+name: side
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 05 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3C 00 00 00
+# 
+name: master
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 08 00 00 00
+# 
+name: sv2_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2A 00 00 00
+# 
+name: rear
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 02 00 00 00
+# 
+name: sv4_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2C 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 12 00 00 00
+# 
+name: cv1_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 2D 00 00 00
+# 
+name: rf_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 26 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0C 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 3D 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0F 00 00 00
+# 
+name: simulation_r
+type: parsed
+protocol: RC5
+address: 1C 00 00 00
+command: 0A 00 00 00

@@ -1,0 +1,140 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B3 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B7 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: EC 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: EA 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B4 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 87 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 80 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 85 00 00 00
+# 
+name: next
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: BA 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B9 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: E9 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: CF 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: EB 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 86 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B6 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 83 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B9 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: BA 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 82 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B8 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: 86 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: CF 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 7C 00 00 00
+command: B5 00 00 00

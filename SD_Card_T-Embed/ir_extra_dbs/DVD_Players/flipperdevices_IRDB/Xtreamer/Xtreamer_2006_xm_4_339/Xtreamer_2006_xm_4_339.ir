@@ -1,0 +1,290 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: caption
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4F 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: into
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: previews
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: subtitlesync2
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 48 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: pop up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: b
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4F 00 00 00
+# 
+name: delete
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1C 00 00 00
+# 
+name: function
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4B 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 41 00 00 00
+# 
+name: less tv
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: subtitlesync
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 5A 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4C 00 00 00
+# 
+name: audio
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1C 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: add
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 5C 00 00 00
+# 
+name: shuf
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0C 00 00 00

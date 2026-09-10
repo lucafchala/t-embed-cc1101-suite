@@ -1,0 +1,32 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: wind_type
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 03 00 00 00
+# 
+name: wind_speed
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 07 00 00 00
+# 
+name: shake_wind
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 13 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 0F 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 0B 00 00 00

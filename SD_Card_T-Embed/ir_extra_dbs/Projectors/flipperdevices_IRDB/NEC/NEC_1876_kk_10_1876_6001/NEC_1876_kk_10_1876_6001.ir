@@ -1,0 +1,176 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: computer2
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 05 FA 00 00
+# 
+name: ecomode
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 16 E9 00 00
+# 
+name: aspect
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 10 EF 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 03 FC 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: BC 43 00 00
+# 
+name: s-video
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: C6 39 00 00
+# 
+name: power_r
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 14 EB 00 00
+# 
+name: Auto Adjust
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 06 F9 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 4C B3 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 25 DA 00 00
+# 
+name: mouse l-click
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 17 E8 00 00
+# 
+name: mouse r-click
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 25 DA 00 00
+# 
+name: computer1
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 04 FB 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: B8 47 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 17 E8 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 08 F7 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 49 B6 00 00
+# 
+name: av mute
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 47 B8 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 0D F2 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 46 B9 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 48 B7 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: BA 45 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 2A D5 00 00
+# 
+name: help
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 4E B1 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 2B D4 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 8A 75 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 89 76 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 46 B9 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: BE 41 00 00

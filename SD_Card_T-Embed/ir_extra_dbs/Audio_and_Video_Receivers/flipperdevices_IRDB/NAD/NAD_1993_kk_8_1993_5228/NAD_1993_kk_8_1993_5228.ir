@@ -1,0 +1,218 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: 5_1
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 2E D1 00 00
+# 
+name: vcr
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C1 3E 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 28 D7 00 00
+# 
+name: center-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D5 2A 00 00
+# 
+name: video5
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 31 CE 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8D 72 00 00
+# 
+name: surround mode
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: CC 33 00 00
+# 
+name: Speaker A
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: CE 31 00 00
+# 
+name: LNTE
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 2F D0 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 85 7A 00 00
+# 
+name: sat
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C0 3F 00 00
+# 
+name: surround+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D6 29 00 00
+# 
+name: Disply
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 26 D9 00 00
+# 
+name: surround-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D7 28 00 00
+# 
+name: center+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D0 2F 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 27 D8 00 00
+# 
+name: title
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 82 7D 00 00
+# 
+name: tone
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 39 C6 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C2 3D 00 00
+# 
+name: cp
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 89 76 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C8 37 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8C 73 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 32 CD 00 00
+# 
+name: Sub-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D9 26 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 88 77 00 00
+# 
+name: Sub+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D8 27 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 2A D5 00 00
+# 
+name: Video6
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 1E E1 00 00
+# 
+name: RTN
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 20 DF 00 00
+# 
+name: diapason
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: DD 22 00 00
+# 
+name: Speaker B
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: CF 30 00 00
+# 
+name: test
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: CD 32 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 81 7E 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 94 6B 00 00
+# 
+name: video4
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 30 CF 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 29 D6 00 00

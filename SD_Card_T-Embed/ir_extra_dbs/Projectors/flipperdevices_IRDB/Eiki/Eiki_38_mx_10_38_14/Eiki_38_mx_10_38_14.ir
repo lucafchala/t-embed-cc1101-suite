@@ -1,0 +1,56 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 8D 00 00 00
+# 
+name: repeat_code
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9000 4500 560 560 560 560 560 560 560 560 560 1680 560 1680 560 560 560 560 560 1680 560 1680 560 1680 560 1680 560 560 560 560 560 1680 560 1680 9000 2250 560 96190 560 40180
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 8C 00 00 00
+# 
+name: usb
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: FF 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 0A 00 00 00
+# 
+name: list
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 1C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 09 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 1D 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 1E 00 00 00

@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: repeat_code
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9000 4500 560 560 560 1680 560 560 560 560 560 1680 560 560 560 1680 560 1680 560 1680 560 560 560 1680 560 1680 560 560 560 1680 560 1680 560 560 9000 2250 560 96190 560 40180
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: FF 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 02 FD 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 03 FC 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 05 FA 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 04 FB 00 00

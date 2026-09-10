@@ -1,0 +1,350 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0A F5 00 00
+# 
+name: vcr2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5A A5 00 00
+# 
+name: mode+
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5C A3 00 00
+# 
+name: vcr
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 56 A9 00 00
+# 
+name: radios
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 02 FD 00 00
+# 
+name: video3
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: E4 1B 00 00
+# 
+name: system
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 59 A6 00 00
+# 
+name: aux1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0A F5 00 00
+# 
+name: program_down
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 01 00 00 00
+# 
+name: ld
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5B A4 00 00
+# 
+name: center-
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 55 AA 00 00
+# 
+name: video5
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: E6 19 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 06 F9 00 00
+# 
+name: delay-
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 44 BB 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0B F4 00 00
+# 
+name: delay+
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5F A0 00 00
+# 
+name: OPTICAL1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 79 86 00 00
+# 
+name: file
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 12 ED 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 40 BF 00 00
+# 
+name: surround+
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 53 AC 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 42 BD 00 00
+# 
+name: vcr3
+type: parsed
+protocol: NECext
+address: 84 45 00 00
+command: 00 FF 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 18 E7 00 00
+# 
+name: surround-
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 57 A8 00 00
+# 
+name: center+
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 51 AE 00 00
+# 
+name: tone
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 50 AF 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0D F2 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 83 44 00 00
+command: 37 C8 00 00
+# 
+name: tape2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5D A2 00 00
+# 
+name: surround
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5C A3 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 07 F8 00 00
+# 
+name: video1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5E A1 00 00
+# 
+name: cp
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 1D E2 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 09 F6 00 00
+# 
+name: preset
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0F F0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 11 EE 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 01 FE 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 4B B4 00 00
+# 
+name: Optical2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: E0 1F 00 00
+# 
+name: video2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: E3 1C 00 00
+# 
+name: bass+
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 17 E8 00 00
+# 
+name: vol+
+type: raw
+frequency: 38020
+duty_cycle: 0.330000
+data: 9010 4440 625 1549 625 1523 651 430 625 430 625 430 625 456 625 430 625 1550 625 1524 625 430 651 1524 625 430 651 430 625 430 625 1550 625 430 625 1550 625 1524 625 1550 625 430 625 456 599 456 625 1524 625 456 625 430 625 430 625 456 625 1524 625 1550 625 1524 625 456 625 1524 651 42902 8905 2227 547 94880
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0C F3 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 16 E9 00 00
+# 
+name: bass-
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 04 FB 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 41 BE 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 10 EF 00 00
+# 
+name: vcr1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 56 A9 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 19 E6 00 00
+# 
+name: acr1
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 06 F9 00 00
+# 
+name: program_up
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 00 00 00 00
+# 
+name: user
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 05 FA 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 52 AD 00 00
+# 
+name: aux2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 0E F1 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 20 DF 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 43 BC 00 00
+# 
+name: video4
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: E5 1A 00 00
+# 
+name: acr2
+type: parsed
+protocol: NECext
+address: 83 45 00 00
+command: 5D A2 00 00

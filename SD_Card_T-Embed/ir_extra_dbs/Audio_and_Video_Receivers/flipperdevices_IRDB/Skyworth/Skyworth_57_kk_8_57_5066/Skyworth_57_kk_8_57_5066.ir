@@ -1,0 +1,80 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: formats
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 09 00 00 00
+# 
+name: high_pitch+
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 02 00 00 00
+# 
+name: high_pitch-
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 47 00 00 00
+# 
+name: music
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 1D 00 00 00
+# 
+name: reset
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 0D 00 00 00
+# 
+name: movie
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 1F 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 41 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 14 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 17 00 00 00
+# 
+name: bass+
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 03 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 08 00 00 00
+# 
+name: bass-
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 5E 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 28 00 00 00
+command: 46 00 00 00

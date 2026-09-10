@@ -1,0 +1,722 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: +10_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: tv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: Text Hold
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: aspect
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: video
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: Brightness_Down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 13 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: audio_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: yellow_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sleep_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: TeletextStop_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: TeletextHidden_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: WHITE_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2F 00 00 00
+# 
+name: aspect_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: TeletextZoom
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: antenna_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: teletext_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 13 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: MenuOn_r
+type: raw
+frequency: 39220
+duty_cycle: 0.330000
+data: 1711 1632 1711 816 842 816 842 816 842 816 842 816 842 1632 1711 816 842 1632 1711 86312 1711 1632 1711 816 842 816 842 816 842 816 842 816 842 1632 1711 816 842 1632 1711 86312
+# 
+name: PC
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: Contrast_Down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: pip
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 28 00 00 00
+# 
+name: TeletextZoom_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: game
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: TeletextHidden
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: Brightness_Up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: sat_r
+type: parsed
+protocol: RC5
+address: 08 00 00 00
+command: 3F 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: MenuOff_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 13 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: Contrast_Up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: green
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: PP
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: PP_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: --
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: TeletextMix
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: sat
+type: parsed
+protocol: RC5
+address: 08 00 00 00
+command: 3F 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: Text Update
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: antenna
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: WHITE
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2F 00 00 00
+# 
+name: Text Update_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: --_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: green_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: enter
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sap
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: video_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: teletext
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: PipPosition
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: red
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: pip_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 28 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: MenuOn
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: TeletextTime_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: PC_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: info
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: TeletextMix_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: info_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: freeze_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: sap_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: Contrast_Down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: audio
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: Contrast_Up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: blue_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: picture mode_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: PipPosition_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: MenuUp_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: MenuUp
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: Brightness_Down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 13 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: Brightness_Up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: +10
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: TeletextTime
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: enter_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 12 00 00 00

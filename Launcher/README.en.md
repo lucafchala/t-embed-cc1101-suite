@@ -1,16 +1,15 @@
 # Launcher/
 
-A firmware launcher that stays permanently flashed on the board and lets
-you install/switch other firmwares (Bruce, Marauder, etc.) directly from
-its built-in OTA gallery — no USB cable needed after the initial install.
+Install guide for the firmware launcher that stays permanently flashed on
+the board and lets you install/switch other firmwares (Bruce, Marauder,
+etc.) directly from its built-in OTA gallery — no USB cable needed after
+the initial install.
 
-## What goes here
+> **This folder contains documentation only.** The Launcher binary isn't
+> vendored here — it's fetched straight from the official flasher (see
+> below), always already the latest version, so it never goes stale.
 
-| File | Description |
-|---|---|
-| `Launcher-lilygo-t-embed-all.bin` | [bmorcelli/Launcher](https://github.com/bmorcelli/Launcher) binary, built from the `lilygo-t-embed-all` profile — covers both the plain T-Embed and the T-Embed CC1101 (it detects which one at boot by probing the BQ25896 PMIC over I2C). This is the binary that needs to be flashed to the board over USB. |
-
-The Bruce firmware itself is **not** downloaded manually — it gets
+The Bruce firmware itself is also **not** downloaded manually — it gets
 installed afterward, from inside the Launcher itself, via its OTA gallery.
 
 ## Why this flow (Launcher + gallery) instead of flashing Bruce directly
@@ -24,13 +23,15 @@ installed afterward, from inside the Launcher itself, via its OTA gallery.
 
 ## How to install the Launcher
 
-1. Connect the T-Embed via USB-C (install the CH9102 driver first if
-   needed — `../Drivers_Windows/`).
-2. Flash the Launcher through one of these:
-   - Official flasher: [bmorcelli.github.io/Launcher](https://bmorcelli.github.io/Launcher/)
-   - M5Burner
-   - ESP Web Tools / `esptool` with `Launcher-lilygo-t-embed-all.bin` from
-     this folder (address `0x0`)
+1. Connect the T-Embed via USB-C. If the board isn't recognized on
+   Windows, install the CH9102 USB-serial driver from the [official WCH page](https://www.wch.cn/downloads/CH343SER_EXE.html)
+   or from [LilyGO's repository](https://github.com/Xinyuan-LilyGO/CH9102_Driver).
+2. Flash the Launcher via the [official flasher](https://bmorcelli.github.io/Launcher/) —
+   it always serves the latest build of the `lilygo-t-embed-all` profile,
+   which covers both the plain T-Embed and the T-Embed CC1101 (it detects
+   which one at boot by probing the BQ25896 PMIC over I2C). If you prefer
+   the command line over the web flasher, use `esptool` — see
+   [espressif/esptool](https://github.com/espressif/esptool).
 3. After booting, the Launcher menu should appear on screen.
 4. From the Launcher menu, open the **online gallery/catalog** and select
    **Bruce** to install the firmware directly onto the board.

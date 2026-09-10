@@ -1,0 +1,764 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: SAT Input_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: EYE
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: VCR Input_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 86 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 59 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F7 00 00 00
+# 
+name: Start_r
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 2803 777 500 777 500 500 500 500 1304 1304 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 1027 500 500 500 500 777 500 500 500 500 500 85831 2803 777 500 777 500 500 500 500 1304 1304 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 1027 500 500 500 500 777 500 500 500 500 500 85831
+# 
+name: HDTV
+type: parsed
+protocol: RC6
+address: 26 00 00 00
+command: 43 00 00 00
+# 
+name: av4_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 39 00 00 00
+# 
+name: EYE_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: pipswap_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: PipFreeze
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sleep_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: front
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 3A 00 00 00
+# 
+name: CC
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3A 00 00 00
+# 
+name: SSM
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: Ambilig_Mode_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 90 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: teletext_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: cable
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 71 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: SplitScreen_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5D 00 00 00
+# 
+name: PIPMove
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: pip
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: PipFreeze_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: vid
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: broadcast
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 31 00 00 00
+# 
+name: av1
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 04 00 00 00
+# 
+name: Screen16x9
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F5 00 00 00
+# 
+name: AmilightToggle_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 8F 00 00 00
+# 
+name: dvd_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 88 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: ARC_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: tuner_input_r
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 08 00 00 00
+# 
+name: Surround2
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: ARC
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: psm_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: cable_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: SAT Input
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: SplitScreen
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5D 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: power_r_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 3D 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: Screen16x9_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F5 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 58 00 00 00
+# 
+name: front_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 3A 00 00 00
+# 
+name: psm
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: surround
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 88 00 00 00
+# 
+name: HDTV_r
+type: parsed
+protocol: RC6
+address: 26 00 00 00
+command: 43 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: Surround2_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: VCR Input
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 86 00 00 00
+# 
+name: surround_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: Format
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: exit_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 71 00 00 00
+# 
+name: av2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: SSM_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: effect_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 0B 00 00 00
+# 
+name: AmilightToggle
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 8F 00 00 00
+# 
+name: teletext
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: vid_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: Format_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: av4
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 39 00 00 00
+# 
+name: PIPMove_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: pip_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: av2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: Ambilig_Mode
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 90 00 00 00
+# 
+name: pipswap
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: CC_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3A 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: freeze_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 67 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 36 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: effect
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 0B 00 00 00
+# 
+name: av3_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 38 00 00 00
+# 
+name: vga
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 3B 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: GuideOff_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 71 00 00 00
+# 
+name: broadcast_r
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 31 00 00 00
+# 
+name: GuideOff
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 71 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 08 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 36 00 00 00
+# 
+name: av3
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 38 00 00 00
+# 
+name: av1_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 04 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: program
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: vga_r
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 3B 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: Start
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: program_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: zoom_r
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: F7 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 00 00 00 00
+command: 5A 00 00 00

@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 11 00 00 00
+# 
+name: bt
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 0D 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 31 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 38 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 32 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 33 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 11 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 2F 00 00 00
+# 
+name: bt_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 0D 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 2F 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 38 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 34 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 32 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 33 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 10 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 34 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 31 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 0F 00 00 00
+command: 10 00 00 00

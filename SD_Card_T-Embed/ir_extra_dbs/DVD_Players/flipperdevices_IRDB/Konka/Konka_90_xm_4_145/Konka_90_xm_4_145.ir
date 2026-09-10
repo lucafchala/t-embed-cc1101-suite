@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: formats
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 41 BE 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 5D A2 00 00
+# 
+name: caption
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 56 A9 00 00
+# 
+name: eject
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 0C F3 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 54 AB 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 1C E3 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: E1 1E 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 1F E0 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 14 EB 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 10 EF 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: E1 1E 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 18 E7 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 5C A3 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 1D E2 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 07 F8 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 09 F6 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: E1 1E 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 04 FD 00 00
+command: 59 A6 00 00

@@ -1,0 +1,206 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: phono_r
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: aux
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: cd1_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 37 00 00 00
+# 
+name: tv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: vcr
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: cd3_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 39 00 00 00
+# 
+name: cd2_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 38 00 00 00
+# 
+name: tape1_r
+type: parsed
+protocol: RC5
+address: 12 00 00 00
+command: 3F 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 0C 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: tape1
+type: parsed
+protocol: RC5
+address: 12 00 00 00
+command: 3F 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: sat_r
+type: parsed
+protocol: RC5
+address: 16 00 00 00
+command: 3F 00 00 00
+# 
+name: tuner_input_r
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: sat
+type: parsed
+protocol: RC5
+address: 16 00 00 00
+command: 3F 00 00 00
+# 
+name: tape2
+type: parsed
+protocol: RC5
+address: 12 00 00 00
+command: 3F 00 00 00
+# 
+name: cdr
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 0C 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: tape
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: cdr_r
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: vcr_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: tape_r
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: tape2_r
+type: parsed
+protocol: RC5
+address: 12 00 00 00
+command: 3F 00 00 00
+# 
+name: cd2
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 38 00 00 00
+# 
+name: cd3
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 39 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: phono
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: cd1
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 37 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0D 00 00 00

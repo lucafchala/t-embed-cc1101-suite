@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 27 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 11 00 00 00
+# 
+name: home
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 63 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 26 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 1C 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 0B 00 00 00
+# 
+name: back
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8563 4257 517 537 518 1619 518 537 518 1619 518 537 518 1619 518 537 518 1619 518 1619 518 537 518 1619 518 537 518 1619 518 537 518 1619 518 537 518 1619 518 1619 518 537 518 1619 518 1619 518 537 518 1619 518 538 518 537 518 537 518 1619 518 537 518 537 518 1619 518 537 518 1619 518 25226 8563 4257 518 1619 518 1619 518 1619 518 1620 517 537 518 1619 518 537 518 1619 518 537 518 537 518 537 518 537 518 1619 518 537 518 1619 518 538 518 537 518 1619 518 537 518 538 518 537 518 1619 518 537 518 537 518 1619 517 537 518 1619 518 1619 518 1619 518 537 518 1619 518 1619 518 61953
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 28 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 13 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 0A 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 24 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 10 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 4A 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 20 00 00 00
+# 
+name: shopping
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 2E 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 49 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 25 00 00 00

@@ -1,0 +1,164 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: right slide
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 4B B4 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 50 AF 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 5F A0 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 47 B8 00 00
+# 
+name: 3d
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 13 EC 00 00
+# 
+name: folder
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: FA 05 00 00
+# 
+name: rgb
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 51 AE 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 5E A1 00 00
+# 
+name: aspect ratio
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 10 EF 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 08 F7 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 49 B6 00 00
+# 
+name: pointer
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 26 D9 00 00
+# 
+name: slide
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: F1 0E 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 17 E8 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 48 B7 00 00
+# 
+name: focus-
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 0C F3 00 00
+# 
+name: pj
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 92 6D 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 5C A3 00 00
+# 
+name: cancel
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 25 DA 00 00
+# 
+name: help
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 4E B1 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 06 F9 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 8A 75 00 00
+# 
+name: focus+
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 0B F4 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 09 F6 00 00
+# 
+name: left slide
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 20 DF 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 46 B9 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 18 E9 00 00
+command: 5D A2 00 00

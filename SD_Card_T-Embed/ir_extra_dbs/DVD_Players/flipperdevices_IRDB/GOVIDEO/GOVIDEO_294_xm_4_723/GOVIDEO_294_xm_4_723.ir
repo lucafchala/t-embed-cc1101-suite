@@ -1,0 +1,200 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: track+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: tv
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 01 00 00 00
+# 
+name: rew
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 18 00 00 00
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2D 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 10 00 00 00
+# 
+name: shuttle_>>
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0A 00 00 00
+# 
+name: ff
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1A 00 00 00
+# 
+name: 100+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 26 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 11 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 08 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0C 00 00 00
+# 
+name: track-
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 04 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2C 00 00 00
+# 
+name: enter
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 43 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 55 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0D 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 48 00 00 00
+# 
+name: stop
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 15 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 40 00 00 00
+# 
+name: _shuttle
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 09 00 00 00
+# 
+name: vcr_r
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 28 00 00 00
+# 
+name: disc_menu
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 60 00 00 00
+# 
+name: record
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 14 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 63 00 00 00
+# 
+name: info
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1E 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 05 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 13 00 00 00
+# 
+name: pause
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 19 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 12 00 00 00
+# 
+name: clear
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 17 00 00 00
+# 
+name: enter_r
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1D 00 00 00

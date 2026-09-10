@@ -1,0 +1,158 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: black screen
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 41 01 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 19 01 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 2C 01 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: B4 01 00 00
+# 
+name: reset
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 22 01 00 00
+# 
+name: lens-
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 6B 01 00 00
+# 
+name: rgb
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 18 01 00 00
+# 
+name: search
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 1A 01 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 28 01 00 00
+# 
+name: volume
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 53 01 00 00
+# 
+name: aspect ratio
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 7A 01 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 17 01 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: D4 01 00 00
+# 
+name: ok
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1206 1221 599 614 599 614 599 614 599 614 599 614 599 615 599 614 1206 1221 599 614 599 614 599 615 599 614 599 614 599 615 599 86775
+# 
+name: focus-
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 63 01 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 2A 01 00 00
+# 
+name: position
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 30 01 00 00
+# 
+name: keystone
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: B6 01 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 24 01 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 61 01 00 00
+# 
+name: focus+
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 62 01 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 60 01 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 20 01 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 52 01 00 00
+# 
+name: lens+
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 6A 01 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 87 45 00 00
+command: 2E 01 00 00

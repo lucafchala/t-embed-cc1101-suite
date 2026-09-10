@@ -1,0 +1,344 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: 16:9
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 09 00 00 00
+# 
+name: tv
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5F 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 55 00 00 00
+# 
+name: caption
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 54 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 0C 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 46 00 00 00
+# 
+name: display information
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 44 00 00 00
+# 
+name: music
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 62 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 66 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 00 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5C 00 00 00
+# 
+name: eject
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 1E 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 4F 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 4C 00 00 00
+# 
+name: mouse
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5A 00 00 00
+# 
+name: movie
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 61 00 00 00
+# 
+name: delete
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5E 00 00 00
+# 
+name: tvmode
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5F 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 0F 00 00 00
+# 
+name: hd tv
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 60 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 45 00 00 00
+# 
+name: epg
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 49 00 00 00
+# 
+name: dark
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 64 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 50 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 1C 00 00 00
+# 
+name: reach the peak
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 14 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 4E 00 00 00
+# 
+name: hmedia
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 67 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5D 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 5B 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 13 00 00 00
+# 
+name: look_back
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 02 00 00 00
+# 
+name: bookmarks
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 48 00 00 00
+# 
+name: photo
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 63 00 00 00
+# 
+name: language
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 04 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 00 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 1A 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 41 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 1D 00 00 00
+# 
+name: in the end
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 15 00 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 16 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 40 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 17 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 44 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 52 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 01 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 4A 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 59 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 08 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 59 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 05 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 57 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 07 00 00 00

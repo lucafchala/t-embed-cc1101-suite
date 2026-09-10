@@ -1,22 +1,20 @@
 # lilygo — T-Embed CC1101 Plus Suite (Bruce via Launcher)
 
-[
-
-![Board](https://img.shields.io/badge/board-LilyGO%20T--Embed%20CC1101%20Plus-blue)
-
-](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main)
-[
-
-![Firmware](https://img.shields.io/badge/firmware-Bruce%20(via%20bmorcelli%2FLauncher)
-
--green)](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main)
-[
-
-![Mixed license](https://img.shields.io/badge/license-mixed%20(see%20below)
-
--yellow)](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main)
+[![Board](https://img.shields.io/badge/board-LilyGO%20T--Embed%20CC1101%20Plus-blue)](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main) [![Firmware](https://img.shields.io/badge/firmware-Bruce%20%28via%20bmorcelli%2FLauncher%29-green)](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main) [![Mixed license](https://img.shields.io/badge/license-mixed%20%28see%20below%29-yellow)](https://github.com/lucafchala/t-embed-cc1101-suite/blob/main)
 
 *[Ler em Português](README.md)*
+
+## 🔗 Useful links
+
+| Tool | Link | What it's for |
+|---|---|---|
+| Launcher Web Flasher (recommended) | [bmorcelli.github.io/Launcher](https://bmorcelli.github.io/Launcher/) | Flashes the Launcher straight from the browser — the flow used in this repository |
+| Bruce Web Flasher | [bruce.computer/flasher](https://bruce.computer/flasher) | Installs Bruce straight from the browser, without going through the Launcher |
+| Bruce Theme Builder | [bruce.computer/build_theme.html](https://bruce.computer/build_theme.html) | Builds/customizes UI themes for Bruce |
+| CH9102 driver (official WCH) | [wch.cn](https://www.wch.cn/downloads/CH343SER_EXE.html) | USB-serial driver, needed on Windows if the board isn't recognized |
+| CH9102 driver (LilyGO mirror) | [Xinyuan-LilyGO/CH9102_Driver](https://github.com/Xinyuan-LilyGO/CH9102_Driver) | Same driver, redistributed by LilyGO |
+| esptool | [espressif/esptool](https://github.com/espressif/esptool) | Command-line flashing, an alternative to the web flashers |
+| CapibaraZero Web-Flasher | [flash.capibarazero.com](https://flash.capibarazero.com/) | Installer for the alternative CapibaraZero firmware (not Bruce — out of scope for this repository, link for reference only) |
 
 Organized SD card content collection for the **LilyGO T-Embed CC1101 Plus**
 board, running official **[Bruce](https://github.com/BruceDevices/firmware)**
@@ -26,7 +24,7 @@ This repository is a **curation and reorganization** of several public GitHub
 sources — not original code. See [Provenance and licenses](#provenance-and-licenses)
 before redistributing any part of it.
 
-**~49,600 files, ~1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
+**~53,560 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
 [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
@@ -89,7 +87,9 @@ lilygo/
 │   ├── subghz_extra_dbs/        → extra Sub-GHz databases, by category
 │   ├── ir_extra_dbs/            → extra IR databases, by category
 │   ├── badusb_extra_payloads/   → extra BadUSB payloads
+│   ├── wifi_portals/            → captive-portal (evil portal) templates for Bruce's Wi-Fi
 │   └── music_rtttl/             → RTTTL music files (.txt) for Bruce's audio player
+├── Launcher/                    → bmorcelli/Launcher install guide (no vendored binary)
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md / README.en.md

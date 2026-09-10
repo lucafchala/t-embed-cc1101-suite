@@ -1,0 +1,128 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: high_pitch+
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 14 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 43 00 00 00
+# 
+name: high_pitch-
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 56 00 00 00
+# 
+name: Sound Field Effect
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 5A 00 00 00
+# 
+name: sound_channel
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 50 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 42 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 50 00 00 00
+# 
+name: FF
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8753 4396 544 521 569 521 569 521 569 522 569 522 569 1599 569 522 569 522 569 1625 569 1599 569 1599 569 1599 569 1599 569 521 569 1625 569 1599 569 1599 569 1600 569 1599 569 1625 543 522 569 522 569 1599 569 522 569 522 569 522 569 522 569 522 569 1600 569 1599 569 548 543 1625 569 39005 8778 2165 568 93933 8752 2164 569 102153
+# 
+name: reach the peak
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 1A 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 41 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 43 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Pioneer
+address: 20 00 00 00
+command: 1B 00 00 00
+# 
+name: bass+
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 4D 00 00 00
+# 
+name: in the end
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 4F 00 00 00
+# 
+name: REW
+type: parsed
+protocol: Pioneer
+address: 20 00 00 00
+command: 1A 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 42 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 4F 00 00 00
+# 
+name: bass-
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 51 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 1B 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 20 00 00 00
+command: 1B 00 00 00
+# 
+name: left
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8753 4370 569 521 569 522 569 521 570 521 569 521 569 1600 569 522 569 522 569 1599 569 1599 569 1625 569 1599 569 1599 569 522 569 1599 569 1599 569 522 569 1599 569 522 569 1625 569 1599 569 522 569 522 569 522 569 1600 569 522 569 1599 569 522 569 522 569 1600 569 1625 569 1599 569 38979 8778 2165 569 93882 8778 2165 569 102201

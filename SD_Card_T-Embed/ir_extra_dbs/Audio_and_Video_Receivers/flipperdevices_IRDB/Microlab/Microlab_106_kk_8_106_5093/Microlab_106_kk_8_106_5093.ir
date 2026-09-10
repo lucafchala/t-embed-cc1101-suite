@@ -1,0 +1,140 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 02 FD 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 01 FE 00 00
+# 
+name: scan+
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 06 F9 00 00
+# 
+name: SESET
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 40 BF 00 00
+# 
+name: memory
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 07 F8 00 00
+# 
+name: front+
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 05 FA 00 00
+# 
+name: usb
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 03 FC 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 0A F5 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 0E F1 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 10 EF 00 00
+# 
+name: Treble Down
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 1A E5 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 11 EE 00 00
+# 
+name: bass+
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 1D E2 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 0B F4 00 00
+# 
+name: bass-
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 42 BD 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 0D F2 00 00
+# 
+name: Treble Up
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 00 FF 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 0D F2 00 00
+# 
+name: front-
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 08 F7 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 45 BA 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 04 FB 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 41 BE 00 00
+# 
+name: scan-
+type: parsed
+protocol: NECext
+address: 60 DF 00 00
+command: 09 F6 00 00

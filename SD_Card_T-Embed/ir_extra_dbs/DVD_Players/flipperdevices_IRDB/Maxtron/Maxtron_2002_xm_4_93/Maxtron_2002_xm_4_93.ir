@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: formats
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 57 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 44 00 00 00
+# 
+name: caption
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4A 00 00 00
+# 
+name: eject
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: FF 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 52 00 00 00
+# 
+name: next
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 40 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: FF 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 55 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 48 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 47 00 00 00

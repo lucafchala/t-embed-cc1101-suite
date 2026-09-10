@@ -1,0 +1,92 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0E F1 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 00 FF 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0B F4 00 00
+# 
+name: reach the peak
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 67 98 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0A F5 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1C E3 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 70 8F 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0D F2 00 00
+# 
+name: in the end
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 40 BF 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 15 EA 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 11 EE 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0C F3 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 51 AE 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 51 AE 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 10 EF 00 00

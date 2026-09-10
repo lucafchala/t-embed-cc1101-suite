@@ -1,0 +1,26 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 99 66 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9E 61 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9F 60 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 40 BF 00 00

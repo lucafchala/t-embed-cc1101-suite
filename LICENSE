@@ -8,9 +8,9 @@ each folder.
 ## License for original content (documentation and organization)
 
 The following applies only to the documentation files (README.md,
-README.en.md, README.pt-BR.md, CONTRIBUTING.md) and the organizational
-structure created for this repository — NOT to the aggregated third-party
-content (firmware, databases, drivers, tools, libraries) described in
+README.en.md, CONTRIBUTING.md, and the per-folder README.md files) and the
+organizational structure created for this repository — NOT to the
+aggregated third-party content (firmware, databases) described in
 CONTRIBUTING.md, which remains under its original licenses.
 
 MIT License
@@ -39,10 +39,16 @@ DEALINGS IN THE SOFTWARE.
 
 ## Third-party content
 
-Everything under `Launcher/`, `SD_Card_T-Embed/`, `Drivers_Windows/`,
-`Ferramentas_Flash/`, `Documentacao/`, and `Bibliotecas_Dev/` was sourced
-from third-party repositories and keeps its original license — notably,
-the Bruce firmware installed through the Launcher is AGPL-3.0
+Everything under `SD_Card_T-Embed/` was sourced from third-party
+repositories and keeps its original license — notably, the Bruce firmware
+itself (installed through the Launcher) is AGPL-3.0
 ([BruceDevices/firmware](https://github.com/BruceDevices/firmware)). See
 CONTRIBUTING.md for the full table. When in doubt about a specific file's
 license, consult the linked source repository directly.
+
+`Launcher/` contains only documentation written for this repository (no
+vendored binary), so it's covered by the MIT license above like the rest
+of the docs — see [`Launcher/README.md`](Launcher/README.md) for why.
+Drivers, flashing tools, hardware documentation, and development libraries
+are intentionally not vendored anywhere in this repository; the root
+README links directly to their official sources instead.

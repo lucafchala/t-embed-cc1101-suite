@@ -1,0 +1,86 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: list_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: left_r
+type: raw
+frequency: 36000
+duty_cycle: 0.330000
+data: 888 888 1776 888 888 888 888 888 888 888 888 888 888 1776 1776 1776 888 888 1776 888 888 888 83600
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1C 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1C 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: list
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: left
+type: raw
+frequency: 36000
+duty_cycle: 0.330000
+data: 888 888 888 888 1776 888 888 888 888 888 888 888 888 1776 1776 1776 888 888 1776 888 888 888 83600

@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: TVP3
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8C 00 00 00
+# 
+name: av1
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9D 00 00 00
+# 
+name: VID4
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 88 00 00 00
+# 
+name: component
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 84 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 98 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 90 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 94 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9C 00 00 00

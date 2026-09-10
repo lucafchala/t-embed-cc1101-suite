@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: pipinput
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 25 DA 00 00
+# 
+name: aspect
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 1B E4 00 00
+# 
+name: AudioInput
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 1E E1 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 14 EB 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 1F E0 00 00
+# 
+name: pip
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 24 DB 00 00
+# 
+name: AutoSetup
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 17 E8 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 15 EA 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 03 FC 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 20 DF 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 23 DC 00 00
+# 
+name: PictureMode
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 1D E2 00 00
+# 
+name: pipswap
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 26 D9 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 01 FE 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 19 E6 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 22 DD 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 28 D7 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 16 E9 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: FC FB 00 00
+command: 21 DE 00 00

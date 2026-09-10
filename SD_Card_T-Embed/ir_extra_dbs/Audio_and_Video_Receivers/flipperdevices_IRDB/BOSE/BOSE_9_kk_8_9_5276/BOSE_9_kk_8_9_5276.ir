@@ -1,0 +1,278 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 0F F0 00 00
+# 
+name: sat
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 15 EA 00 00
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 0E F1 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 18 E7 00 00
+# 
+name: Am Fm   Toggle
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 06 F9 00 00
+# 
+name: stored
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: B3 4C 00 00
+# 
+name: system
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 70 8F 00 00
+# 
+name: program_down
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 18 E7 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 40 BF 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 44 BB 00 00
+# 
+name: WholeCD
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 67 98 00 00
+# 
+name: Encore
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 65 9A 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 47 B8 00 00
+# 
+name: PLAYLIST
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 9F 60 00 00
+# 
+name: uMusic
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 66 99 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 53 AC 00 00
+# 
+name: Library
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: B0 4F 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 19 E6 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 41 BE 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 58 A7 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 48 B7 00 00
+# 
+name: VCR Input
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 0D F2 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 4C B3 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 1A E5 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 49 B6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 02 FD 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 19 E6 00 00
+# 
+name: ratingup
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 69 96 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 18 E7 00 00
+# 
+name: RatingDown
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 68 97 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 03 FC 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 42 BD 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 60 9F 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 9D 62 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 45 BA 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 80 7F 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 43 BC 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 46 B9 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: E0 1F 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 57 A8 00 00
+# 
+name: program_up
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 19 E6 00 00
+# 
+name: CdNumber
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 63 9C 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 06 F9 00 00
+# 
+name: shuf
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 5C A3 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 01 FE 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: A0 5F 00 00

@@ -1,0 +1,44 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Osc
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 86 00 00 00
+# 
+name: wind_type
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 87 00 00 00
+# 
+name: wind_speed
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 86 00 00 00
+# 
+name: automatic
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 87 00 00 00
+# 
+name: timer
+type: raw
+frequency: 37900
+duty_cycle: 0.330000
+data: 9174 4489 680 612 522 665 496 665 522 665 469 1720 575 1720 522 612 575 612 575 1720 549 1720 601 1667 601 1667 549 585 549 586 548 1667 575 1641 601 586 575 586 575 1641 575 1667 575 1667 575 586 575 586 575 1641 575 1667 575 1667 575 586 575 586 575 586 575 1641 575 1667 575 586 575 39676 9121 2195 601 96571 9121 2195 601 96624
+# 
+name: Light
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 85 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 97 00 00 00

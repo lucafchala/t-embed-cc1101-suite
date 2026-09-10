@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 98 00 00 00
+# 
+name: pop-up menu
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 8B 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: A4 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 97 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 9E 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 91 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: A2 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 99 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 9C 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 99 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 8F 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 9F 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: A1 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: A0 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 9B 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 99 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC42
+address: 66 00 00 00
+command: 9A 00 00 00

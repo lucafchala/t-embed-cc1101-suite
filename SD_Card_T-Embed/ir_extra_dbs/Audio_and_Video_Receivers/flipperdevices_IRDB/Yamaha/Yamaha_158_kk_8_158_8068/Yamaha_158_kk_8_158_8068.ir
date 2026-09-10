@@ -1,0 +1,158 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: vcr
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 0F 00 00 00
+# 
+name: PRESET_+
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 10 00 00 00
+# 
+name: music
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 89 00 00 00
+# 
+name: SetupMenu
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 9C 00 00 00
+# 
+name: program_down
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 59 00 00 00
+# 
+name: return
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: AA 00 00 00
+# 
+name: cd
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 15 00 00 00
+# 
+name: PRESET_-
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 11 00 00 00
+# 
+name: CD-R
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: C9 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: DE 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: C1 00 00 00
+# 
+name: level
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 86 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1F 00 00 00
+# 
+name: straight
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 56 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1B 00 00 00
+# 
+name: stereo
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 88 00 00 00
+# 
+name: cbl
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 54 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1A 00 00 00
+# 
+name: standard
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 90 00 00 00
+# 
+name: tuner
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 16 00 00 00
+# 
+name: v_aux
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 55 00 00 00
+# 
+name: program_up
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 58 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 57 00 00 00
+# 
+name: night
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 95 00 00 00
+# 
+name: test
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 85 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1C 00 00 00

@@ -1,0 +1,242 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: timer set up
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 26 D9 00 00
+# 
+name: aspect
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 13 EC 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0C F3 00 00
+# 
+name: 3D Settings
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 8D 72 00 00
+# 
+name: keystone+
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0B F4 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 03 FC 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0F F0 00 00
+# 
+name: Digital Zoom-
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 19 E6 00 00
+# 
+name: Digital Zoom+
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 18 E7 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 10 EF 00 00
+# 
+name: Teaching Template
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 9B 64 00 00
+# 
+name: source
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 04 FB 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0B F4 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 02 FD 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 83 7C 00 00
+# 
+name: timer on
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 25 DA 00 00
+# 
+name: blank
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 07 F8 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0F F0 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 10 EF 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 82 7D 00 00
+# 
+name: Smart Eco
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 30 CF 00 00
+# 
+name: info
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 20 DF 00 00
+# 
+name: menu lock
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0E F1 00 00
+# 
+name: automatic
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 08 F7 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0E F1 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 03 FC 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 05 FA 00 00
+# 
+name: capture
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 1E E1 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 04 FB 00 00
+# 
+name: help
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0D F2 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 06 F9 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 03 FC 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 08 F7 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 19 E6 00 00
+# 
+name: keystone-
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0C F3 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 18 E7 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0F F0 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 14 EB 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 0D F2 00 00
+# 
+name: Quick Install
+type: parsed
+protocol: NECext
+address: 00 30 00 00
+command: 94 6B 00 00

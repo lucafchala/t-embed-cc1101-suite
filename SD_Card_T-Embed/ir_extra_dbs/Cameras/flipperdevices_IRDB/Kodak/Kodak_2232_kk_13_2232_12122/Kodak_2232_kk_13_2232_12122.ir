@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: C7 00 00 00
+# 
+name: shutter
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 0A 00 00 00
+# 
+name: delete
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 05 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 6E 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 38 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 6A 00 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 6A 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: AC 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 33 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: B6 00 00 00

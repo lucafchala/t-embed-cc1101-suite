@@ -1,0 +1,56 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: left
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 42 00 00 00
+# 
+name: down
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 46 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 04 00 00 00
+# 
+name: up
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 4A 00 00 00
+# 
+name: list
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 49 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 0C 00 00 00
+# 
+name: power
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 0A 00 00 00
+# 
+name: ok
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 25 00 00 00
+# 
+name: right
+type: parsed
+protocol: SIRC
+address: 14 00 00 00
+command: 4C 00 00 00

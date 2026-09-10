@@ -1,0 +1,134 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: contrast+
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 36 C9 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 07 F8 00 00
+# 
+name: INPUT 1
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 2D D2 00 00
+# 
+name: Presets
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 2C D3 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 0E F1 00 00
+# 
+name: contrast-
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 37 C8 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 30 CF 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 03 FC 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 3C C3 00 00
+# 
+name: Native
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 3B C4 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 3A C5 00 00
+# 
+name: blank
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 31 CE 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 32 CD 00 00
+# 
+name: overscan
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 35 CA 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 2E D1 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 20 DF 00 00
+# 
+name: mailbox
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 3E C1 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 10 EF 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 3D C2 00 00
+# 
+name: INPUT 3
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 2F D0 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 02 FD 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 87 4E 00 00
+command: 21 DE 00 00

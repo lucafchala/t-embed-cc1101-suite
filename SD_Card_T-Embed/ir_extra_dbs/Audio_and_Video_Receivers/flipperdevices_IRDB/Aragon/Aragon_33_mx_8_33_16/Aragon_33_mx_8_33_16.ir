@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2A 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2E 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2A 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2F 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2D 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2E 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2F 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 0B 00 00 00
+command: 2D 00 00 00

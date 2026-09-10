@@ -1,0 +1,122 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: MEDIUM
+type: parsed
+protocol: NECext
+address: 01 FE 00 00
+command: 85 A4 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 8E 00 00 00
+# 
+name: anion
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: C8 00 00 00
+# 
+name: mode
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: CC 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 88 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: CA 00 00 00
+# 
+name: wind_speed
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 92 00 00 00
+# 
+name: HIGH
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 87 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 8A 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 99 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 9C 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: CE 00 00 00
+# 
+name: shake_wind
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 93 00 00 00
+# 
+name: Light
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 8F 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 8B 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 87 00 00 00
+# 
+name: LOW
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 81 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: C4 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: C9 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: C1 00 00 00

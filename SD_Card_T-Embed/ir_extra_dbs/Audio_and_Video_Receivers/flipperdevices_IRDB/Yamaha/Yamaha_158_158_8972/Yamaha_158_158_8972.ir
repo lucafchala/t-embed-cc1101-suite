@@ -1,0 +1,206 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: vcr2
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 82 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 9C 00 00 00
+# 
+name: aux1
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 8A 00 00 00
+# 
+name: tune-up
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 10 00 00 00
+# 
+name: ld
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 83 00 00 00
+# 
+name: cd
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 87 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D3 00 00 00
+# 
+name: vcr3
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 85 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D6 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 9D 00 00 00
+# 
+name: tune-down
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 11 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D0 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D7 00 00 00
+# 
+name: preset
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 12 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 90 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D8 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 8E 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 8D 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D1 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 9E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D4 00 00 00
+# 
+name: effect
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: C1 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D2 00 00 00
+# 
+name: vcr1
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 81 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 89 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: D5 00 00 00
+# 
+name: acr1
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 8B 00 00 00
+# 
+name: phono
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 88 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 93 00 00 00
+# 
+name: dbs
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 84 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: C2 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 94 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 9F 00 00 00
+# 
+name: acr2
+type: parsed
+protocol: NEC
+address: 7D 00 00 00
+command: 8C 00 00 00

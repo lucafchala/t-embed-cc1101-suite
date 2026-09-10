@@ -1,0 +1,470 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Text Hold
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 53 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1F 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1F 00 00 00
+# 
+name: sound mode
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5A 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5B 00 00 00
+# 
+name: Format (Aspect)
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 59 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 15 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 43 00 00 00
+# 
+name: TEXT EXPAND
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0D 00 00 00
+# 
+name: call
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 16 00 00 00
+# 
+name: 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: scale
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 59 00 00 00
+# 
+name: 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: bass
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 55 00 00 00
+# 
+name: Terrestrial Digital
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7A 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 4A 00 00 00
+# 
+name: dtv
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: 10
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: PIP Channel Down
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5D 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 49 00 00 00
+# 
+name: time
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 15 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 00 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 04 00 00 00
+# 
+name: Text Update
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 15 00 00 00
+# 
+name: pip swap
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 58 00 00 00
+# 
+name: pip freeze
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 22 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: Text Mix
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1B 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 21 00 00 00
+# 
+name: surround
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0F 00 00 00
+# 
+name: Text Index_ Bookmark
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 2B 00 00 00
+# 
+name: 8
+type: raw
+frequency: 37990
+duty_cycle: 0.330000
+data: 9053 4466 625 537 606 540 578 535 605 541 605 540 579 567 579 1622 605 541 606 1612 625 1608 624 1609 624 1610 684 1565 625 1592 624 537 605 1644 605 540 580 535 605 540 605 1613 625 539 578 534 604 540 605 540 579 1638 606 1629 607 1646 527 603 605 1644 606 1628 606 1643 606 1645 625 40222 9071 2178 625 96755
+# 
+name: usb
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 66 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 12 00 00 00
+# 
+name: sap
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 13 00 00 00
+# 
+name: program schedule
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6E 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1E 00 00 00
+# 
+name: stereo
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 13 00 00 00
+# 
+name: image effects
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 11 00 00 00
+# 
+name: teletext
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 52 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 48 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 21 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 4B 00 00 00
+# 
+name: Text On
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: swap
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 58 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 14 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1A 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 16 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 02 00 00 00
+# 
+name: pip move
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 4E 00 00 00
+# 
+name: digital 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1A 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 11 00 00 00
+# 
+name: Text Reveal
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 54 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 16 00 00 00
+# 
+name: D-Data
+type: parsed
+protocol: NEC
+address: 43 00 00 00
+command: 14 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 05 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 50 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1B 00 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 2D D2 00 00
+# 
+name: pip input
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 4F 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: CS
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7D 00 00 00
+# 
+name: PIP Channel Up
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5C 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: program-guide
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 45 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 52 00 00 00
+# 
+name: pip on
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 51 00 00 00
+# 
+name: BS
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7C 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5F 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5B 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 10 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1E 00 00 00
+# 
+name: text
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 2B 00 00 00

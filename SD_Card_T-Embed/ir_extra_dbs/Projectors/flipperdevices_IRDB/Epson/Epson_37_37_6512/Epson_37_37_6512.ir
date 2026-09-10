@@ -1,0 +1,146 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B2 4D 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 94 6B 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 92 6D 00 00
+# 
+name: color mode
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 8F 70 00 00
+# 
+name: video
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 9239 4623 579 1744 558 1744 586 578 558 586 578 579 585 579 558 586 579 1744 558 1744 585 579 558 1744 585 579 558 1744 585 579 558 1744 585 580 558 586 578 579 585 1724 578 1744 558 1744 585 579 558 586 578 1744 558 1744 585 1724 579 579 585 579 558 586 578 1744 558 1744 585 579 558 39265
+# 
+name: easy mp
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 9245 4616 585 1724 579 1744 558 586 579 579 585 579 558 586 578 579 585 1724 578 1744 558 586 578 1744 559 585 578 1744 558 586 579 1744 559 585 578 1744 558 586 579 1744 558 1744 585 1724 579 579 585 579 558 1745 585 579 558 1744 585 579 558 586 578 579 585 1724 579 1744 558 586 578 39256
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B0 4F 00 00
+# 
+name: aspect ratio
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 8A 75 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 90 6F 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 99 66 00 00
+# 
+name: av mute
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 9245 4616 586 1723 579 1744 558 586 578 579 585 579 558 586 578 579 585 1724 579 1744 558 586 579 1744 559 586 578 1744 558 586 579 1744 558 586 579 1744 559 1744 586 579 558 586 579 1744 559 585 579 579 585 1724 579 579 585 579 558 1744 586 1723 579 579 586 1723 579 1744 559 586 578 39249
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 84 7B 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 85 7A 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 98 67 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B1 4E 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 86 79 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 8C 73 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 87 78 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 9E 61 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 89 76 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 88 77 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 9A 65 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 93 6C 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B3 4C 00 00

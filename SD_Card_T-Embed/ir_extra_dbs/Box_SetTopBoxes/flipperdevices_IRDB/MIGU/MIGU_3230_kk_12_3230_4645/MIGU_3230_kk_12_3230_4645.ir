@@ -1,0 +1,188 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 52 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: vod
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 83 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: SURE
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 9A 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 8E 00 00 00
+# 
+name: delete
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 9B 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 8A 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 46 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 92 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 8B 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C4 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 40 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 55 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: apply
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: D8 00 00 00
+# 
+name: livetv
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: DA 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 93 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 8F 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 50 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C5 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: CC 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C8 00 00 00
+# 
+name: favorite
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C6 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 9C 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 47 00 00 00

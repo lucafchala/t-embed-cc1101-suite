@@ -1,0 +1,86 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 41 00 00 00
+# 
+name: sound_channel
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 0D 00 00 00
+# 
+name: up
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 40 00 00 00
+# 
+name: title
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 67 00 00 00
+# 
+name: power
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 1A 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 0B 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 2C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 0A 00 00 00
+# 
+name: right
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 43 00 00 00
+# 
+name: display
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8540 4279 495 1615 496 560 496 1615 495 1615 496 560 496 1614 496 559 495 1615 496 560 496 1615 496 560 495 560 495 1615 495 560 495 1615 495 560 496 1615 496 560 496 559 496 1615 496 1615 495 560 496 560 495 560 495 560 496 1615 495 1615 496 560 496 560 495 1615 496 1615 495 1615 496 25829 8540 4279 495 1615 495 1615 495 1615 495 1615 495 560 495 1641 496 560 495 1615 495 560 496 560 495 560 496 560 495 1615 495 560 495 1615 495 560 495 1615 496 560 495 1615 495 1615 496 560 495 1615 495 1615 495 560 496 559 495 1615 495 560 496 560 495 1615 495 560 495 560 495 1615 496 26214
+# 
+name: pause
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 58 00 00 00
+# 
+name: play
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 58 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 30 00 00 00
+# 
+name: left
+type: parsed
+protocol: Pioneer
+address: AD 00 00 00
+command: 42 00 00 00

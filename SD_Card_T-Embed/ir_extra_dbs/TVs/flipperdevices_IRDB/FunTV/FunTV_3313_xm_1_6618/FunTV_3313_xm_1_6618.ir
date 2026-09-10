@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: D8 27 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 80 7F 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: C3 3C 00 00
+# 
+name: search for
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 79 86 00 00
+# 
+name: Little Helper
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 71 8E 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 92 6D 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: D7 28 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 83 7C 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: DC 23 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 9B 64 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 70 8F 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 86 79 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 9F 60 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 8E 71 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: D4 2B 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 01 DF 00 00
+command: 97 68 00 00

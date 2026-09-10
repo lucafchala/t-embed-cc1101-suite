@@ -1,0 +1,128 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: 16:9
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 3C C3 00 00
+# 
+name: contrast+
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 36 C9 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 14 EB 00 00
+# 
+name: blank_off
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 43 BC 00 00
+# 
+name: keystone+
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 20 DF 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 0E F1 00 00
+# 
+name: contrast-
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 37 C8 00 00
+# 
+name: 4:3
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 3D C2 00 00
+# 
+name: resize
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 34 CB 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 13 EC 00 00
+# 
+name: brightness-
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 07 F8 00 00
+# 
+name: preset
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 2C D3 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 17 E8 00 00
+# 
+name: brightness+
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 03 FC 00 00
+# 
+name: blank_on
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 44 BB 00 00
+# 
+name: overscan
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 35 CA 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 10 EF 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 33 CC 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 32 CD 00 00
+# 
+name: keystone-
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 21 DE 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 4E 87 00 00
+command: 02 FD 00 00

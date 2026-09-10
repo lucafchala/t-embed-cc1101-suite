@@ -1,0 +1,152 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aspect
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: EA 00 00 00
+# 
+name: video
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D9 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: CD 00 00 00
+# 
+name: INPUT 1
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: DA 00 00 00
+# 
+name: s-video
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D8 00 00 00
+# 
+name: Memo4
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E4 00 00 00
+# 
+name: Memo1
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E1 00 00 00
+# 
+name: menu+
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: CF 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: DD 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: CC 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: DB 00 00 00
+# 
+name: hide
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: C6 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: C2 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D0 00 00 00
+# 
+name: picture
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D7 00 00 00
+# 
+name: automatic
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: C3 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E2 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E5 00 00 00
+# 
+name: still
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: DF 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E3 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: E6 00 00 00
+# 
+name: ESCAPE
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D5 00 00 00
+# 
+name: menu-
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: CE 00 00 00
+# 
+name: dvi
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: DC 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: D3 00 00 00

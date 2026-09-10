@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Preset Next
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 93 6C 00 00
+# 
+name: PreviousTrack
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 89 76 00 00
+# 
+name: prevpreset
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 89 76 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 94 6B 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 8B 74 00 00
+# 
+name: on a rail
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 91 6E 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 94 6B 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 97 68 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 8B 74 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 89 76 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 96 69 00 00
+# 
+name: nextpreset
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 93 6C 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 94 6B 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 8B 74 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 8F 70 00 00
+# 
+name: Preset Prev
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 91 6E 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 92 6D 00 00

@@ -1,0 +1,194 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: rew
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 27 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: pre_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 30 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0C 00 00 00
+# 
+name: pre
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: ff
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 28 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: ff_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 28 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: next
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: info
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: info_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: cancel_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 30 00 00 00
+# 
+name: cancel
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: rew_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 27 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00

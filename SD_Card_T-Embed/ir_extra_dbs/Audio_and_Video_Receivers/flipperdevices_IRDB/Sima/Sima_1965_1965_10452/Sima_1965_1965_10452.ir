@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: auto_in
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 07 F8 00 00
+# 
+name: vs_act
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 05 FA 00 00
+# 
+name: in4
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 10 EF 00 00
+# 
+name: in3
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 0E F1 00 00
+# 
+name: in2
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 0D F2 00 00
+# 
+name: in1
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 0B F4 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 01 FE 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 3F 00 00
+command: 00 FF 00 00

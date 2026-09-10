@@ -1,0 +1,86 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 0E 00 00 00
+# 
+name: 3D SWITCH
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 47 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 0B 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 4D 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 17 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 42 00 00 00
+# 
+name: ok
+type: raw
+frequency: 37900
+duty_cycle: 0.330000
+data: 8961 4412 599 1643 574 534 599 535 573 535 573 535 599 1617 573 535 599 535 626 509 599 1643 600 1643 573 1643 626 1616 599 535 599 1616 599 1616 626 1616 599 509 599 1616 599 1617 626 509 626 509 626 509 705 429 626 509 626 1616 600 508 599 509 626 1616 599 1616 626 1617 599 1616 599 38808 8987 2197 626 95439 8987 2197 573 94086
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 18 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 11 00 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 17 00 00 00
+# 
+name: media
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 54 00 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 18 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 43 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 10 00 00 00

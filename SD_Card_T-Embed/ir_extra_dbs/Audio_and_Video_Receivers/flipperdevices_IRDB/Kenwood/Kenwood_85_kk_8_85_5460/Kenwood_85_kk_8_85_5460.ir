@@ -1,0 +1,68 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: power
+type: parsed
+protocol: NEC
+address: B8 00 00 00
+command: 9D 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 8D 72 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: B8 00 00 00
+command: 9A 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 9E 61 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 8F 70 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: B8 00 00 00
+command: 9B 00 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 8B 74 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 91 6E 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: B8 01 00 00
+command: D6 29 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: B8 02 00 00
+command: 91 6E 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: B8 00 00 00
+command: 9C 00 00 00

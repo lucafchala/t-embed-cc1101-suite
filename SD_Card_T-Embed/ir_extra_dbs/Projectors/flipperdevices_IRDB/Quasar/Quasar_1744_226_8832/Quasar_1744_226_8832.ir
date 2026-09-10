@@ -1,0 +1,218 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: iris
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 33 CC 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3D C2 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8D 72 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 16 E9 00 00
+# 
+name: screen mode
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 82 7D 00 00
+# 
+name: color
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 32 CD 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 38 C7 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 43 BC 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 12 ED 00 00
+# 
+name: reset
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 19 E6 00 00
+# 
+name: contrast
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 31 CE 00 00
+# 
+name: Bright
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 30 CF 00 00
+# 
+name: s video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3E C1 00 00
+# 
+name: component1
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 83 7C 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 37 C8 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8C 73 00 00
+# 
+name: preset
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0E F1 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 00 FF 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0A F5 00 00
+# 
+name: sharpness
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 14 EB 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3C C3 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1C E3 00 00
+# 
+name: component2
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 81 7E 00 00
+# 
+name: color temperature
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 15 EA 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 09 F6 00 00
+# 
+name: no show
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8B 74 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1D E2 00 00
+# 
+name: lamp
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 18 E7 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 59 A6 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 5A A5 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 89 76 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0F F0 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 13 EC 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1C E3 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0B F4 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1E E1 00 00

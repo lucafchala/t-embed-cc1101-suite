@@ -1,0 +1,242 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: osd
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 43 00 00 00
+# 
+name: video
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 03 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 4B 00 00 00
+# 
+name: s-video
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 0B 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 4B 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 50 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 52 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 0E 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 0F 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 1E 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 15 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 00 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 47 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 1D 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 1F 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 11 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 1B 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 57 00 00 00
+# 
+name: dvi input
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 5A 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 4C 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 4C 00 00 00
+# 
+name: picture
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 54 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 55 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 04 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 51 00 00 00
+# 
+name: Comp
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 07 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 53 00 00 00
+# 
+name: Light
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 58 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 1C 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 53 00 00 00
+# 
+name: inputtv
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 06 00 00 00
+# 
+name: 5
+type: raw
+frequency: 37780
+duty_cycle: 0.330000
+data: 9067 4458 629 1636 602 1632 623 523 577 506 629 517 656 506 602 495 629 533 602 512 656 522 576 1627 602 1663 603 1650 576 1659 576 1643 602 1664 602 495 628 517 629 1623 629 502 603 1663 669 414 629 534 629 502 576 1692 543 1658 602 511 629 1637 629 502 629 1621 623 1644 603 1650 624 40236 9077 2192 605 96696
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 47 00 00 00
+# 
+name: effect
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 5C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 46 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 45 00 00 00
+# 
+name: sleep
+type: raw
+frequency: 37780
+duty_cycle: 0.330000
+data: 9116 4452 703 1563 681 1536 703 443 603 511 623 507 623 507 603 513 623 508 624 507 623 507 603 1618 681 1568 670 1581 657 1594 657 1577 656 1578 623 1611 682 465 624 1578 656 1579 629 518 623 523 602 496 624 508 624 508 603 1616 623 507 623 507 622 1626 623 1579 655 1579 656 1578 656 40191 9098 2162 623 96881
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 04 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 13 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 03 00 00 00
+command: 57 00 00 00

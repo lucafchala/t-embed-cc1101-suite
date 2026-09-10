@@ -1,0 +1,170 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: sat
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C0 3F 00 00
+# 
+name: cd-r
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 85 7A 00 00
+# 
+name: vcr
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C1 3E 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 84 7B 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 28 D7 00 00
+# 
+name: tuning
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 82 7D 00 00
+# 
+name: video3
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C1 3E 00 00
+# 
+name: video5
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 31 CE 00 00
+# 
+name: tape1
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8D 72 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 85 7A 00 00
+# 
+name: SAT Input
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C0 3F 00 00
+# 
+name: EXT1
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 2E D1 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 27 D8 00 00
+# 
+name: tape2
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 91 6E 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C2 3D 00 00
+# 
+name: video1
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: DD 22 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 80 7F 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8C 73 00 00
+# 
+name: video2
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8D 72 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 86 79 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 88 77 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 2A D5 00 00
+# 
+name: Video6
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 1E E1 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: DA 25 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 81 7E 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 94 6B 00 00
+# 
+name: video4
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 30 CF 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 29 D6 00 00

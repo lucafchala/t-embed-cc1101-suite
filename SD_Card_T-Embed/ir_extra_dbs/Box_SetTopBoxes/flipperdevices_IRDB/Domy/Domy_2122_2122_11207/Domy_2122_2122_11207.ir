@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: D2 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 88 00 00 00
+# 
+name: game
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: search for
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 35 00 00 00
+# 
+name: Cleaning
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 36 00 00 00
+# 
+name: movie
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 30 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: CA 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: DC 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 81 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C5 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: CE 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 80 00 00 00
+# 
+name: apply
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: C1 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 82 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: E2 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 99 00 00 00
+# 
+name: hd
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 33 00 00 00

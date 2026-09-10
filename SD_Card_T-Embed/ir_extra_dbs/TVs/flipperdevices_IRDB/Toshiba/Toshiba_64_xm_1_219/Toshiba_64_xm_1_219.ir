@@ -1,0 +1,224 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8561 4244 538 527 539 1600 539 1599 539 527 539 527 538 527 539 527 539 1599 538 1599 539 1599 538 527 538 1599 539 527 538 1599 538 1599 538 527 538 527 539 1600 539 1599 538 1599 538 1601 538 527 538 527 538 527 538 1599 538 527 538 527 539 527 539 527 539 1599 539 1599 538 1599 539 43406
+# 
+name: INPUT 1
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 02 FD 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 19 E6 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 54 AB 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 0D F2 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 07 F8 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 0A F5 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 1A E5 00 00
+# 
+name: 1
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8560 4245 538 528 539 1600 539 1599 539 528 539 527 539 527 539 527 538 1600 538 1599 539 1599 539 528 539 1599 538 527 538 1599 539 1599 538 527 539 527 538 527 539 1600 539 527 539 527 539 527 539 527 538 527 539 1599 538 1601 539 527 538 1599 539 1605 538 1599 538 1600 539 1599 539 43389
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 00 FF 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 12 ED 00 00
+# 
+name: sap
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 5E A1 00 00
+# 
+name: 9
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8563 4242 539 527 539 1600 539 1599 538 528 539 527 539 527 539 528 538 1599 539 1599 539 1599 539 527 539 1599 539 527 539 1599 539 1602 539 527 539 1599 539 1599 538 1599 539 527 538 1599 539 527 538 527 539 527 539 527 538 528 540 530 539 1599 538 527 539 1601 539 1599 538 1599 539 43387
+# 
+name: vol-
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8576 4234 538 526 537 1599 539 1599 538 526 537 526 538 527 539 527 539 1597 539 1599 539 1599 539 528 538 1599 538 527 539 1599 539 1599 539 527 538 1599 539 1599 538 528 540 528 540 1602 540 528 540 529 539 527 538 527 539 527 539 1599 539 1599 539 527 539 1599 538 1599 539 1599 539 43392
+# 
+name: previous
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8560 4243 538 527 538 1599 538 1599 539 527 539 527 538 527 538 527 539 1599 538 1599 539 1599 539 527 538 1601 539 527 539 1600 538 1600 540 528 539 1599 538 527 538 1599 539 1601 538 1599 539 527 539 527 539 527 538 527 538 1599 538 528 538 527 538 527 539 1599 539 1599 539 1599 539 43401
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 1D E2 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 54 AB 00 00
+# 
+name: INPUT 2
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 03 FC 00 00
+# 
+name: vol+
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8547 4245 539 528 538 1596 537 1599 537 527 538 527 539 527 538 528 538 1599 538 1599 539 1599 539 527 539 1599 539 528 539 1601 538 1599 539 527 538 1599 538 1599 539 1599 539 1599 538 527 538 528 538 527 538 527 539 527 538 528 538 527 538 527 538 1599 538 1599 538 1599 538 1599 539 43424
+# 
+name: info
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 51 AE 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 05 FA 00 00
+# 
+name: right
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8561 4243 538 527 538 1599 539 1599 538 527 539 528 538 528 539 527 538 1599 539 1599 538 1599 539 527 539 1599 538 527 539 1599 539 1599 538 527 538 1599 539 1599 539 1599 539 1599 538 1599 538 528 538 527 538 527 538 528 538 527 538 527 538 527 538 528 538 1599 538 1600 539 1599 539 43407
+# 
+name: picture mode
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 59 A6 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 51 AE 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 08 F7 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 10 EF 00 00
+# 
+name: effect
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 4D B2 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 06 F9 00 00
+# 
+name: +100
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 0E F1 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 01 FE 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 09 F6 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 1D E2 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 52 AD 00 00
+# 
+name: INPUT 3
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 01 FE 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 86 6B 00 00
+command: 54 AB 00 00
+# 
+name: mute
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8574 4243 539 527 539 1599 540 1600 539 527 539 527 539 527 539 527 539 1600 539 1600 539 1599 539 527 539 1599 538 527 539 1599 538 1599 539 527 539 527 539 527 539 1599 539 1599 539 1599 539 527 539 527 539 527 539 1599 539 1599 539 527 539 527 538 527 539 1599 538 1599 539 1599 539 43380
+# 
+name: left
+type: raw
+frequency: 37820
+duty_cycle: 0.330000
+data: 8560 4243 539 527 539 1599 539 1597 539 527 539 527 538 527 539 527 539 1599 539 1602 538 1601 539 528 538 1599 539 527 539 1599 539 1599 538 527 539 1599 539 1599 539 527 539 1599 539 1599 538 527 539 527 539 527 539 527 539 527 539 1599 539 527 539 527 538 1599 539 1599 539 1600 540 43394

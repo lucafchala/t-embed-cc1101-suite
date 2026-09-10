@@ -1,0 +1,56 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: NEAR
+type: parsed
+protocol: SIRC15
+address: D9 00 00 00
+command: 1B 00 00 00
+# 
+name: NEAR
+type: parsed
+protocol: SIRC
+address: 19 00 00 00
+command: 1B 00 00 00
+# 
+name: FAR
+type: parsed
+protocol: SIRC15
+address: D9 00 00 00
+command: 1A 00 00 00
+# 
+name: shutter
+type: parsed
+protocol: SIRC20
+address: 7A 00 00 00
+command: 30 00 00 00
+# 
+name: right
+type: parsed
+protocol: SIRC20
+address: 5A 04 00 00
+command: 7C 00 00 00
+# 
+name: left
+type: parsed
+protocol: SIRC20
+address: 5A 04 00 00
+command: 7B 00 00 00
+# 
+name: down
+type: parsed
+protocol: SIRC20
+address: 5A 04 00 00
+command: 7A 00 00 00
+# 
+name: up
+type: parsed
+protocol: SIRC20
+address: 5A 04 00 00
+command: 79 00 00 00
+# 
+name: ok
+type: parsed
+protocol: SIRC20
+address: 5A 04 00 00
+command: 0B 00 00 00

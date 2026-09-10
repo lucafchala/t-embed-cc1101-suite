@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: E0 90 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: C0 D0 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 0E 0C 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 0B 09 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 4C 65 00 00
+command: 0A F5 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 60 0E 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 05 70 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 0A 0B 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 07 05 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: F0 80 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: A0 07 00 00
+# 
+name: letv
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 20 0F 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: D0 06 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 70 60 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 06 0D 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: B7 3E 00 00
+command: 0D 0A 00 00

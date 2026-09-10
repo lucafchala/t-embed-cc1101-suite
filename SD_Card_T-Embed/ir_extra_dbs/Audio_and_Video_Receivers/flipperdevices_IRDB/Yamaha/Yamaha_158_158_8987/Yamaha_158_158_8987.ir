@@ -1,0 +1,254 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: hdmi3
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 4D 32 00 00
+# 
+name: direct
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: DD 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 9C 00 00 00
+# 
+name: music
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 89 00 00 00
+# 
+name: av1
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 53 2C 00 00
+# 
+name: hdmi5
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 70 0F 00 00
+# 
+name: audio1
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 65 1A 00 00
+# 
+name: hdmi4
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 50 2F 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 5A A5 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 54 AB 00 00
+# 
+name: movie
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 88 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 57 A8 00 00
+# 
+name: av5
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 5F 20 00 00
+# 
+name: sur_decode
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 8D 00 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 47 38 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 9D 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 51 AE 00 00
+# 
+name: option
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 6B 14 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 58 A7 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 7E 00 00 00
+command: 2A 00 00 00
+# 
+name: straight
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 56 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 59 A6 00 00
+# 
+name: av2
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 56 29 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1B 00 00 00
+# 
+name: audio2
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 68 17 00 00
+# 
+name: av4
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 5C 23 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: AA 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: DE 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1A 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 52 AD 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 9E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 56 A9 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 65 1A 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 84 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 53 AC 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 16 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 7F 01 00 00
+command: 56 A9 00 00
+# 
+name: av3
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 59 26 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 4A 35 00 00
+# 
+name: av6
+type: parsed
+protocol: NECext
+address: 7A 85 00 00
+command: 62 1D 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 1C 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 7A 00 00 00
+command: 9F 00 00 00

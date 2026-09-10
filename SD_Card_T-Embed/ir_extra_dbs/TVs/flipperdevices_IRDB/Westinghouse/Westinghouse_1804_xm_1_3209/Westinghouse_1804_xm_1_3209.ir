@@ -1,0 +1,218 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aspect
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: DC 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9D 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8F 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 98 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: CA 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: C9 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 95 00 00 00
+# 
+name: mode
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: DB 00 00 00
+# 
+name: --
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 94 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8C 00 00 00
+# 
+name: guide
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: D5 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 90 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 99 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 88 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9A 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 91 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 82 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 92 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8B 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: C8 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9A 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: CB 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 93 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9F 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: D9 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 89 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8D 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9B 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8A 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 8E 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 96 00 00 00
+# 
+name: favorite
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: C1 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 97 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: D0 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 9C 00 00 00

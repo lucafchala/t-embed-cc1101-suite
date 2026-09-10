@@ -1,0 +1,518 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: top menu
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9C 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 59 00 00 00
+# 
+name: options_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: C9 00 00 00
+# 
+name: home
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 92 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 30 00 00 00
+# 
+name: yellow_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6F 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0C 00 00 00
+# 
+name: pop-up menu_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: pop-up menu
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 29 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 06 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5B 00 00 00
+# 
+name: Subtitle_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4B 00 00 00
+# 
+name: eject_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6F 00 00 00
+# 
+name: eject
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: disc
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6D 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 05 00 00 00
+# 
+name: green
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6E 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 2C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 00 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 28 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 04 00 00 00
+# 
+name: back_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 83 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 04 00 00 00
+# 
+name: disc menu
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: sound_source
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 70 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 58 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 58 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 01 00 00 00
+# 
+name: green_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6E 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 28 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 08 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5C 00 00 00
+# 
+name: disc_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6D 00 00 00
+# 
+name: next
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: SOUND SETTINGS_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: CD 00 00 00
+# 
+name: disc menu_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 21 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 83 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: red
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6D 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5C 00 00 00
+# 
+name: blue
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 70 00 00 00
+# 
+name: Subtitle
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4B 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 01 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 29 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 10 00 00 00
+# 
+name: sound_source_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 70 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0D 00 00 00
+# 
+name: SOUND SETTINGS
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: CD 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5B 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 11 00 00 00
+# 
+name: top menu_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9C 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 05 00 00 00
+# 
+name: help_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6F 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 03 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 30 00 00 00
+# 
+name: options
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: C9 00 00 00
+# 
+name: blue_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 70 00 00 00
+# 
+name: help
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6F 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 2C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 03 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 06 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 08 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 21 00 00 00
+# 
+name: ipod_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6E 00 00 00
+# 
+name: home_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 92 00 00 00
+# 
+name: ipod
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6E 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 6D 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5A 00 00 00

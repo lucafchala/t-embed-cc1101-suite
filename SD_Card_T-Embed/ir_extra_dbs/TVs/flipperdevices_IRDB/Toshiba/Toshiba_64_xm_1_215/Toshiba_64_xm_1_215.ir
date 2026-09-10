@@ -1,0 +1,266 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 81 00 00 00
+# 
+name: caption
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 28 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: A8 00 00 00
+# 
+name: sound mode
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 43 00 00 00
+# 
+name: AUX 2
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 29 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 22 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 0A 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 04 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 07 00 00 00
+# 
+name: Title (Top) Menu
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: DE 00 00 00
+# 
+name: Skip Reverse
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 23 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 80 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 01 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 13 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 08 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 12 00 00 00
+# 
+name: sap
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 27 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 14 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: C9 00 00 00
+# 
+name: Cancel
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: EF 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 84 00 00 00
+# 
+name: Text On
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 2E 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 19 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: E0 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: C8 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 16 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 4D 00 00 00
+# 
+name: random
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 2E 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: EE 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 05 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 00 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: A9 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 15 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 03 00 00 00
+# 
+name: +100
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 25 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 06 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 21 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: C7 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 84 00 00 00
+# 
+name: Setup Menu
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 20 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: BD 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 51 00 00 00

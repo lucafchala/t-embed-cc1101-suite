@@ -1,0 +1,212 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 23 DC 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 06 F9 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 09 F6 00 00
+# 
+name: music
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 22 DD 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 03 FC 00 00
+# 
+name: yellow
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 26 D9 00 00
+# 
+name: green
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 25 DA 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 10 EF 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 14 EB 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 17 E8 00 00
+# 
+name: export
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 2B D4 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 05 FA 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 11 EE 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 18 E7 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 00 FF 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 19 E6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 29 D6 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 1A E5 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 1B E4 00 00
+# 
+name: red
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 24 DB 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 04 FB 00 00
+# 
+name: blue
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 27 D8 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 28 D7 00 00
+# 
+name: livetv
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 20 DF 00 00
+# 
+name: hotkeys
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 0A F5 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 12 ED 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 08 F7 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 15 EA 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 2A D5 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 13 EC 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 16 E9 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 21 DE 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 02 FD 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 01 FE 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: CC 1D 00 00
+command: 07 F8 00 00

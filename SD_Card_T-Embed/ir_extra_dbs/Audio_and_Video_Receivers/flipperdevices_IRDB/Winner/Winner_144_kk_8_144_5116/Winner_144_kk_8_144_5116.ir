@@ -1,0 +1,86 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: D6 29 00 00
+# 
+name: a+b
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: CB 34 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: C6 39 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: DA 25 00 00
+# 
+name: AMP MODE
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: DB 24 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: DF 20 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: CE 31 00 00
+# 
+name: xlr
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: DE 21 00 00
+# 
+name: amp
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: D7 28 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: CA 35 00 00
+# 
+name: b
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: CF 30 00 00
+# 
+name: SACD
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: C7 38 00 00
+# 
+name: a
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: D3 2C 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 20 CF 00 00
+command: D2 2D 00 00

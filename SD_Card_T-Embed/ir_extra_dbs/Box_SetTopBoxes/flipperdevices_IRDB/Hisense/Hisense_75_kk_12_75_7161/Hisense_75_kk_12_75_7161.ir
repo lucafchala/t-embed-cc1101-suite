@@ -1,0 +1,92 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 92 6D 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 17 E8 00 00
+# 
+name: game
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 93 6C 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 16 E9 00 00
+# 
+name: online education
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 90 6F 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 0D F2 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 9E 61 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 48 B7 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 15 EA 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: AA 55 00 00
+# 
+name: apply
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 91 6E 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 18 E7 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 98 67 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 14 EB 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 00 BC 00 00
+command: 19 E6 00 00

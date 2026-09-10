@@ -1,0 +1,542 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: ld_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 0C 00 00 00
+# 
+name: vcr2
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 31 00 00 00
+# 
+name: tv
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 33 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 20 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 11 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 33 00 00 00
+# 
+name: radios
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 30 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 0C 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 06 00 00 00
+# 
+name: cable
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2F 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 16 00 00 00
+# 
+name: ld
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 0C 00 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2D 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: broadcast
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2C 00 00 00
+# 
+name: dvd_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 34 00 00 00
+# 
+name: cd
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2B 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 05 00 00 00
+# 
+name: acr2_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2E 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: acr1_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2D 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 00 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 34 00 00 00
+# 
+name: cable_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2F 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 04 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 04 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 11 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 15 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 10 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 10 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 01 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 34 00 00 00
+# 
+name: radios_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: cp
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 34 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 08 00 00 00
+# 
+name: cdr
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: magnetic tape_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2D 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 36 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 11 00 00 00
+# 
+name: cdr_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: cd_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2B 00 00 00
+# 
+name: next
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 20 00 00 00
+# 
+name: clear_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 31 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 21 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 36 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 01 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 32 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 00 00 00 00
+# 
+name: vcr2_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 31 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 16 00 00 00
+# 
+name: storage
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 2E 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 11 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 3A 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 05 00 00 00
+# 
+name: help_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 39 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 03 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 30 00 00 00
+# 
+name: diapason_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2C 00 00 00
+# 
+name: help
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 39 00 00 00
+# 
+name: diapason
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2C 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 03 00 00 00
+# 
+name: vcr1
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 30 00 00 00
+# 
+name: broadcast_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2C 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 06 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 3A 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 08 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 21 00 00 00
+# 
+name: acr1
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2D 00 00 00
+# 
+name: cp_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 35 00 00 00
+# 
+name: storage_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 2E 00 00 00
+# 
+name: vcr1_r
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 30 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 09 00 00 00
+# 
+name: clear
+type: parsed
+protocol: RC5
+address: 13 00 00 00
+command: 31 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 15 00 00 00
+# 
+name: acr2
+type: parsed
+protocol: RC5X
+address: 13 00 00 00
+command: 2E 00 00 00

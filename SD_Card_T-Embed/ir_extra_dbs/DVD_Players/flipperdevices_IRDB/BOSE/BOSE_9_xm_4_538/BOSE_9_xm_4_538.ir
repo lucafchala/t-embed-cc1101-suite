@@ -1,0 +1,170 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: seek+
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 60 9F 00 00
+# 
+name: tune+
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: C0 3F 00 00
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 0F F0 00 00
+# 
+name: rew
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 57 A8 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 20 DF 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 18 E7 00 00
+# 
+name: ff
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 58 A7 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 40 BF 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 44 BB 00 00
+# 
+name: left_r
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: A0 5F 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 47 B8 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 41 BE 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 48 B7 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 4C B3 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 1A E5 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 49 B6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 02 FD 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: E0 1F 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 03 FC 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 42 BD 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 45 BA 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 36 C9 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 19 E6 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 55 AA 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 43 BC 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 46 B9 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 90 6F 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: 01 FE 00 00

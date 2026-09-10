@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1214 1213 607 606 607 607 606 606 607 606 607 606 607 606 607 606 607 606 1214 606 607 606 607 606 607 606 607 606 607 606 607 5377
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 10 EF 00 00
+# 
+name: mouse
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1212 608 606 1215 606 608 606 608 605 608 606 608 606 608 606 608 606 608 606 608 606 608 606 608 606 608 606 608 606 608 606 608 606 4758
+# 
+name: pincushion-
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 0D F2 00 00
+# 
+name: up
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1214 1212 608 606 607 606 607 606 608 606 607 606 607 606 608 606 607 606 607 606 608 606 607 606 607 606 608 606 607 606 1214 5373
+# 
+name: pincushion+
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 09 F6 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 02 FD 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 0B F4 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 17 E8 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 08 F7 00 00
+# 
+name: right
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1214 1213 607 606 607 606 607 606 607 606 607 606 607 606 1214 1213 607 606 607 606 607 606 607 606 607 606 607 606 607 606 607 4770
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 04 FB 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 0E F1 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 0A F5 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 11 EE 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 4F 50 00 00
+command: 0F F0 00 00
+# 
+name: left
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1214 1213 1214 606 608 606 607 606 607 606 608 606 607 606 607 1213 607 606 608 606 607 606 607 606 608 606 607 606 607 606 608 4765

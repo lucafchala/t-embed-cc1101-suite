@@ -1,0 +1,164 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 0
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8947 4579 500 1737 500 579 526 579 526 632 474 605 500 658 447 579 526 605 500 605 500 579 526 1737 500 579 579 526 526 579 526 553 553 579 526 1737 500 632 474 1684 553 658 447 1737 500 579 526 1737 526 553 526 579 526 1711 526 553 684 1579 526 553 553 1763 474 553 579 1684 526 46342 8947 2263 553 96105
+# 
+name: --
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 01 04 00 00
+command: 55 AA 00 00

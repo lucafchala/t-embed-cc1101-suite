@@ -1,0 +1,122 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: osd
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 01 FE 00 00
+# 
+name: contrast+
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 08 F7 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 21 DE 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 27 D8 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 16 E9 00 00
+# 
+name: keystone+
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 19 E6 00 00
+# 
+name: contrast-
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 12 ED 00 00
+# 
+name: reset
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 20 DF 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 23 DC 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 25 DA 00 00
+# 
+name: brightness-
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 13 EC 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 02 FD 00 00
+# 
+name: brightness+
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 09 F6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 14 EB 00 00
+# 
+name: rgb2
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 06 F9 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 10 EF 00 00
+# 
+name: rgb1
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 05 FA 00 00
+# 
+name: keystone-
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 22 DD 00 00
+# 
+name: test
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 24 DB 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 84 36 00 00
+command: 07 F8 00 00

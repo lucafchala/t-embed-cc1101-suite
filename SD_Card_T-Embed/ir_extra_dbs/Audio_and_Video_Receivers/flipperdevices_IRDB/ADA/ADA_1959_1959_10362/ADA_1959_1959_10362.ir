@@ -1,0 +1,152 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: hall
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 1C 00 00 00
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 0B 00 00 00
+# 
+name: 3d
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 15 00 00 00
+# 
+name: tape1
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 4426 4595 522 612 496 639 522 639 496 639 522 612 496 639 496 1746 496 1746 522 612 496 639 496 639 496 639 496 639 495 639 496 1746 522 1746 522 612 496 1774 495 1773 496 1773 496 639 523 638 496 639 522 612 496 1773 496 639 496 612 496 639 522 1746 522 1746 522 1746 522 1746 522 49039 4426 4595 496 1746 496 95798
+# 
+name: cinema
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 05 00 00 00
+# 
+name: phantom
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 14 00 00 00
+# 
+name: AV
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: E0 00 00 00
+# 
+name: normal
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 04 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 0A 00 00 00
+# 
+name: karaoke
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 09 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 1E 00 00 00
+# 
+name: loud
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 4426 4595 522 639 496 639 522 612 496 638 522 639 496 639 522 1746 522 1747 496 639 496 638 522 639 496 639 496 612 496 639 522 1746 522 1746 496 1746 522 639 496 1773 496 1773 496 1773 495 639 522 612 496 639 522 639 496 1773 496 639 522 639 496 639 496 1746 522 1746 522 1746 522 49039 4478 4569 522 1746 522 95588
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 19 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 1B 00 00 00
+# 
+name: vcd
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 06 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 1A 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 12 00 00 00
+# 
+name: wide
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 0C 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 20 00 00 00
+# 
+name: delay
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 4504 4516 548 586 548 586 549 586 548 586 548 586 549 586 575 1667 548 1694 574 560 548 586 548 586 548 586 548 586 548 586 548 1694 548 1694 548 1694 548 586 548 586 548 586 548 1720 549 586 496 639 496 639 548 586 496 1773 496 1773 496 1773 496 639 496 1747 522 1746 496 1746 522 49039 4505 4542 549 1694 548 95857
+# 
+name: test
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 01 00 00 00
+# 
+name: hifi
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 0D 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 19 00 00 00
+# 
+name: ac-3
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 16 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: C0 00 00 00
+command: 13 00 00 00

@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8998 4485 554 539 580 539 580 539 580 539 579 539 580 539 554 539 580 1670 553 1670 580 1644 580 1670 553 1670 580 1644 580 1670 553 1670 580 539 579 539 579 539 580 1644 579 1670 554 539 579 539 579 539 579 539 685 1565 553 1671 579 539 579 539 580 1670 553 1670 579 1644 579 1670 553 39950 8998 2223 579 95637
+# 
+name: freeze
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1A 00 00 00
+# 
+name: 3d
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0B 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 08 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 12 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 06 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0D 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1B 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 03 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1F 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 09 00 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 05 00 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 02 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 07 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1E 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0A 00 00 00

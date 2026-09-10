@@ -1,0 +1,170 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 34 CB 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 56 A9 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 3A C5 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 60 9F 00 00
+# 
+name: --
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 60 9F 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 64 9B 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 67 98 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 31 CE 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 61 9E 00 00
+# 
+name: 8
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 533 522 534 522 534 522 533 522 534 522 533 522 1615 522 534 522 1615 522 534 522 1615 522 534 522 533 522 1615 522 533 522 533 522 533 522 533 522 534 522 1615 522 534 521 1615 522 1615 522 534 522 1615 522 1615 522 1615 522 533 522 1615 522 534 522 534 522 1615 522 47905
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 4A B5 00 00
+# 
+name: 9
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 534 521 534 522 534 522 534 522 534 522 533 522 1615 522 534 522 1615 522 534 522 1615 522 534 522 533 522 1615 522 533 522 534 522 1615 522 533 522 533 522 1615 522 534 521 1615 522 1615 522 533 522 533 522 1615 521 1615 522 534 522 1615 522 534 522 534 522 1614 522 47906
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 59 A6 00 00
+# 
+name: ok
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 533 522 534 522 534 522 533 522 534 522 534 522 1615 522 533 522 1615 522 534 521 1615 522 534 522 533 522 1615 522 533 522 534 521 533 522 534 522 1615 522 1615 522 534 522 534 522 1615 522 534 522 1615 522 1615 522 534 522 533 522 1615 522 1615 522 533 522 1615 522 47905
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 37 C8 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 6C 93 00 00
+# 
+name: 2
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 533 522 534 522 534 522 533 522 534 522 533 522 1615 522 533 522 1615 522 533 522 1615 522 534 522 534 522 1615 522 533 522 534 522 534 522 1615 522 533 522 534 522 534 521 1615 522 1615 522 533 522 1615 522 534 522 1615 522 1615 522 1615 522 534 522 533 522 1615 522 47905
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 33 CC 00 00
+# 
+name: display
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 533 522 534 522 533 522 533 522 533 522 533 522 1615 522 533 522 1615 522 534 522 1615 522 533 522 534 522 1615 522 534 521 534 522 534 522 1615 522 534 522 534 522 1615 522 1615 521 1615 522 534 522 1615 522 533 522 1616 521 1615 522 534 522 534 522 534 522 1615 522 47905
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 65 9A 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 55 AA 00 00
+# 
+name: 3
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 534 522 533 522 534 522 533 522 534 522 533 522 1615 522 534 522 1615 522 534 522 1615 522 534 522 533 522 1615 521 533 522 534 521 1615 522 1615 522 534 522 533 522 534 522 1615 522 1615 522 533 522 534 522 534 522 1615 522 1616 521 1615 522 534 522 533 522 1615 522 47905
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 66 99 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 3F C0 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 73 8C 00 00
+# 
+name: menu
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8566 4253 522 533 522 534 522 534 522 533 522 534 522 533 522 1615 522 534 522 1615 522 533 522 1615 522 534 522 533 522 1615 522 533 522 534 522 534 522 534 522 1615 522 1615 522 534 522 533 522 1615 522 534 522 1615 522 1615 521 534 522 534 522 1615 522 1615 522 534 522 1615 522 47903
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 71 8E 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 32 CD 00 00

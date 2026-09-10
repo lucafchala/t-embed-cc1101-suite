@@ -1,0 +1,530 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: slp
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3A 00 00 00
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 21 00 00 00
+# 
+name: vcr plus
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 05 00 00 00
+# 
+name: pic ctrl_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 21 00 00 00
+# 
+name: audio_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 23 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 35 00 00 00
+# 
+name: speed+_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 26 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0C 00 00 00
+# 
+name: vess>>
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 30 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 32 00 00 00
+# 
+name: f adv_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 2B 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: mem
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3B 00 00 00
+# 
+name: trk+_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 0D 00 00 00
+# 
+name: record_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 37 00 00 00
+# 
+name: vess<<_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: eject_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 2D 00 00 00
+# 
+name: eject
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 2D 00 00 00
+# 
+name: var play
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 28 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: trk-_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 0E 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 05 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 29 00 00 00
+# 
+name: speed+
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 26 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 00 00 00 00
+# 
+name: skip_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 34 00 00 00
+# 
+name: trk-
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 0E 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 04 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 04 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 07 00 00 00
+# 
+name: var play_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 28 00 00 00
+# 
+name: vcr
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 01 00 00 00
+# 
+name: speed-_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 25 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 34 00 00 00
+# 
+name: cnt
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3C 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 08 00 00 00
+# 
+name: speed-
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 25 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0C 00 00 00
+# 
+name: mem_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3B 00 00 00
+# 
+name: status_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0F 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 36 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 09 00 00 00
+# 
+name: vcr_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: otr
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 27 00 00 00
+# 
+name: clear_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: status
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0F 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 36 00 00 00
+# 
+name: f adv
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 2B 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 01 00 00 00
+# 
+name: record
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 37 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 32 00 00 00
+# 
+name: pic ctrl
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 00 00 00 00
+# 
+name: vess>>_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 30 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 02 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 03 00 00 00
+# 
+name: vess<<
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 35 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 20 00 00 00
+# 
+name: slp_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3A 00 00 00
+# 
+name: audio
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 23 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 29 00 00 00
+# 
+name: cnt_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 03 00 00 00
+# 
+name: +100
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0A 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: otr_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 27 00 00 00
+# 
+name: +100_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 0A 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 08 00 00 00
+# 
+name: trk+
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 0D 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 09 00 00 00
+# 
+name: skip
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: clear
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: vcr plus_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 05 00 00 00

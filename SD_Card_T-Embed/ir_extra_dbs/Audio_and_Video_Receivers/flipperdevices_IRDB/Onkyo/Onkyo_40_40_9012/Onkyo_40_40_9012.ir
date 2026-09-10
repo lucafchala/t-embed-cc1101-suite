@@ -1,0 +1,242 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: D2 09 00 00
+command: 83 7C 00 00
+# 
+name: cycle
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 56 A9 00 00
+# 
+name: heavy bass
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 9B 64 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 9C 63 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 48 B7 00 00
+# 
+name: folder
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 81 7E 00 00
+# 
+name: dim
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 95 6A 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 09 F6 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 08 F7 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: D8 27 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: DB 24 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: D2 09 00 00
+command: 82 7D 00 00
+# 
+name: tone
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 49 B6 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: D5 2A 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 8A 75 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: DC 23 00 00
+# 
+name: usb
+type: parsed
+protocol: NECext
+address: D2 05 00 00
+command: 9E 61 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: CB 34 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 1C E3 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: DD 22 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 03 FC 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 17 E8 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 8B 74 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 02 FD 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: D6 29 00 00
+# 
+name: progressive
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 06 F9 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 1D E2 00 00
+# 
+name: sd
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 09 F6 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: D9 26 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: D2 1A 00 00
+command: 44 BB 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: D2 1A 00 00
+command: 44 BB 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: D7 28 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: DA 25 00 00
+# 
+name: digital
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 56 A9 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 5D A2 00 00
+# 
+name: cross
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 57 A8 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: D2 04 00 00
+command: 14 EB 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 05 FA 00 00
+# 
+name: clear
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 9E 61 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: D2 03 00 00
+command: 1E E1 00 00

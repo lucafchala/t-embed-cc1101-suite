@@ -1,0 +1,248 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: go
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8953 4526 539 595 512 596 486 596 512 622 512 596 512 596 486 648 512 622 486 1730 512 1704 512 1703 539 1677 539 1677 539 1703 539 1703 539 1756 486 596 407 1782 486 1703 512 596 512 1703 512 596 512 622 486 596 512 1703 539 596 512 622 486 1730 486 596 512 1730 512 1703 460 1730 539 40266 8926 2363 486 96605
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: caption
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 5F 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 46 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 54 00 00 00
+# 
+name: display information
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 59 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: angle
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 5B 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: title
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 41 00 00 00
+# 
+name: b
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 48 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4B 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 53 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0B 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: next
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8979 4526 539 596 486 596 512 596 512 596 486 622 512 596 512 595 513 595 486 1756 486 1704 512 1704 512 1703 512 1703 512 1703 512 1703 512 1704 512 1756 486 622 512 596 512 1704 538 1704 512 622 459 622 513 595 512 648 433 1756 486 1703 512 596 512 596 512 1677 539 1703 539 1703 512 40292 8979 2257 512 96663
+# 
+name: slow
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 57 00 00 00
+# 
+name: previous
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8794 4526 539 595 512 596 486 596 512 596 512 596 512 596 486 596 512 622 512 1677 539 1677 539 1677 539 1703 512 1703 539 1677 539 1677 539 1703 512 596 486 1703 512 1730 486 622 512 596 512 596 486 1730 512 596 512 1703 539 596 512 596 460 1730 512 1756 486 1756 407 701 486 1703 512 40266 8927 2336 539 96842
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 51 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: ch+
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8979 4526 459 701 486 595 512 596 512 596 486 596 512 596 512 596 486 596 512 1756 486 1677 539 1677 539 1677 539 1704 539 1677 539 1677 539 1703 512 1703 512 622 512 595 486 1730 486 1730 512 596 512 596 512 596 512 596 486 1756 486 1703 539 596 512 596 539 1703 512 1703 512 1677 539 40292 8953 2257 539 96658
+# 
+name: page_up
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: audio
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 4F 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 46 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 52 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1C 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: left
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8926 4605 486 648 460 622 486 648 486 622 459 648 460 622 512 596 486 648 460 1730 460 1835 460 1730 485 1756 486 1783 486 1703 486 1730 486 1783 459 622 486 1756 486 622 486 1730 486 622 460 648 486 1730 512 622 486 1703 539 596 460 1783 486 596 486 1730 486 1730 486 622 486 1756 486 40292 8953 2284 486 96576
+# 
+name: +10
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 40 00 00 00

@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 57 00 00 00
+# 
+name: into
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 43 00 00 00
+# 
+name: program_down
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 11 00 00 00
+# 
+name: 100+
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 40 00 00 00
+# 
+name: PAUSE
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 56 00 00 00
+# 
+name: power
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 1B 00 00 00
+# 
+name: right
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 4A 00 00 00
+# 
+name: selection
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 13 00 00 00
+# 
+name: last
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 4A 00 00 00
+# 
+name: program_up
+type: parsed
+protocol: Pioneer
+address: A4 00 00 00
+command: 10 00 00 00

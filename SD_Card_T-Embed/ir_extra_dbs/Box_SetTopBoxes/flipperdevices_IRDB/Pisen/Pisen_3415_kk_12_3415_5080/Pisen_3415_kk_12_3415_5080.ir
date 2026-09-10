@@ -1,0 +1,92 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: D2 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 80 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: CA 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 9F 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 88 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 81 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: CE 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 82 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: C1 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 95 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 73 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 95 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: C5 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 9C 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: B3 00 00 00
+command: 99 00 00 00

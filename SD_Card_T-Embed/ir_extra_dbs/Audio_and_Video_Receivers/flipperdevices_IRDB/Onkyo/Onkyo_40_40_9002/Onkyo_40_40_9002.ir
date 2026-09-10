@@ -1,0 +1,272 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 9F 60 00 00
+# 
+name: sat
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 0E F1 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 83 7C 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: D2 19 00 00
+command: C0 3F 00 00
+# 
+name: music
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 92 6D 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 9C 63 00 00
+# 
+name: dvr
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 0F F0 00 00
+# 
+name: game
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 93 6C 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: D2 6C 00 00
+command: 8C 73 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: DE 21 00 00
+# 
+name: net
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 87 78 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: D8 27 00 00
+# 
+name: guide
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 94 6B 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: DB 24 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 82 7D 00 00
+# 
+name: am
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 47 B8 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 09 F6 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: D5 2A 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 80 7F 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: DC 23 00 00
+# 
+name: usb
+type: parsed
+protocol: NECext
+address: D2 AC 00 00
+command: 9E 61 00 00
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 97 68 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: D2 6C 00 00
+command: CB 34 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 8E 71 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: DD 22 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 03 FC 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 90 6F 00 00
+# 
+name: thx
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 96 69 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 8F 70 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 86 79 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 97 68 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 81 7E 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 02 FD 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: D6 29 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 85 7A 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: D2 6C 00 00
+command: 55 AA 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: D9 26 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 91 6E 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 8D 72 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: D7 28 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: DA 25 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 46 B9 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: D2 02 00 00
+command: 95 6A 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 05 FA 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: D2 6D 00 00
+command: 84 7B 00 00

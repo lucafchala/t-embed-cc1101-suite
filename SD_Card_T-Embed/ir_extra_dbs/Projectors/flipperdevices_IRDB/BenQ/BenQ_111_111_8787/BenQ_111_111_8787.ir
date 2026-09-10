@@ -1,0 +1,86 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: black screen
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 2A 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 0E 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 0A 00 00 00
+# 
+name: reset
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 42 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 18 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 22 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 10 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 1A 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 08 00 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 28 00 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 2D 00 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 2C 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 20 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 12 00 00 00

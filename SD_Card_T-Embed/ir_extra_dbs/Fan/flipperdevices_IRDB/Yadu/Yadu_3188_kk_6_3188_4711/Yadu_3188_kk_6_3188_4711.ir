@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: HIGH
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 06 00 00 00
+# 
+name: MEDIUM
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 05 00 00 00
+# 
+name: LOW
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 04 00 00 00
+# 
+name: automatic
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 08 00 00 00
+# 
+name: anion
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 03 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 01 00 00 00
+# 
+name: Light
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 02 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 44 00 00 00
+command: 00 00 00 00

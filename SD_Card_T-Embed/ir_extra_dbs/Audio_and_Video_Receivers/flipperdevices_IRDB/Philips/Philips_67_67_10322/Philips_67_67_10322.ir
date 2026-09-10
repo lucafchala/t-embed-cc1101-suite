@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: RC6
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC6
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: broadcast
+type: parsed
+protocol: RC6
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: cd
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: usb
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 7E 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: cd_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: usb_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 7E 00 00 00
+# 
+name: broadcast_r
+type: parsed
+protocol: RC6
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: ipod_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 93 00 00 00
+# 
+name: ipod
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 93 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 0D 00 00 00

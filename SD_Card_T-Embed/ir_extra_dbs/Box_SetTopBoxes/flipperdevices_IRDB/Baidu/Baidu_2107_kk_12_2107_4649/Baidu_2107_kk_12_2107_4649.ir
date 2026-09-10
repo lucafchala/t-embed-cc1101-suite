@@ -1,0 +1,74 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AD 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AA 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AC 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: 9C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: B2 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: B4 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: B1 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: B0 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: B3 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AF 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AB 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: AA 00 00 00
+command: AE 00 00 00

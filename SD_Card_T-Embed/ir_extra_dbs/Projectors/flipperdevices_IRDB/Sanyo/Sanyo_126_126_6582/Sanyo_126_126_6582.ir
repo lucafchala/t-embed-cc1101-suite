@@ -1,0 +1,158 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: computer2
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 39 C6 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3D C2 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8D 72 00 00
+# 
+name: p-timer
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8A 75 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 43 BC 00 00
+# 
+name: s video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3E C1 00 00
+# 
+name: component
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 83 7C 00 00
+# 
+name: computer1
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 38 C7 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8C 73 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 00 FF 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0A F5 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0C F3 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0F F0 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 09 F6 00 00
+# 
+name: screen mode
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 82 7D 00 00
+# 
+name: info
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 16 E9 00 00
+# 
+name: no show
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8B 74 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1D E2 00 00
+# 
+name: lamp
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 18 E7 00 00
+# 
+name: keystone
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 5B A4 00 00
+# 
+name: auto sync
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 17 E8 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 02 FD 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 01 FE 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1C E3 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0B F4 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1E E1 00 00

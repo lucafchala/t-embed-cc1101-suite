@@ -1,0 +1,230 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: tuning
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2D D2 00 00
+# 
+name: continuous right
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3C C3 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 29 D6 00 00
+# 
+name: p_bass
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 1C E3 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2E D1 00 00
+# 
+name: preset eq
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 12 ED 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 30 CF 00 00
+# 
+name: pgm
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2B D4 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 34 CB 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 37 C8 00 00
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2F D0 00 00
+# 
+name: under continuous
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3F C0 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 31 CE 00 00
+# 
+name: surround
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 1D E2 00 00
+# 
+name: usb-pc
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2C D3 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 38 C7 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 20 DF 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 11 EE 00 00
+# 
+name: disc skip
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 27 D8 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 39 C6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 24 DB 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 23 DC 00 00
+# 
+name: continuous on
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3E C1 00 00
+# 
+name: intro scan
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 26 D9 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 32 CD 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 10 EF 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 1E E1 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 35 CA 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3B C4 00 00
+# 
+name: clock
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 2A D5 00 00
+# 
+name: continuous left
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3D C2 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 3B C4 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 33 CC 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 36 C9 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 21 DE 00 00
+# 
+name: demo
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 1A E5 00 00
+# 
+name: shuf
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 25 DA 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 81 48 00 00
+command: 22 DD 00 00

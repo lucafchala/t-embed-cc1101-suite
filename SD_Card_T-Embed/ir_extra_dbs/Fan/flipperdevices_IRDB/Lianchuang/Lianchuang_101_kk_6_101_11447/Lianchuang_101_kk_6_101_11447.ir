@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: COLD WIND
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 87 78 00 00
+# 
+name: wind_type
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 85 7A 00 00
+# 
+name: shake_wind
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 82 7D 00 00
+# 
+name: shutdown
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 80 7F 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 86 79 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 84 7B 00 00

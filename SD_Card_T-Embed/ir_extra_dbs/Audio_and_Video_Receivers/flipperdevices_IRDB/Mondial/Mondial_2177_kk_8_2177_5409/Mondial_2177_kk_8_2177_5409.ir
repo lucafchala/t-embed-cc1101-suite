@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 53 AC 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 55 AA 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 5B A4 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 1B E4 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 13 EC 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 58 A7 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 5F A0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 80 22 00 00
+command: 00 FF 00 00

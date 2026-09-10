@@ -17,16 +17,16 @@ com o Bruce já instalado (via Launcher).
 | [`UniversalIR/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
 | [`UniversalRF/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
-| [`nfc/`](#nfc) | 5.370 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade) |
-| [`themes/`](#themes) | 37 | Temas de interface |
-| [`wifi_portals/`](#wifi_portals) | 11 | Templates de captive portal (Evil Portal) |
-| [`interpreter_js_apps/`](#interpreter_js_apps) | 52 | Apps/scripts para o interpretador JS do Bruce |
-| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.115 | Bancos Sub-GHz extras, por categoria |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 12.824 | Bancos IR extras, por categoria |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.089 | Payloads BadUSB extras |
-| [`music_rtttl/`](#music_rtttl) | 11.199 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
+| [`nfc/`](#nfc) | 5.344 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade) |
+| [`themes/`](#themes) | 96 | Temas de interface |
+| [`wifi_portals/`](#wifi_portals) | 43 | Templates de captive portal (Evil Portal) |
+| [`interpreter_js_apps/`](#interpreter_js_apps) | 60 | Apps/scripts para o interpretador JS do Bruce |
+| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.088 | Bancos Sub-GHz extras, por categoria |
+| [`ir_extra_dbs/`](#ir_extra_dbs) | 16.813 | Bancos IR extras, por categoria |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.031 | Payloads BadUSB extras |
+| [`music_rtttl/`](#music_rtttl) | 11.196 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
 
-Total: **49.583 arquivos**, ~1 GB.
+Total: **53.557 arquivos**, ~1,1 GB.
 
 ---
 
@@ -62,7 +62,7 @@ conteúdo:
 | `UberGuidoZ_Amiibo_Tools/` | Conversores/ferramentas Amiibo (complementar ao AmiiboDB, não duplicado) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer pro formato de cartão de acesso HID H10301 (Wiegand 26-bit) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 
-Total: 5.370 arquivos.
+Total: 5.344 arquivos.
 
 ## themes/
 
@@ -70,8 +70,10 @@ Temas de interface para o Bruce:
 
 - `README.md`, `Theme_Builder.html`, `example/` — material oficial do Bruce
 - `Bruce-Themes_community/` — temas extras da comunidade ([anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes))
+- `Bruce-Themes_wendells01/` — 3 temas extras ("Orange - Akkok", "Orange - Tsoucky", "Flipper inspired black theme") + animações de boot pro T-Embed e M5Stick ([wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes))
+- `Pwnagotchi_theme_pfefferle/` — tema com estética inspirada no Pwnagotchi, com ícones próprios pros módulos do Bruce (wifi, ble, rf, ir, nfc, gps etc.); confirma compatibilidade com Cardputer, M5StickC Plus2 e CYD ([pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme))
 
-Total: 37 arquivos. **Esta é uma das únicas pastas que pode depender da
+Total: 96 arquivos. **Esta é uma das únicas pastas que pode depender da
 placa específica** (resolução de tela) — confira compatibilidade antes de
 aplicar um tema feito para outro hardware.
 
@@ -83,8 +85,10 @@ línguas:
 - `en/` — facebook, google, instagram, microsoft, router_update (5 páginas)
 - `pt-br/` — as mesmas 5 páginas em português
 - `evil portal/readme.md` — instruções de uso
+- `router_login_batcherss/` — 22 templates de tela de login de roteador por marca (TP-LINK, Xiaomi, Asus, Mercusys, Keenetic, Huawei, Tenda, Mikrotik, Netis), em variantes Bruce e Marauder ([Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html))
+- `fake_login_borys/` — 7 templates de login falso de serviços conhecidos (Apple ID, Facebook, Google, T-Mobile, etc.) ([Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB))
 
-Total: 11 arquivos.
+Total: 43 arquivos.
 
 > **Aviso**: estes templates simulam páginas de login de serviços reais.
 > Use apenas em testes de segurança autorizados ou ambientes controlados —
@@ -102,8 +106,24 @@ Scripts/apps para o interpretador JavaScript embutido do Bruce:
 - `gifs/` + `gifs.js` — suporte a GIFs na interface
 - `BruceScripts_community/` — extras da comunidade ([badgib/BruceScripts](https://github.com/badgib/BruceScripts))
 - `js-apps-bruce/` — extras da comunidade ([michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce))
+- `ProtoPirate.js` — decodificador multi-protocolo de chaveiro/controle de carro ([Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce))
+- `App_Store.js` — launcher/loja de apps dentro do próprio interpretador JS ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
+- `rename-catch.js` — utilitário de renomear/organizar arquivos ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
+- `rf_433_replay.js` — replay de sinais Sub-GHz 433MHz ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
+- `ir_brute_force.js`, `rf_brute_nmrf.js` — implementações alternativas de bruteforce IR/Sub-GHz, mesma função de `ir_brute.js`/`rf_brute.js` (oficiais) mas código próprio ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
+- `browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` — implementações alternativas de navegador web e cotação de criptomoedas, mesma função de `crypto-prices.js` já incluído (não há navegador oficial equivalente) ([OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps), GPL-3.0)
 
-Total: 52 arquivos.
+Total: 60 arquivos.
+
+> **Nota**: o `Bruce-App-Store` (Jiggyv3) também tinha um `rf_jammer.js`
+> (ferramenta de jamming ativo de RF, com aviso legal embutido no próprio
+> código dizendo que é ilegal na maioria das jurisdições) que **foi
+> deixado de fora** — jamming é uma categoria de risco diferente dos
+> bancos de replay/clonagem e bruteforce já presentes aqui (que leem/testam
+> sinais, não interferem ativamente neles). Essa é a única exclusão
+> deliberada nesta pasta; todo o resto do que foi encontrado e é
+> tecnicamente compatível com o Bruce está incluído, mesmo quando duplica
+> a função de algo que já existe.
 
 ## subghz_extra_dbs/
 
@@ -131,7 +151,7 @@ Algumas categorias têm nomes duplicados com grafias diferentes
 nomeavam a mesma coisa de forma diferente — a fusão preserva ambas em vez
 de adivinhar qual renomear.
 
-Total: 14.115 arquivos únicos (após deduplicação — ver
+Total: 14.088 arquivos únicos (após deduplicação — ver
 [Deduplicação](#deduplicação-aplicada)).
 
 ## ir_extra_dbs/
@@ -145,12 +165,20 @@ Fontes agregadas nesta pasta:
 |---|---|
 | Principal banco IR da comunidade Flipper Zero (TVs, ACs, consoles etc.) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) |
 | IR extra da comunidade Bruce | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
+| Banco IR **oficial** do time do Flipper Zero (mesclado dentro das categorias já existentes, em `<Categoria>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
+| IR extra independente (pasta `_sasiplavnik_extra/`) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
+| Controle de vaporizador Arizer XQ2 (pasta `_magikh0e_extra/`) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
 Categorias notáveis: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
-`Brand_(sorted)` (a mesma coleção organizada por marca em vez de tipo de
-dispositivo), entre ~50 outras.
+`Box_SetTopBoxes` (nova — set-top boxes majoritariamente de marcas
+chinesas/asiáticas: Xiaomi, ZTE, XGIMI, EVPAD, etc., trazida pelo
+flipperdevices/IRDB), `Brand_(sorted)` (a mesma coleção organizada por
+marca em vez de tipo de dispositivo), entre ~50 outras.
 
-Total: 12.824 arquivos únicos (após deduplicação).
+Total: 16.813 arquivos únicos (após deduplicação). Só os arquivos `.ir` do
+flipperdevices/IRDB foram trazidos — os `.json`/`.png` de metadado que
+acompanham cada dispositivo são específicos da UI do app oficial do
+Flipper e não são lidos pelo Bruce.
 
 ## badusb_extra_payloads/
 
@@ -163,7 +191,7 @@ Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
 | `Bruce-Scripts-Heaven_BAD/` | Payloads Ducky Script (Windows/macOS/Linux/Android/iOS) | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
 | `UberGuidoZ_BadUSB/` | Payloads adicionais (bombs, pranks, recon, exfiltração) não duplicados nas fontes acima | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 
-Total: 3.089 arquivos únicos (após deduplicação e remoção de 3 arquivos
+Total: 3.031 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
 
 > Wordlists de bruteforce (rockyou.txt, openwall.txt etc.) **não estão
@@ -185,7 +213,7 @@ nomes que começam com número/símbolo) e duas categorias extras:
 - Fonte: [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (pastas `Music_Player/RTTTL_DUMP`, `Original_Files`, `Arcade_Tones`, `Theme_Songs`, `flipnoise`)
 - Licença: GPL-3.0
 
-Total: 11.199 arquivos únicos (após deduplicação interna entre as
+Total: 11.196 arquivos únicos (após deduplicação interna entre as
 subpastas de origem — 264 duplicatas removidas).
 
 ---
@@ -200,10 +228,11 @@ merge:
 | Categoria | Observação |
 |---|---|
 | Sub-GHz | Dedup pesado nas fontes originais (33.723 → ~14.071), mais dedup incremental ao mesclar CrowdLED (22 duplicatas evitadas) |
-| IR | Dedup pesado nas fontes originais (30.139 → ~12.825) |
+| IR | Dedup pesado nas fontes originais (30.139 → ~12.825), mais 2.116 duplicatas evitadas ao mesclar o flipperdevices/IRDB (muito dele já cobria os mesmos códigos genéricos/reaproveitados entre marcas) e 572 ao mesclar o sasiplavnik/Flipper-IRDB |
 | BadUSB | 316 duplicatas evitadas ao mesclar `UberGuidoZ_BadUSB/` contra o que já existia |
 | NFC | 111 duplicatas evitadas ao mesclar `Tonies_NFC/` contra o que já existia |
 | Music RTTTL | 264 duplicatas internas evitadas entre as 5 subpastas de origem do UberGuidoZ |
+| Temas / Portais / Apps JS | Comparados por hash contra a árvore inteira — 0 duplicatas encontradas nessas fontes (conteúdo genuinamente novo) |
 
 Dois forks idênticos do mesmo dataset (`techniixdotcom/Bruce-Scripts` e
 `0xN0WHERE/BRUCE-FILES`) foram descartados inteiramente por serem cópias
@@ -224,6 +253,21 @@ aplicativos compilados especificamente para o firmware/hardware do
 | GPS reader (`ezod/flipperzero-gps`) | App `.fap` compilado pro Flipper Zero (`application.fam` = manifesto de app do firmware oficial deles) |
 | COM Port Scanner Emulator | Mesma categoria — funcionalidade de emulação USB-HID específica do firmware Flipper Zero |
 | Wav_Player (arquivos `.wav` reais, ~2.4GB) | Peso inviável para um repositório GitHub, e boa parte é música com copyright (trilhas reais de artistas) — o `music_rtttl/` cobre o mesmo caso de uso em formato leve e sem essas questões |
+| `rf_jammer.js` (do Jiggyv3/Bruce-App-Store) | Ferramenta de jamming ativo de RF — diferente do resto do conteúdo aqui porque a interferência se propaga pro ambiente (afeta qualquer receptor na frequência, não só um alvo específico), e o próprio código traz aviso de que é ilegal operar isso na maioria das jurisdições. |
+| `Information Stealer.txt`, `Disable Firewall and Create An Admin Account.txt` (do magikh0e/FlipperZero_Stuff, pasta `BadUSB/`) | Payloads que o próprio autor rotula como "Backdoor" — criam conta de admin oculta e desativam o firewall num Windows alvo sem consentimento. Categoria de conteúdo malicioso, diferente dos payloads ofensivos de segurança/pentest já presentes em `badusb_extra_payloads/` — não incluídos |
+| `probonopd/irdb` | Banco de IR grande e ativo, mas em formato `.csv` próprio, não `.ir` — precisaria de conversão pra ser utilizável pelo Bruce/Flipper; fora de escopo por ora |
+| Forks idênticos de bancos de IR já incluídos (`sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb`) | Cópias/forks confirmados de fontes já presentes, sem conteúdo próprio — reconferido por hash, zero arquivos novos |
+| `Jalapenothedragon/evil-portal-html` | Mesmo conjunto de templates (por marca de roteador) que `Batcherss/evil-portal-html` já incluído, com 2 variantes a menos — reconferido por hash, zero arquivos novos |
+| `MuddledBox/FlipperZeroSub-GHz`, `ErikLentz/Flipper-Finds` | Reconferidos por hash a pedido: só metadado de repositório (LICENSE/README) e uma foto (.jpg) eram "novos" — nenhum arquivo de conteúdo real (`.sub`/`.ir`/`.nfc`) que já não estivesse aqui |
+
+`ir_brute_force.js`/`rf_brute_nmrf.js` (Jiggyv3) e `cryptocurrencies.js`/
+`browser.js` (OnChainTemplars) foram reconsiderados e **incluídos** — ver
+[interpreter_js_apps/](#interpreter_js_apps) acima; são reimplementações
+próprias, não duplicatas de fato, e não têm problema de segurança.
+`magikh0e/FlipperZero_Stuff` também teve um arquivo `.ir` legítimo
+incluído (controle de vaporizador Arizer XQ2) — ver
+[ir_extra_dbs/](#ir_extra_dbs). Os 2 payloads BadUSB "Backdoor" do mesmo
+autor não entraram — ver a tabela acima.
 
 ## Aviso de uso
 
