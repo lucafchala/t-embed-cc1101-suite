@@ -17,16 +17,16 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`UniversalIR/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
 | [`UniversalRF/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
-| [`nfc/`](#nfc) | 6,131 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
-| [`themes/`](#themes) | 181 | UI themes |
+| [`nfc/`](#nfc) | 8,008 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
+| [`themes/`](#themes) | 410 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
 | [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,086 | Extra Sub-GHz databases, by category |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,826 | Extra IR databases, by category |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,074 | Extra BadUSB payloads |
+| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,825 | Extra IR databases, by category |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,316 | Extra BadUSB payloads |
 | [`music_rtttl/`](#music_rtttl) | 11,195 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
 
-Total: **54,494 files**, ~1.1 GB.
+Total: **56,841 files**, ~1.1 GB.
 
 ---
 
@@ -62,7 +62,7 @@ hash:
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer for the HID H10301 access-card format (26-bit Wiegand) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `Skylanders_LEGO_Toys/` | 784 NFC dumps of Skylanders figures + 2 per-UID cryptographic key generator scripts (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 6,131 files.
+Total: 8,008 files.
 
 ## themes/
 
@@ -74,7 +74,7 @@ UI themes for Bruce:
 - `Pwnagotchi_theme_pfefferle/` — theme with a Pwnagotchi-inspired look, with its own icon set for Bruce's modules (wifi, ble, rf, ir, nfc, gps, etc.); confirmed compatible with Cardputer, M5StickC Plus2 and CYD ([pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme))
 - `koua29_community/` — 2 theme sets made specifically for the T-Embed CC1101's 320×170 screen: "HUD" (3 colorways) and "Wheel" (radial wheel, light/dark) ([koua29](https://github.com/koua29))
 
-Total: 181 files. **This is one of the only folders that can depend on the
+Total: 410 files. **This is one of the only folders that can depend on the
 specific board** (screen resolution) — check compatibility before applying
 a theme made for other hardware.
 
@@ -214,7 +214,7 @@ Xiaomi, ZTE, XGIMI, EVPAD, etc., brought in by flipperdevices/IRDB),
 `Brand_(sorted)` (the same collection organized by brand instead of
 device type), among ~50 others.
 
-Total: 16,826 unique files (after deduplication). Only the `.ir` files
+Total: 16,825 unique files (after deduplication). Only the `.ir` files
 from flipperdevices/IRDB were brought in — the `.json`/`.png` metadata
 that accompanies each device is specific to the official Flipper app's UI
 and isn't read by Bruce.
@@ -231,7 +231,7 @@ BadUSB payloads **beyond** the official `BadUSB_BlueDucky/`:
 | `UberGuidoZ_BadUSB/` | Additional payloads (bombs, pranks, recon, exfiltration) not duplicated in the sources above | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 "post-exploitation" payloads (system-information gathering; hidden admin account creation + firewall disable) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3,074 unique files (after deduplication and removal of 3 "prank"
+Total: 3,316 unique files (after deduplication and removal of 3 "prank"
 files of ~15MB each, which were image hexdumps with no real function).
 
 > **Correction**: the previous `Flipper-Zero-BadUSB/` folder (same

@@ -17,16 +17,16 @@ com o Bruce já instalado (via Launcher).
 | [`UniversalIR/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
 | [`UniversalRF/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
-| [`nfc/`](#nfc) | 6.131 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
-| [`themes/`](#themes) | 181 | Temas de interface |
+| [`nfc/`](#nfc) | 8.008 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
+| [`themes/`](#themes) | 410 | Temas de interface |
 | [`wifi_portals/`](#wifi_portals) | 42 | Templates de simulação de captura de credencial (captive portal) |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts para o interpretador JS do Bruce |
 | [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.086 | Bancos Sub-GHz extras, por categoria |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 16.826 | Bancos IR extras, por categoria |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.074 | Payloads BadUSB extras |
+| [`ir_extra_dbs/`](#ir_extra_dbs) | 16.825 | Bancos IR extras, por categoria |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.316 | Payloads BadUSB extras |
 | [`music_rtttl/`](#music_rtttl) | 11.195 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
 
-Total: **54.494 arquivos**, ~1,1 GB.
+Total: **56.841 arquivos**, ~1,1 GB.
 
 ---
 
@@ -63,7 +63,7 @@ conteúdo:
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer pro formato de cartão de acesso HID H10301 (Wiegand 26-bit) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `Skylanders_LEGO_Toys/` | 784 dumps NFC de figuras Skylanders + 2 scripts geradores de chave criptográfica por UID (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 6.131 arquivos.
+Total: 8.008 arquivos.
 
 ## themes/
 
@@ -75,7 +75,7 @@ Temas de interface para o Bruce:
 - `Pwnagotchi_theme_pfefferle/` — tema com estética inspirada no Pwnagotchi, com ícones próprios pros módulos do Bruce (wifi, ble, rf, ir, nfc, gps etc.); confirma compatibilidade com Cardputer, M5StickC Plus2 e CYD ([pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme))
 - `koua29_community/` — 2 conjuntos de temas feitos especificamente para a tela 320×170 do T-Embed CC1101: "HUD" (3 variações de cor) e "Wheel" (roda radial, claro/escuro) ([koua29](https://github.com/koua29))
 
-Total: 181 arquivos. **Esta é uma das únicas pastas que pode depender da
+Total: 410 arquivos. **Esta é uma das únicas pastas que pode depender da
 placa específica** (resolução de tela) — confira compatibilidade antes de
 aplicar um tema feito para outro hardware.
 
@@ -215,7 +215,7 @@ chinesas/asiáticas: Xiaomi, ZTE, XGIMI, EVPAD, etc., trazida pelo
 flipperdevices/IRDB), `Brand_(sorted)` (a mesma coleção organizada por
 marca em vez de tipo de dispositivo), entre ~50 outras.
 
-Total: 16.813 arquivos únicos (após deduplicação). Só os arquivos `.ir` do
+Total: 16.825 arquivos únicos (após deduplicação). Só os arquivos `.ir` do
 flipperdevices/IRDB foram trazidos — os `.json`/`.png` de metadado que
 acompanham cada dispositivo são específicos da UI do app oficial do
 Flipper e não são lidos pelo Bruce.
@@ -232,7 +232,7 @@ Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
 | `UberGuidoZ_BadUSB/` | Payloads adicionais (bombs, pranks, recon, exfiltração) não duplicados nas fontes acima | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 payloads de "post-exploitation" (coleta de informações do sistema; criação de conta admin oculta + desativação de firewall) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3.074 arquivos únicos (após deduplicação e remoção de 3 arquivos
+Total: 3.316 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
 
 > **Correção**: a pasta anterior `Flipper-Zero-BadUSB/` (mesma fonte,

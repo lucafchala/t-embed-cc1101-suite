@@ -23,7 +23,7 @@ oficial instalado através do **[bmorcelli/Launcher](https://github.com/bmorcell
 Este repositório é uma **curadoria e reorganização** de várias fontes públicas do
 GitHub — não é código original. Veja [Proveniência e licenças](#proveniência-e-licenças) antes de redistribuir qualquer parte dele.
 
-**~54.494 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
+**~56.841 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
 deduplicados por hash de conteúdo e organizados por categoria — veja o
 detalhamento completo em [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 

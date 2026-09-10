@@ -24,7 +24,7 @@ This repository is a **curation and reorganization** of several public GitHub
 sources — not original code. See [Provenance and licenses](#provenance-and-licenses)
 before redistributing any part of it.
 
-**~54,494 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
+**~56,841 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
 [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
