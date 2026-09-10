@@ -17,7 +17,7 @@ com o Bruce já instalado (via Launcher).
 | [`UniversalIR/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
 | [`UniversalRF/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
-| [`nfc/`](#nfc) | 8.008 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
+| [`nfc/`](#nfc) | 8.007 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | Temas de interface |
 | [`wifi_portals/`](#wifi_portals) | 42 | Templates de simulação de captura de credencial (captive portal) |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts para o interpretador JS do Bruce |
@@ -63,7 +63,7 @@ conteúdo:
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer pro formato de cartão de acesso HID H10301 (Wiegand 26-bit) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `Skylanders_LEGO_Toys/` | 784 dumps NFC de figuras Skylanders + 2 scripts geradores de chave criptográfica por UID (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 8.008 arquivos.
+Total: 8.007 arquivos.
 
 > **Aviso — `UberGuidoZ_H10301_RFID_Bruteforce/`**: diferente do resto
 > desta pasta (dumps/replay de tags específicas), este é um bruteforcer
@@ -72,6 +72,13 @@ Total: 8.008 arquivos.
 > real. Categoria: **controle de acesso físico, fuzzing/brute force
 > ativo, uso somente em teste autorizado**. Não é equivalente aos dumps
 > NFC normais desta pasta.
+>
+> **A wordlist `H10301_BF.txt` (112MB) não está incluída** — excede o
+> limite de 100MB por arquivo do GitHub e, mais importante, se encaixa
+> na mesma política já aplicada a rockyou.txt/openwall.txt neste
+> repositório: wordlists grandes de bruteforce não são vendorizadas por
+> tamanho e por serem fáceis de obter separadamente. Só o `ReadMe.md`
+> da pasta original foi mantido, documentando o que ela continha.
 
 ## themes/
 

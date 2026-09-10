@@ -17,7 +17,7 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`UniversalIR/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
 | [`UniversalRF/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
-| [`nfc/`](#nfc) | 8,008 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
+| [`nfc/`](#nfc) | 8,007 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
@@ -62,7 +62,7 @@ hash:
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer for the HID H10301 access-card format (26-bit Wiegand) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `Skylanders_LEGO_Toys/` | 784 NFC dumps of Skylanders figures + 2 per-UID cryptographic key generator scripts (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 8,008 files.
+Total: 8,007 files.
 
 > **Warning — `UberGuidoZ_H10301_RFID_Bruteforce/`**: unlike the rest of
 > this folder (dumps/replay of specific tags), this is a **physical
@@ -71,6 +71,13 @@ Total: 8,008 files.
 > Category: **physical access control, active fuzzing/brute force,
 > authorized testing only**. Not equivalent to the regular NFC dumps in
 > this folder.
+>
+> **The `H10301_BF.txt` wordlist (112MB) is not included** — it exceeds
+> GitHub's 100MB per-file limit and, more importantly, fits the same
+> policy already applied to rockyou.txt/openwall.txt in this
+> repository: large bruteforce wordlists aren't vendored due to size
+> and because they're easy to obtain separately. Only the original
+> folder's `ReadMe.md` was kept, documenting what it contained.
 
 ## themes/
 
