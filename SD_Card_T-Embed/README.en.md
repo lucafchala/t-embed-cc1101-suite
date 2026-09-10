@@ -199,6 +199,13 @@ both kept, the incoming one gets a short suffix).
 > 9.472/1997, art. 183). This isn't legal advice — check your own
 > country's regulations before transmitting anything.
 
+> **Note — `Rg/`, `Am_far/`, `Fm_far/`, `Fm_close/`**: 4 folders with 1
+> `RAW_Data` file each (467.75 MHz and 433.92 MHz OOK/2FSK). By content
+> they look like range-test recordings (far/close) — the aggregated
+> source doesn't document the exact purpose or target device. Kept since
+> there's no indication they're useless or duplicate, but they don't fit
+> a clear category.
+
 Total: 14,086 unique files (after deduplication — see
 [Deduplication](#deduplication-applied)).
 

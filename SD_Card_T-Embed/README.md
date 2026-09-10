@@ -204,6 +204,13 @@ Total: 14.086 arquivos únicos (após deduplicação — ver
 > jurídico — confirme a legislação do seu país antes de transmitir
 > qualquer coisa.
 
+> **Nota — `Rg/`, `Am_far/`, `Fm_far/`, `Fm_close/`**: 4 pastas com 1
+> arquivo `RAW_Data` cada (467,75 MHz e 433,92 MHz OOK/2FSK). Pelo
+> conteúdo, parecem gravações de teste de alcance (far/close) — a fonte
+> agregada não documenta o propósito exato nem o dispositivo-alvo.
+> Mantidas por não haver indicação de que sejam inúteis ou duplicadas,
+> mas sem uma categoria clara pra encaixar.
+
 ## ir_extra_dbs/
 
 Bancos IR **além** do `UniversalIR/` oficial, reorganizados por
