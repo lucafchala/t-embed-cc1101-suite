@@ -136,6 +136,79 @@ local sobre clonagem de sinais RF/NFC de terceiros e uso de dispositivos BadUSB
 antes de utilizar qualquer um desses bancos fora de um ambiente controlado ou
 autorizado.
 
+## Créditos
+
+Este repositório não existiria sem o trabalho de dezenas de
+desenvolvedores e comunidades open-source. A tabela completa de
+proveniência pasta-por-pasta (com licença de cada fonte) está em
+[CONTRIBUTING.md](CONTRIBUTING.md#proveniência-detalhada-por-pasta) —
+esta seção é o resumo com nome/crédito de cada autor.
+
+**Firmware e ferramentas de base**
+
+- **[BruceDevices/firmware](https://github.com/BruceDevices/firmware)**
+  (antigo `pr3y/Bruce`) — o firmware em si, sobre o qual todo o resto
+  deste repositório é construído.
+- **[bmorcelli/Launcher](https://github.com/bmorcelli/Launcher)** —
+  launcher OTA usado no fluxo de instalação recomendado aqui.
+- **[LilyGO](https://github.com/Xinyuan-LilyGO)** — fabricante da placa
+  T-Embed CC1101 Plus; documentação de hardware e driver USB-serial
+  redistribuído.
+- **[espressif/esptool](https://github.com/espressif/esptool)** —
+  ferramenta de flash via linha de comando.
+- **WCH** — driver USB-serial CH9102, oficial do fabricante do chip.
+
+**Bancos de dados e conteúdo curado** (por usuário/organização de
+origem, ordem alfabética — ver CONTRIBUTING.md para a atribuição
+completa por pasta e a licença de cada uma):
+
+[AmiiboDB](https://github.com/AmiiboDB) ·
+[anonimoKali](https://github.com/anonimoKali) ·
+[badgib](https://github.com/badgib) ·
+[Batcherss](https://github.com/Batcherss) ·
+[Borys-esp](https://github.com/Borys-esp) ·
+[DRA6N](https://github.com/DRA6N) ·
+[flipperdevices](https://github.com/flipperdevices) ·
+[I-Am-Jakoby](https://github.com/I-Am-Jakoby) ·
+[Jiggyv3](https://github.com/Jiggyv3) ·
+[koua29](https://github.com/koua29) ·
+[LNRC](https://github.com/LNRC) ·
+[Lucaslhm](https://github.com/Lucaslhm) ·
+[magikh0e](https://github.com/magikh0e) ·
+[michauMiau](https://github.com/michauMiau) ·
+[niltefa](https://github.com/niltefa) ·
+[nortakales](https://github.com/nortakales) ·
+[OnChainTemplars](https://github.com/OnChainTemplars) ·
+[pfefferle](https://github.com/pfefferle) ·
+[Robbbbbbbbb](https://github.com/Robbbbbbbbb) ·
+[sasiplavnik](https://github.com/sasiplavnik) ·
+[sealldeveloper](https://github.com/sealldeveloper) ·
+[Senape3000](https://github.com/Senape3000) ·
+[sloth632](https://github.com/sloth632) ·
+[Starvinci](https://github.com/Starvinci) ·
+[ssstee](https://github.com/ssstee) ·
+[UberGuidoZ](https://github.com/UberGuidoZ) ·
+[V0lk3n](https://github.com/V0lk3n) ·
+[wendells01](https://github.com/wendells01) ·
+[Zero-Sploit](https://github.com/Zero-Sploit)
+
+Além destes: colaborador **"sark"**, autor de três coleções de
+controles IR universais — fonte original não identificada apesar de
+pesquisa dedicada (nomes de pasta só foram padronizados nesta
+curadoria; ver nota em CONTRIBUTING.md).
+
+**Curadoria, documentação e verificação técnica**
+
+A organização, deduplicação por hash, documentação (avisos de
+segurança/legal, correção de links, contagens de arquivo) e
+verificação técnica deste repositório (leitura direta do código-fonte
+do Bruce para mapear compatibilidade de BadUSB, checagem de alegações
+contra fontes primárias, auditoria de colisão de nomes FAT32) foram
+feitas com assistência de IA (Claude, da Anthropic), sob supervisão e
+decisão final do mantenedor humano ([lucafchala](https://github.com/lucafchala))
+em cada etapa — nenhuma inclusão, remoção ou classificação de conteúdo
+sensível foi automática ou não revisada.
+
 ## Contribuindo
 
 Veja [`CONTRIBUTING.md`](CONTRIBUTING.md) para como propor adições aos bancos de
