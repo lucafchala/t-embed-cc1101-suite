@@ -56,6 +56,13 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | `SD_Card_T-Embed/themes/Bruce-Themes_community/` | [anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/BruceScripts_community/` | [badgib/BruceScripts](https://github.com/badgib/BruceScripts) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/js-apps-bruce/` | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) | Ver repositório |
+| `SD_Card_T-Embed/nfc/Skylanders_LEGO_Toys/` (dumps) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders) | Ver repositório |
+| `SD_Card_T-Embed/nfc/Skylanders_LEGO_Toys/key_generator_scripts/` | [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) (idêntico a [V0lk3n/Flipper-Skylanders](https://github.com/V0lk3n/Flipper-Skylanders)) | Ver repositório |
+| `SD_Card_T-Embed/interpreter_js_apps/koua29_community/`, `SD_Card_T-Embed/themes/koua29_community/` | [koua29](https://github.com/koua29) (7 repos de apps + 2 de temas — ver README da pasta) | MIT |
+| `SD_Card_T-Embed/interpreter_js_apps/BruceSafe.js` | [ssstee/BruceSafe](https://github.com/ssstee/BruceSafe) | Ver repositório |
+| `SD_Card_T-Embed/interpreter_js_apps/BruteRF.js` | [Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps) | Ver repositório |
+| `SD_Card_T-Embed/ir_extra_dbs/` (parte, 20 arquivos novos desta rodada) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
+| `SD_Card_T-Embed/badusb_extra_payloads/I-Am-Jakoby_BadUSB/` (substitui a antiga `Flipper-Zero-BadUSB/`, que só tinha os READMEs sem os scripts `.ps1` reais) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
 
 "Ver repositório" significa que a licença não foi confirmada nesta
 organização — consulte o repositório de origem antes de redistribuir ou
@@ -94,6 +101,33 @@ usar comercialmente esse conteúdo específico.
 | `sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb` | Forks/cópias confirmadas de bancos de IR já incluídos — reconferido por hash a pedido, zero arquivos novos |
 | `Jalapenothedragon/evil-portal-html` | Mesmo conjunto de templates que `Batcherss/evil-portal-html` já incluído, com 2 variantes a menos — reconferido por hash, zero arquivos novos |
 | `MuddledBox/FlipperZeroSub-GHz`, `ErikLentz/Flipper-Finds` | Reconferidos por hash a pedido: só metadado de repositório (LICENSE/README) e uma foto eram "novos" — nenhum arquivo de conteúdo real |
+| `dolmen-go/legodim` | Ferramenta Go para o **LEGO Dimensions Toy Pad**, um periférico USB para PC/console — protocolo e hardware completamente diferentes de NFC/Bruce/T-Embed. Não produz nenhum artefato vendorizável para o cartão SD (não é um gerador de dumps; é um driver para ler/escrever um leitor físico via USB-HID que o T-Embed não possui) |
+| `Senape3000/Bruce-JS-Apps/ProtoPirate/ProtoPirate_6.js` | Comparado byte a byte com o já vendorizado `ProtoPirate.js` (fonte: `Senape3000/ProtoPirate-Bruce`) — o já incluído é mais recente (Bruce 2.0+, com fix de navegação de menu) que este (`v1.0.0`, Bruce 1.4+); descartado por ser versão anterior, não por redundância de conteúdo |
+| `koua29/bruce-grille-theme`, `bruce-spiderman-theme`, `bruce-fallout-theme` | Já cadastrados na Bruce App Store (`BruceDevices/App-Store-Data`) sob o mesmo usuário `koua29` — instaláveis direto pelo dispositivo, não vendorizados como cópia estática. Distintos dos 9 repositórios `koua29` de apps/temas que **foram** incluídos nesta rodada (nenhum destes 9 está na App Store) |
+| `SasPes/key-decoding`, `SasPes/magic-8-ball` | Cadastrados na Bruce App Store sob `SasPes` — mesma lógica acima |
+| `viniciusbo/m5-palnagotchi`, `bmorcelli/io433`, `bmorcelli/Launcher` | Encontrados na pesquisa por fontes brasileiras — são firmwares `.ino`/PlatformIO próprios (substituem o Bruce inteiro ou visam outro hardware), não apps JS nem conteúdo de cartão SD; fora do escopo deste repositório pelo mesmo motivo que binários `.fap` do Flipper Zero |
+
+> **Nota sobre a Bruce App Store**: antes de vendorizar qualquer app/tema
+> candidato, este repositório confere se ele já está cadastrado em
+> `BruceDevices/App-Store-Data` (instalável direto pelo menu *App Store*
+> no dispositivo, com auto-atualização) — se estiver, ele é listado aqui
+> como "descartado" com o motivo, em vez de copiado como arquivo estático.
+> A verificação é por nome de repositório **e** usuário, já que nomes de
+> repositório se repetem entre desenvolvedores sem relação (ex.:
+> `koua29/bruce-snake` e `mateuspereirabr71-bit/bruce-snake` são dois
+> projetos diferentes).
+
+> **Nota sobre fontes regionais/brasileiras**: pesquisa dedicada não
+> encontrou nenhum banco de sinais Sub-GHz específico de marcas
+> brasileiras de portão/cerca (PPA, Rossi, Peccinin, Garen) como
+> repositório dedicado — o protocolo genérico (CAME, KeeLoq/fixed-code),
+> que já está coberto em `UniversalRF/Garages/`, cobre a maioria desses
+> equipamentos na prática, já que a captura depende do protocolo de RF
+> usado, não da marca do controle. `mateuspereirabr71-bit/bruce-snake`
+> (dev brasileiro, específico para Cardputer) foi conferido por hash
+> contra o já incluído `koua29/bruce-snake` — são dois jogos diferentes,
+> não uma duplicata; não incluído nesta rodada por não ter sido
+> explicitamente pedido, mas é candidato válido para o futuro.
 
 > **Nota**: `ir_brute_force.js`/`rf_brute_nmrf.js` (Jiggyv3) e o restante de
 > `OnChainTemplars/bruce-apps` — inicialmente descartados por serem
@@ -170,6 +204,31 @@ throughout the repository for consistency with the file structure.
 | `sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb` | Confirmed forks/copies of IR databases already included — rechecked by hash on request, zero new files |
 | `Jalapenothedragon/evil-portal-html` | Same set of templates as `Batcherss/evil-portal-html` already included, minus 2 variants — rechecked by hash, zero new files |
 | `MuddledBox/FlipperZeroSub-GHz`, `ErikLentz/Flipper-Finds` | Rechecked by hash on request: only repo metadata (LICENSE/README) and one photo came back "new" — no actual content files |
+| `dolmen-go/legodim` | Go tool for the **LEGO Dimensions Toy Pad**, a USB peripheral for PC/console — a completely different protocol and hardware from NFC/Bruce/T-Embed. Produces nothing vendorable for the SD card (it's not a dump generator; it's a driver for reading/writing a physical reader over USB-HID that the T-Embed doesn't have) |
+| `Senape3000/Bruce-JS-Apps/ProtoPirate/ProtoPirate_6.js` | Byte-for-byte compared against the already-vendored `ProtoPirate.js` (source: `Senape3000/ProtoPirate-Bruce`) — the included one is newer (Bruce 2.0+, with a menu-navigation fix) than this one (`v1.0.0`, Bruce 1.4+); dropped as an older version, not for content redundancy |
+| `koua29/bruce-grille-theme`, `bruce-spiderman-theme`, `bruce-fallout-theme` | Already registered on the Bruce App Store (`BruceDevices/App-Store-Data`) under the same `koua29` user — installable directly from the device, not vendored as a static copy. Distinct from the 9 `koua29` app/theme repos that **were** included this round (none of those 9 are on the App Store) |
+| `SasPes/key-decoding`, `SasPes/magic-8-ball` | Registered on the Bruce App Store under `SasPes` — same reasoning as above |
+| `viniciusbo/m5-palnagotchi`, `bmorcelli/io433`, `bmorcelli/Launcher` | Found while researching Brazilian sources — these are standalone `.ino`/PlatformIO firmwares (replace Bruce entirely, or target different hardware), not Bruce JS apps or SD-card content; out of scope for the same reason `.fap` Flipper Zero binaries are |
+
+> **Note on the Bruce App Store**: before vendoring any candidate app/theme,
+> this repository checks whether it's already registered in
+> `BruceDevices/App-Store-Data` (installable directly from the device's
+> *App Store* menu, with auto-update) — if so, it's listed here as
+> "dropped" with the reason instead of copied as a static file. The check
+> is by repository name **and** owner, since repo names repeat across
+> unrelated developers (e.g. `koua29/bruce-snake` and
+> `mateuspereirabr71-bit/bruce-snake` are two different projects).
+
+> **Note on regional/Brazilian sources**: a dedicated search found no
+> repository specifically hosting Sub-GHz signal databases for Brazilian
+> gate/fence remote brands (PPA, Rossi, Peccinin, Garen). The generic
+> protocol content (CAME, KeeLoq/fixed-code) already covered in
+> `UniversalRF/Garages/` covers most of these in practice, since capture
+> depends on the RF protocol used, not the remote's brand name.
+> `mateuspereirabr71-bit/bruce-snake` (Brazilian dev, Cardputer-specific)
+> was hash-checked against the already-included `koua29/bruce-snake` —
+> two different games, not a duplicate; not included this round since it
+> wasn't explicitly requested, but a valid future candidate.
 
 > **Note**: `ir_brute_force.js`/`rf_brute_nmrf.js` (Jiggyv3) and the rest of
 > `OnChainTemplars/bruce-apps` — initially dropped for duplicating the

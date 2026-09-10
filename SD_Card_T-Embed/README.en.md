@@ -17,16 +17,16 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`UniversalIR/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
 | [`UniversalRF/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
-| [`nfc/`](#nfc) | 5,344 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community) |
-| [`themes/`](#themes) | 96 | UI themes |
+| [`nfc/`](#nfc) | 6,131 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
+| [`themes/`](#themes) | 181 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
-| [`interpreter_js_apps/`](#interpreter_js_apps) | 61 | Apps/scripts for Bruce's JS interpreter |
+| [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
 | [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,088 | Extra Sub-GHz databases, by category |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,813 | Extra IR databases, by category |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,033 | Extra BadUSB payloads |
+| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,826 | Extra IR databases, by category |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,075 | Extra BadUSB payloads |
 | [`music_rtttl/`](#music_rtttl) | 11,196 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
 
-Total: **53,560 files**, ~1.1 GB.
+Total: **54,499 files**, ~1.1 GB.
 
 ---
 
@@ -60,8 +60,9 @@ hash:
 | `UberGuidoZ_Mifare_Classic_Dict/` | Key dictionaries for Mifare Classic cards | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `UberGuidoZ_Amiibo_Tools/` | Amiibo converters/tools (complements AmiiboDB, not duplicated) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer for the HID H10301 access-card format (26-bit Wiegand) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
+| `Skylanders_LEGO_Toys/` | 784 NFC dumps of Skylanders figures + 2 per-UID cryptographic key generator scripts (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 5,344 files.
+Total: 6,131 files.
 
 ## themes/
 
@@ -71,8 +72,9 @@ UI themes for Bruce:
 - `Bruce-Themes_community/` — extra community themes ([anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes))
 - `Bruce-Themes_wendells01/` — 3 extra themes ("Orange - Akkok", "Orange - Tsoucky", "Flipper inspired black theme") + boot animations for T-Embed and M5Stick ([wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes))
 - `Pwnagotchi_theme_pfefferle/` — theme with a Pwnagotchi-inspired look, with its own icon set for Bruce's modules (wifi, ble, rf, ir, nfc, gps, etc.); confirmed compatible with Cardputer, M5StickC Plus2 and CYD ([pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme))
+- `koua29_community/` — 2 theme sets made specifically for the T-Embed CC1101's 320×170 screen: "HUD" (3 colorways) and "Wheel" (radial wheel, light/dark) ([koua29](https://github.com/koua29))
 
-Total: 96 files. **This is one of the only folders that can depend on the
+Total: 181 files. **This is one of the only folders that can depend on the
 specific board** (screen resolution) — check compatibility before applying
 a theme made for other hardware.
 
@@ -111,8 +113,11 @@ Scripts/apps for Bruce's built-in JavaScript interpreter:
 - `ir_brute_force.js`, `rf_brute_nmrf.js` — alternative IR/Sub-GHz bruteforce implementations, same function as `ir_brute.js`/`rf_brute.js` (official) but their own code ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
 - `browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` — alternative web-browser and crypto-price apps, same function as the already-included `crypto-prices.js` (there's no official browser equivalent) ([OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps), GPL-3.0)
 - `rf_jammer.js` — active RF jamming tool ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store)); added directly by the repository maintainer, outside the hash-based curation process above
+- `BruceSafe.js` — game made specifically for the T-Embed ([ssstee/BruceSafe](https://github.com/ssstee/BruceSafe))
+- `BruteRF.js` — Sub-GHz bruteforce tool with 34 protocols, De Bruijn attack, RAW mode ([Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps))
+- `koua29_community/` — 7 apps made specifically for the T-Embed CC1101: surveillance-camera detector (Flock Detector), Wi-Fi QR code, Snake, SSID "safari", Breakout, TV-B-Gone, script launcher ([koua29](https://github.com/koua29))
 
-Total: 61 files.
+Total: 73 files.
 
 > **⚠️ Warning about `rf_jammer.js`**: unlike the rest of this folder
 > (which reads, probes, or replays signals), this script actively
@@ -172,7 +177,7 @@ Xiaomi, ZTE, XGIMI, EVPAD, etc., brought in by flipperdevices/IRDB),
 `Brand_(sorted)` (the same collection organized by brand instead of
 device type), among ~50 others.
 
-Total: 16,813 unique files (after deduplication). Only the `.ir` files
+Total: 16,826 unique files (after deduplication). Only the `.ir` files
 from flipperdevices/IRDB were brought in — the `.json`/`.png` metadata
 that accompanies each device is specific to the official Flipper app's UI
 and isn't read by Bruce.
@@ -183,14 +188,23 @@ BadUSB payloads **beyond** the official `BadUSB_BlueDucky/`:
 
 | Subfolder | Contents | Source |
 |---|---|---|
-| `Flipper-Zero-BadUSB/` | Flipper Zero community payloads | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) |
+| `I-Am-Jakoby_BadUSB/` | 24 payloads (prank/visual, recon, and 2 flagged for capturing credentials — see warning and the folder's README) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) |
 | `BadUsb-Library/` | Library organized by technique (MITRE ATT&CK) | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) |
 | `Bruce-Scripts-Heaven_BAD/` | Ducky Script payloads (Windows/macOS/Linux/Android/iOS) | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
 | `UberGuidoZ_BadUSB/` | Additional payloads (bombs, pranks, recon, exfiltration) not duplicated in the sources above | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 "post-exploitation" payloads (system-information gathering; hidden admin account creation + firewall disable) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3,033 unique files (after deduplication and removal of 3 "prank"
+Total: 3,075 unique files (after deduplication and removal of 3 "prank"
 files of ~15MB each, which were image hexdumps with no real function).
+
+> **Correction**: the previous `Flipper-Zero-BadUSB/` folder (same
+> source, `I-Am-Jakoby/Flipper-Zero-BadUSB`) only had the
+> `README.md`/`.txt` description for each payload — the functional
+> `.ps1` scripts had never actually been included. It was replaced by
+> `I-Am-Jakoby_BadUSB/`, which brings the complete content (the same
+> already-documented payloads, now with the real script, plus 3 payloads
+> that weren't even documented: `Debug`, `Flip-Rage-PopUps`,
+> `Payloads/Scripts/WifiPasswords.ps1`).
 
 > `magikh0e_BadUSB/` was added directly by the repository maintainer,
 > outside the hash-based curation process above. These are BadUSB (HID)
