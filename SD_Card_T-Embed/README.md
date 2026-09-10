@@ -253,6 +253,23 @@ Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
 Total: 3.316 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
 
+> **Compatibilidade com o interpretador BadUSB do Bruce**: nem todo
+> Ducky Script funciona como está — o Bruce (via `ducky_typer.cpp`)
+> suporta Ducky clássico + atalhos de modificador de 1 linha, mas não
+> `STRINGLN`/`EXTENSION`/`REM_BLOCK`/`DEFINE` (sintaxe do DuckyScript
+> 3.0/Bash Bunny). Em `Bruce-Scripts-Heaven_BAD/`, ~1.211 arquivos já
+> funcionam direto (1.187 nativamente + 24 convertidos de `STRINGLN` pra
+> `STRING`+`ENTER`, reformatação pura). Os 300 que não funcionam como
+> estão foram separados em
+> [`Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/`](badusb_extra_payloads/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/README.md)
+> pra não ficarem misturados com os prontos pra uso — nada foi excluído,
+> só reorganizado e documentado (25 precisam de ajuste manual de sintaxe,
+> 275 dependem da `EXTENSION` que o Bruce não implementa). A pasta
+> `BadUSB-FalsePhilosopher/` (que tem ~1.000 arquivos incompatíveis por
+> motivo diferente — sintaxe/hardware do Bash Bunny/WHID/Malduino/OMG,
+> não DuckyScript 3.0) foi mantida exatamente como o autor original
+> organizou, sem reestruturação.
+
 > **Correção**: a pasta anterior `Flipper-Zero-BadUSB/` (mesma fonte,
 > `I-Am-Jakoby/Flipper-Zero-BadUSB`) só tinha os `README.md`/`.txt` de
 > descrição de cada payload — os scripts `.ps1` funcionais nunca haviam
