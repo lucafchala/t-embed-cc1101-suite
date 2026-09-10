@@ -208,6 +208,7 @@ Fontes agregadas nesta pasta:
 | Banco IR **oficial** do time do Flipper Zero (mesclado dentro das categorias já existentes, em `<Categoria>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
 | IR extra independente (pasta `_sasiplavnik_extra/`) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
 | Controle de vaporizador Arizer XQ2 (pasta `_magikh0e_extra/`) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
+| 3 coleções extras atribuídas ao colaborador "sark" — controles universais, `IrBegone @sark/` (bloqueio de sinal de TV por ambiente) e `irtobefree @sark/` (eletrônicos diversos) | fonte original não identificada; nomes de pasta padronizados nesta curadoria (grafia `@sark` consistente) |
 
 Categorias notáveis: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
 `Box_SetTopBoxes` (nova — set-top boxes majoritariamente de marcas

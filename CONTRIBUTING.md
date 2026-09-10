@@ -45,6 +45,7 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | `SD_Card_T-Embed/music_rtttl/` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (Music_Player) | GPL-3.0 |
 | `SD_Card_T-Embed/ir_extra_dbs/<Categoria>/flipperdevices_IRDB/` | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) | MIT |
 | `SD_Card_T-Embed/ir_extra_dbs/_sasiplavnik_extra/` | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) | Ver repositório |
+| `SD_Card_T-Embed/ir_extra_dbs/universal_remotes @sark/`, `IrBegone @sark/`, `irtobefree @sark/` | Colaborador "sark" — fonte original não identificada (nomes de pasta só padronizados nesta curadoria) | Desconhecida — confirme antes de redistribuir |
 | `SD_Card_T-Embed/themes/Bruce-Themes_wendells01/` | [wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes) | Ver repositório |
 | `SD_Card_T-Embed/themes/Pwnagotchi_theme_pfefferle/` | [pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme) | Ver repositório |
 | `SD_Card_T-Embed/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |
@@ -67,6 +68,27 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 "Ver repositório" significa que a licença não foi confirmada nesta
 organização — consulte o repositório de origem antes de redistribuir ou
 usar comercialmente esse conteúdo específico.
+
+### Curado vs. adicionado pelo mantenedor
+
+**Todo o conteúdo listado na tabela acima passou pelo processo de
+curadoria por hash** (dedup de conteúdo, conferência de licença básica,
+avaliação de segurança/legalidade antes de incluir). Duas exceções foram
+adicionadas **diretamente pelo mantenedor deste repositório**, por fora
+desse processo — ou seja, sem a mesma triagem que o resto do conteúdo
+recebeu:
+
+| Item | O que é | Onde |
+|---|---|---|
+| `SD_Card_T-Embed/interpreter_js_apps/rf_jammer.js` | Ferramenta de jamming **ativo** de RF (transmite, não só recebe/testa) | [interpreter_js_apps/](SD_Card_T-Embed/README.md#interpreter_js_apps) |
+| `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` (2 arquivos) | Payloads BadUSB de pós-exploração (criação de conta admin oculta + desativação de firewall) | [badusb_extra_payloads/](SD_Card_T-Embed/README.md#badusb_extra_payloads) |
+
+Ambos tinham sido inicialmente descartados neste documento (ver
+"Itens descartados na curadoria" abaixo) por risco legal/de segurança
+maior que o resto do conteúdo equivalente, e foram reincluídos por
+decisão direta do mantenedor. Os avisos de uso específicos de cada um
+estão nas seções do README linkadas na tabela acima — leia antes de
+usar.
 
 > **Nota sobre conteúdo removido**: versões anteriores deste repositório
 > vendorizavam também drivers USB-serial (WCH CH9102), o `esptool`,
@@ -170,6 +192,25 @@ include the source repository link in the PR description.
 See the table above (Português section) — it applies identically in both
 languages; folder names are kept in their original Portuguese form
 throughout the repository for consistency with the file structure.
+
+### Curated vs. maintainer-added
+
+**Everything listed in the table above went through the hash-based
+curation process** (content dedup, basic license check, security/legality
+review before inclusion). Two exceptions were added **directly by this
+repository's maintainer**, outside that process — i.e. without the same
+screening the rest of the content received:
+
+| Item | What it is | Where |
+|---|---|---|
+| `SD_Card_T-Embed/interpreter_js_apps/rf_jammer.js` | **Active** RF jamming tool (transmits, not just receives/tests) | [interpreter_js_apps/](SD_Card_T-Embed/README.en.md#interpreter_js_apps) |
+| `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` (2 files) | Post-exploitation BadUSB payloads (hidden admin account creation + firewall disable) | [badusb_extra_payloads/](SD_Card_T-Embed/README.en.md#badusb_extra_payloads) |
+
+Both had initially been dropped in this document (see "Items dropped
+during curation" below) for carrying more legal/security risk than the
+rest of the equivalent content, and were added back by the maintainer's
+direct decision. The specific usage warnings for each live in the README
+sections linked above — read them before use.
 
 > **Note on removed content**: earlier versions of this repository also
 > vendored USB-serial drivers (WCH CH9102), `esptool`, the board's hardware

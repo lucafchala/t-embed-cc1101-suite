@@ -207,6 +207,7 @@ Sources aggregated into this folder:
 | **Official** Flipper Zero team IR database (merged inside the existing categories, under `<Category>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
 | Independent extra IR (`_sasiplavnik_extra/` folder) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
 | Arizer XQ2 vaporizer remote (`_magikh0e_extra/` folder) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
+| 3 extra collections attributed to contributor "sark" — universal remotes, `IrBegone @sark/` (per-room TV signal blocking) and `irtobefree @sark/` (misc electronics) | original source not identified; folder names standardized in this curation (consistent `@sark` spelling) |
 
 Notable categories: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
 `Box_SetTopBoxes` (new — set-top boxes, mostly Chinese/Asian brands:
