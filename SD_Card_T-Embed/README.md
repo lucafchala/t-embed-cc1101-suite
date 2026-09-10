@@ -20,13 +20,13 @@ com o Bruce já instalado (via Launcher).
 | [`nfc/`](#nfc) | 5.344 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade) |
 | [`themes/`](#themes) | 96 | Temas de interface |
 | [`wifi_portals/`](#wifi_portals) | 43 | Templates de captive portal (Evil Portal) |
-| [`interpreter_js_apps/`](#interpreter_js_apps) | 60 | Apps/scripts para o interpretador JS do Bruce |
+| [`interpreter_js_apps/`](#interpreter_js_apps) | 61 | Apps/scripts para o interpretador JS do Bruce |
 | [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.088 | Bancos Sub-GHz extras, por categoria |
 | [`ir_extra_dbs/`](#ir_extra_dbs) | 16.813 | Bancos IR extras, por categoria |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.031 | Payloads BadUSB extras |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.033 | Payloads BadUSB extras |
 | [`music_rtttl/`](#music_rtttl) | 11.196 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
 
-Total: **53.557 arquivos**, ~1,1 GB.
+Total: **53.560 arquivos**, ~1,1 GB.
 
 ---
 
@@ -112,18 +112,16 @@ Scripts/apps para o interpretador JavaScript embutido do Bruce:
 - `rf_433_replay.js` — replay de sinais Sub-GHz 433MHz ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
 - `ir_brute_force.js`, `rf_brute_nmrf.js` — implementações alternativas de bruteforce IR/Sub-GHz, mesma função de `ir_brute.js`/`rf_brute.js` (oficiais) mas código próprio ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store))
 - `browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` — implementações alternativas de navegador web e cotação de criptomoedas, mesma função de `crypto-prices.js` já incluído (não há navegador oficial equivalente) ([OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps), GPL-3.0)
+- `rf_jammer.js` — ferramenta de jamming ativo de RF ([Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store)); adicionado diretamente pelo mantenedor do repositório, fora do processo de curadoria por hash acima
 
-Total: 60 arquivos.
+Total: 61 arquivos.
 
-> **Nota**: o `Bruce-App-Store` (Jiggyv3) também tinha um `rf_jammer.js`
-> (ferramenta de jamming ativo de RF, com aviso legal embutido no próprio
-> código dizendo que é ilegal na maioria das jurisdições) que **foi
-> deixado de fora** — jamming é uma categoria de risco diferente dos
-> bancos de replay/clonagem e bruteforce já presentes aqui (que leem/testam
-> sinais, não interferem ativamente neles). Essa é a única exclusão
-> deliberada nesta pasta; todo o resto do que foi encontrado e é
-> tecnicamente compatível com o Bruce está incluído, mesmo quando duplica
-> a função de algo que já existe.
+> **⚠️ Aviso sobre `rf_jammer.js`**: diferente do resto do conteúdo desta
+> pasta (que lê, testa ou faz replay de sinais), este script transmite
+> ativamente ruído de RF pra interferir em outros sinais — o próprio código
+> traz aviso de que operar isso é ilegal na maioria das jurisdições, e a
+> interferência afeta qualquer receptor na frequência, não só um alvo
+> específico. Uso por conta e risco exclusivos de quem opera o dispositivo.
 
 ## subghz_extra_dbs/
 
@@ -190,9 +188,17 @@ Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
 | `BadUsb-Library/` | Biblioteca organizada por técnica (MITRE ATT&CK) | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) |
 | `Bruce-Scripts-Heaven_BAD/` | Payloads Ducky Script (Windows/macOS/Linux/Android/iOS) | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
 | `UberGuidoZ_BadUSB/` | Payloads adicionais (bombs, pranks, recon, exfiltração) não duplicados nas fontes acima | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
+| `magikh0e_BadUSB/` | 2 payloads de "post-exploitation" (coleta de informações do sistema; criação de conta admin oculta + desativação de firewall) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3.031 arquivos únicos (após deduplicação e remoção de 3 arquivos
+Total: 3.033 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
+
+> `magikh0e_BadUSB/` foi adicionado diretamente pelo mantenedor do
+> repositório, fora do processo de curadoria por hash acima. São payloads
+> BadUSB (HID) que rodam com privilégio de administrador na máquina
+> conectada — mesma categoria de risco do resto desta pasta, mas mais
+> invasivos que os de recon/replay. Uso só em teste autorizado ou no seu
+> próprio equipamento.
 
 > Wordlists de bruteforce (rockyou.txt, openwall.txt etc.) **não estão
 > incluídas** neste repositório — são padrão da indústria de segurança e
@@ -253,8 +259,6 @@ aplicativos compilados especificamente para o firmware/hardware do
 | GPS reader (`ezod/flipperzero-gps`) | App `.fap` compilado pro Flipper Zero (`application.fam` = manifesto de app do firmware oficial deles) |
 | COM Port Scanner Emulator | Mesma categoria — funcionalidade de emulação USB-HID específica do firmware Flipper Zero |
 | Wav_Player (arquivos `.wav` reais, ~2.4GB) | Peso inviável para um repositório GitHub, e boa parte é música com copyright (trilhas reais de artistas) — o `music_rtttl/` cobre o mesmo caso de uso em formato leve e sem essas questões |
-| `rf_jammer.js` (do Jiggyv3/Bruce-App-Store) | Ferramenta de jamming ativo de RF — diferente do resto do conteúdo aqui porque a interferência se propaga pro ambiente (afeta qualquer receptor na frequência, não só um alvo específico), e o próprio código traz aviso de que é ilegal operar isso na maioria das jurisdições. |
-| `Information Stealer.txt`, `Disable Firewall and Create An Admin Account.txt` (do magikh0e/FlipperZero_Stuff, pasta `BadUSB/`) | Payloads que o próprio autor rotula como "Backdoor" — criam conta de admin oculta e desativam o firewall num Windows alvo sem consentimento. Categoria de conteúdo malicioso, diferente dos payloads ofensivos de segurança/pentest já presentes em `badusb_extra_payloads/` — não incluídos |
 | `probonopd/irdb` | Banco de IR grande e ativo, mas em formato `.csv` próprio, não `.ir` — precisaria de conversão pra ser utilizável pelo Bruce/Flipper; fora de escopo por ora |
 | Forks idênticos de bancos de IR já incluídos (`sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb`) | Cópias/forks confirmados de fontes já presentes, sem conteúdo próprio — reconferido por hash, zero arquivos novos |
 | `Jalapenothedragon/evil-portal-html` | Mesmo conjunto de templates (por marca de roteador) que `Batcherss/evil-portal-html` já incluído, com 2 variantes a menos — reconferido por hash, zero arquivos novos |
@@ -266,8 +270,11 @@ aplicativos compilados especificamente para o firmware/hardware do
 próprias, não duplicatas de fato, e não têm problema de segurança.
 `magikh0e/FlipperZero_Stuff` também teve um arquivo `.ir` legítimo
 incluído (controle de vaporizador Arizer XQ2) — ver
-[ir_extra_dbs/](#ir_extra_dbs). Os 2 payloads BadUSB "Backdoor" do mesmo
-autor não entraram — ver a tabela acima.
+[ir_extra_dbs/](#ir_extra_dbs). O `rf_jammer.js` e os 2 payloads BadUSB
+`magikh0e_BadUSB/` — que este documento recomendava deixar de fora — foram
+adicionados diretamente pelo mantenedor do repositório; ver os avisos nas
+seções [interpreter_js_apps/](#interpreter_js_apps) e
+[badusb_extra_payloads/](#badusb_extra_payloads) acima.
 
 ## Aviso de uso
 

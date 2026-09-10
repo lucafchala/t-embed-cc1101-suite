@@ -50,9 +50,9 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | `SD_Card_T-Embed/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |
 | `SD_Card_T-Embed/wifi_portals/fake_login_borys/` | [Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/ProtoPirate.js` | [Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/App_Store.js`, `rename-catch.js`, `rf_433_replay.js`, `ir_brute_force.js`, `rf_brute_nmrf.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
+| `SD_Card_T-Embed/interpreter_js_apps/App_Store.js`, `rename-catch.js`, `rf_433_replay.js`, `ir_brute_force.js`, `rf_brute_nmrf.js`, `rf_jammer.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` | [OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps) | GPL-3.0 |
-| `SD_Card_T-Embed/ir_extra_dbs/_magikh0e_extra/` | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório |
+| `SD_Card_T-Embed/ir_extra_dbs/_magikh0e_extra/`, `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório |
 | `SD_Card_T-Embed/themes/Bruce-Themes_community/` | [anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/BruceScripts_community/` | [badgib/BruceScripts](https://github.com/badgib/BruceScripts) | Ver repositório |
 | `SD_Card_T-Embed/interpreter_js_apps/js-apps-bruce/` | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) | Ver repositório |
@@ -90,8 +90,6 @@ usar comercialmente esse conteúdo específico.
 | Sentry Safe plugin, GPS reader (`ezod/flipperzero-gps`), COM Port Scanner Emulator | Apps `.fap` do Flipper Zero — dependem de hardware/SDK do Flipper, não portáveis ao Bruce |
 | Wav_Player (UberGuidoZ) | Arquivos de áudio grandes (.wav) — descartado por tamanho; o formato RTTTL (`music_rtttl/`) já cobre música no buzzer do Bruce |
 | T119 bruteforcer | Conteúdo equivalente já presente no banco Sub-GHz agregado, descartado por redundância |
-| `rf_jammer.js` (Jiggyv3/Bruce-App-Store) | Ferramenta de jamming ativo de RF — diferente do resto do conteúdo agregado porque a interferência se propaga pro ambiente (afeta qualquer receptor na frequência, não um alvo específico), e o próprio código traz aviso de que é ilegal operar isso na maioria das jurisdições |
-| `Information Stealer.txt`, `Disable Firewall and Create An Admin Account.txt` (magikh0e/FlipperZero_Stuff, pasta `BadUSB/`) | Payloads que o próprio autor rotula como "Backdoor" — criam conta de admin oculta e desativam o firewall num Windows alvo sem consentimento. Categoria diferente dos payloads ofensivos de segurança já presentes em `badusb_extra_payloads/` — não incluídos |
 | `probonopd/irdb` | Banco de IR grande mas em formato `.csv` próprio, não `.ir` — precisaria de conversão |
 | `sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb` | Forks/cópias confirmadas de bancos de IR já incluídos — reconferido por hash a pedido, zero arquivos novos |
 | `Jalapenothedragon/evil-portal-html` | Mesmo conjunto de templates que `Batcherss/evil-portal-html` já incluído, com 2 variantes a menos — reconferido por hash, zero arquivos novos |
@@ -103,8 +101,11 @@ usar comercialmente esse conteúdo específico.
 > **reincluídos** a pedido, já que não têm problema de segurança, só
 > duplicam funcionalidade. `magikh0e/FlipperZero_Stuff` também teve seu
 > único arquivo `.ir` legítimo (controle de vaporizador Arizer XQ2)
-> incluído. Os 2 payloads BadUSB "Backdoor" do mesmo autor e o
-> `rf_jammer.js` são as únicas exclusões que seguem de fora.
+> incluído. O `rf_jammer.js` e os 2 payloads BadUSB `magikh0e_BadUSB/` —
+> que este documento recomendava deixar de fora — foram adicionados
+> diretamente pelo mantenedor do repositório, fora do processo de
+> curadoria por hash; ver os avisos nas seções correspondentes do README
+> de `SD_Card_T-Embed/`.
 
 ---
 
@@ -165,8 +166,6 @@ throughout the repository for consistency with the file structure.
 | Sentry Safe plugin, GPS reader (`ezod/flipperzero-gps`), COM Port Scanner Emulator | Flipper Zero `.fap` apps — depend on Flipper's own hardware/SDK, not portable to Bruce |
 | Wav_Player (UberGuidoZ) | Large audio (.wav) files — dropped for size; the RTTTL format (`music_rtttl/`) already covers buzzer music on Bruce |
 | T119 bruteforcer | Equivalent content already present in the aggregated Sub-GHz database, dropped as redundant |
-| `rf_jammer.js` (Jiggyv3/Bruce-App-Store) | Active RF jamming tool — unlike the rest of the aggregated content, the interference radiates into the environment (it affects any receiver on that frequency, not one specific target), and the code itself warns it's illegal to operate in most jurisdictions |
-| `Information Stealer.txt`, `Disable Firewall and Create An Admin Account.txt` (magikh0e/FlipperZero_Stuff, `BadUSB/` folder) | Payloads the author himself labels "Backdoor" — they create a hidden admin account and disable the firewall on a targeted Windows machine without consent. Different category from the offensive-security payloads already in `badusb_extra_payloads/` — not included |
 | `probonopd/irdb` | Large IR database but in its own `.csv` format, not `.ir` — would need conversion |
 | `sosbgit/Flipper-Zero-IRDB`, `logickworkshop/Flipper-IRDB`, `mahan518/Flipper_IR_Database`, `heytem/Flipper-Zero-IR-DataBase`, `RandomDebugError/irdb` | Confirmed forks/copies of IR databases already included — rechecked by hash on request, zero new files |
 | `Jalapenothedragon/evil-portal-html` | Same set of templates as `Batcherss/evil-portal-html` already included, minus 2 variants — rechecked by hash, zero new files |
@@ -177,5 +176,8 @@ throughout the repository for consistency with the file structure.
 > function of scripts already included — were **added back** on request,
 > since they carry no safety concern, only functional overlap.
 > `magikh0e/FlipperZero_Stuff` also had its one legitimate `.ir` file
-> (Arizer XQ2 vaporizer remote) included. The same author's 2 "Backdoor"
-> BadUSB payloads and `rf_jammer.js` are the only exclusions that remain.
+> (Arizer XQ2 vaporizer remote) included. `rf_jammer.js` and the 2 BadUSB
+> payloads in `magikh0e_BadUSB/` — which this document recommended
+> leaving out — were added directly by the repository maintainer,
+> outside the hash-curation process; see the warnings in the
+> corresponding sections of `SD_Card_T-Embed/README.en.md`.
