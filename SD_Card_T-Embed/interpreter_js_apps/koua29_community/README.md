@@ -5,9 +5,15 @@ especificamente no **LilyGO T-Embed CC1101** — não são ports genéricos de
 outro dispositivo.
 
 - **`Flock Detector.js`** (+ `Flock_Detector_sigs.json`) — detector de
-  contra-vigilância: varre Wi-Fi 2.4 GHz e sinaliza câmeras ALPR tipo
-  Flock Safety e câmeras "espiãs" Wi-Fi baratas (AliExpress/Amazon) por
-  assinatura de BSSID/fabricante.
+  contra-vigilância completo: varre Wi-Fi 2.4 GHz e sinaliza câmeras ALPR
+  tipo Flock Safety e câmeras "espiãs" Wi-Fi baratas (AliExpress/Amazon,
+  ~119 assinaturas de SSID/OUI — V380, Yoosee, A9, CamHi, EZVIZ, Hikvision,
+  Dahua, Reolink, Wyze, Foscam, entre outras), com modelo de confiança em 4
+  níveis (CONFIRMED/LIKELY/POSSIBLE/WEAK), modo "LAN scan" pra achar
+  câmeras já pareadas na rede (RTSP/ONVIF/portas Dahua/Hikvision), catálogo
+  "Cam list" na tela, beep tipo contador Geiger e log em CSV no SD. Passivo
+  (só recebe, não faz deauth nem se conecta em nada). Assinaturas extras
+  podem ser adicionadas sem reflash, via `flock_sigs.json` na raiz do SD.
 - **`WiFi QR.js`** — conecta a uma rede Wi-Fi e mostra um QR code
   escaneável na tela para convidados entrarem sem digitar senha; QR
   gerado localmente no dispositivo (sem PC/internet).

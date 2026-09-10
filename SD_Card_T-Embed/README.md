@@ -19,14 +19,14 @@ com o Bruce já instalado (via Launcher).
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
 | [`nfc/`](#nfc) | 6.131 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
 | [`themes/`](#themes) | 181 | Temas de interface |
-| [`wifi_portals/`](#wifi_portals) | 43 | Templates de captive portal (Evil Portal) |
+| [`wifi_portals/`](#wifi_portals) | 42 | Templates de simulação de captura de credencial (captive portal) |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts para o interpretador JS do Bruce |
-| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.088 | Bancos Sub-GHz extras, por categoria |
+| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.086 | Bancos Sub-GHz extras, por categoria |
 | [`ir_extra_dbs/`](#ir_extra_dbs) | 16.826 | Bancos IR extras, por categoria |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.075 | Payloads BadUSB extras |
-| [`music_rtttl/`](#music_rtttl) | 11.196 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.074 | Payloads BadUSB extras |
+| [`music_rtttl/`](#music_rtttl) | 11.195 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
 
-Total: **54.499 arquivos**, ~1,1 GB.
+Total: **54.494 arquivos**, ~1,1 GB.
 
 ---
 
@@ -81,20 +81,38 @@ aplicar um tema feito para outro hardware.
 
 ## wifi_portals/
 
-Templates de Evil Portal / captive portal, oficiais do Bruce, em duas
-línguas:
+Templates de **simulação de captura de credencial** (a técnica é comumente
+apelidada de "Evil Portal", mas o nome descreve melhor o que o template
+realmente faz: imitar a tela de login de um serviço real pra capturar o
+que for digitado nela). Oficiais do Bruce, em duas línguas:
 
 - `en/` — facebook, google, instagram, microsoft, router_update (5 páginas)
 - `pt-br/` — as mesmas 5 páginas em português
-- `evil portal/readme.md` — instruções de uso
 - `router_login_batcherss/` — 22 templates de tela de login de roteador por marca (TP-LINK, Xiaomi, Asus, Mercusys, Keenetic, Huawei, Tenda, Mikrotik, Netis), em variantes Bruce e Marauder ([Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html))
 - `fake_login_borys/` — 7 templates de login falso de serviços conhecidos (Apple ID, Facebook, Google, T-Mobile, etc.) ([Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB))
 
-Total: 43 arquivos.
+Total: 42 arquivos.
 
 > **Aviso**: estes templates simulam páginas de login de serviços reais.
 > Use apenas em testes de segurança autorizados ou ambientes controlados —
-> nunca contra terceiros sem consentimento.
+> nunca contra terceiros sem consentimento. Copiar o cartão inteiro sem
+> revisar o conteúdo pode carregar essas páginas sem perceber.
+
+### Definindo o nome do AP a partir do próprio HTML
+
+O sistema de captive portal do Bruce suporta definir o nome do Access
+Point direto num comentário na **primeira linha** do arquivo HTML do
+template, em vez de digitar o nome toda vez que for usar:
+
+```html
+<!-- AP="NomeDoSeuAP" -->
+<!DOCTYPE html>
+...
+```
+
+Se a tag não estiver presente, o Bruce pergunta o nome do AP normalmente
+(comportamento padrão, nenhum template precisa dela). Vale pra qualquer
+template desta pasta, não só um em específico.
 
 ## interpreter_js_apps/
 
@@ -149,13 +167,32 @@ Fontes agregadas nesta pasta:
 Categorias notáveis: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
 `Ceiling_Fans`, `Concert bracelet` (com subpasta `CrowdLED_Wristbands/`),
 `Smart_Home_Remotes`, `Retekess pager system t119`, entre ~65 outras.
-Algumas categorias têm nomes duplicados com grafias diferentes
-(`Ceiling Fans` vs `Ceiling_Fans`) porque vieram de fontes distintas que
-nomeavam a mesma coisa de forma diferente — a fusão preserva ambas em vez
-de adivinhar qual renomear.
+Categorias que vieram de fontes distintas com grafias diferentes pro mesmo
+nome (ex.: `Ceiling Fans` vs `Ceiling_Fans`) foram mescladas numa pasta só,
+com dedup por hash de conteúdo aplicado na própria fusão (arquivo idêntico
+em ambas → mantido uma vez; nome igual mas conteúdo diferente → ambos
+mantidos, o recém-chegado com um sufixo curto).
 
-Total: 14.088 arquivos únicos (após deduplicação — ver
+Total: 14.086 arquivos únicos (após deduplicação — ver
 [Deduplicação](#deduplicação-aplicada)).
+
+> **⚠️ Aviso — `Jamming/` e `Car Key Jammer/`**: diferente do resto desta
+> pasta (que lê, testa ou faz replay de sinais individuais), essas duas
+> categorias contêm arquivos `RAW_Data` de ruído puro, prontos pra
+> transmitir via TX do Bruce sem precisar de nenhum script — cobrindo
+> sistematicamente praticamente toda a faixa 300–928 MHz que o CC1101
+> transmite. É o mesmo risco já documentado pro [`rf_jammer.js`](#interpreter_js_apps)
+> (interferência ativa de RF, ilegal na maioria das jurisdições, afeta
+> qualquer receptor na frequência, não só um alvo específico) — só que mais
+> fácil de disparar por engano, já que não passa pelo interpretador JS.
+> **No Brasil especificamente**: boa parte do conteúdo de portão/carro
+> norte-americano nesta suíte opera em 315 MHz, que **não está** entre as
+> faixas de radiação restrita permitidas pela Anatel (Resolução 680/2017,
+> Anexo I — permitidas 335,4–399,9 MHz, 410–608 MHz e 915–948 MHz).
+> Transmitir fora dessas faixas pode configurar atividade clandestina de
+> telecomunicação (Lei 9.472/1997, art. 183). Isto não é aconselhamento
+> jurídico — confirme a legislação do seu país antes de transmitir
+> qualquer coisa.
 
 ## ir_extra_dbs/
 
@@ -195,7 +232,7 @@ Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
 | `UberGuidoZ_BadUSB/` | Payloads adicionais (bombs, pranks, recon, exfiltração) não duplicados nas fontes acima | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 payloads de "post-exploitation" (coleta de informações do sistema; criação de conta admin oculta + desativação de firewall) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3.075 arquivos únicos (após deduplicação e remoção de 3 arquivos
+Total: 3.074 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
 
 > **Correção**: a pasta anterior `Flipper-Zero-BadUSB/` (mesma fonte,
@@ -232,7 +269,7 @@ nomes que começam com número/símbolo) e duas categorias extras:
 - Fonte: [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (pastas `Music_Player/RTTTL_DUMP`, `Original_Files`, `Arcade_Tones`, `Theme_Songs`, `flipnoise`)
 - Licença: GPL-3.0
 
-Total: 11.196 arquivos únicos (após deduplicação interna entre as
+Total: 11.195 arquivos únicos (após deduplicação interna entre as
 subpastas de origem — 264 duplicatas removidas).
 
 ---

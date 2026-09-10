@@ -21,12 +21,12 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`themes/`](#themes) | 181 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
-| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,088 | Extra Sub-GHz databases, by category |
+| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,086 | Extra Sub-GHz databases, by category |
 | [`ir_extra_dbs/`](#ir_extra_dbs) | 16,826 | Extra IR databases, by category |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,075 | Extra BadUSB payloads |
-| [`music_rtttl/`](#music_rtttl) | 11,196 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,074 | Extra BadUSB payloads |
+| [`music_rtttl/`](#music_rtttl) | 11,195 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
 
-Total: **54,499 files**, ~1.1 GB.
+Total: **54,494 files**, ~1.1 GB.
 
 ---
 
@@ -80,19 +80,38 @@ a theme made for other hardware.
 
 ## wifi_portals/
 
-Official Bruce Evil Portal / captive portal templates, in two languages:
+**Credential-harvesting simulation** templates (the technique is commonly
+nicknamed "Evil Portal", but that name undersells what the template
+actually does: imitate a real service's login screen to capture whatever
+gets typed into it). Official Bruce templates, in two languages:
 
 - `en/` — facebook, google, instagram, microsoft, router_update (5 pages)
 - `pt-br/` — the same 5 pages in Portuguese
-- `evil portal/readme.md` — usage instructions
 - `router_login_batcherss/` — 22 router-brand login-screen templates (TP-LINK, Xiaomi, Asus, Mercusys, Keenetic, Huawei, Tenda, Mikrotik, Netis), in Bruce and Marauder variants ([Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html))
 - `fake_login_borys/` — 7 fake login templates for well-known services (Apple ID, Facebook, Google, T-Mobile, etc.) ([Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB))
 
-Total: 43 files.
+Total: 42 files.
 
 > **Warning**: these templates simulate login pages of real services. Use
 > only in authorized security testing or controlled environments — never
-> against third parties without consent.
+> against third parties without consent. Copying the whole card without
+> reviewing its content can load these pages without you realizing it.
+
+### Setting the AP name from the HTML itself
+
+Bruce's captive-portal system supports setting the Access Point name
+directly from a comment on the **first line** of the template's HTML file,
+instead of typing the name every time:
+
+```html
+<!-- AP="YourAPName" -->
+<!DOCTYPE html>
+...
+```
+
+If the tag isn't present, Bruce asks for the AP name as usual (default
+behavior — no template requires it). Works for any template in this
+folder, not just one specific one.
 
 ## interpreter_js_apps/
 
@@ -148,12 +167,30 @@ Sources aggregated into this folder:
 Notable categories: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
 `Ceiling_Fans`, `Concert bracelet` (with a `CrowdLED_Wristbands/`
 subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`, among
-~65 others. Some categories have duplicate-looking names with different
-spelling (`Ceiling Fans` vs `Ceiling_Fans`) because they came from
-different sources that named the same thing differently — the merge keeps
-both rather than guessing which to rename.
+~65 others. Categories that came from different sources under different
+spellings for the same name (e.g. `Ceiling Fans` vs `Ceiling_Fans`) were
+merged into a single folder, with content-hash dedup applied at merge time
+(identical file in both → kept once; same name but different content →
+both kept, the incoming one gets a short suffix).
 
-Total: 14,088 unique files (after deduplication — see
+> **⚠️ Warning — `Jamming/` and `Car Key Jammer/`**: unlike the rest of
+> this folder (which reads, tests, or replays individual signals), these
+> two categories contain pure-noise `RAW_Data` files, ready to transmit
+> via the Bruce's TX with no script needed — systematically covering
+> almost the entire 300–928 MHz range the CC1101 transmits. This is the
+> same risk already documented for [`rf_jammer.js`](#interpreter_js_apps)
+> (active RF interference, illegal in most jurisdictions, affects any
+> receiver on the frequency, not just an intended target) — except easier
+> to trigger by accident, since it doesn't go through the JS interpreter.
+> **In Brazil specifically**: much of the US-style car/gate content in
+> this suite operates at 315 MHz, which is **not** among the restricted-
+> radiation bands ANATEL permits (Resolução 680/2017, Annex I — permitted:
+> 335.4–399.9 MHz, 410–608 MHz, and 915–948 MHz). Transmitting outside
+> those bands may constitute unauthorized telecom activity (Lei
+> 9.472/1997, art. 183). This isn't legal advice — check your own
+> country's regulations before transmitting anything.
+
+Total: 14,086 unique files (after deduplication — see
 [Deduplication](#deduplication-applied)).
 
 ## ir_extra_dbs/
@@ -194,7 +231,7 @@ BadUSB payloads **beyond** the official `BadUSB_BlueDucky/`:
 | `UberGuidoZ_BadUSB/` | Additional payloads (bombs, pranks, recon, exfiltration) not duplicated in the sources above | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 "post-exploitation" payloads (system-information gathering; hidden admin account creation + firewall disable) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3,075 unique files (after deduplication and removal of 3 "prank"
+Total: 3,074 unique files (after deduplication and removal of 3 "prank"
 files of ~15MB each, which were image hexdumps with no real function).
 
 > **Correction**: the previous `Flipper-Zero-BadUSB/` folder (same
@@ -231,7 +268,7 @@ Organized into alphabetical subfolders (`A/` through `Z/`, plus `0/` and
 - Source: [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (folders `Music_Player/RTTTL_DUMP`, `Original_Files`, `Arcade_Tones`, `Theme_Songs`, `flipnoise`)
 - License: GPL-3.0
 
-Total: 11,196 unique files (after internal deduplication across the
+Total: 11,195 unique files (after internal deduplication across the
 source subfolders — 264 duplicates removed).
 
 ---

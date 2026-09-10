@@ -24,7 +24,7 @@ This repository is a **curation and reorganization** of several public GitHub
 sources — not original code. See [Provenance and licenses](#provenance-and-licenses)
 before redistributing any part of it.
 
-**~54,499 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
+**~54,494 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
 [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
@@ -63,10 +63,11 @@ from there (also always the latest version).
 5. Insert the card and power on the board — Bruce should boot with access to
 the extra databases.
 
-> ⚠️ **If your board is the Plus variant (as documented here)**: there's a
-> known, still-unfixed bug where the SD card fails to mount when running via
-> Launcher. See the full note in [Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411)
-> before spending time debugging a "defective" card.
+> ⚠️ **If your board is the Plus variant (as documented here)**: you may hit
+> a bug where the SD card fails to mount when running via Launcher. See the
+> full note in [Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411)
+> (**closed** — check the closing reason before assuming your version
+> already has the fix) before spending time debugging a "defective" card.
 
 > ℹ️ **Command-line flashing**: if you prefer esptool over the web flashers,
 > it's documented at [espressif/esptool](https://github.com/espressif/esptool) —

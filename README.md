@@ -23,7 +23,7 @@ oficial instalado através do **[bmorcelli/Launcher](https://github.com/bmorcell
 Este repositório é uma **curadoria e reorganização** de várias fontes públicas do
 GitHub — não é código original. Veja [Proveniência e licenças](#proveniência-e-licenças) antes de redistribuir qualquer parte dele.
 
-**~54.499 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
+**~54.494 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
 deduplicados por hash de conteúdo e organizados por categoria — veja o
 detalhamento completo em [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
 
@@ -64,10 +64,12 @@ partir dela (também sempre a versão mais recente).
 5. Insira o cartão e ligue a placa — o Bruce deve bootar com acesso aos
 bancos de dados extras.
 
-> ⚠️ **Se sua placa é a variante Plus (como a documentada aqui)**: há um bug
-> conhecido e ainda sem correção de SD card não montando ao rodar via
-> Launcher. Veja o aviso completo no [issue #411 do Launcher](https://github.com/bmorcelli/Launcher/issues/411)
-> antes de gastar tempo debugando um cartão "com defeito".
+> ⚠️ **Se sua placa é a variante Plus (como a documentada aqui)**: pode
+> ocorrer um bug de SD card não montando ao rodar via Launcher. Veja o
+> aviso completo no [issue #411 do Launcher](https://github.com/bmorcelli/Launcher/issues/411)
+> (**fechada** — confira o motivo do fechamento antes de assumir que sua
+> versão já tem a correção) antes de gastar tempo debugando um cartão "com
+> defeito".
 
 > ℹ️ **Flash via linha de comando**: se preferir esptool em vez dos web
 > flashers, ele está documentado em [espressif/esptool](https://github.com/espressif/esptool) —

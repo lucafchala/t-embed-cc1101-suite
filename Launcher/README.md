@@ -38,20 +38,22 @@ instalado depois, de dentro do próprio Launcher, pela galeria OTA.
 
 ## ⚠️ Aviso conhecido — T-Embed CC1101 **Plus**
 
-Se sua placa é a variante **Plus**, há um problema reportado e **ainda sem
-correção** ([Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411)):
-o cartão SD pode falhar ao montar quando rodando através deste Launcher,
-por um conflito de barramento SPI compartilhado — os pinos CS do CC1101/
-NRF24 ficam flutuando ou em LOW e travam o barramento que o SD também usa.
-O mesmo cartão SD funciona normalmente quando o Bruce é flashado
-diretamente (sem Launcher), o que confirma que é um problema específico do
-perfil de hardware "T-Embed" padrão usado pelo Launcher, que não tem um
-perfil dedicado para a variante Plus.
+Se sua placa é a variante **Plus**, pode ocorrer um problema já reportado
+([Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411),
+**issue fechada** — confira lá o motivo do fechamento e se corresponde à
+sua versão do Launcher antes de assumir que já está corrigido): o cartão SD
+pode falhar ao montar quando rodando através deste Launcher, por um
+conflito de barramento SPI compartilhado — os pinos CS do CC1101/NRF24
+ficam flutuando ou em LOW e travam o barramento que o SD também usa. O
+mesmo cartão SD funciona normalmente quando o Bruce é flashado diretamente
+(sem Launcher), o que confirma que é um problema específico do perfil de
+hardware "T-Embed" padrão usado pelo Launcher, que não tem um perfil
+dedicado para a variante Plus.
 
-Não há solução oficial no momento. Se o SD não montar depois de instalar o
-Bruce pela galeria do Launcher, isso é a causa provável — não é o cartão
-SD, nem a formatação, nem os arquivos copiados. Acompanhe o issue linkado
-para novidades.
+Se o SD não montar depois de instalar o Bruce pela galeria do Launcher,
+isso é a causa mais provável — não é o cartão SD, nem a formatação, nem os
+arquivos copiados. Atualize o Launcher pra versão mais recente antes de
+mais nada; se persistir, acompanhe o issue linkado.
 
 ## Depois de instalar o Bruce
 
