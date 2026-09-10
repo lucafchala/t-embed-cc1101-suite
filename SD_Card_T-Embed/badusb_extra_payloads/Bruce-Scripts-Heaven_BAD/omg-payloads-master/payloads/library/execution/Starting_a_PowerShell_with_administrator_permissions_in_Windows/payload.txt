@@ -18,8 +18,11 @@ LEFTARROW
 ENTER
 
 DELAY 2000
-STRINGLN Get-ExecutionPolicy -List
-STRINGLN Set-ExecutionPolicy Bypass
-STRINGLN Get-ExecutionPolicy -List
+STRING Get-ExecutionPolicy -List
+ENTER
+STRING Set-ExecutionPolicy Bypass
+ENTER
+STRING Get-ExecutionPolicy -List
+ENTER
 
 ALT F4

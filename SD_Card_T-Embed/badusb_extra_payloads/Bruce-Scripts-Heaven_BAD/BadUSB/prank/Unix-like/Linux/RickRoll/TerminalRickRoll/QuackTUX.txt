@@ -16,4 +16,5 @@ CTRL-ALT t
 DELAY 2000
 F11
 DELAY 300
-STRINGLN curl -s -L https://raw.githubusercontent.com/FalsePhilosopher/rickrollrc/master/roll.sh | bash
+STRING curl -s -L https://raw.githubusercontent.com/FalsePhilosopher/rickrollrc/master/roll.sh | bash
+ENTER

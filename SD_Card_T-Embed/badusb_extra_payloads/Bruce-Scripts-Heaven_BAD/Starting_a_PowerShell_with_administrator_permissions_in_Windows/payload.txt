@@ -21,11 +21,14 @@ DELAY 500
 ENTER
 
 DELAY 2000
-STRINGLN Get-ExecutionPolicy -List
+STRING Get-ExecutionPolicy -List
+ENTER
 DELAY 500
-STRINGLN Set-ExecutionPolicy Bypass
+STRING Set-ExecutionPolicy Bypass
+ENTER
 DELAY 500
-STRINGLN Get-ExecutionPolicy -List
+STRING Get-ExecutionPolicy -List
+ENTER
 DELAY 500
 
 ALT F4
