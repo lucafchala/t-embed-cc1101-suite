@@ -9,15 +9,15 @@ Also can read my [blog post](https://hong5489.github.io/2022-09-23-gate-protocol
 
 ## UNILARM remote sample
 
-<img src="unilarm.JPG" width="500">
+*(imagem original não incluída neste espelho)*
 
 ## SMC5326 remote sample
 
-<img src="smc5326.JPG" width="500">
+*(imagem original não incluída neste espelho)*
 
 ## PT2260 remote sample
 
-<img src="PT2260_front.jpg" width="250"><img src="PT2260_inside.jpg" width="250">
+*(imagens originais não incluídas neste espelho)*
 
 ## Protocol Structure
 
@@ -25,17 +25,13 @@ Also can read my [blog post](https://hong5489.github.io/2022-09-23-gate-protocol
 
 [ 16bits of DIP switch combinations ][ 9bits of Instruction base ]
 
-Example in [Pulse Plotter](https://my.flipp.dev/pulse-plotter): 
-
-![protocol](protocol.png)
+Example in [Pulse Plotter](https://my.flipp.dev/pulse-plotter) — *(imagem original não incluída neste espelho)*
 
 ### PT2260
 
 [ 16bits of DIP switch combinations ][ 8bits of Instruction base ]
 
-Example in [Pulse Plotter](https://my.flipp.dev/pulse-plotter): 
-
-![protocol](PT2260_protocol.png)
+Example in [Pulse Plotter](https://my.flipp.dev/pulse-plotter) — *(imagem original não incluída neste espelho)*
 
 Both protocol is similar to the PT-2262 Format (Princeton). More info [here in russian](https://phreakerclub.com/447)
 

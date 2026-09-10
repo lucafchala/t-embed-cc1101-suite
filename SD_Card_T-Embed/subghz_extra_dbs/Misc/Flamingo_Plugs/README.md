@@ -9,7 +9,6 @@ Raw DeBruijn (.sub) signal files from [JKCTech](https://github.com/jkctech/Flipp
 
 Might be compatible with more Flamingo Devices
 
-<img src="remote.jpg">
-<img src="socket.jpg">
+*(imagens originais não incluídas neste espelho)*
 
 **Pro Tip:** `You should add googly eyes to your remotes as well!`

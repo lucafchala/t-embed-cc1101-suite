@@ -2,7 +2,7 @@
 
 FCC Link: [https://fcc.report/FCC-ID/A25-TX028](https://fcc.report/FCC-ID/A25-TX028)
 
-<img align="right" src=".remote.png"  height=100>
+*(imagem original não incluída neste espelho)*
 
 Copied from a fan from Home Depot ( [Link](https://www.homedepot.com/p/Home-Decorators-Collection-Ashby-Park-52-in-White-Color-Changing-Integrated-LED-Brushed-Nickel-Ceiling-Fan-with-Light-Kit-and-Remote-Control-59252/308039187) ):
 

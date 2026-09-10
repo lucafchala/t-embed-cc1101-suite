@@ -6,5 +6,4 @@ Raw DeBruijn (.sub) signal files from [JKCTech](https://github.com/jkctech/Flipp
 
 - `Byron DB421E` - Receiver
 
-<img src="receiver.jpg">
-<img src="stock.jpg">
+*(imagens originais não incluídas neste espelho)*
