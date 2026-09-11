@@ -17,16 +17,16 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`UniversalIR/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
 | [`UniversalRF/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
 | [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
-| [`nfc/`](#nfc) | 6,131 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
-| [`themes/`](#themes) | 181 | UI themes |
+| [`nfc/`](#nfc) | 8,007 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
+| [`themes/`](#themes) | 410 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
-| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,088 | Extra Sub-GHz databases, by category |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,826 | Extra IR databases, by category |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,075 | Extra BadUSB payloads |
-| [`music_rtttl/`](#music_rtttl) | 11,196 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
+| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,086 | Extra Sub-GHz databases, by category |
+| [`ir_extra_dbs/`](#ir_extra_dbs) | 16,825 | Extra IR databases, by category |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,316 | Extra BadUSB payloads |
+| [`music_rtttl/`](#music_rtttl) | 11,195 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
 
-Total: **54,499 files**, ~1.1 GB.
+Total: **56,841 files**, ~1.1 GB.
 
 ---
 
@@ -62,7 +62,22 @@ hash:
 | `UberGuidoZ_H10301_RFID_Bruteforce/` | Bruteforcer for the HID H10301 access-card format (26-bit Wiegand) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `Skylanders_LEGO_Toys/` | 784 NFC dumps of Skylanders figures + 2 per-UID cryptographic key generator scripts (Skylanders/Disney Infinity) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders), [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) |
 
-Total: 6,131 files.
+Total: 8,007 files.
+
+> **Warning — `UberGuidoZ_H10301_RFID_Bruteforce/`**: unlike the rest of
+> this folder (dumps/replay of specific tags), this is a **physical
+> access control** bruteforcer (HID H10301 cards, Wiegand 26-bit) — it
+> systematically tries credential combinations against a real reader.
+> Category: **physical access control, active fuzzing/brute force,
+> authorized testing only**. Not equivalent to the regular NFC dumps in
+> this folder.
+>
+> **The `H10301_BF.txt` wordlist (112MB) is not included** — it exceeds
+> GitHub's 100MB per-file limit and, more importantly, fits the same
+> policy already applied to rockyou.txt/openwall.txt in this
+> repository: large bruteforce wordlists aren't vendored due to size
+> and because they're easy to obtain separately. Only the original
+> folder's `ReadMe.md` was kept, documenting what it contained.
 
 ## themes/
 
@@ -74,25 +89,44 @@ UI themes for Bruce:
 - `Pwnagotchi_theme_pfefferle/` — theme with a Pwnagotchi-inspired look, with its own icon set for Bruce's modules (wifi, ble, rf, ir, nfc, gps, etc.); confirmed compatible with Cardputer, M5StickC Plus2 and CYD ([pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme))
 - `koua29_community/` — 2 theme sets made specifically for the T-Embed CC1101's 320×170 screen: "HUD" (3 colorways) and "Wheel" (radial wheel, light/dark) ([koua29](https://github.com/koua29))
 
-Total: 181 files. **This is one of the only folders that can depend on the
+Total: 410 files. **This is one of the only folders that can depend on the
 specific board** (screen resolution) — check compatibility before applying
 a theme made for other hardware.
 
 ## wifi_portals/
 
-Official Bruce Evil Portal / captive portal templates, in two languages:
+**Credential-harvesting simulation** templates (the technique is commonly
+nicknamed "Evil Portal", but that name undersells what the template
+actually does: imitate a real service's login screen to capture whatever
+gets typed into it). Official Bruce templates, in two languages:
 
 - `en/` — facebook, google, instagram, microsoft, router_update (5 pages)
 - `pt-br/` — the same 5 pages in Portuguese
-- `evil portal/readme.md` — usage instructions
 - `router_login_batcherss/` — 22 router-brand login-screen templates (TP-LINK, Xiaomi, Asus, Mercusys, Keenetic, Huawei, Tenda, Mikrotik, Netis), in Bruce and Marauder variants ([Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html))
 - `fake_login_borys/` — 7 fake login templates for well-known services (Apple ID, Facebook, Google, T-Mobile, etc.) ([Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB))
 
-Total: 43 files.
+Total: 42 files.
 
 > **Warning**: these templates simulate login pages of real services. Use
 > only in authorized security testing or controlled environments — never
-> against third parties without consent.
+> against third parties without consent. Copying the whole card without
+> reviewing its content can load these pages without you realizing it.
+
+### Setting the AP name from the HTML itself
+
+Bruce's captive-portal system supports setting the Access Point name
+directly from a comment on the **first line** of the template's HTML file,
+instead of typing the name every time:
+
+```html
+<!-- AP="YourAPName" -->
+<!DOCTYPE html>
+...
+```
+
+If the tag isn't present, Bruce asks for the AP name as usual (default
+behavior — no template requires it). Works for any template in this
+folder, not just one specific one.
 
 ## interpreter_js_apps/
 
@@ -147,13 +181,39 @@ Sources aggregated into this folder:
 
 Notable categories: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
 `Ceiling_Fans`, `Concert bracelet` (with a `CrowdLED_Wristbands/`
-subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`, among
-~65 others. Some categories have duplicate-looking names with different
-spelling (`Ceiling Fans` vs `Ceiling_Fans`) because they came from
-different sources that named the same thing differently — the merge keeps
-both rather than guessing which to rename.
+subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`,
+`Jamming`, `Car Key Jammer` and `OOK_bruteforce` (the last 3 carry their
+own usage warning below — not ordinary replay signals), among ~65 others. Categories that came from different sources under different
+spellings for the same name (e.g. `Ceiling Fans` vs `Ceiling_Fans`) were
+merged into a single folder, with content-hash dedup applied at merge time
+(identical file in both → kept once; same name but different content →
+both kept, the incoming one gets a short suffix).
 
-Total: 14,088 unique files (after deduplication — see
+> **⚠️ Warning — `Jamming/` and `Car Key Jammer/`**: unlike the rest of
+> this folder (which reads, tests, or replays individual signals), these
+> two categories contain pure-noise `RAW_Data` files, ready to transmit
+> via the Bruce's TX with no script needed — systematically covering
+> almost the entire 300–928 MHz range the CC1101 transmits. This is the
+> same risk already documented for [`rf_jammer.js`](#interpreter_js_apps)
+> (active RF interference, illegal in most jurisdictions, affects any
+> receiver on the frequency, not just an intended target) — except easier
+> to trigger by accident, since it doesn't go through the JS interpreter.
+> **In Brazil specifically**: much of the US-style car/gate content in
+> this suite operates at 315 MHz, which is **not** among the restricted-
+> radiation bands ANATEL permits (Resolução 680/2017, Annex I — permitted:
+> 335.4–399.9 MHz, 410–608 MHz, and 915–948 MHz). Transmitting outside
+> those bands may constitute unauthorized telecom activity (Lei
+> 9.472/1997, art. 183). This isn't legal advice — check your own
+> country's regulations before transmitting anything.
+
+> **Note — `Rg/`, `Am_far/`, `Fm_far/`, `Fm_close/`**: 4 folders with 1
+> `RAW_Data` file each (467.75 MHz and 433.92 MHz OOK/2FSK). By content
+> they look like range-test recordings (far/close) — the aggregated
+> source doesn't document the exact purpose or target device. Kept since
+> there's no indication they're useless or duplicate, but they don't fit
+> a clear category.
+
+Total: 14,086 unique files (after deduplication — see
 [Deduplication](#deduplication-applied)).
 
 ## ir_extra_dbs/
@@ -170,6 +230,7 @@ Sources aggregated into this folder:
 | **Official** Flipper Zero team IR database (merged inside the existing categories, under `<Category>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
 | Independent extra IR (`_sasiplavnik_extra/` folder) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
 | Arizer XQ2 vaporizer remote (`_magikh0e_extra/` folder) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
+| 3 extra collections attributed to contributor "sark" — universal remotes, `IrBegone @sark/` (per-room TV signal blocking) and `irtobefree @sark/` (misc electronics) | original source not identified; folder names standardized in this curation (consistent `@sark` spelling) |
 
 Notable categories: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
 `Box_SetTopBoxes` (new — set-top boxes, mostly Chinese/Asian brands:
@@ -177,7 +238,7 @@ Xiaomi, ZTE, XGIMI, EVPAD, etc., brought in by flipperdevices/IRDB),
 `Brand_(sorted)` (the same collection organized by brand instead of
 device type), among ~50 others.
 
-Total: 16,826 unique files (after deduplication). Only the `.ir` files
+Total: 16,825 unique files (after deduplication). Only the `.ir` files
 from flipperdevices/IRDB were brought in — the `.json`/`.png` metadata
 that accompanies each device is specific to the official Flipper app's UI
 and isn't read by Bruce.
@@ -194,8 +255,25 @@ BadUSB payloads **beyond** the official `BadUSB_BlueDucky/`:
 | `UberGuidoZ_BadUSB/` | Additional payloads (bombs, pranks, recon, exfiltration) not duplicated in the sources above | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 "post-exploitation" payloads (system-information gathering; hidden admin account creation + firewall disable) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3,075 unique files (after deduplication and removal of 3 "prank"
+Total: 3,316 unique files (after deduplication and removal of 3 "prank"
 files of ~15MB each, which were image hexdumps with no real function).
+
+> **Compatibility with Bruce's BadUSB interpreter**: not every Ducky
+> Script works as-is — Bruce (via `ducky_typer.cpp`) supports classic
+> Ducky plus single-line modifier shortcuts, but not
+> `STRINGLN`/`EXTENSION`/`REM_BLOCK`/`DEFINE` (DuckyScript 3.0/Bash
+> Bunny syntax). In `Bruce-Scripts-Heaven_BAD/`, ~1,211 files already
+> work as-is (1,187 natively + 24 converted from `STRINGLN` to
+> `STRING`+`ENTER`, pure reformatting). The 300 that don't work as-is
+> were separated into
+> [`Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/`](badusb_extra_payloads/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/README.md#english)
+> so they don't sit mixed in with ready-to-use ones — nothing was
+> deleted, only reorganized and documented (25 need a manual syntax fix,
+> 275 depend on the `EXTENSION` system Bruce doesn't implement). The
+> `BadUSB-FalsePhilosopher/` folder (which has ~1,000 incompatible files
+> for a different reason — Bash Bunny/WHID/Malduino/OMG syntax/hardware,
+> not DuckyScript 3.0) was kept exactly as its original author organized
+> it, with no restructuring.
 
 > **Correction**: the previous `Flipper-Zero-BadUSB/` folder (same
 > source, `I-Am-Jakoby/Flipper-Zero-BadUSB`) only had the
@@ -231,7 +309,7 @@ Organized into alphabetical subfolders (`A/` through `Z/`, plus `0/` and
 - Source: [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (folders `Music_Player/RTTTL_DUMP`, `Original_Files`, `Arcade_Tones`, `Theme_Songs`, `flipnoise`)
 - License: GPL-3.0
 
-Total: 11,196 unique files (after internal deduplication across the
+Total: 11,195 unique files (after internal deduplication across the
 source subfolders — 264 duplicates removed).
 
 ---

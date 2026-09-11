@@ -32,7 +32,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN www.youtube.com
+STRING www.youtube.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -41,7 +42,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN www.facebook.com
+STRING www.facebook.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -50,7 +52,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN https://www.nytimes.com/
+STRING https://www.nytimes.com/
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -60,7 +63,8 @@ CTRL l
 
 REM Enter your domain/ip site below.
 DELAY 1000
-STRINGLN <link to your site>
+STRING <link to your site>
+ENTER
 DELAY 2000
 CTRL d
 DELAY 500
@@ -71,7 +75,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN instagram.com
+STRING instagram.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -80,7 +85,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN twitter.com
+STRING twitter.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -89,7 +95,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN whatsapp.com
+STRING whatsapp.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -98,7 +105,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN pinterest.com
+STRING pinterest.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -107,7 +115,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN microsoft.com
+STRING microsoft.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -116,7 +125,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN imdb.com
+STRING imdb.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -125,7 +135,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN netflix.com
+STRING netflix.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -134,7 +145,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN apple.com
+STRING apple.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -143,7 +155,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN globo.com
+STRING globo.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -152,7 +165,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN translate.google.com
+STRING translate.google.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -161,7 +175,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN it.wikipedia.org
+STRING it.wikipedia.org
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500
@@ -170,7 +185,8 @@ DELAY 500
 CTRL l
 
 DELAY 1000
-STRINGLN openai.com
+STRING openai.com
+ENTER
 DELAY 1500
 CTRL t
 DELAY 500

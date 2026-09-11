@@ -38,19 +38,21 @@ installed afterward, from inside the Launcher itself, via its OTA gallery.
 
 ## ⚠️ Known issue — T-Embed CC1101 **Plus**
 
-If your board is the **Plus** variant, there's a reported and **still
-unfixed** issue ([Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411)):
-the SD card can fail to mount when running through this Launcher, due to a
-shared SPI bus conflict — the CC1101/NRF24 CS pins are left floating or
-pulled LOW and lock up the bus the SD card also uses. The same SD card
-works fine when Bruce is flashed directly (without the Launcher), which
-confirms this is specific to the standard "T-Embed" hardware profile the
-Launcher uses, since there's no dedicated profile for the Plus variant.
+If your board is the **Plus** variant, you may hit a previously reported
+issue ([Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411),
+**closed** — check there for the closing reason and whether it matches your
+Launcher version before assuming it's already fixed): the SD card can fail
+to mount when running through this Launcher, due to a shared SPI bus
+conflict — the CC1101/NRF24 CS pins are left floating or pulled LOW and
+lock up the bus the SD card also uses. The same SD card works fine when
+Bruce is flashed directly (without the Launcher), which confirms this is
+specific to the standard "T-Embed" hardware profile the Launcher uses,
+since there's no dedicated profile for the Plus variant.
 
-There's no official fix at this time. If the SD card doesn't mount after
-installing Bruce through the Launcher's gallery, this is the likely cause
-— not the SD card itself, its formatting, or the copied files. Watch the
-linked issue for updates.
+If the SD card doesn't mount after installing Bruce through the Launcher's
+gallery, this is the most likely cause — not the SD card itself, its
+formatting, or the copied files. Update the Launcher to the latest version
+first; if it persists, follow the linked issue.
 
 ## After installing Bruce
 

@@ -6,4 +6,5 @@ GUI b
 DELAY 700
 CTRL l
 DELAY 700
-STRINGLN croustycloud.fr
+STRING croustycloud.fr
+ENTER

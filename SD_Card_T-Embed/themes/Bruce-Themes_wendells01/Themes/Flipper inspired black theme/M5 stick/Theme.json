@@ -1,0 +1,21 @@
+{
+  "priColor": "ffff",
+  "secColor": "ffff",
+  "bgColor": "0000",
+  "border": 0,
+  "label": 1,
+  "wifi": "wifi.png",
+  "ble": "ble.png",
+  "rf": "rf.png",
+  "rfid": "rfid.png",
+  "ir": "ir.png",
+  "fm": "fm.png",
+  "files": "files.png",
+  "gps": "gps.png",
+  "nrf": "nrf.png",
+  "interpreter": "interpreter.png",
+  "others": "others.png",
+  "clock": "clock.png",
+  "connect": "connect.png",
+  "config": "config.png"
+}

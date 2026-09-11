@@ -22,7 +22,8 @@ GUI r
 DELAY 2000
 
 REM Open advanced settings
-STRINGLN sysdm.cpl
+STRING sysdm.cpl
+ENTER
 DELAY 2000
 
 REM Goto nav bar
