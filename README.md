@@ -89,6 +89,7 @@ bancos de dados extras.
 ```
 lilygo/
 ├── SD_Card_T-Embed/             → conteúdo a copiar para a raiz do cartão SD
+│   ├── esp32_serial_navigator.html → ferramenta PC-side (Web Serial) p/ navegar o Bruce por USB
 │   ├── UniversalIR/             → banco IR (curado)
 │   ├── UniversalRF/             → banco RF (curado)
 │   ├── BadUSB_BlueDucky/        → payloads Ducky Script
@@ -99,8 +100,12 @@ lilygo/
 │   ├── ir_extra_dbs/            → bancos IR extras, por categoria
 │   ├── badusb_extra_payloads/   → payloads BadUSB extras
 │   ├── wifi_portals/            → templates de portal cativo (evil portal) para o Wi-Fi do Bruce
-│   └── music_rtttl/             → músicas RTTTL (.txt) pro player de áudio do Bruce
+│   ├── music_rtttl/             → músicas RTTTL (.txt) pro player de áudio do Bruce
+│   ├── pwnagotchi/              → rostos/nomes de spam pro PwnGrid do modo Pwnagotchi
+│   ├── reverseshell/            → doc de uso do Reverse Shell / BruceC2 embutido no Bruce
+│   └── ssid_list/               → lista de SSIDs pro Enhanced Karma
 ├── Launcher/                    → guia de instalação do bmorcelli/Launcher (sem binário vendorizado)
+├── tools/                       → scripts de manutenção do repositório (ex.: verify_pack.sh)
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md / README.en.md
@@ -138,11 +143,14 @@ usados livremente; o conteúdo agregado de terceiros segue suas licenças de ori
 ## Aviso de uso
 
 Vários itens aqui — payloads BadUSB, bancos Sub-GHz de veículos e portões,
-wordlists de bruteforce — são ferramentas de segurança ofensiva/pesquisa em RF.
-O uso é de responsabilidade de quem opera o dispositivo: verifique a legislação
-local sobre clonagem de sinais RF/NFC de terceiros e uso de dispositivos BadUSB
-antes de utilizar qualquer um desses bancos fora de um ambiente controlado ou
-autorizado.
+wordlists de bruteforce, o Reverse Shell/BruceC2 (`reverseshell/`) e a
+lista de SSID do Enhanced Karma (`ssid_list/`) — são ferramentas de
+segurança ofensiva/pesquisa em RF. O uso é de responsabilidade de quem
+opera o dispositivo: verifique a legislação local sobre clonagem de
+sinais RF/NFC de terceiros, uso de dispositivos BadUSB e execução remota
+de comando antes de utilizar qualquer um desses bancos fora de um
+ambiente controlado ou autorizado. Detalhes de cada um em
+[`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md#aviso-de-uso).
 
 ## Créditos
 

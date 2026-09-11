@@ -28,15 +28,35 @@ before powering it on with Bruce already installed (via the Launcher).
 | [`nfc/`](#nfc) | 8,007 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
-| [`interpreter_js_apps/`](#interpreter_js_apps) | 73 | Apps/scripts for Bruce's JS interpreter |
+| [`interpreter_js_apps/`](#interpreter_js_apps) | 74 | Apps/scripts for Bruce's JS interpreter |
 | [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14,086 | Extra Sub-GHz databases, by category |
 | [`ir_extra_dbs/`](#ir_extra_dbs) | 16,825 | Extra IR databases, by category |
 | [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3,316 | Extra BadUSB payloads |
 | [`music_rtttl/`](#music_rtttl) | 11,195 | RTTTL-format songs (text `.txt`) for Bruce's audio player |
+| [`pwnagotchi/`](#pwnagotchi) | 1 | Spam faces/names for Bruce's Pwnagotchi mode PwnGrid |
+| [`reverseshell/`](#reverseshell) | 1 | Usage doc for Bruce's built-in Reverse Shell / BruceC2 |
+| [`ssid_list/`](#ssid_list) | 2 | ~15,000 SSID list for Enhanced Karma (fake SSID broadcast) |
 
-Total: **56,841 files**, ~1.1 GB.
+Total: **56,847 files**, ~1.1 GB (includes the files at this folder's
+root — see [`esp32_serial_navigator.html`](#esp32_serial_navigatorhtml)
+below).
 
 ---
+
+## esp32_serial_navigator.html
+
+**PC-side** tool (not meant to be copied to the SD card with the rest —
+open it locally in a browser; it uses the Web Serial API to talk to the
+board over USB). Connects to the T-Embed's serial port, shows a live log
+console, and has a "Navigator" panel with a directional keypad (prev/sel/
+next) that sends navigation commands over serial — designed to pair with
+[`xFlipper.js`](#interpreter_js_apps) running on Bruce, which mirrors the
+same commands (`nav prev`, `nav sel`, `nav next`) from the other end.
+Requires a browser with Web Serial support (Chrome/Edge; doesn't work in
+Firefox/Safari).
+
+Added directly by the repository maintainer, outside the hash-based
+curation process used for the rest of the pack.
 
 ## UniversalIR/ and UniversalRF/
 
@@ -158,8 +178,9 @@ Scripts/apps for Bruce's built-in JavaScript interpreter:
 - `BruceSafe.js` — game made specifically for the T-Embed ([ssstee/BruceSafe](https://github.com/ssstee/BruceSafe))
 - `BruteRF.js` — Sub-GHz bruteforce tool with 34 protocols, De Bruijn attack, RAW mode ([Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps))
 - `koua29_community/` — 7 apps made specifically for the T-Embed CC1101: surveillance-camera detector (Flock Detector), Wi-Fi QR code, Snake, SSID "safari", Breakout, TV-B-Gone, script launcher ([koua29](https://github.com/koua29))
+- `xFlipper.js` — Flipper Zero-style menu (submenu + dialog) that uses the JS interpreter's `serial` API to send navigation commands (`nav prev`/`nav sel`/`nav next`) over the board's serial port; built as the on-device counterpart to the PC-side [`esp32_serial_navigator.html`](#esp32_serial_navigatorhtml). Added directly by the repository maintainer, outside the hash-based curation process above.
 
-Total: 73 files.
+Total: 74 files.
 
 > **⚠️ Warning about `rf_jammer.js`**: unlike the rest of this folder
 > (which reads, probes, or replays signals), this script actively
@@ -320,6 +341,59 @@ Organized into alphabetical subfolders (`A/` through `Z/`, plus `0/` and
 Total: 11,195 unique files (after internal deduplication across the
 source subfolders — 264 duplicates removed).
 
+## pwnagotchi/
+
+`pwngridspam.txt` — list of "faces" (ASCII emoticons) and "names" used by
+Bruce's Pwnagotchi mode to spam the PwnGrid (the peer-to-peer network
+Pwnagotchi units use to announce their presence to each other) with fake
+identities. Cosmetic/noise only — it doesn't interact with real Wi-Fi
+clients, it just confuses/clutters the list of units seen by nearby
+Pwnagotchis.
+
+Added directly by the repository maintainer, outside the hash-based
+curation process used for the rest of the pack.
+
+Total: 1 file.
+
+## reverseshell/
+
+`README.md` documenting Bruce's built-in **Reverse Shell / BruceC2**
+feature: Bruce connects over TCP to a BruceC2 server running on the
+target machine, executes received commands (Bash/PowerShell), and exposes
+a web interface (`http://192.168.4.1`) to monitor the connection. The doc
+itself recommends triggering it via BadUSB (the board inserts the payload
+that automatically starts BruceC2 on the target machine).
+
+Added directly by the repository maintainer, outside the hash-based
+curation process used for the rest of the pack.
+
+Total: 1 file.
+
+> **⚠️ Warning**: this is a C2 (command & control) tool — it gives remote
+> code execution on whatever machine BruceC2 is running on. Use only in
+> authorized security testing (your own equipment or a pentest with a
+> signed scope) — running this against a machine without the owner's
+> explicit consent is a crime in most jurisdictions, regardless of intent.
+
+## ssid_list/
+
+`ssid_list.txt` — list of ~15,000 common SSIDs (carrier networks,
+factory-default routers, public hotspots) for use with Bruce's
+**Enhanced Karma** SSID-broadcast option, plus `readme.txt` explaining
+where to place the file (SD card root or LittleFS).
+
+Added directly by the repository maintainer, outside the hash-based
+curation process used for the rest of the pack.
+
+Total: 2 files.
+
+> **⚠️ Warning**: Karma/Enhanced Karma is an **evil twin** technique — the
+> board broadcasts the SSIDs from this list to get nearby devices that
+> already trusted one of these networks (via their normal probe-request
+> behavior) to auto-connect to it instead of the real network. Use only in
+> authorized security testing or on your own equipment — check local law
+> before using it outside a controlled environment.
+
 ---
 
 ## Deduplication applied
@@ -376,7 +450,9 @@ maintainer; see the warnings in the
 ## Usage warning
 
 Several databases here (third-party vehicle/gate Sub-GHz signals, BadUSB
-payloads, captive portal templates, RFID bruteforcers) are
-offensive-security/RF-research tools. Use is the responsibility of
-whoever operates the device — check local regulations before using
-outside a controlled or authorized environment.
+payloads, captive portal templates, RFID bruteforcers, the
+[Reverse Shell/BruceC2](#reverseshell), and the
+[Enhanced Karma](#ssid_list) SSID list) are offensive-security/RF-research
+tools. Use is the responsibility of whoever operates the device — check
+local regulations before using outside a controlled or authorized
+environment.

@@ -87,6 +87,7 @@ the extra databases.
 ```
 lilygo/
 ├── SD_Card_T-Embed/             → content to copy to the SD card root
+│   ├── esp32_serial_navigator.html → PC-side tool (Web Serial) to navigate Bruce over USB
 │   ├── UniversalIR/             → curated IR database
 │   ├── UniversalRF/             → curated RF database
 │   ├── BadUSB_BlueDucky/        → Ducky Script payloads
@@ -97,8 +98,12 @@ lilygo/
 │   ├── ir_extra_dbs/            → extra IR databases, by category
 │   ├── badusb_extra_payloads/   → extra BadUSB payloads
 │   ├── wifi_portals/            → captive-portal (evil portal) templates for Bruce's Wi-Fi
-│   └── music_rtttl/             → RTTTL music files (.txt) for Bruce's audio player
+│   ├── music_rtttl/             → RTTTL music files (.txt) for Bruce's audio player
+│   ├── pwnagotchi/              → spam faces/names for Pwnagotchi mode's PwnGrid
+│   ├── reverseshell/            → usage doc for Bruce's built-in Reverse Shell / BruceC2
+│   └── ssid_list/               → SSID list for Enhanced Karma
 ├── Launcher/                    → bmorcelli/Launcher install guide (no vendored binary)
+├── tools/                       → repository maintenance scripts (e.g. verify_pack.sh)
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md / README.en.md
@@ -137,10 +142,13 @@ freely used; aggregated third-party content follows its original licenses.
 ## Usage notice
 
 Several items here — BadUSB payloads, vehicle/gate Sub-GHz banks, bruteforce
-wordlists — are offensive security/RF research tools. Use is the operator's
-responsibility: check local legislation on cloning third-party RF/NFC signals
-and using BadUSB devices before using any of these banks outside a controlled
-or authorized environment.
+wordlists, the Reverse Shell/BruceC2 (`reverseshell/`), and the Enhanced
+Karma SSID list (`ssid_list/`) — are offensive security/RF research tools.
+Use is the operator's responsibility: check local legislation on cloning
+third-party RF/NFC signals, using BadUSB devices, and remote code
+execution before using any of these banks outside a controlled or
+authorized environment. Details for each in
+[`SD_Card_T-Embed/README.en.md`](SD_Card_T-Embed/README.en.md#usage-warning).
 
 ## Credits
 
