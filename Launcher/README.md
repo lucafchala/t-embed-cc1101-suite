@@ -57,7 +57,7 @@ mais nada; se persistir, acompanhe o issue linkado.
 
 ## Depois de instalar o Bruce
 
-Copie o conteúdo de [`../SD_Card_T-Embed/`](../SD_Card_T-Embed/README.md)
+Copie o conteúdo de [`../sd_card_content/`](../sd_card_content/README.md)
 para a raiz de um cartão microSD FAT32 e insira na placa — os bancos de
 dados IR/RF/NFC e demais extras funcionam da mesma forma independente de
 o Bruce ter sido instalado via Launcher ou flashado diretamente.

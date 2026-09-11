@@ -1,4 +1,4 @@
-# SD_Card_T-Embed/
+# sd_card_content/
 
 **Copie o conteúdo desta pasta (os arquivos e subpastas, não a pasta em si)
 para a raiz de um cartão microSD FAT32** e insira na placa antes de ligá-la
@@ -22,9 +22,9 @@ com o Bruce já instalado (via Launcher).
 
 | Subpasta | Arquivos | Conteúdo |
 |---|---|---|
-| [`UniversalIR/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
-| [`UniversalRF/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
-| [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
+| [`universal_ir/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
+| [`universal_rf/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
+| [`badusb_ducky_scripts/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
 | [`nfc/`](#nfc) | 8.007 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | Temas de interface |
 | [`wifi_portals/`](#wifi_portals) | 42 | Templates de simulação de captura de credencial (captive portal) |
@@ -58,7 +58,7 @@ Serial (Chrome/Edge; não funciona no Firefox/Safari).
 Adicionado diretamente pelo mantenedor do repositório, fora do processo
 de curadoria por hash usado no resto do pacote.
 
-## UniversalIR/ e UniversalRF/
+## universal_ir/ e universal_rf/
 
 Bancos de dados oficiais que acompanham a release do Bruce — 829 arquivos
 IR e 2.052 arquivos RF (organizados em categorias como Garages, Gates,
@@ -67,7 +67,7 @@ Vehicles), curados e validados pelos mantenedores do projeto.
 - Fonte: [BruceDevices/firmware](https://github.com/BruceDevices/firmware) (release oficial)
 - Licença: AGPL-3.0
 
-## BadUSB_BlueDucky/
+## badusb_ducky_scripts/
 
 Payloads Ducky Script oficiais que acompanham o Bruce (3 arquivos,
 PT-BR e EN).
@@ -192,7 +192,7 @@ Total: 74 arquivos.
 
 ## subghz_extra_dbs/
 
-Bancos Sub-GHz **além** do `UniversalRF/` oficial, reorganizados por
+Bancos Sub-GHz **além** do `universal_rf/` oficial, reorganizados por
 **categoria** (device/uso), mesclando todas as fontes numa única árvore e
 deduplicando por hash de conteúdo. A proveniência por arquivo individual se
 perde na fusão — as fontes agregadas estão listadas abaixo.
@@ -249,7 +249,7 @@ Total: 14.086 arquivos únicos (após deduplicação — ver
 
 ## ir_extra_dbs/
 
-Bancos IR **além** do `UniversalIR/` oficial, reorganizados por
+Bancos IR **além** do `universal_ir/` oficial, reorganizados por
 **categoria** (device/uso) da mesma forma que o Sub-GHz.
 
 Fontes agregadas nesta pasta:
@@ -276,7 +276,7 @@ Flipper e não são lidos pelo Bruce.
 
 ## badusb_extra_payloads/
 
-Payloads BadUSB **além** do `BadUSB_BlueDucky/` oficial:
+Payloads BadUSB **além** do `badusb_ducky_scripts/` oficial:
 
 | Subpasta | Conteúdo | Fonte |
 |---|---|---|

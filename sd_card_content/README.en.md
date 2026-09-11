@@ -1,4 +1,4 @@
-# SD_Card_T-Embed/
+# sd_card_content/
 
 **Copy the contents of this folder (files and subfolders, not the folder
 itself) to the root of a FAT32 microSD card** and insert it into the board
@@ -22,9 +22,9 @@ before powering it on with Bruce already installed (via the Launcher).
 
 | Subfolder | Files | Contents |
 |---|---|---|
-| [`UniversalIR/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
-| [`UniversalRF/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
-| [`BadUSB_BlueDucky/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
+| [`universal_ir/`](#universalir-and-universalrf) | 829 | Official Bruce IR database |
+| [`universal_rf/`](#universalir-and-universalrf) | 2,052 | Official Bruce Sub-GHz database (Garages/Gates/Vehicles) |
+| [`badusb_ducky_scripts/`](#badusb_blueducky) | 3 | Official Ducky Script payloads |
 | [`nfc/`](#nfc) | 8,007 | NFC/RFID tags (Amiibo, Tonies, Mifare dictionaries, novelty tags, community, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | UI themes |
 | [`wifi_portals/`](#wifi_portals) | 43 | Captive portal (Evil Portal) templates |
@@ -58,7 +58,7 @@ Firefox/Safari).
 Added directly by the repository maintainer, outside the hash-based
 curation process used for the rest of the pack.
 
-## UniversalIR/ and UniversalRF/
+## universal_ir/ and universal_rf/
 
 Official databases shipped with the Bruce release — 829 IR files and
 2,052 RF files (organized into categories like Garages, Gates, Vehicles),
@@ -67,7 +67,7 @@ curated and validated by the project maintainers.
 - Source: [BruceDevices/firmware](https://github.com/BruceDevices/firmware) (official release)
 - License: AGPL-3.0
 
-## BadUSB_BlueDucky/
+## badusb_ducky_scripts/
 
 Official Ducky Script payloads shipped with Bruce (3 files, PT-BR and EN).
 
@@ -192,7 +192,7 @@ Total: 74 files.
 
 ## subghz_extra_dbs/
 
-Sub-GHz databases **beyond** the official `UniversalRF/`, reorganized by
+Sub-GHz databases **beyond** the official `universal_rf/`, reorganized by
 **category** (device/use case), merging every source into a single tree
 and deduplicating by content hash. Per-file provenance is lost in the
 merge — the aggregated sources are listed below.
@@ -247,7 +247,7 @@ Total: 14,086 unique files (after deduplication — see
 
 ## ir_extra_dbs/
 
-IR databases **beyond** the official `UniversalIR/`, reorganized by
+IR databases **beyond** the official `universal_ir/`, reorganized by
 **category** (device/use case) the same way as Sub-GHz.
 
 Sources aggregated into this folder:
@@ -274,7 +274,7 @@ and isn't read by Bruce.
 
 ## badusb_extra_payloads/
 
-BadUSB payloads **beyond** the official `BadUSB_BlueDucky/`:
+BadUSB payloads **beyond** the official `badusb_ducky_scripts/`:
 
 | Subfolder | Contents | Source |
 |---|---|---|

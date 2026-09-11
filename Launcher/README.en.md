@@ -56,7 +56,7 @@ first; if it persists, follow the linked issue.
 
 ## After installing Bruce
 
-Copy the contents of [`../SD_Card_T-Embed/`](../SD_Card_T-Embed/README.en.md)
+Copy the contents of [`../sd_card_content/`](../sd_card_content/README.en.md)
 to the root of a FAT32 microSD card and insert it into the board — the
 IR/RF/NFC databases and other extras work the same way regardless of
 whether Bruce was installed via the Launcher or flashed directly.

@@ -26,7 +26,7 @@ before redistributing any part of it.
 
 **~56,841 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
-[`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
+[`sd_card_content/README.md`](sd_card_content/README.md).
 
 ## What this is
 
@@ -44,7 +44,7 @@ straight from its built-in OTA gallery, no cable needed after the initial
 install.
 
 > **Compatibility note**: despite the repository name, almost all content in
-> `SD_Card_T-Embed/` is **generic to Bruce** — it works on any board running
+> `sd_card_content/` is **generic to Bruce** — it works on any board running
 > the firmware (Cardputer, CYD, other LilyGO variants, etc.), not just the
 > T-Embed CC1101. The only exceptions are `themes/` and some boot images,
 > which may depend on each board's specific screen resolution.
@@ -58,7 +58,7 @@ or from [LilyGO's repository](https://github.com/Xinyuan-LilyGO/CH9102_Driver).
 always serves the latest version, no manual download needed.
 3. From Launcher's menu, open the built-in OTA gallery and install **Bruce**
 from there (also always the latest version).
-4. Copy **all the contents** of [`SD_Card_T-Embed/`](SD_Card_T-Embed/README.md)
+4. Copy **all the contents** of [`sd_card_content/`](sd_card_content/README.md)
 (the files, not the folder itself) to the root of a FAT32 microSD card.
 5. Insert the card and power on the board — Bruce should boot with access to
 the extra databases.
@@ -86,11 +86,11 @@ the extra databases.
 
 ```
 lilygo/
-├── SD_Card_T-Embed/             → content to copy to the SD card root
+├── sd_card_content/             → content to copy to the SD card root
 │   ├── esp32_serial_navigator.html → PC-side tool (Web Serial) to navigate Bruce over USB
-│   ├── UniversalIR/             → curated IR database
-│   ├── UniversalRF/             → curated RF database
-│   ├── BadUSB_BlueDucky/        → Ducky Script payloads
+│   ├── universal_ir/             → curated IR database
+│   ├── universal_rf/             → curated RF database
+│   ├── badusb_ducky_scripts/        → Ducky Script payloads
 │   ├── nfc/                     → NFC/RFID tags (Amiibo + community)
 │   ├── themes/                  → UI themes
 │   ├── interpreter_js_apps/     → apps/scripts for Bruce's JS interpreter
@@ -116,7 +116,7 @@ lilygo/
 > section above.
 
 Each main folder has its own `README.md` with details, file counts, and
-provenance: [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
+provenance: [`sd_card_content/README.md`](sd_card_content/README.md).
 
 ## Provenance and licenses
 
@@ -148,7 +148,7 @@ Use is the operator's responsibility: check local legislation on cloning
 third-party RF/NFC signals, using BadUSB devices, and remote code
 execution before using any of these banks outside a controlled or
 authorized environment. Details for each in
-[`SD_Card_T-Embed/README.en.md`](SD_Card_T-Embed/README.en.md#usage-warning).
+[`sd_card_content/README.en.md`](sd_card_content/README.en.md#usage-warning).
 
 ## Credits
 

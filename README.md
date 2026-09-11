@@ -25,7 +25,7 @@ GitHub — não é código original. Veja [Proveniência e licenças](#proveniê
 
 **~56.841 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
 deduplicados por hash de conteúdo e organizados por categoria — veja o
-detalhamento completo em [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
+detalhamento completo em [`sd_card_content/README.md`](sd_card_content/README.md).
 
 ## O que é isto
 
@@ -43,7 +43,7 @@ firmwares) direto pela galeria OTA embutida, sem precisar de cabo depois
 da instalação inicial.
 
 > **Nota sobre compatibilidade**: apesar do nome do repositório, quase todo
-> o conteúdo de `SD_Card_T-Embed/` é **genérico do Bruce** — funciona em
+> o conteúdo de `sd_card_content/` é **genérico do Bruce** — funciona em
 > qualquer placa rodando o firmware (Cardputer, CYD, outras variantes
 > LilyGO, etc.), não só no T-Embed CC1101. As únicas exceções são `themes/`
 > e eventuais imagens de boot, que podem depender da resolução de tela
@@ -59,7 +59,7 @@ ou do [repositório da LilyGO](https://github.com/Xinyuan-LilyGO/CH9102_Driver).
 serve a versão mais recente, sem precisar baixar nada manualmente.
 3. No menu do Launcher, abra a galeria OTA embutida e instale o **Bruce** a
 partir dela (também sempre a versão mais recente).
-4. Copie **todo o conteúdo** de [`SD_Card_T-Embed/`](SD_Card_T-Embed/README.md)
+4. Copie **todo o conteúdo** de [`sd_card_content/`](sd_card_content/README.md)
 (os arquivos, não a pasta em si) para a raiz de um cartão microSD FAT32.
 5. Insira o cartão e ligue a placa — o Bruce deve bootar com acesso aos
 bancos de dados extras.
@@ -88,11 +88,11 @@ bancos de dados extras.
 
 ```
 lilygo/
-├── SD_Card_T-Embed/             → conteúdo a copiar para a raiz do cartão SD
+├── sd_card_content/             → conteúdo a copiar para a raiz do cartão SD
 │   ├── esp32_serial_navigator.html → ferramenta PC-side (Web Serial) p/ navegar o Bruce por USB
-│   ├── UniversalIR/             → banco IR (curado)
-│   ├── UniversalRF/             → banco RF (curado)
-│   ├── BadUSB_BlueDucky/        → payloads Ducky Script
+│   ├── universal_ir/             → banco IR (curado)
+│   ├── universal_rf/             → banco RF (curado)
+│   ├── badusb_ducky_scripts/        → payloads Ducky Script
 │   ├── nfc/                     → tags NFC/RFID (Amiibo + comunidade)
 │   ├── themes/                  → temas de interface
 │   ├── interpreter_js_apps/     → apps/scripts para o interpretador JS do Bruce
@@ -117,7 +117,7 @@ lilygo/
 > os links na seção [Quickstart](#quickstart--instalando-o-launcher-e-o-bruce) acima.
 
 Cada pasta principal tem seu próprio `README.md` com detalhes, contagem de
-arquivos e origem: [`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md).
+arquivos e origem: [`sd_card_content/README.md`](sd_card_content/README.md).
 
 ## Proveniência e licenças
 
@@ -150,7 +150,7 @@ opera o dispositivo: verifique a legislação local sobre clonagem de
 sinais RF/NFC de terceiros, uso de dispositivos BadUSB e execução remota
 de comando antes de utilizar qualquer um desses bancos fora de um
 ambiente controlado ou autorizado. Detalhes de cada um em
-[`SD_Card_T-Embed/README.md`](SD_Card_T-Embed/README.md#aviso-de-uso).
+[`sd_card_content/README.md`](sd_card_content/README.md#aviso-de-uso).
 
 ## Créditos
 

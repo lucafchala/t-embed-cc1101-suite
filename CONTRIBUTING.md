@@ -29,41 +29,41 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | Pasta final | Repositório de origem | Licença |
 |---|---|---|
 | `Launcher/` | [bmorcelli/Launcher](https://github.com/bmorcelli/Launcher) | Ver repositório |
-| `SD_Card_T-Embed/UniversalIR/`, `UniversalRF/`, `BadUSB_BlueDucky/` | [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 |
-| `SD_Card_T-Embed/subghz_extra_dbs/` (parte) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório |
-| `SD_Card_T-Embed/subghz_extra_dbs/` (parte) | [Zero-Sploit/FlipperZero-Subghz-DB](https://github.com/Zero-Sploit/FlipperZero-Subghz-DB) | Ver repositório |
-| `SD_Card_T-Embed/subghz_extra_dbs/`, `ir_extra_dbs/`, `nfc/`, `badusb_extra_payloads/` (partes) | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório |
-| `SD_Card_T-Embed/subghz_extra_dbs/` (parte) | [Robbbbbbbbb/tesla-chargeport](https://github.com/Robbbbbbbbb/tesla-chargeport) | Ver repositório |
-| `SD_Card_T-Embed/subghz_extra_dbs/` (parte) | [DRA6N/SubGhz_Cust_Serv](https://github.com/DRA6N/SubGhz_Cust_Serv) | Ver repositório |
-| `SD_Card_T-Embed/ir_extra_dbs/` (parte) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
-| `SD_Card_T-Embed/nfc/AmiiboDB/` | [AmiiboDB/Amiibo](https://github.com/AmiiboDB/Amiibo) | Ver repositório |
-| `SD_Card_T-Embed/badusb_extra_payloads/` (parte) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
-| `SD_Card_T-Embed/badusb_extra_payloads/` (parte) | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) | Ver repositório |
-| `SD_Card_T-Embed/badusb_extra_payloads/UberGuidoZ_BadUSB/`, `SD_Card_T-Embed/nfc/UberGuidoZ_*` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório |
-| `SD_Card_T-Embed/nfc/Tonies_NFC/` | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório |
-| `SD_Card_T-Embed/subghz_extra_dbs/` (parte) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) | MIT |
-| `SD_Card_T-Embed/music_rtttl/` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (Music_Player) | GPL-3.0 |
-| `SD_Card_T-Embed/ir_extra_dbs/<Categoria>/flipperdevices_IRDB/` | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) | MIT |
-| `SD_Card_T-Embed/ir_extra_dbs/_sasiplavnik_extra/` | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) | Ver repositório |
-| `SD_Card_T-Embed/ir_extra_dbs/universal_remotes @sark/`, `IrBegone @sark/`, `irtobefree @sark/` | Colaborador "sark" — fonte original não identificada (nomes de pasta só padronizados nesta curadoria) | Desconhecida — confirme antes de redistribuir |
-| `SD_Card_T-Embed/themes/Bruce-Themes_wendells01/` | [wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes) | Ver repositório |
-| `SD_Card_T-Embed/themes/Pwnagotchi_theme_pfefferle/` | [pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme) | Ver repositório |
-| `SD_Card_T-Embed/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |
-| `SD_Card_T-Embed/wifi_portals/fake_login_borys/` | [Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/ProtoPirate.js` | [Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/App_Store.js`, `rename-catch.js`, `rf_433_replay.js`, `ir_brute_force.js`, `rf_brute_nmrf.js`, `rf_jammer.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` | [OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps) | GPL-3.0 |
-| `SD_Card_T-Embed/ir_extra_dbs/_magikh0e_extra/`, `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório |
-| `SD_Card_T-Embed/themes/Bruce-Themes_community/` | [anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/BruceScripts_community/` | [badgib/BruceScripts](https://github.com/badgib/BruceScripts) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/js-apps-bruce/` | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) | Ver repositório |
-| `SD_Card_T-Embed/nfc/Skylanders_LEGO_Toys/` (dumps) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders) | Ver repositório |
-| `SD_Card_T-Embed/nfc/Skylanders_LEGO_Toys/key_generator_scripts/` | [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) (idêntico a [V0lk3n/Flipper-Skylanders](https://github.com/V0lk3n/Flipper-Skylanders)) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/koua29_community/`, `SD_Card_T-Embed/themes/koua29_community/` | [koua29](https://github.com/koua29) (7 repos de apps + 2 de temas — ver README da pasta) | MIT |
-| `SD_Card_T-Embed/interpreter_js_apps/BruceSafe.js` | [ssstee/BruceSafe](https://github.com/ssstee/BruceSafe) | Ver repositório |
-| `SD_Card_T-Embed/interpreter_js_apps/BruteRF.js` | [Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps) | Ver repositório |
-| `SD_Card_T-Embed/ir_extra_dbs/` (parte, 20 arquivos novos desta rodada) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
-| `SD_Card_T-Embed/badusb_extra_payloads/I-Am-Jakoby_BadUSB/` (substitui a antiga `Flipper-Zero-BadUSB/`, que só tinha os READMEs sem os scripts `.ps1` reais) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
+| `sd_card_content/universal_ir/`, `universal_rf/`, `badusb_ducky_scripts/` | [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 |
+| `sd_card_content/subghz_extra_dbs/` (parte) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório |
+| `sd_card_content/subghz_extra_dbs/` (parte) | [Zero-Sploit/FlipperZero-Subghz-DB](https://github.com/Zero-Sploit/FlipperZero-Subghz-DB) | Ver repositório |
+| `sd_card_content/subghz_extra_dbs/`, `ir_extra_dbs/`, `nfc/`, `badusb_extra_payloads/` (partes) | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório |
+| `sd_card_content/subghz_extra_dbs/` (parte) | [Robbbbbbbbb/tesla-chargeport](https://github.com/Robbbbbbbbb/tesla-chargeport) | Ver repositório |
+| `sd_card_content/subghz_extra_dbs/` (parte) | [DRA6N/SubGhz_Cust_Serv](https://github.com/DRA6N/SubGhz_Cust_Serv) | Ver repositório |
+| `sd_card_content/ir_extra_dbs/` (parte) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
+| `sd_card_content/nfc/AmiiboDB/` | [AmiiboDB/Amiibo](https://github.com/AmiiboDB/Amiibo) | Ver repositório |
+| `sd_card_content/badusb_extra_payloads/` (parte) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
+| `sd_card_content/badusb_extra_payloads/` (parte) | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) | Ver repositório |
+| `sd_card_content/badusb_extra_payloads/UberGuidoZ_BadUSB/`, `sd_card_content/nfc/UberGuidoZ_*` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório |
+| `sd_card_content/nfc/Tonies_NFC/` | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório |
+| `sd_card_content/subghz_extra_dbs/` (parte) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) | MIT |
+| `sd_card_content/music_rtttl/` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (Music_Player) | GPL-3.0 |
+| `sd_card_content/ir_extra_dbs/<Categoria>/flipperdevices_IRDB/` | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) | MIT |
+| `sd_card_content/ir_extra_dbs/_sasiplavnik_extra/` | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) | Ver repositório |
+| `sd_card_content/ir_extra_dbs/universal_remotes @sark/`, `IrBegone @sark/`, `irtobefree @sark/` | Colaborador "sark" — fonte original não identificada (nomes de pasta só padronizados nesta curadoria) | Desconhecida — confirme antes de redistribuir |
+| `sd_card_content/themes/Bruce-Themes_wendells01/` | [wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes) | Ver repositório |
+| `sd_card_content/themes/Pwnagotchi_theme_pfefferle/` | [pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme) | Ver repositório |
+| `sd_card_content/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |
+| `sd_card_content/wifi_portals/fake_login_borys/` | [Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/ProtoPirate.js` | [Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/App_Store.js`, `rename-catch.js`, `rf_433_replay.js`, `ir_brute_force.js`, `rf_brute_nmrf.js`, `rf_jammer.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` | [OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps) | GPL-3.0 |
+| `sd_card_content/ir_extra_dbs/_magikh0e_extra/`, `sd_card_content/badusb_extra_payloads/magikh0e_BadUSB/` | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório |
+| `sd_card_content/themes/Bruce-Themes_community/` | [anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/BruceScripts_community/` | [badgib/BruceScripts](https://github.com/badgib/BruceScripts) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/js-apps-bruce/` | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) | Ver repositório |
+| `sd_card_content/nfc/Skylanders_LEGO_Toys/` (dumps) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders) | Ver repositório |
+| `sd_card_content/nfc/Skylanders_LEGO_Toys/key_generator_scripts/` | [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) (idêntico a [V0lk3n/Flipper-Skylanders](https://github.com/V0lk3n/Flipper-Skylanders)) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/koua29_community/`, `sd_card_content/themes/koua29_community/` | [koua29](https://github.com/koua29) (7 repos de apps + 2 de temas — ver README da pasta) | MIT |
+| `sd_card_content/interpreter_js_apps/BruceSafe.js` | [ssstee/BruceSafe](https://github.com/ssstee/BruceSafe) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/BruteRF.js` | [Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps) | Ver repositório |
+| `sd_card_content/ir_extra_dbs/` (parte, 20 arquivos novos desta rodada) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
+| `sd_card_content/badusb_extra_payloads/I-Am-Jakoby_BadUSB/` (substitui a antiga `Flipper-Zero-BadUSB/`, que só tinha os READMEs sem os scripts `.ps1` reais) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
 
 "Ver repositório" significa que a licença não foi confirmada nesta
 organização — consulte o repositório de origem antes de redistribuir ou
@@ -80,8 +80,8 @@ recebeu:
 
 | Item | O que é | Onde |
 |---|---|---|
-| `SD_Card_T-Embed/interpreter_js_apps/rf_jammer.js` | Ferramenta de jamming **ativo** de RF (transmite, não só recebe/testa) | [interpreter_js_apps/](SD_Card_T-Embed/README.md#interpreter_js_apps) |
-| `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` (2 arquivos) | Payloads BadUSB de pós-exploração (criação de conta admin oculta + desativação de firewall) | [badusb_extra_payloads/](SD_Card_T-Embed/README.md#badusb_extra_payloads) |
+| `sd_card_content/interpreter_js_apps/rf_jammer.js` | Ferramenta de jamming **ativo** de RF (transmite, não só recebe/testa) | [interpreter_js_apps/](sd_card_content/README.md#interpreter_js_apps) |
+| `sd_card_content/badusb_extra_payloads/magikh0e_BadUSB/` (2 arquivos) | Payloads BadUSB de pós-exploração (criação de conta admin oculta + desativação de firewall) | [badusb_extra_payloads/](sd_card_content/README.md#badusb_extra_payloads) |
 
 Ambos tinham sido inicialmente descartados neste documento (ver
 "Itens descartados na curadoria" abaixo) por risco legal/de segurança
@@ -143,7 +143,7 @@ usar.
 > encontrou nenhum banco de sinais Sub-GHz específico de marcas
 > brasileiras de portão/cerca (PPA, Rossi, Peccinin, Garen) como
 > repositório dedicado — o protocolo genérico (CAME, KeeLoq/fixed-code),
-> que já está coberto em `UniversalRF/Garages/`, cobre a maioria desses
+> que já está coberto em `universal_rf/Garages/`, cobre a maioria desses
 > equipamentos na prática, já que a captura depende do protocolo de RF
 > usado, não da marca do controle. `mateuspereirabr71-bit/bruce-snake`
 > (dev brasileiro, específico para Cardputer) foi conferido por hash
@@ -161,7 +161,7 @@ usar.
 > que este documento recomendava deixar de fora — foram adicionados
 > diretamente pelo mantenedor do repositório, fora do processo de
 > curadoria por hash; ver os avisos nas seções correspondentes do README
-> de `SD_Card_T-Embed/`.
+> de `sd_card_content/`.
 
 ---
 
@@ -203,8 +203,8 @@ screening the rest of the content received:
 
 | Item | What it is | Where |
 |---|---|---|
-| `SD_Card_T-Embed/interpreter_js_apps/rf_jammer.js` | **Active** RF jamming tool (transmits, not just receives/tests) | [interpreter_js_apps/](SD_Card_T-Embed/README.en.md#interpreter_js_apps) |
-| `SD_Card_T-Embed/badusb_extra_payloads/magikh0e_BadUSB/` (2 files) | Post-exploitation BadUSB payloads (hidden admin account creation + firewall disable) | [badusb_extra_payloads/](SD_Card_T-Embed/README.en.md#badusb_extra_payloads) |
+| `sd_card_content/interpreter_js_apps/rf_jammer.js` | **Active** RF jamming tool (transmits, not just receives/tests) | [interpreter_js_apps/](sd_card_content/README.en.md#interpreter_js_apps) |
+| `sd_card_content/badusb_extra_payloads/magikh0e_BadUSB/` (2 files) | Post-exploitation BadUSB payloads (hidden admin account creation + firewall disable) | [badusb_extra_payloads/](sd_card_content/README.en.md#badusb_extra_payloads) |
 
 Both had initially been dropped in this document (see "Items dropped
 during curation" below) for carrying more legal/security risk than the
@@ -264,7 +264,7 @@ sections linked above — read them before use.
 > repository specifically hosting Sub-GHz signal databases for Brazilian
 > gate/fence remote brands (PPA, Rossi, Peccinin, Garen). The generic
 > protocol content (CAME, KeeLoq/fixed-code) already covered in
-> `UniversalRF/Garages/` covers most of these in practice, since capture
+> `universal_rf/Garages/` covers most of these in practice, since capture
 > depends on the RF protocol used, not the remote's brand name.
 > `mateuspereirabr71-bit/bruce-snake` (Brazilian dev, Cardputer-specific)
 > was hash-checked against the already-included `koua29/bruce-snake` —
@@ -280,4 +280,4 @@ sections linked above — read them before use.
 > payloads in `magikh0e_BadUSB/` — which this document recommended
 > leaving out — were added directly by the repository maintainer,
 > outside the hash-curation process; see the warnings in the
-> corresponding sections of `SD_Card_T-Embed/README.en.md`.
+> corresponding sections of `sd_card_content/README.en.md`.
