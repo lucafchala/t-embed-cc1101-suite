@@ -209,9 +209,9 @@ Fontes agregadas nesta pasta:
 | Pulseiras de LED de evento (protocolo CrowdLED, EN+ES) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) |
 
 Categorias notáveis: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
-`Ceiling_Fans`, `Concert bracelet` (com subpasta `CrowdLED_Wristbands/`),
-`Smart_Home_Remotes`, `Retekess pager system t119`, `Jamming`,
-`Car Key Jammer` e `OOK_bruteforce` (as 3 últimas com aviso próprio de uso
+`Ceiling_Fans`, `Concert_bracelet` (com subpasta `CrowdLED_Wristbands/`),
+`Smart_Home_Remotes`, `Retekess_pager_system_t119`, `Jamming`,
+`Car_Key_Jammer` e `OOK_bruteforce` (as 3 últimas com aviso próprio de uso
 abaixo — não são sinais de replay comuns), entre ~65 outras.
 Categorias que vieram de fontes distintas com grafias diferentes pro mesmo
 nome (ex.: `Ceiling Fans` vs `Ceiling_Fans`) foram mescladas numa pasta só,
@@ -222,7 +222,7 @@ mantidos, o recém-chegado com um sufixo curto).
 Total: 14.086 arquivos únicos (após deduplicação — ver
 [Deduplicação](#deduplicação-aplicada)).
 
-> **⚠️ Aviso — `Jamming/` e `Car Key Jammer/`**: diferente do resto desta
+> **⚠️ Aviso — `Jamming/` e `Car_Key_Jammer/`**: diferente do resto desta
 > pasta (que lê, testa ou faz replay de sinais individuais), essas duas
 > categorias contêm arquivos `RAW_Data` de ruído puro, prontos pra
 > transmitir via TX do Bruce sem precisar de nenhum script — cobrindo
@@ -261,12 +261,12 @@ Fontes agregadas nesta pasta:
 | Banco IR **oficial** do time do Flipper Zero (mesclado dentro das categorias já existentes, em `<Categoria>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
 | IR extra independente (pasta `_sasiplavnik_extra/`) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
 | Controle de vaporizador Arizer XQ2 (pasta `_magikh0e_extra/`) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
-| 3 coleções extras atribuídas ao colaborador "sark" — controles universais, `IrBegone @sark/` (bloqueio de sinal de TV por ambiente) e `irtobefree @sark/` (eletrônicos diversos) | fonte original não identificada; nomes de pasta padronizados nesta curadoria (grafia `@sark` consistente) |
+| 3 coleções extras atribuídas ao colaborador "sark" — controles universais, `IrBegone_@sark/` (bloqueio de sinal de TV por ambiente) e `irtobefree_@sark/` (eletrônicos diversos) | fonte original não identificada; nomes de pasta padronizados nesta curadoria (grafia `@sark` consistente) |
 
 Categorias notáveis: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
 `Box_SetTopBoxes` (nova — set-top boxes majoritariamente de marcas
 chinesas/asiáticas: Xiaomi, ZTE, XGIMI, EVPAD, etc., trazida pelo
-flipperdevices/IRDB), `Brand_(sorted)` (a mesma coleção organizada por
+flipperdevices/IRDB), `Brand_sorted` (a mesma coleção organizada por
 marca em vez de tipo de dispositivo), entre ~50 outras.
 
 Total: 16.825 arquivos únicos (após deduplicação). Só os arquivos `.ir` do

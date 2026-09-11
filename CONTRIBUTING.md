@@ -45,7 +45,7 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | `sd_card_content/music_rtttl/` | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) (Music_Player) | GPL-3.0 |
 | `sd_card_content/ir_extra_dbs/<Categoria>/flipperdevices_IRDB/` | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) | MIT |
 | `sd_card_content/ir_extra_dbs/_sasiplavnik_extra/` | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) | Ver repositório |
-| `sd_card_content/ir_extra_dbs/universal_remotes @sark/`, `IrBegone @sark/`, `irtobefree @sark/` | Colaborador "sark" — fonte original não identificada (nomes de pasta só padronizados nesta curadoria) | Desconhecida — confirme antes de redistribuir |
+| `sd_card_content/ir_extra_dbs/universal_remotes_@sark/`, `IrBegone_@sark/`, `irtobefree_@sark/` (nomes originais: `universal_remotes @sark/`, `IrBegone @sark/`, `irtobefree @sark/`) | Colaborador "sark" — fonte original não identificada (nomes de pasta só padronizados nesta curadoria) | Desconhecida — confirme antes de redistribuir |
 | `sd_card_content/themes/Bruce-Themes_wendells01/` | [wendells01/Bruce-Themes](https://github.com/wendells01/Bruce-Themes) | Ver repositório |
 | `sd_card_content/themes/Pwnagotchi_theme_pfefferle/` | [pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme) | Ver repositório |
 | `sd_card_content/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |

@@ -209,16 +209,16 @@ Sources aggregated into this folder:
 | Event LED wristbands (CrowdLED protocol, EN+ES) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) |
 
 Notable categories: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
-`Ceiling_Fans`, `Concert bracelet` (with a `CrowdLED_Wristbands/`
-subfolder), `Smart_Home_Remotes`, `Retekess pager system t119`,
-`Jamming`, `Car Key Jammer` and `OOK_bruteforce` (the last 3 carry their
+`Ceiling_Fans`, `Concert_bracelet` (with a `CrowdLED_Wristbands/`
+subfolder), `Smart_Home_Remotes`, `Retekess_pager_system_t119`,
+`Jamming`, `Car_Key_Jammer` and `OOK_bruteforce` (the last 3 carry their
 own usage warning below — not ordinary replay signals), among ~65 others. Categories that came from different sources under different
 spellings for the same name (e.g. `Ceiling Fans` vs `Ceiling_Fans`) were
 merged into a single folder, with content-hash dedup applied at merge time
 (identical file in both → kept once; same name but different content →
 both kept, the incoming one gets a short suffix).
 
-> **⚠️ Warning — `Jamming/` and `Car Key Jammer/`**: unlike the rest of
+> **⚠️ Warning — `Jamming/` and `Car_Key_Jammer/`**: unlike the rest of
 > this folder (which reads, tests, or replays individual signals), these
 > two categories contain pure-noise `RAW_Data` files, ready to transmit
 > via the Bruce's TX with no script needed — systematically covering
@@ -259,12 +259,12 @@ Sources aggregated into this folder:
 | **Official** Flipper Zero team IR database (merged inside the existing categories, under `<Category>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
 | Independent extra IR (`_sasiplavnik_extra/` folder) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
 | Arizer XQ2 vaporizer remote (`_magikh0e_extra/` folder) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
-| 3 extra collections attributed to contributor "sark" — universal remotes, `IrBegone @sark/` (per-room TV signal blocking) and `irtobefree @sark/` (misc electronics) | original source not identified; folder names standardized in this curation (consistent `@sark` spelling) |
+| 3 extra collections attributed to contributor "sark" — universal remotes, `IrBegone_@sark/` (per-room TV signal blocking) and `irtobefree_@sark/` (misc electronics) | original source not identified; folder names standardized in this curation (consistent `@sark` spelling) |
 
 Notable categories: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
 `Box_SetTopBoxes` (new — set-top boxes, mostly Chinese/Asian brands:
 Xiaomi, ZTE, XGIMI, EVPAD, etc., brought in by flipperdevices/IRDB),
-`Brand_(sorted)` (the same collection organized by brand instead of
+`Brand_sorted` (the same collection organized by brand instead of
 device type), among ~50 others.
 
 Total: 16,825 unique files (after deduplication). Only the `.ir` files

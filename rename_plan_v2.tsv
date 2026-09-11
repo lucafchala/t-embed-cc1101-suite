@@ -1,0 +1,2 @@
+old_path	new_path	is_vendor_root_needs_provenance_note
+.git	git	
