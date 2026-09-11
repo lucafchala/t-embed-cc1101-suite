@@ -4,6 +4,14 @@
 itself) to the root of a FAT32 microSD card** and insert it into the board
 before powering it on with Bruce already installed (via the Launcher).
 
+> ⚠️ **FAT32 vs exFAT**: cards larger than 32GB usually ship
+> factory-formatted as exFAT, which Bruce/ESP32 won't mount — the board
+> powers on but doesn't see the card, with no clear error. Reformat as
+> FAT32 before copying the content over (on Windows, use a tool like
+> [guiformat](http://ridgecrop.co.uk/index.htm?guiformat.htm), since the
+> default formatter refuses FAT32 above 32GB; on Linux/macOS,
+> `mkfs.vfat -F 32`).
+
 > Despite the folder's name (inherited from this repository's target
 > board), almost everything here is **Bruce-generic** — it works on any
 > board running the firmware, not just the T-Embed CC1101. The only

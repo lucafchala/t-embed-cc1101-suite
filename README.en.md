@@ -63,6 +63,14 @@ from there (also always the latest version).
 5. Insert the card and power on the board — Bruce should boot with access to
 the extra databases.
 
+> ⚠️ **FAT32 vs exFAT**: Bruce/ESP32 only reads FAT32-formatted cards.
+> Cards larger than 32GB usually ship factory-formatted as exFAT, which
+> causes a silent mount failure (the board powers on but doesn't see the
+> card). If your SD card is over 32GB, reformat it as FAT32 (on Windows,
+> the default formatter refuses FAT32 above 32GB — use a tool like
+> [guiformat](http://ridgecrop.co.uk/index.htm?guiformat.htm) or
+> `mkfs.vfat -F 32` on Linux/macOS) before copying the content over.
+
 > ⚠️ **If your board is the Plus variant (as documented here)**: you may hit
 > a bug where the SD card fails to mount when running via Launcher. See the
 > full note in [Launcher issue #411](https://github.com/bmorcelli/Launcher/issues/411)

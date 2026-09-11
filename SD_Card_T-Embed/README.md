@@ -4,6 +4,14 @@
 para a raiz de um cartão microSD FAT32** e insira na placa antes de ligá-la
 com o Bruce já instalado (via Launcher).
 
+> ⚠️ **FAT32 vs exFAT**: cartões acima de 32GB costumam vir formatados de
+> fábrica em exFAT, que o Bruce/ESP32 não monta — a placa liga mas não
+> enxerga o cartão, sem erro claro. Reformate em FAT32 antes de copiar o
+> conteúdo (no Windows, use uma ferramenta como o
+> [guiformat](http://ridgecrop.co.uk/index.htm?guiformat.htm), já que o
+> formatador padrão recusa FAT32 acima de 32GB; no Linux/macOS,
+> `mkfs.vfat -F 32`).
+
 > Apesar do nome da pasta (herdado da placa alvo deste repositório), quase
 > todo o conteúdo aqui é **genérico do Bruce** — funciona em qualquer placa
 > rodando o firmware, não só no T-Embed CC1101. As únicas exceções são

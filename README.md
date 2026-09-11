@@ -64,6 +64,14 @@ partir dela (também sempre a versão mais recente).
 5. Insira o cartão e ligue a placa — o Bruce deve bootar com acesso aos
 bancos de dados extras.
 
+> ⚠️ **FAT32 vs exFAT**: o Bruce/ESP32 só lê cartões formatados em FAT32.
+> Cartões acima de 32GB costumam vir formatados de fábrica em exFAT, o que
+> causa falha de montagem silenciosa (a placa liga, mas não enxerga o
+> cartão). Se o seu SD tiver mais de 32GB, reformate-o em FAT32 (no
+> Windows, o formatador padrão recusa FAT32 acima de 32GB — use uma
+> ferramenta como o [guiformat](http://ridgecrop.co.uk/index.htm?guiformat.htm)
+> ou `mkfs.vfat -F 32` no Linux/macOS) antes de copiar o conteúdo.
+
 > ⚠️ **Se sua placa é a variante Plus (como a documentada aqui)**: pode
 > ocorrer um bug de SD card não montando ao rodar via Launcher. Veja o
 > aviso completo no [issue #411 do Launcher](https://github.com/bmorcelli/Launcher/issues/411)
