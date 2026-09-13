@@ -3,7 +3,7 @@
 
 ### Minolta MN674 ###
 
-*(imagem original não incluída neste espelho)*
+<img align="right" width="200" height="200" src="Minolta-MN674.jpg">
 
 Brand Name: Minolta
 Model: MN674
