@@ -11700,27 +11700,10 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Hea
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Jakoby_BadUSB/Payloads/Flip-We-Found-You/We-Found-You.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/-RD-YT-Tripwire/YouTube-TripWire.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Flipper-Zero-BadUSB-made just for Flipper/Payloads/Flip-Play-WAV/Play-WAV.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/SpamRickrollPayload/SpamRickrollPayload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/iOS/directly_ready/Bruce-Scripts-Heaven_BAD/RickRoll_Apple/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Download-and-Execute/Download-Execute.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/command_control/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Defeat_Defender/payload.txt,badusb,command_control,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Desktop Screenshare over LAN.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Record-Screen-to-Discord.txt.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Exfiltrate Files to USB Drive.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Exfiltrate files to DropBox.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Discord-Infostealer.txt.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Record-Mic-to-Discord.txt.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Discord WiFi Grabber 2.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Discord WiFi Grabber.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Email System & User Information.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/remote_access/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Desktop Screenshare over Netcat.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/OSINT/Installed Programs and Eventlogs to File.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Exfiltrate files to Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Exfiltrate files to Telegram.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Google Login Phish to Discord.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Speech-to-Discord.txt.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Email System Info with Screenshot.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/OSINT/Screenshot to Telegram.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/social_engineering/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/GNU-Linux/Phishing/StandardPhishingAttack_Linux/script.js,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/iOS/configuration_needed/Bruce-Scripts-Heaven_BAD/GNU-Linux/Incident_Response/Auto-Check_Cisco_IOS_XE_Backdoor_based_on_CVE-2023-20198_and_CVE/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/GNU-Linux/Incident_Response/Exploit_Citrix_NetScaler_ADC_and_Gateway_through_CVE-2023-4966/lin-payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -11820,7 +11803,6 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Hea
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Discord-Reverse-Shell/Discord-Reverse-Shell.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Flip-Wallpaper-Troll/Wallpaper-Troll.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/execution/DuckyHelper/DuckyHelper.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/authentication/Win/directly_ready/Bruce-Scripts-Heaven_BAD/execution/Win/adminAccountCreator/BadUSB_adminAccountCreator.txt,badusb,authentication,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/defense_evasion/Win/directly_ready/Bruce-Scripts-Heaven_BAD/execution/Win/Kiosk-evasion/kiosk-evasion-payload.txt,badusb,defense_evasion,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/authentication/Win/directly_ready/Bruce-Scripts-Heaven_BAD/execution/Win/Admin_Who_Never_Sleeps/payload.txt,badusb,authentication,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/execution/Win/Login_CMD/quack.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -11834,7 +11816,6 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/
 sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/fake-update.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/you-idiot.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/Screenshoter.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/Explorer-spam.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/KODBLOCK.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/File-Load_BadUSB.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/open_website_win.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -11844,25 +11825,16 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/blue-screen.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/random-letters.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/pwn3d windows prank.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/windows10/hackertyper.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/windows10/create folders in C.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/windows10/matrix ps hidden.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/clear_explorer.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/privacy.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/activate_windows.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/enable_cortana.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/disable_cortana.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/GoodUSB/bloatware_remover.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/windows11/You have been hacked desktop.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/windows11/hackertyper.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/PC/windows11/create folders in C.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/windows11/nyancat.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PC/windows11/matrix.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/win_smb-backdoor/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Payload Control/Payload-Control-example3.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Payload Control/Payload-Control-example2.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/Win_Hid_ImgOverKey/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/US-Keyboard-Layout/US-Keyboard.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Batch/Fake_Error_Spam.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Batch/Typing_Prank.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Batch/Random_Beeps.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
@@ -11883,18 +11855,9 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Hea
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Powershell-History/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Persistent_Keylogger-Telegram_Based/connection.py,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Image-to-Console/Image-to-Console.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Netcat-Client/Simple-Netcat-Client.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/-RD-ET-Phone-Home/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Download-Execute from Run Prompt.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Tools/Clean-Command-History.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Disable RT-Protection through GUI.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Add Exclusion C-drive.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Downgrade-PS-Win11.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Update Windows in Powershell.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Tools/Local-FileServer-for-Exfiltration.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Set US Keyboard & System Language.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tools/Base64 Decode & Execute.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Tools/Webhook-Test-Tool.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Tools/Anti-AFK-Tool.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Hacker_Typer/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Change Wallpaper With Screenshot/script.py,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
@@ -11904,8 +11867,6 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Ins
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Install_And_Run_Any_Arbitrary_Executable-No_Internet_And_Root_Needed/assets/convert_to_hex.py,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Screenshare-Over-LAN/Screenshare-Over-LAN.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Screen-to-Discord/Screenshot-to-Discord.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/mobile/Android/Android_HID_Forward-Email/Payload_Samsung.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/mobile/Android/Android_HID_Forward-Email/Payload_Gmail.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/CRASHER/CRASHER.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Operators/Operators-example3.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Operators/Operators-example2.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -11921,25 +11882,6 @@ sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Sc
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Windows-Idiot-Prank/Windows-Idiot-Prank.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/-RD-Play-WAV/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Webhook-Spammer-GUI/Webhook-Spammer-GUI.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Rickroll with Max Volume spam.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/ScreenParty.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Disable-Keyboard-Mouse-120s.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Blank Image to Discord Spammer.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Dsktop Shortcut Spammer.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Change-System-Sounds.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/5 second Screen Kill.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Persisant-Goose.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Mute-Button-Spam.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Kill I-O Devices.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Invoke BSOD.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/USB-SoundSwap.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Invoke Fake Update (.vbs).txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Hydra-in-Powershell.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/System Message.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Change Wallpaper.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Start Windows-93 (parody edition).txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Mario-BSOD.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Pranks/Computer-ACID-Prank.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Alien Message From Computer/script.py,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Alien Message From Computer/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/-RD-PS-Draw/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -11989,9 +11931,7 @@ sd_card_content/badusb_extra_payloads/discovery/Win/directly_ready/Bruce-Scripts
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Clean-History/Clean-History.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Dropbox-Bandit/payload_duckyscript_old.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/Dropbox-Bandit/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Shortcut-Spam/Desktop-Shortcut-Spam.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/rickroll_terminal_payload/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Tree_of_Knowledge/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Tree_of_Knowledge/-RD-ADV-Recon/payload.txt,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Button/Button-example6.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Button/Button-example4.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12009,12 +11949,9 @@ sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scr
 sd_card_content/badusb_extra_payloads/collection/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/credentials/Unix-like/Osx/Sudograbber/sudograbber.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/credentials/DuckyLogger/payload.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/credentials/Win/open_smb_share_to_steal_creds.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/credentials/Win/windowsPassDisabler/BadUSB_windowsPassDisabler.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/credentials/Simple_User_Password_Grabber/payload.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/persistentReverseDucky/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/-RD-We-Found-You/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Flip-ADV-Recon/ADV-Recon.txt,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Blockator/Blockator.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/MOAB/MOAB.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Voice-Activated-DarkMode/Voice-Activated-DarkMode.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Screen-to-Telegram/Screenshot-to-Telegram.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
@@ -12023,7 +11960,6 @@ sd_card_content/badusb_extra_payloads/collection/Win/configuration_needed/Bruce-
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Payload Hiding/Payload-Hiding-example1.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/macOS_rickroll/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Reverse Shells and C2/Simple-Discord-BOT-CLI.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Reverse Shells and C2/Telegram Reverse Shell.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/ATTACKMODE/ATTACKMODE-example1.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/ATTACKMODE/ATTACKMODE-example2.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Flip-JumpScare/JumpScare.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
@@ -12044,11 +11980,9 @@ sd_card_content/badusb_extra_payloads/data_exfiltration/Unix-like/macOS/directly
 sd_card_content/badusb_extra_payloads/data_exfiltration/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/rickroll_terminal_payload/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/DUCKY-WIFI_GRABER/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/Win/Bookmark-Hog/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/Win/chrome-exfil/Rubber-Ducky/duckyscript.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/Win/History-Pig/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/Win/Copy-And-Waste/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/exfiltration/Win/Snaffler/snaffler.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/remote_access/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/Netcat-Screenshare/Desktop Screenshare over Netcat.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Zero-Lazagne/Zero-Lazagne.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Make_Windows_performant_but_ugly_and_boring/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/ratlocker/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
@@ -12058,7 +11992,6 @@ sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/OMG/payloads/Printer-Recon/payload.txt,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/OMG/payloads/Proton-Hog/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/OMG/payloads/Browser-Grab/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/OMG/payloads/Water-UnMark/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/OMG/payloads/De-Bloater/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/FlipperZero/payloads/cApS-Troll/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/atomiczsec-BadUSB/FlipperZero/payloads/Priv-Paths/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
@@ -12143,8 +12076,6 @@ sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scrip
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/-RD-PineApple/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Text2Speech/Text2Speech.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/win_winrm-backdoor/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Win10-Phishing/Fake-Windows-10-Logon.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Hotfix_Warning/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/GoodUSB/payload.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Kavitate-BadUSB/Prank/High Contrast/High-Contrast-Lock.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Kavitate-BadUSB/Prank/High Contrast/High-Contrast.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
@@ -12170,7 +12101,6 @@ sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scr
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Flip-PineApple/PineApple-KeyInjection.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Flip-PineApple/PineApple.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/EnableSSH-Android/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/File-Load_BadUSB/File-Load_BadUSB.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Google-Phishing/Google-Phish-to-Discord.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Hasta lasagna!/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/RegDoor/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12183,7 +12113,6 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Hol
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Holding Keys/Holding-Keys-example2.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/QuacKed_Again/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Try_To_Catch_Me/script.py,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Closer/Closer.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/screenshot_exfil/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Screen-Shock/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Copy-And-Waste/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
@@ -12278,7 +12207,6 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_pr
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Export_Cookies_From_Firefox/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Unix-like/Linux/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Camouflage_Your_Backdoor/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Exports_all_the_links_of_the_downloads/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/WindowsLicenseKeyExfiltration/WindowsLicenseKeyExfiltration.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/PUBLIC-SERVICE-ANNOUNCEMENT/PSA.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Change_Github_Profile_Settings/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/remote_access/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/ReverseDuckyII/ReverseDuckyII.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
@@ -12287,7 +12215,6 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_pr
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Piano_Player/examples/super_mario_payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Lazagne-Exfil/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Windows-Privilege-Excalibur/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/VM-Detection-Report/Payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/Printer-Recon/payload.txt,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/passive_windows_detect/passive_windows_detect.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/destruction/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/_precisa_edicao_manual/depende_de_extension/ReverseDuckyUltimate/payload.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
@@ -12479,12 +12406,10 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/_pr
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/PassVault/PassVault2Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/-RD-SafeHaven/SafeHaven.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/File-Monitor-to-Discord/File-Changes-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Flip-Subscribe/Subscribe.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Flip-Subscribe/IWR-Subscribe.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Chrome-DB-to-Discord/Chrome-DB-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/MacOS/Execution/IPLogger-Discord_Webhook-by_bst04/IPLogger-Discord_Webhook-by_bst04.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/MacOS/Execution/SetVolumeMax-MacOS/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Win11-Phishing/Fake-Windows-11-Logon.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/web2Discord/Web2Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Webcam-to-Discord/Webcam-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Unsaved-Notepad-to-Discord/Notepad-Tabs-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
@@ -12564,7 +12489,6 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Hea
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Phone/apps-crash.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Phone/Tab LAG.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/collection/Android/directly_ready/Bruce-Scripts-Heaven_BAD/Phone/android-crasher.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Phone/Wifi-Stealer_ORG.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Phone/4PinCracker.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Phone/pincode.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Phone/Shutdown Win11.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12615,32 +12539,18 @@ sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruc
 sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/phishing/Win/duckyphish/duckyphish.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/general/jiggler.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/general/GitHub-Star.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/general/Win/Win_HID_MonaLisa/MonaLisa.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/general/Win/Water-UnMark/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/YouHaveBeenQuacked2.0/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/RickRoll Max Vol (Basic).txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/CYE_Was_Here.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Grabber-Discord_Webhook.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Wifi_and_Show_Passwords_for_Flipper.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Awesome_Flipper_OSX.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Wifi-Stealer-Discord-Improved.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Cookie-Stealer.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Party_Parrot_OSX.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Show_WiFi_Passwords.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/OSX_Rickroll.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/GoodUSB.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Show_Saved_Passwords_UPDATED.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/The_Matrix_Wake_Up.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/RickRoll (Basic).txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/wifi_stealer_by_webhook.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/265_4_Digit_Pin_BF.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Char_Test_ALTSTRING.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/1_minute_to_sleep.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Hey_Everybody.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Credential_Harvester_MarkCyber.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/SpamRickrollPayload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/RickRoll_Term_OSX.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Char_Test.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/CODE_OF_CONDUCT.md,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/license.md,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/SECURITY.md,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12657,27 +12567,16 @@ sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/Windows_Badusb/Exfiltration/Network_Exfiltration/Network_Exfiltration.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/Windows_Badusb/Exfiltration/SAMexfil/SAMexfil.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/UNC0V3R3D-BadUSB-Collection/iPhone_Badusb/open-website/iPhone_open_website.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Bookmark-Hog/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/FLIZZ3R/FZROPEN_WRECKER.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/FLIZZ3R/BUSY-GUI.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/FLIZZ3R/EMERGENKEY_FZR.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/utilities/Android/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/FLIZZ3R/FLIZAPPAUTO.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/s4dic - BadUSB/DiscordGrabber/DiscordGrabber.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Discord_FAQ/RM_FW_DL.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Discord_FAQ/My_Flip_Repo.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/credentials/Win/open_smb_share_to_steal_creds.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/exfiltration/Win/Bookmark-Hog/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/exfiltration/Win/chrome-exfil/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/exfiltration/Win/History-Pig/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/exfiltration/Win/Copy-And-Waste/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/configuration_needed/Bruce-Scripts-Heaven_BAD/BadUSB/Bombs/You_are_an_Idiot_Web.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/History-Pig/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/InfoSecREDD_Payloads/C2-Data-Exfil-Discord.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Water-UnMark/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/incident_response/Win/GoodUSB/payload.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/RansomwareSimulation/RansomwareSimCleanup.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/RansomwareSimulation/RansomwareSimMain.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Screen-Shock/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Copy-And-Waste/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/BadUSB-MarkCyber/RansomwareSimulation/RansomwareSimulation1.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/BadUSB-MarkCyber/RansomwareSimulation/RansomwareSimulation2-cleanup.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
@@ -12686,14 +12585,7 @@ sd_card_content/badusb_extra_payloads/command_control/Win/directly_ready/Bruce-S
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/BadUSB-MarkCyber/Emails/EmailSender.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/HackStuff/CredentialHarvester.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/command_control/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/HackStuff/VulnerabilityScanner.txt,badusb,command_control,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/phishing/Win/duckyphish/duckyphish.txt,badusb,social_engineering,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/general/GitHub-Star.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/general/Win/Water-UnMark/payload.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
-sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/remote_access/Win/NSHELL/Payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/Pwn-Drive/payload.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/prank/Unix-like/Linux/RickRoll/TerminalRickRoll/QuackTUX.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/prank/Win/JumpScare/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/BadUSB/prank/Win/Always-Minimize/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Emails/EmailSender.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/BadUSB/Emails/EmailScriptGenerator.py,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Exfiltrate-to-Discord/Exfiltrate-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
@@ -12705,7 +12597,6 @@ sd_card_content/badusb_extra_payloads/remote_access/Unix-like/macOS/directly_rea
 sd_card_content/badusb_extra_payloads/remote_access/Unix-like/macOS/directly_ready/Bruce-Scripts-Heaven_BAD/remote_access/Unix-like/OSX/Root_backdoor.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Win/directly_ready/Bruce-Scripts-Heaven_BAD/remote_access/Win/win10lockpick.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/remote_access/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/remote_access/Win/ReverseDucky/payload.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/remote_access/Unix-like/Linux/directly_ready/Bruce-Scripts-Heaven_BAD/remote_access/Win/ReverseDucky/ReverseDucky.txt,badusb,remote_access,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/discovery/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Exfiltrate-to-USB/Exfiltrate-to-USB.txt,badusb,discovery,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/x-frame-options_scanner/recon_files/assets/js/constants.js,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/Bruce-Scripts-Heaven_BAD/x-frame-options_scanner/recon_files/assets/js/main.js,badusb,reconnaissance,Bruce-Scripts-Heaven_BAD,classified
@@ -12779,12 +12670,7 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/UNC
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/Execution/Delete_System_32/Delete_System_32.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/MoreSeriousFUN/DeleteMicrosoftStore/DeleteMicrosoftStore.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/MoreSeriousFUN/DeleteWindowsMail/DeleteWindowsMail.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Enable_Cortana/enable_cortana.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Disable_Cortana/disable_cortana.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Win_Debloater/win_debloat.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Bloatware_removal/bloatware_remover.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Clear_Explorer/clear_explorer.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Privacy_Windows/privacy.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/Activate_Windows/activate_windows.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/utilities/Win/directly_ready/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/GoodUSB/OneDrive_Removal/uninstall_onedrive.txt,badusb,utilities,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/UNC0V3R3D-BadUSB/BadUsb-Collection/Windows_Badusb/FUN/Cartman/Cartman.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12839,15 +12725,10 @@ sd_card_content/badusb_extra_payloads/prank/iOS/directly_ready/Bruce-Scripts-Hea
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/The_Matrix-Wake_Up/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/Hacker_Typer/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/Broken_capslock/quack.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/ADV-Rickware/ADV-Rickware.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/Terminal_RickRoll/quack.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/Rick_Rolling_Forever/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/RickUpdater/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/ADV-RickRoll/ADV-RickRoll.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/RickRoll/RickCurs/quack.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/CartmanSpam/CartmanSpam.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/Bruce-Scripts-Heaven_BAD/prank/Win/SoundChangeDuck/payload.txt,badusb,prank,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Screenshoter/Screenshoter.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Randomization/Randomization-example3.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Randomization/Randomization-example2.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/iphone-crasher(better)/iphone-crasher(better).txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
@@ -12866,14 +12747,11 @@ sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/win
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/-RD-ShortcutJacker/Shortcut-Jacker-Execute.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/Bruce-Scripts-Heaven_BAD/EmailAndTextMessage/wifi2Message.txt,badusb,collection,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/RanFunWare/payload.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Funni_Stick_V3/README.txt,badusb,destruction,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/discovery/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Bad GPT/PentestGPT.txt,badusb,discovery,Bruce-Scripts-Heaven_BAD,classified
-sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Filetype-Organizer/Filetype-Organizer.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/Bruce-Scripts-Heaven_BAD/Win_PoSH_MorseCode/b.txt,badusb,_unclassified,Bruce-Scripts-Heaven_BAD,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/Bruce-Scripts-Heaven_BAD/Record-Mic-to-Discord/Record-Mic-to-Discord.txt,badusb,data_exfiltration,Bruce-Scripts-Heaven_BAD,classified
 sd_card_content/badusb_extra_payloads/social_engineering/Win/directly_ready/I-Am-Jakoby_BadUSB/README.md,badusb,social_engineering,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/test.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
-sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-Rage-PopUps/Rage-PopUps.txt,badusb,prank,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-Rage-PopUps/Rage-PopUps.ps1,badusb,prank,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-Keylogger/keylogger.txt,badusb,destruction,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-Keylogger/keylogger.ps1,badusb,prank,I-Am-Jakoby_BadUSB,classified
@@ -12926,9 +12804,7 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUS
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-IP-Grabber/IP-Grabber.txt,badusb,collection,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-IP-Grabber/ReadMe.md,badusb,collection,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/collection/Unix-like/macOS/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-IP-Grabber/IP-Grabber.ps1,badusb,collection,I-Am-Jakoby_BadUSB,classified
-sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PineApple/PineApple-KeyInjection.txt,badusb,destruction,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PineApple/PineApple.ps1,badusb,destruction,I-Am-Jakoby_BadUSB,classified
-sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-PineApple/PineApple.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-PineApple/README.md,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/destruction/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-Play-WAV/Play-WAV.ps1,badusb,destruction,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-Play-WAV/Play-WAV.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
@@ -12941,7 +12817,6 @@ sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUS
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Debug/Debug.ps1,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/PS-Custom-Draw.ps1,badusb,prank,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/PS-Draw.ps1,badusb,data_exfiltration,I-Am-Jakoby_BadUSB,classified
-sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/PS-Draw.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/README.md,badusb,data_exfiltration,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/remote_access/iOS/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/Images/PS-Draw.jpg,badusb,remote_access,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-PS-Draw/Images/omg-ico.png,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
@@ -12957,7 +12832,6 @@ sd_card_content/badusb_extra_payloads/remote_access/iOS/directly_ready/I-Am-Jako
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-We-Found-You/We-Found-You.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/reconnaissance/Win/directly_ready/I-Am-Jakoby_BadUSB/Payloads/Flip-We-Found-You/README.md,badusb,reconnaissance,I-Am-Jakoby_BadUSB,classified
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-EvilGoose/ReadMe.md,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
-sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-EvilGoose/placeholder,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/_unclassified/I-Am-Jakoby_BadUSB/Payloads/Flip-EvilGoose/EvilGoose.txt,badusb,_unclassified,I-Am-Jakoby_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/defense_evasion/Win/directly_ready/magikh0e_BadUSB/Disable Firewall and Create An Admin Account.txt,badusb,defense_evasion,magikh0e_BadUSB,classified
 sd_card_content/badusb_extra_payloads/collection/Win/directly_ready/magikh0e_BadUSB/Information Stealer.txt,badusb,collection,magikh0e_BadUSB,classified

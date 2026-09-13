@@ -44,6 +44,27 @@ SOURCES = [
 
 OUT = os.path.join(REPO_ROOT, "PROVENANCE.csv")
 
+# Logs de dedup pos-classificacao: arquivos listados aqui como
+# "removed_path" foram fisicamente apagados depois que o provenance_*.csv
+# de origem foi gravado (ex.: dedup_badusb.py rodou DEPOIS do apply do
+# classify_badusb.py). Excluidos do PROVENANCE.csv final pra nao deixar
+# linha orfa apontando pra um arquivo que nao existe mais.
+DEDUP_LOGS = ["dedup_removed_badusb.csv"]
+
+
+def load_removed_paths():
+    removed = set()
+    for name in DEDUP_LOGS:
+        p = os.path.join(REPO_ROOT, name)
+        if not os.path.exists(p):
+            continue
+        with open(p, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                rp = row.get("removed_path")
+                if rp:
+                    removed.add(rp)
+    return removed
+
 # merge_type/acao que documentam um arquivo removido (nao uma localizacao
 # final) -- excluidos da checagem de new_path duplicado.
 DROPPED_MARKERS = ("dropped", "discard")
@@ -80,6 +101,12 @@ def main():
     if not found:
         print("Nenhuma fonte de provenance encontrada.")
         sys.exit(1)
+
+    removed_paths = load_removed_paths()
+    if removed_paths:
+        before = len(rows)
+        rows = [r for r in rows if r["new_path"] not in removed_paths]
+        print(f"Excluidas {before - len(rows)} linha(s) cujo arquivo foi removido por um dedup posterior.")
 
     with open(OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDNAMES)
