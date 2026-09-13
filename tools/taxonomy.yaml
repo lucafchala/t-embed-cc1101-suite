@@ -1,0 +1,187 @@
+# taxonomy.yaml -- tabela de mapeamento pra reorganizacao funcional profunda
+# de badusb_extra_payloads/ e nfc/. Editar este arquivo pra estender a
+# taxonomia (nova categoria, nova regra de keyword) NAO exige reescrever os
+# scripts -- classify_badusb.py e classify_nfc.py leem daqui.
+#
+# ============================================================================
+# NFC -- mapeamento EXATO por pasta de vendor (nao e keyword-based: ja
+# sabemos o conteudo de cada vendor pelo reconhecimento feito na homelab
+# em 2026-09-13, entao o mapeamento e uma tabela fixa, sem adivinhacao).
+# ============================================================================
+nfc_merge_groups:
+  # grupo -> lista de (vendor_relpath dentro de nfc/) que sao mesclados com
+  # dedup por hash de conteudo (mesmo padrao do merge_ir_rf.py) dentro da
+  # pasta final nfc/<grupo>/
+  Amiibo:
+    - AmiiboDB
+    - Bruce-Scripts-Heaven_RFID/Amiibo
+    - UberGuidoZ_Amiibo_Tools
+  Tonies:
+    - Tonies_NFC
+    - Bruce-Scripts-Heaven_RFID/Toniebox
+  Access_Control_and_Dictionaries:
+    - UberGuidoZ_H10301_RFID_Bruteforce
+    - UberGuidoZ_Mifare_Classic_Dict
+    - Bruce-Scripts-Heaven_RFID/mf_classic_dict
+  Community_Misc:
+    - Bruce-Scripts-Heaven_RFID/Calling
+    - Bruce-Scripts-Heaven_RFID/NFC_Files
+    - Bruce-Scripts-Heaven_RFID/NFC_YouTube
+    - Bruce-Scripts-Heaven_RFID/random
+    - Bruce-Scripts-Heaven_RFID/StarRFID
+    - Bruce-Scripts-Heaven_RFID/Trolling
+    - Bruce-Scripts-Heaven_RFID/assets
+    - Bruce-Scripts-Heaven_RFID/VizOff.rfid
+    - UberGuidoZ_Fun_Files
+
+# pastas que ficam como estao (vendor unico, sem duplicacao com outro
+# vendor -- so um rename/move de container, sem merge de conteudo)
+nfc_simple_rename:
+  Skylanders_LEGO_Toys: Skylanders_LEGO_Toys
+
+# ============================================================================
+# BADUSB -- taxonomia MITRE-ATT&CK-style, EXATAMENTE as 12 categorias que o
+# BadUsb-Library ja usa internamente (reaproveitada, nao inventada). Os
+# outros 4 vendors (Bruce-Scripts-Heaven_BAD, I-Am-Jakoby_BadUSB,
+# magikh0e_BadUSB, UberGuidoZ_BadUSB) sao classificados por keyword no
+# NOME do arquivo/pasta (case-insensitive). Primeira regra que bater
+# vence -- ordem da lista abaixo importa. Arquivo que nao bate em nenhuma
+# regra vai pra _unclassified/ (nunca e forcado numa categoria errada).
+#
+# BadUsb-Library/ em si NAO passa por esse classificador -- ja esta correto,
+# so e normalizada/mantida no lugar.
+#
+# NOTA (dry-run real 2026-09-13, 3a rodada): descoberta uma sub-colecao
+# dentro de Bruce-Scripts-Heaven_BAD chamada BadUSB-FalsePhilosopher/, com
+# organizacao interna propria em torno de dois dispositivos (OMG/Library/*
+# e WHID/Library/*). Algumas das subpastas dela batem em categorias reais
+# (exfiltration/, remote_access/ -- keywords adicionadas abaixo), mas
+# outras (OMG/Library/execution/, OMG/Library/incident_response/,
+# WHID/Library/Base/) NAO tem nome de categoria reconhecivel na nossa
+# taxonomia de 12 categorias -- "execution" e generico demais (quase todo
+# payload BadUSB "executa" algo) e "incident_response"/"Base" nao
+# correspondem a nenhuma das 12. Decisao deliberada: NAO inventar
+# categoria nova nem forcar essas pastas num bucket errado -- ficam em
+# _unclassified/ pra revisao manual (mesmo principio de "nunca forcar"
+# ja aplicado a demo_*/misc/test_ em utilities).
+# ============================================================================
+badusb_categories:
+  - name: destruction
+    # "terminator" adicionado apos o dry-run real de 2026-09-13 --
+    # ProcessTerminator/payload.txt ficou sem match. "delete"/"deletion"
+    # adicionados na 2a rodada -- "Desktop Deletion.txt" ficou sem match.
+    # "destructive" adicionado na 4a rodada -- sinonimo direto do nome da
+    # categoria, usado como nome de pasta pelo proprio framework
+    # USBRubberducky (BadUSB-FalsePhilosopher/Ducky/USBRubberducky/destructive/).
+    keywords: [wipe, destroy, format_disk, formatc, ransomware, bomb, brick, corrupt, delete_all, deltree, shred, terminator, delete, deletion, destructive]
+  - name: defense_evasion
+    # "evasion" e "obscurity" adicionados apos o mesmo dry-run --
+    # Kiosk-Evasion-Bruteforce.txt e a pasta inteira
+    # MacOS-narstybits/Obscurity/ (proxy/anonimizacao/anti-forense)
+    # ficaram sem match. "kiosk" adicionado na 4a rodada -- generaliza esse
+    # mesmo caso pra variantes sem a palavra "evasion" no nome
+    # (WHID/Library/Base/winkiOSKhack.txt) -- kiosk breakout e por
+    # definicao uma tecnica de defense evasion, palavra especifica o
+    # bastante pra nao gerar falso positivo.
+    keywords: [disable_defender, disable_uac, disable_firewall, disable_antivirus, disable_smartscreen, bypass_amsi, bypass_uac, clear_log, clearlog, disable_av, killav, disable_updates, evade, evasion, obscurity, kiosk]
+  - name: remote_access
+    # "remote_access" e "remote_shell" adicionados na 4a rodada -- a
+    # sub-colecao BadUSB-FalsePhilosopher (dentro de Bruce-Scripts-Heaven_BAD)
+    # tem uma pasta literal OMG/Library/remote_access/ que nao batia em
+    # nenhuma keyword antiga (so tinhamos "remote_control", palavra
+    # diferente); "Remote Shell.txt" e "Virtual Network Remote Access.txt"
+    # (MacOS-narstybits/Executions/) tambem passam a bater com essas duas
+    # novas keywords. "metasploit" adicionado no mesmo dry-run -- nome de
+    # ferramenta especifico e inequivoco (framework de exploracao/acesso
+    # remoto), visto em BashBunny/.../Metasploit-Autopwn/.
+    keywords: [reverse_shell, reverseshell, revshell, netcat, ncat, meterpreter, metasploit, rat_, "_rat", backdoor, ngrok, remote_control, remote_access, remote_shell, c2_, "_c2", bind_shell]
+  - name: social_engineering
+    keywords: [phishing, fake_login, fake_update, fake_error, credential_harvest, social_engineer, spoof_login]
+  - name: data_exfiltration
+    # "exfiltration" adicionado apos o dry-run real da 3a rodada -- a
+    # keyword "exfil" nao bate na palavra inteira "exfiltration" (ex.:
+    # OMG/Library/exfiltration/ do BadUSB-FalsePhilosopher) porque o "t"
+    # logo depois de "exfil" quebra a checagem de fronteira de palavra; em
+    # vez de mexer na logica de match (kw_in), e mais simples e mais seguro
+    # so adicionar a palavra inteira como keyword propria.
+    # "dropbox" adicionado pelo mesmo motivo que pastebin/discord_send/
+    # telegram_send ja existiam -- e um destino comum de exfiltracao visto
+    # em arquivos reais (`Cookies to Dropbox.txt`,
+    # `iCloud Photos to Dropbox.txt`, MacOS-narstybits/Executions/), nao
+    # uma palavra generica.
+    keywords: [exfil, exfiltration, webhook, discord_send, telegram_send, pastebin, dropbox, ftp_upload, upload_to, send_wifi, wifi_exfil, email_send]
+  - name: collection
+    # "show_password"/"show_passwords" adicionados apos o dry-run real --
+    # Wifi_and_Show_Passwords_for_Flipper.txt nao batia em "wifi_password"
+    # (a keyword antiga exigia o singular colado, sem "_and_show_" no meio)
+    # "mimikatz" adicionado na 4a rodada -- nome de ferramenta especifico e
+    # inequivoco (dump de credenciais do Windows), visto em
+    # BashBunny-FalsePhilosopher/Ducky/Ducky-Framework/payloads/win/mimikatzPay/.
+    # "credentials" adicionado na 5a rodada -- BashBunny (dentro de
+    # BadUSB-FalsePhilosopher) tem uma pasta inteira
+    # payloads/library/credentials/ (HashDumpBunny, LaZassword, Quickdraw,
+    # WindowsCookies, SMBruteBunny, etc.) que e sinonimo direto desta
+    # categoria mas nao batia em "credential_dump" (palavra diferente).
+    keywords: [grabber, stealer, keylog, screenshot, clipboard, browser_history, wifi_grabber, wifi_password, cookie_steal, saved_password, credential_dump, credentials, show_password, show_passwords, mimikatz]
+  - name: authentication
+    keywords: [useradd, adduser, hidden_admin, backdoor_account, password_change, bypass_login, create_admin, admin_account]
+  - name: command_control
+    keywords: [persistence, scheduled_task, registry_run, autorun, startup_folder, beacon, run_key]
+  - name: discovery
+    # "connected-usb"/"get-connected" adicionados apos o dry-run real --
+    # Get-Connected-USBs.txt ficou sem match
+    keywords: [sysinfo, systeminfo, whoami, list_users, enum_, network_info, ipconfig, list_processes, connected-usb, get-connected]
+  - name: reconnaissance
+    keywords: [recon, wifi_scan, network_scan, geolocation, ip_logger, whois, port_scan]
+  - name: prank
+    # honk/party_parrot/hacker_typer/was_here/wake_up/hey_everybody/pingme
+    # adicionados apos o dry-run real -- sao nomes de marca/apelido de
+    # payloads de pegadinha classicos (memes conhecidos: Party Parrot,
+    # Hacker Typer, "X was here", rickroll-style wake-up), sem a palavra
+    # "prank"/"joke" literal no nome. "jumpscare" adicionado na 2a rodada
+    # (-RD-JumpScare/). Nao precisou adicionar "pranks" (plural) -- o
+    # script agora aceita plural simples automaticamente, entao a propria
+    # pasta "Pranks/" da Bruce-Scripts-Heaven_BAD ja bate em "prank" sozinho.
+    # "wallpaper" e "popup" adicionados na 4a rodada -- troca de papel de
+    # parede e spam de popup sao pegadinhas classicas e inequivocas de
+    # BadUSB (Malduino/.../WallpaperChangerWin10.ino,
+    # WHID/Library/Base/winpropopups.txt).
+    keywords: [prank, joke, troll, annoying, rickroll, meme, fake_bsod, screen_flip, mouse_invert, honk, party_parrot, hacker_typer, was_here, wake_up, hey_everybody, pingme, jumpscare, wallpaper, popup]
+  - name: utilities
+    # deliberadamente NAO inclui palavras genericas tipo "misc", "test_",
+    # "demo", "example" -- essas nao dizem nada sobre a FUNCAO do payload,
+    # so que o vendor nao organizou; um arquivo assim deve cair em
+    # _unclassified pra revisao manual, nao ser engolido aqui por engano.
+    # "goodusb" adicionado na 2a rodada: Bruce-Scripts-Heaven_BAD tem uma
+    # pasta MacOS-narstybits/Goodusb/ inteira de scripts legitimos/benignos
+    # (gerador de senha, dashboard, organizador de desktop, etc.) -- nao
+    # sao ataque nenhum, exatamente a categoria "utilities" (utilitario
+    # legitimo) que o proprio BadUsb-Library ja usa. "char_test" tambem
+    # adicionado -- scripts de teste de layout de teclado/encoding, nao
+    # payload de ataque.
+    keywords: [util, tool_, wordlist, keyboard_layout, goodusb, char_test]
+
+# heuristica de plataforma (por path/nome do arquivo, case-insensitive).
+# ordem importa; default = Win (maioria dos payloads Ducky Script visa
+# atalhos de GUI do Windows quando nao especificado).
+badusb_platforms:
+  - name: Android
+    keywords: [android, apk, "termux"]
+  - name: iOS
+    keywords: [ios, iphone, ipad, "shortcuts.app"]
+  - name: Unix-like/macOS
+    keywords: [macos, "osx", "_mac", "mac_"]
+  - name: Unix-like/Linux
+    keywords: [linux, ubuntu, debian, "_nix"]
+  - name: Win
+    keywords: []  # fallback -- sempre bate por ultimo
+
+# heuristica de prontidao (le o CONTEUDO do arquivo, nao so o nome):
+#   - contem "EXTENSION" (variavel nao preenchida) -> configuration_needed
+#     (nao-trivial, precisa decisao manual de qual extensao/arquivo usar)
+#   - contem "STRINGLN" sem EXTENSION -> configuration_needed, mas marcado
+#     como auto-fixable (conversao facil: colapsar pra STRING de verdade)
+#   - nenhum dos dois -> directly_ready
+badusb_readiness_markers:
+  needs_extension: "EXTENSION"
+  needs_stringln_collapse: "STRINGLN"
