@@ -19,7 +19,12 @@ mudou de pasta).
 
 VENDOR_SOURCES abaixo foi copiado da tabela ja verificada em
 CONTRIBUTING.md ("Proveniencia detalhada por pasta") -- nunca adicione uma
-URL aqui que nao esteja tambem documentada la.
+URL aqui que nao esteja tambem documentada la. Varios vendor_key
+diferentes podem apontar pro MESMO repositorio de origem (ex.:
+UberGuidoZ_BadUSB, UberGuidoZ_Fun_Files, UberGuidoZ_Amiibo_Tools sao todos
+UberGuidoZ/Flipper) -- a agregacao abaixo agrupa por FONTE real
+(nome+URL+licenca), nao por vendor_key, senao a mesma fonte aparece
+repetida em varias linhas.
 
 Uso:
   python3 gen_credits.py
@@ -62,10 +67,24 @@ def vendor_of(ovf):
 def main():
     rows = list(csv.DictReader(open(PROVENANCE_CSV, encoding="utf-8")))
 
-    counts = defaultdict(lambda: defaultdict(int))  # vendor -> function -> count
+    vendor_counts = defaultdict(lambda: defaultdict(int))  # vendor_key -> function -> count
     for r in rows:
         vendor = vendor_of(r["original_vendor_folder"])
-        counts[vendor][r["function"]] += 1
+        vendor_counts[vendor][r["function"]] += 1
+
+    # agrupa por FONTE real (nome, URL, licenca), nao por vendor_key --
+    # varios vendor_keys podem apontar pro mesmo repositorio de origem.
+    source_counts = defaultdict(lambda: defaultdict(int))
+    unknown_counts = defaultdict(lambda: defaultdict(int))
+
+    for vendor, func_counts in vendor_counts.items():
+        if vendor in VENDOR_SOURCES:
+            key = VENDOR_SOURCES[vendor]
+            for func, n in func_counts.items():
+                source_counts[key][func] += n
+        else:
+            for func, n in func_counts.items():
+                unknown_counts[vendor][func] += n
 
     lines = []
     lines.append("# CREDITS.md\n")
@@ -89,28 +108,18 @@ def main():
     lines.append("| Fonte | Licença | Arquivos | Funções |")
     lines.append("|---|---|---|---|")
 
-    def total_of(vendor):
-        return sum(counts[vendor].values())
+    def total_of(d):
+        return sum(d.values())
 
-    known_vendors = sorted(
-        (v for v in counts if v in VENDOR_SOURCES),
-        key=lambda v: -total_of(v),
-    )
-    unknown_vendors = sorted(
-        (v for v in counts if v not in VENDOR_SOURCES),
-        key=lambda v: -total_of(v),
-    )
+    ordered_sources = sorted(source_counts.keys(), key=lambda k: -total_of(source_counts[k]))
+    for name, url, license_ in ordered_sources:
+        fc = source_counts[(name, url, license_)]
+        funcs = ", ".join(f"{f} ({n})" for f, n in sorted(fc.items(), key=lambda kv: -kv[1]))
+        lines.append(f"| [{name}]({url}) | {license_} | {total_of(fc)} | {funcs} |")
 
-    for vendor in known_vendors:
-        name, url, license_ = VENDOR_SOURCES[vendor]
-        funcs = ", ".join(f"{f} ({n})" for f, n in sorted(counts[vendor].items(), key=lambda kv: -kv[1]))
-        lines.append(f"| [{name}]({url}) | {license_} | {total_of(vendor)} | {funcs} |")
-
-    if unknown_vendors:
+    if unknown_counts:
         lines.append("")
-        lines.append(
-            "### Fontes sem URL confirmada em CONTRIBUTING.md\n"
-        )
+        lines.append("### Fontes sem URL confirmada em CONTRIBUTING.md\n")
         lines.append(
             "(presentes em PROVENANCE.csv mas ainda sem entrada em "
             "`VENDOR_SOURCES` -- confira CONTRIBUTING.md e adicione lá "
@@ -118,9 +127,10 @@ def main():
         )
         lines.append("| Pasta original | Arquivos | Funções |")
         lines.append("|---|---|---|")
-        for vendor in unknown_vendors:
-            funcs = ", ".join(f"{f} ({n})" for f, n in sorted(counts[vendor].items(), key=lambda kv: -kv[1]))
-            lines.append(f"| `{vendor}` | {total_of(vendor)} | {funcs} |")
+        for vendor in sorted(unknown_counts.keys(), key=lambda v: -total_of(unknown_counts[v])):
+            fc = unknown_counts[vendor]
+            funcs = ", ".join(f"{f} ({n})" for f, n in sorted(fc.items(), key=lambda kv: -kv[1]))
+            lines.append(f"| `{vendor}` | {total_of(fc)} | {funcs} |")
 
     lines.append("")
     lines.append(f"**Total de arquivos rastreados em PROVENANCE.csv: {len(rows)}**")
@@ -128,7 +138,7 @@ def main():
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
-    print(f"CREDITS.md gerado ({len(rows)} linhas de PROVENANCE.csv, {len(known_vendors)} fontes conhecidas, {len(unknown_vendors)} sem URL confirmada)")
+    print(f"CREDITS.md gerado ({len(rows)} linhas de PROVENANCE.csv, {len(source_counts)} fontes distintas, {len(unknown_counts)} vendor(s) sem URL confirmada)")
 
 
 if __name__ == "__main__":

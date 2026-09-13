@@ -6,19 +6,13 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 
 | Fonte | Licença | Arquivos | Funções |
 |---|---|---|---|
-| [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório | 2688 | nfc (2688) |
-| [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório | 2379 | badusb (2379) |
-| [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 | 2052 | rf (2052) |
+| [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório | 5067 | nfc (2688), badusb (2379) |
+| [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 | 2840 | rf (2052), ir (788) |
+| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 2314 | nfc (1901), badusb (413) |
 | [AmiiboDB/Amiibo](https://github.com/AmiiboDB/Amiibo) | Ver repositório | 1917 | nfc (1917) |
-| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 1891 | nfc (1891) |
-| [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 | 788 | ir (788) |
 | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório | 712 | nfc (712) |
-| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 413 | badusb (413) |
 | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) | Ver repositório | 314 | badusb (314) |
 | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório | 83 | badusb (83) |
-| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 7 | nfc (7) |
-| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 2 | nfc (2) |
 | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório | 2 | badusb (2) |
-| [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 1 | nfc (1) |
 
 **Total de arquivos rastreados em PROVENANCE.csv: 13249**
