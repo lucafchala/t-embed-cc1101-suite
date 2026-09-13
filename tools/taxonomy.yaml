@@ -66,6 +66,19 @@ nfc_simple_rename:
 # ja aplicado a demo_*/misc/test_ em utilities).
 # ============================================================================
 badusb_categories:
+  # NOTA (auditoria de _unclassified/, 2026-09-13): alem dos casos ja
+  # documentados acima (BadUSB-FalsePhilosopher), o maior cluster restante
+  # em _unclassified/ e UberGuidoZ_BadUSB/emptythevoid-BadUSB/ (~270
+  # arquivos, dominado por red_dead_redemption_2/Five_Finger_Filet/ --
+  # centenas de sequencias de teclas geradas p/ um minigame -- mais
+  # Zoom_Controls/, win10_install/, win11_install/, windows_helpers/,
+  # Linux_helpers/). Isso NAO e payload de ataque -- e automacao de
+  # teclado pra jogos/apps/instalacao de SO, um genero diferente por
+  # completo das 12 categorias MITRE-ATT&CK abaixo. Decisao deliberada:
+  # NAO forcar em "utilities" (reservada pra utilitario legitimo de
+  # pentest, nao automacao de consumidor) nem inventar categoria nova sem
+  # decisao do mantenedor -- fica em _unclassified/ ate essa decisao (ex.:
+  # uma 13a categoria tipo "productivity_and_game_macros").
   - name: destruction
     # "terminator" adicionado apos o dry-run real de 2026-09-13 --
     # ProcessTerminator/payload.txt ficou sem match. "delete"/"deletion"
@@ -83,7 +96,11 @@ badusb_categories:
     # (WHID/Library/Base/winkiOSKhack.txt) -- kiosk breakout e por
     # definicao uma tecnica de defense evasion, palavra especifica o
     # bastante pra nao gerar falso positivo.
-    keywords: [disable_defender, disable_uac, disable_firewall, disable_antivirus, disable_smartscreen, bypass_amsi, bypass_uac, clear_log, clearlog, disable_av, killav, disable_updates, evade, evasion, obscurity, kiosk]
+    # "bitlocker_disable" adicionado apos auditoria de _unclassified/ em
+    # 2026-09-13 -- emptythevoid-BadUSB/bitlocker/bitlocker_disable.txt
+    # nao batia em nenhuma keyword existente (desabilitar BitLocker e
+    # evasao de defesa por definicao, so faltava a keyword especifica).
+    keywords: [disable_defender, disable_uac, disable_firewall, disable_antivirus, disable_smartscreen, bypass_amsi, bypass_uac, clear_log, clearlog, disable_av, killav, disable_updates, evade, evasion, obscurity, kiosk, bitlocker_disable]
   - name: remote_access
     # "remote_access" e "remote_shell" adicionados na 4a rodada -- a
     # sub-colecao BadUSB-FalsePhilosopher (dentro de Bruce-Scripts-Heaven_BAD)
@@ -109,7 +126,11 @@ badusb_categories:
     # em arquivos reais (`Cookies to Dropbox.txt`,
     # `iCloud Photos to Dropbox.txt`, MacOS-narstybits/Executions/), nao
     # uma palavra generica.
-    keywords: [exfil, exfiltration, webhook, discord_send, telegram_send, pastebin, dropbox, ftp_upload, upload_to, send_wifi, wifi_exfil, email_send]
+    # "exfiltrate" adicionado apos auditoria de _unclassified/ em
+    # 2026-09-13 -- emptythevoid-BadUSB/"exfiltrate forticlient"/ usa a
+    # forma verbal (-ate), que nao compartilha substring com "exfil" nem
+    # "exfiltration" ja existentes.
+    keywords: [exfil, exfiltration, exfiltrate, webhook, discord_send, telegram_send, pastebin, dropbox, ftp_upload, upload_to, send_wifi, wifi_exfil, email_send]
   - name: collection
     # "show_password"/"show_passwords" adicionados apos o dry-run real --
     # Wifi_and_Show_Passwords_for_Flipper.txt nao batia em "wifi_password"
@@ -124,7 +145,11 @@ badusb_categories:
     # categoria mas nao batia em "credential_dump" (palavra diferente).
     keywords: [grabber, stealer, keylog, screenshot, clipboard, browser_history, wifi_grabber, wifi_password, cookie_steal, saved_password, credential_dump, credentials, show_password, show_passwords, mimikatz]
   - name: authentication
-    keywords: [useradd, adduser, hidden_admin, backdoor_account, password_change, bypass_login, create_admin, admin_account]
+    # "login_bypass" adicionado apos auditoria de _unclassified/ em
+    # 2026-09-13 -- emptythevoid-BadUSB/windows_login_bypass_utilman/ usa a
+    # ordem de palavra invertida (login_bypass) da que ja tinhamos
+    # (bypass_login) -- mesma tecnica, nome diferente.
+    keywords: [useradd, adduser, hidden_admin, backdoor_account, password_change, bypass_login, login_bypass, create_admin, admin_account]
   - name: command_control
     keywords: [persistence, scheduled_task, registry_run, autorun, startup_folder, beacon, run_key]
   - name: discovery
