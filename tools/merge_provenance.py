@@ -7,13 +7,23 @@ auditoria do merge ir/rf (tools/migrations/2026-09-merge-ir-rf/
 provenance_ir_rf_merge.csv) num PROVENANCE.csv unico na raiz do repo.
 
 Cada fonte pode ter nomes de coluna diferentes -- um "field_map" por fonte
-traduz pro schema comum (FIELDNAMES) antes de juntar. So concatena as
-fontes que existirem -- nao e erro faltar uma.
+traduz pro schema comum (FIELDNAMES) antes de juntar. Uma fonte tambem
+pode ter "path_prefix_renames": o registro de auditoria do merge ir/rf
+foi gravado ANTES do rename final ir_extra_dbs/subghz_extra_dbs -> ir/rf,
+entao os "destino" que ele guarda usam o nome de container antigo -- sem
+essa reescrita, toda linha vinda dessa fonte apareceria como orfa mesmo
+existindo, so que sob o nome novo do container.
+
+So concatena as fontes que existirem -- nao e erro faltar uma.
 
 Linhas cujo merge_type/acao contenha "dropped"/"discard" (ex.: o
 "duplicate-dropped" do merge ir/rf) documentam um arquivo REMOVIDO, nao
 uma localizacao final -- sao excluidas da checagem de new_path duplicado
 (esperado que varias delas apontem pro mesmo destino sobrevivente).
+
+Tambem cruza com DEDUP_LOGS (ex.: dedup_removed_badusb.csv) pra excluir
+linhas cujo arquivo foi apagado por uma dedup posterior ao provenance_*.csv
+de origem ter sido gravado.
 
 Uso:
   python3 merge_provenance.py
@@ -26,7 +36,9 @@ REPO_ROOT = os.environ.get("REPO_ROOT", os.getcwd())
 FIELDNAMES = ["new_path", "function", "bucket", "original_vendor_folder", "merge_type"]
 
 # Cada fonte: path relativo ao REPO_ROOT + field_map (None = colunas ja
-# batem com FIELDNAMES; dict = traduz coluna-do-arquivo -> campo-comum)
+# batem com FIELDNAMES; dict = traduz coluna-do-arquivo -> campo-comum) +
+# path_prefix_renames opcional (aplicado so no campo new_path, pra corrigir
+# containers renomeados depois que o CSV de origem foi gravado).
 SOURCES = [
     {
         "path": "tools/migrations/2026-09-merge-ir-rf/provenance_ir_rf_merge.csv",
@@ -37,9 +49,13 @@ SOURCES = [
             "original_vendor_folder": "origem_original",
             "merge_type": "acao",
         },
+        "path_prefix_renames": {
+            "sd_card_content/ir_extra_dbs/": "sd_card_content/ir/",
+            "sd_card_content/subghz_extra_dbs/": "sd_card_content/rf/",
+        },
     },
-    {"path": "provenance_nfc.csv", "field_map": None},
-    {"path": "provenance_badusb.csv", "field_map": None},
+    {"path": "provenance_nfc.csv", "field_map": None, "path_prefix_renames": None},
+    {"path": "provenance_badusb.csv", "field_map": None, "path_prefix_renames": None},
 ]
 
 OUT = os.path.join(REPO_ROOT, "PROVENANCE.csv")
@@ -50,6 +66,10 @@ OUT = os.path.join(REPO_ROOT, "PROVENANCE.csv")
 # classify_badusb.py). Excluidos do PROVENANCE.csv final pra nao deixar
 # linha orfa apontando pra um arquivo que nao existe mais.
 DEDUP_LOGS = ["dedup_removed_badusb.csv"]
+
+# merge_type/acao que documentam um arquivo removido (nao uma localizacao
+# final) -- excluidos da checagem de new_path duplicado.
+DROPPED_MARKERS = ("dropped", "discard")
 
 
 def load_removed_paths():
@@ -65,9 +85,14 @@ def load_removed_paths():
                     removed.add(rp)
     return removed
 
-# merge_type/acao que documentam um arquivo removido (nao uma localizacao
-# final) -- excluidos da checagem de new_path duplicado.
-DROPPED_MARKERS = ("dropped", "discard")
+
+def apply_prefix_renames(path, renames):
+    if not renames:
+        return path
+    for old, new in renames.items():
+        if path.startswith(old):
+            return new + path[len(old):]
+    return path
 
 
 def main():
@@ -80,6 +105,7 @@ def main():
             continue
         found.append(src["path"])
         field_map = src["field_map"]
+        renames = src.get("path_prefix_renames")
         with open(path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             file_fields = reader.fieldnames or []
@@ -89,14 +115,18 @@ def main():
                     print(f"ABORTADO -- {src['path']} nao tem as colunas esperadas: faltam {missing}")
                     sys.exit(1)
                 for row in reader:
-                    rows.append({k: row.get(k, "") for k in FIELDNAMES})
+                    mapped = {k: row.get(k, "") for k in FIELDNAMES}
+                    mapped["new_path"] = apply_prefix_renames(mapped["new_path"], renames)
+                    rows.append(mapped)
             else:
                 missing = [c for c in field_map.values() if c not in file_fields]
                 if missing:
                     print(f"ABORTADO -- {src['path']} nao tem as colunas mapeadas: faltam {missing}")
                     sys.exit(1)
                 for row in reader:
-                    rows.append({k: row.get(field_map[k], "") for k in FIELDNAMES})
+                    mapped = {k: row.get(field_map[k], "") for k in FIELDNAMES}
+                    mapped["new_path"] = apply_prefix_renames(mapped["new_path"], renames)
+                    rows.append(mapped)
 
     if not found:
         print("Nenhuma fonte de provenance encontrada.")
