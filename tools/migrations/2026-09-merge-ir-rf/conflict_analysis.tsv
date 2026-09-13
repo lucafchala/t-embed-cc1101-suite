@@ -1,0 +1,40 @@
+destino	origem	veredito	botoes_origem	botoes_destino	so_origem	so_destino	mesmo_nome_dado_diferente
+sd_card_content/ir_extra_dbs/ACs/Black_and_Decker/Portable.ir	sd_card_content/universal_ir/assets/ACs/Black_and_Decker/Portable.ir	DIVERGENTE	9	9	Off	PWR OFF	
+sd_card_content/ir_extra_dbs/ACs/Carrier/Carrier_orlen_ac.ir	sd_card_content/universal_ir/assets/ACs/Carrier/Carrier_orlen_ac.ir	CONTEUDO_EQUIVALENTE	6	6			
+sd_card_content/ir_extra_dbs/ACs/DeLonghi/Pinguino_PAC_EL92_SILENT.ir	sd_card_content/universal_ir/assets/ACs/DeLonghi/Pinguino_PAC_EL92_SILENT.ir	DEST_SUPERSET	7	8		Swing	
+sd_card_content/ir_extra_dbs/ACs/Electrolux/Electrol_ESV09CRO_B2I.ir	sd_card_content/universal_ir/assets/ACs/Electrolux/Electrol_ESV09CRO_B2I.ir	DIVERGENTE	17	17	Off	POWER_OFF	
+sd_card_content/ir_extra_dbs/ACs/LG/LG_AC_2.ir	sd_card_content/universal_ir/assets/ACs/LG/LG_AC_2.ir	CONTEUDO_EQUIVALENTE	2	2			
+sd_card_content/ir_extra_dbs/ACs/LG/LG_COV30332906_AC.ir	sd_card_content/universal_ir/assets/ACs/LG/LG_COV30332906_AC.ir	CONTEUDO_EQUIVALENTE	11	11			
+sd_card_content/ir_extra_dbs/ACs/LG/LG_LP1419IVSM.ir	sd_card_content/universal_ir/assets/ACs/LG/LG_LP1419IVSM.ir	DIVERGENTE	10	10	Off	POWER_OFF	
+sd_card_content/ir_extra_dbs/ACs/LG/LG_R12AWN-NB11.ir	sd_card_content/universal_ir/assets/ACs/LG/LG_R12AWN-NB11.ir	CONTEUDO_EQUIVALENTE	2	2			
+sd_card_content/ir_extra_dbs/ACs/LG/LG_SX122CL.ir	sd_card_content/universal_ir/assets/ACs/LG/LG_SX122CL.ir	CONTEUDO_EQUIVALENTE	11	11			
+sd_card_content/ir_extra_dbs/ACs/Lennox/Lennox_AC.ir	sd_card_content/universal_ir/assets/ACs/Lennox/Lennox_AC.ir	DIVERGENTE	14	16			SLEEP;SWING
+sd_card_content/ir_extra_dbs/ACs/Midea/Midea_AC_MAW05R1WBL.ir	sd_card_content/universal_ir/assets/ACs/Midea/Midea_AC_MAW05R1WBL.ir	CONTEUDO_EQUIVALENTE	12	12			
+sd_card_content/ir_extra_dbs/ACs/Midea/Midea_WWK08CR81N.ir	sd_card_content/universal_ir/assets/ACs/Midea/Midea_WWK08CR81N.ir	CONTEUDO_EQUIVALENTE	10	10			
+sd_card_content/ir_extra_dbs/ACs/Midea/Midea_silent_cool_26_pro.ir	sd_card_content/universal_ir/assets/ACs/Midea/Midea_silent_cool_26_pro.ir	CONTEUDO_EQUIVALENTE	11	11			
+sd_card_content/ir_extra_dbs/ACs/Panasonic/Panasonic_A75C4187.ir	sd_card_content/universal_ir/assets/ACs/Panasonic/Panasonic_A75C4187.ir	CONTEUDO_EQUIVALENTE	9	9			
+sd_card_content/ir_extra_dbs/ACs/Panasonic/Panasonic_CWA75C4179.ir	sd_card_content/universal_ir/assets/ACs/Panasonic/Panasonic_CWA75C4179.ir	DIVERGENTE	13	13	Off	POWER_OFF	
+sd_card_content/ir_extra_dbs/ACs/Panasonic/Panasonic_Climate_A75C2600.ir	sd_card_content/universal_ir/assets/ACs/Panasonic/Panasonic_Climate_A75C2600.ir	CONTEUDO_EQUIVALENTE	7	7			
+sd_card_content/ir_extra_dbs/ACs/Rinnai/Rinnai_AC.ir	sd_card_content/universal_ir/assets/ACs/Rinnai/Rinnai_AC.ir	CONTEUDO_EQUIVALENTE	9	9			
+sd_card_content/ir_extra_dbs/ACs/Samsung/Samsung_AC_AR12K.ir	sd_card_content/universal_ir/assets/ACs/Samsung/Samsung_AC_AR12K.ir	DIVERGENTE	12	12			Quiet;TEMP+
+sd_card_content/ir_extra_dbs/ACs/Samsung/Samsung_AR13TYHZCWKN.ir	sd_card_content/universal_ir/assets/ACs/Samsung/Samsung_AR13TYHZCWKN.ir	CONTEUDO_EQUIVALENTE	42	42			
+sd_card_content/ir_extra_dbs/ACs/Samsung/Samsung_Wind-Free.ir	sd_card_content/universal_ir/assets/ACs/Samsung/Samsung_Wind-Free.ir	CONTEUDO_EQUIVALENTE	4	4			
+sd_card_content/ir_extra_dbs/ACs/Sharp/Sharp_AH_X9VEW_AC.ir	sd_card_content/universal_ir/assets/ACs/Sharp/Sharp_AH_X9VEW_AC.ir	DIVERGENTE	12	12	Off	POWER_OFF	
+sd_card_content/ir_extra_dbs/ACs/Sharp/Sharp_CVP10MX.ir	sd_card_content/universal_ir/assets/ACs/Sharp/Sharp_CVP10MX.ir	DIVERGENTE	14	14	Off	OFF	
+sd_card_content/ir_extra_dbs/ACs/Toshiba/Toshiba_RAS13SKV2E.ir	sd_card_content/universal_ir/assets/ACs/Toshiba/Toshiba_RAS13SKV2E.ir	DIVERGENTE	5	5	Off	POWER_Off	
+sd_card_content/ir_extra_dbs/ACs/Toshiba/Toshiba_RG57H4.ir	sd_card_content/universal_ir/assets/ACs/Toshiba/Toshiba_RG57H4.ir	DIVERGENTE	13	13	Off	Power_Off	Fan Speed;LED;MODE;MyTemp;POWER;SWING;Short Cut;Sleep;TEMP+;TEMP-;Timer Off;Timer On
+sd_card_content/ir_extra_dbs/ACs/Xiaomi/Xiaomi_AC.ir	sd_card_content/universal_ir/assets/ACs/Xiaomi/Xiaomi_AC.ir	CONTEUDO_EQUIVALENTE	7	7			
+sd_card_content/ir_extra_dbs/LED_Lighting/BrandUnknown/LED_Cat.ir	sd_card_content/universal_ir/assets/LED_Lighting/BrandUnknown/LED_Cat.ir	CONTEUDO_EQUIVALENTE	13	13			
+sd_card_content/ir_extra_dbs/Projectors/BenQ/BenQ.ir	sd_card_content/universal_ir/assets/Projectors/BenQ/BenQ.ir	DIVERGENTE	19	6	Aspect;Auto;Down;Eco_Blank;Freeze;Left;Menu;Mute;Page_next;Page_prev;Power;Power_off;Right;Source;Up;Vol_down;Vol_up;Zoom_in;Zoom_out	Back;Home;Input;POWER;Vol_d;Vol_u	
+sd_card_content/ir_extra_dbs/Projectors/Epson/Epson_4650.ir	sd_card_content/universal_ir/assets/Projectors/Epson/Epson_4650.ir	CONTEUDO_EQUIVALENTE	35	35			
+sd_card_content/ir_extra_dbs/Projectors/Gateway/Gateway_210_projextor.ir	sd_card_content/universal_ir/assets/Projectors/Gateway/Gateway_210_projextor.ir	CONTEUDO_EQUIVALENTE	20	20			
+sd_card_content/ir_extra_dbs/Projectors/Minolta/Minolta_MN674.ir	sd_card_content/universal_ir/assets/Projectors/Minolta/Minolta_MN674.ir	DIVERGENTE	24	24	POWER;VOL+;VOL-	Power;Vol_down;Vol_up	
+sd_card_content/ir_extra_dbs/Projectors/Minolta/ReadMe.md	sd_card_content/universal_ir/assets/Projectors/Minolta/ReadMe.md	CONTEUDO_EQUIVALENTE	0	0			
+sd_card_content/ir_extra_dbs/Projectors/RIF6/RIF6-cube-projector-raw.ir	sd_card_content/universal_ir/assets/Projectors/RIF6/RIF6-cube-projector-raw.ir	DIVERGENTE	11	11			Settings
+sd_card_content/ir_extra_dbs/Projectors/Samsung/Samsung_VG-TM2360E.ir	sd_card_content/universal_ir/assets/Projectors/Samsung/Samsung_VG-TM2360E.ir	CONTEUDO_EQUIVALENTE	18	18			
+sd_card_content/ir_extra_dbs/TVs/ContinentalEdison/ContinentalEdison_CELED502723.ir	sd_card_content/universal_ir/assets/TVs/ContinentalEdison/ContinentalEdison_CELED502723.ir	DIVERGENTE	51	51	Arrow_earth;Audio_presets;Back;Blue;Ch_next;Ch_prev;Down;Exit;Fav1;Fav2/search;Favoris;Format;Forward;Green;Guide;I(nfo);Lang;Left;Medias;Menu;Mute;Pause;Play;Power;Prev;Quick_menu;Record;Red;Rewind;Right;Sleep;Sources;Stop;Teletext;Text;Up;Video_presets;Vol_dn;Vol_up;Yellow	ARROW_EARTH;AUDIO_PRESETS;BACK;BLUE;CH+;CH-;DOWN;EXIT;FAV1;FAV2/SEARCH;FAVORIS;FORMAT;FORWARD;GREEN;GUIDE;LANG;LEFT;MEDIAS;MENU;MUTE;PAUSE;PLAY;POWER;PREV;QUICK_MENU;RECORD;RED;REWIND;RIGHT;SLEEP;SOURCES;STOP;TELETEXT;TEXT;UP;VIDEO_PRESETS;VOL+;VOL-;YELLOW;i(nfo)	
+sd_card_content/ir_extra_dbs/TVs/LG/LG_AKB75855501.ir	sd_card_content/universal_ir/assets/TVs/LG/LG_AKB75855501.ir	DEST_SUPERSET	23	36		0;1;2;3;4;5;6;7;8;9;Ch_dn;Ch_up;List	
+sd_card_content/ir_extra_dbs/TVs/Telefunken/Telefunken_L55U405B4CW.ir	sd_card_content/universal_ir/assets/TVs/Telefunken/Telefunken_L55U405B4CW.ir	DIVERGENTE	47	47	1st_ch;Aspect;Back;Blue;Ch_list;Ch_net_type;Ch_next;Ch_prev;Down;Exit;F_forward;Green;Info;Lang;Left;Menu;Mute;Ok;P_guide;Pause;Play;Power;Prev_ch;Q-menu;Record;Red;Rewind;Right;Smart_home;Source;Stop;Subtitle;Up;Usb;Vol_dn;Vol_up;Yellow	1ST_CH;ASPECT;BACK;BLUE;CH+;CH-;CH_LIST;CH_NET_TYPE;DOWN;EXIT;F_FORWARD;GREEN;INFO;LANG;LEFT;MENU;MUTE;OK;PAUSE;PLAY;POWER;PREV_CH;P_GUIDE;Q-MENU;RECORD;RED;REWIND;RIGHT;SMART_HOME;SOURCE;STOP;SUBTITLE;UP;USB;VOL+;VOL-;YELLOW	
+sd_card_content/ir_extra_dbs/TVs/Telefunken/Telefunken_L65F249i3C.ir	sd_card_content/universal_ir/assets/TVs/Telefunken/Telefunken_L65F249i3C.ir	DIVERGENTE	33	33	Ch_next;Ch_prev;Eco_menu;Mute;Power;Skip_back;Skip_forward;Smart_tv;Vol_dn;Vol_up	CH+;CH-;Eco_Menu;MUTE;POWER;Skip_Back;Skip_Forward;Smart_Tv;VOL+;VOL-	
+sd_card_content/ir_extra_dbs/TVs/Telefunken/Telefunken_d32f660x5cwi.ir	sd_card_content/universal_ir/assets/TVs/Telefunken/Telefunken_d32f660x5cwi.ir	DIVERGENTE	36	36	Ch_next;Ch_prev;Enter/ok;Mute;Power;Prime_video;Rakuten_tv;Skip_back;Skip_forward;Vol_dn;Vol_up	CH+;CH-;Enter/OK;MUTE;POWER;Prime_Video;Rakuten_TV;Skip_Back;Skip_Forward;VOL+;VOL-	
+sd_card_content/ir_extra_dbs/TVs/Westinghouse/Westinghouse.ir	sd_card_content/universal_ir/assets/TVs/Westinghouse/Westinghouse.ir	DIVERGENTE	15	15	Ch_next;Ch_prev;Mute;Power;Vol_dn;Vol_up	CH+;CH-;MUTE;POWER;VOL+;VOL-	
