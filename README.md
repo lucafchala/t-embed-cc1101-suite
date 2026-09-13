@@ -23,7 +23,7 @@ oficial instalado através do **[bmorcelli/Launcher](https://github.com/bmorcell
 Este repositório é uma **curadoria e reorganização** de várias fontes públicas do
 GitHub — não é código original. Veja [Proveniência e licenças](#proveniência-e-licenças) antes de redistribuir qualquer parte dele.
 
-**~56.841 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
+**~55.834 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
 deduplicados por hash de conteúdo e organizados por categoria — veja o
 detalhamento completo em [`sd_card_content/README.md`](sd_card_content/README.md).
 
@@ -90,15 +90,14 @@ bancos de dados extras.
 lilygo/
 ├── sd_card_content/             → conteúdo a copiar para a raiz do cartão SD
 │   ├── esp32_serial_navigator.html → ferramenta PC-side (Web Serial) p/ navegar o Bruce por USB
-│   ├── universal_ir/             → banco IR (curado)
-│   ├── universal_rf/             → banco RF (curado)
-│   ├── badusb_ducky_scripts/        → payloads Ducky Script
+│   ├── ir/                      → banco IR completo (oficial + extras), por categoria/marca/modelo
+│   ├── rf/                      → banco Sub-GHz completo (oficial + extras), por categoria/marca/modelo
+│   ├── universal_ir/             → dado complementar do recurso "Universal Remote" (ainda não implementado no Bruce)
+│   ├── badusb_ducky_scripts/        → payloads Ducky Script oficiais
+│   ├── badusb_extra_payloads/   → payloads BadUSB extras
 │   ├── nfc/                     → tags NFC/RFID (Amiibo + comunidade)
 │   ├── themes/                  → temas de interface
 │   ├── interpreter_js_apps/     → apps/scripts para o interpretador JS do Bruce
-│   ├── subghz_extra_dbs/        → bancos Sub-GHz extras, por categoria
-│   ├── ir_extra_dbs/            → bancos IR extras, por categoria
-│   ├── badusb_extra_payloads/   → payloads BadUSB extras
 │   ├── wifi_portals/            → templates de portal cativo (evil portal) para o Wi-Fi do Bruce
 │   ├── music_rtttl/             → músicas RTTTL (.txt) pro player de áudio do Bruce
 │   ├── pwnagotchi/              → rostos/nomes de spam pro PwnGrid do modo Pwnagotchi

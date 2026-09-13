@@ -24,7 +24,7 @@ This repository is a **curation and reorganization** of several public GitHub
 sources — not original code. See [Provenance and licenses](#provenance-and-licenses)
 before redistributing any part of it.
 
-**~56,841 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
+**~55,834 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
 [`sd_card_content/README.md`](sd_card_content/README.md).
 
@@ -88,15 +88,14 @@ the extra databases.
 lilygo/
 ├── sd_card_content/             → content to copy to the SD card root
 │   ├── esp32_serial_navigator.html → PC-side tool (Web Serial) to navigate Bruce over USB
-│   ├── universal_ir/             → curated IR database
-│   ├── universal_rf/             → curated RF database
-│   ├── badusb_ducky_scripts/        → Ducky Script payloads
+│   ├── ir/                      → complete IR database (official + extras), by category/brand/model
+│   ├── rf/                      → complete Sub-GHz database (official + extras), by category/brand/model
+│   ├── universal_ir/             → companion data for the "Universal Remote" feature (not yet implemented in Bruce)
+│   ├── badusb_ducky_scripts/        → official Ducky Script payloads
+│   ├── badusb_extra_payloads/   → extra BadUSB payloads
 │   ├── nfc/                     → NFC/RFID tags (Amiibo + community)
 │   ├── themes/                  → UI themes
 │   ├── interpreter_js_apps/     → apps/scripts for Bruce's JS interpreter
-│   ├── subghz_extra_dbs/        → extra Sub-GHz databases, by category
-│   ├── ir_extra_dbs/            → extra IR databases, by category
-│   ├── badusb_extra_payloads/   → extra BadUSB payloads
 │   ├── wifi_portals/            → captive-portal (evil portal) templates for Bruce's Wi-Fi
 │   ├── music_rtttl/             → RTTTL music files (.txt) for Bruce's audio player
 │   ├── pwnagotchi/              → spam faces/names for Pwnagotchi mode's PwnGrid

@@ -22,22 +22,21 @@ com o Bruce já instalado (via Launcher).
 
 | Subpasta | Arquivos | Conteúdo |
 |---|---|---|
-| [`universal_ir/`](#universalir-e-universalrf) | 829 | Banco IR oficial do Bruce |
-| [`universal_rf/`](#universalir-e-universalrf) | 2.052 | Banco Sub-GHz oficial do Bruce (Garages/Gates/Vehicles) |
-| [`badusb_ducky_scripts/`](#badusb_blueducky) | 3 | Payloads Ducky Script oficiais |
+| [`ir/`](#ir) | 16.883 | Banco IR completo (oficial + extras), por categoria/marca/modelo |
+| [`rf/`](#rf) | 15.889 | Banco Sub-GHz completo (oficial + extras), por categoria/marca/modelo |
+| [`universal_ir/`](#universal_ir) | 7 | Dado complementar do recurso "Universal Remote" do Bruce (ainda não implementado) |
+| [`badusb_ducky_scripts/`](#badusb_ducky_scripts) | 3 | Payloads Ducky Script oficiais |
+| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.317 | Payloads BadUSB extras |
 | [`nfc/`](#nfc) | 8.007 | Tags NFC/RFID (Amiibo, Tonies, dicionários Mifare, tags de brincadeira, comunidade, Skylanders/LEGO) |
 | [`themes/`](#themes) | 410 | Temas de interface |
 | [`wifi_portals/`](#wifi_portals) | 42 | Templates de simulação de captura de credencial (captive portal) |
 | [`interpreter_js_apps/`](#interpreter_js_apps) | 74 | Apps/scripts para o interpretador JS do Bruce |
-| [`subghz_extra_dbs/`](#subghz_extra_dbs) | 14.086 | Bancos Sub-GHz extras, por categoria |
-| [`ir_extra_dbs/`](#ir_extra_dbs) | 16.825 | Bancos IR extras, por categoria |
-| [`badusb_extra_payloads/`](#badusb_extra_payloads) | 3.316 | Payloads BadUSB extras |
 | [`music_rtttl/`](#music_rtttl) | 11.195 | Músicas em formato RTTTL (texto `.txt`) para o player de áudio do Bruce |
 | [`pwnagotchi/`](#pwnagotchi) | 1 | Rostos/nomes de spam pro PwnGrid do modo Pwnagotchi do Bruce |
 | [`reverseshell/`](#reverseshell) | 1 | Doc de uso do Reverse Shell / BruceC2 embutido no Bruce |
 | [`ssid_list/`](#ssid_list) | 2 | Lista de ~15.000 SSIDs pro Enhanced Karma (broadcast de SSID falso) |
 
-Total: **56.847 arquivos**, ~1,1 GB (inclui os arquivos na raiz desta
+Total: **55.834 arquivos**, ~1,1 GB (inclui os arquivos na raiz desta
 pasta — ver [`esp32_serial_navigator.html`](#esp32_serial_navigatorhtml)
 abaixo).
 
@@ -58,14 +57,135 @@ Serial (Chrome/Edge; não funciona no Firefox/Safari).
 Adicionado diretamente pelo mantenedor do repositório, fora do processo
 de curadoria por hash usado no resto do pacote.
 
-## universal_ir/ e universal_rf/
+## ir/
 
-Bancos de dados oficiais que acompanham a release do Bruce — 829 arquivos
-IR e 2.052 arquivos RF (organizados em categorias como Garages, Gates,
-Vehicles), curados e validados pelos mantenedores do projeto.
+Banco IR completo do repositório: o banco oficial do Bruce (antigo
+`universal_ir/`, 829 arquivos em `ACs`/`Consoles`/`LED_Lighting`/
+`Projectors`/`TVs`) foi mesclado com os bancos extras (antigo
+`ir_extra_dbs/`) dentro das mesmas categorias já existentes, com dedup
+por hash de conteúdo — uma única pasta por função, sem duplicar
+containers de IR.
+
+Fontes agregadas nesta pasta:
+
+| Fonte | Repositório |
+|---|---|
+| Banco IR oficial do Bruce | [BruceDevices/firmware](https://github.com/BruceDevices/firmware) (release oficial), AGPL-3.0 |
+| Principal banco IR da comunidade Flipper Zero (TVs, ACs, consoles etc.) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) |
+| IR extra da comunidade Bruce | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
+| Banco IR **oficial** do time do Flipper Zero (mesclado dentro das categorias já existentes, em `<Categoria>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
+| IR extra independente (pasta `_sasiplavnik_extra/`) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
+| Controle de vaporizador Arizer XQ2 (pasta `_magikh0e_extra/`) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
+| 3 coleções extras atribuídas ao colaborador "sark" — controles universais, `IrBegone_@sark/` (bloqueio de sinal de TV por ambiente) e `irtobefree_@sark/` (eletrônicos diversos) | fonte original não identificada; nomes de pasta padronizados nesta curadoria (grafia `@sark` consistente) |
+
+Categorias notáveis: `TVs`, `ACs`, `Consoles`, `LED_Lighting`,
+`Projectors`, `Cable_Boxes`, `Box_SetTopBoxes` (set-top boxes
+majoritariamente de marcas chinesas/asiáticas: Xiaomi, ZTE, XGIMI,
+EVPAD, etc., trazida pelo flipperdevices/IRDB), `Brand_sorted` (a mesma
+coleção organizada por marca em vez de tipo de dispositivo), entre ~50
+outras.
+
+No merge do banco oficial pra dentro desta pasta, 39 conflitos reais
+(mesmo nome de arquivo, conteúdo diferente) foram resolvidos por regra
+automática — a maioria descartada por já estar coberta pelo lado que já
+existia (rótulo de botão equivalente), 5 mantidos dos dois lados com
+sufixo `_alt` (dado genuinamente diferente), 1 deixado como está por não
+ser um arquivo `.ir` (`Projectors/Minolta/ReadMe.md`).
+
+Total: 16.883 arquivos únicos (após deduplicação — ver
+[Deduplicação](#deduplicação-aplicada)). Só os arquivos `.ir` do
+flipperdevices/IRDB foram trazidos — os `.json`/`.png` de metadado que
+acompanham cada dispositivo são específicos da UI do app oficial do
+Flipper e não são lidos pelo Bruce.
+
+> **Pendências de organização**: uma auditoria de profundidade de
+> navegação (categoria → marca → modelo) identificou desvios ainda não
+> corrigidos nesta pasta — aninhamento inconsistente do
+> `flipperdevices_IRDB/`, redundância do `Brand_sorted/`, e algumas
+> pastas soltas nomeadas por fonte em vez de por marca. Detalhes e plano
+> de correção na issue
+> [#14](https://github.com/lucafchala/t-embed-cc1101-suite/issues/14).
+
+## rf/
+
+Banco Sub-GHz completo do repositório: o banco oficial do Bruce (antigo
+`universal_rf/`, 2.052 arquivos em `Garages`/`Gates`/`Vehicles`) foi
+mesclado com os bancos extras (antigo `subghz_extra_dbs/`) dentro das
+mesmas categorias já existentes, com dedup por hash de conteúdo —
+`universal_rf/` deixou de existir como pasta separada, 100% absorvido
+aqui.
+
+Fontes agregadas nesta pasta:
+
+| Fonte | Repositório |
+|---|---|
+| Banco Sub-GHz oficial do Bruce | [BruceDevices/firmware](https://github.com/BruceDevices/firmware) (release oficial), AGPL-3.0 |
+| Coleção "flagship" da comunidade Flipper Zero (Sub-GHz + BadUSB + NFC + Music) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
+| Coleção geral de sinais | [Zero-Sploit/FlipperZero-Subghz-DB](https://github.com/Zero-Sploit/FlipperZero-Subghz-DB) |
+| Sinais RF da comunidade Bruce | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
+| Botões de campainha/customer service comercial | [DRA6N/SubGhz_Cust_Serv](https://github.com/DRA6N/SubGhz_Cust_Serv) |
+| Sinal de abertura da tampa de carregamento Tesla | [Robbbbbbbbb/tesla-chargeport](https://github.com/Robbbbbbbbb/tesla-chargeport) |
+| Pulseiras de LED de evento (protocolo CrowdLED, EN+ES) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) |
+
+Categorias notáveis: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
+`Ceiling_Fans`, `Concert_bracelet` (com subpasta `CrowdLED_Wristbands/`),
+`Smart_Home_Remotes`, `Retekess_pager_system_t119`, `Jamming`,
+`Car_Key_Jammer` e `OOK_bruteforce` (as 3 últimas com aviso próprio de uso
+abaixo — não são sinais de replay comuns), entre ~65 outras.
+Categorias que vieram de fontes distintas com grafias diferentes pro mesmo
+nome (ex.: `Ceiling Fans` vs `Ceiling_Fans`) foram mescladas numa pasta só,
+com dedup por hash de conteúdo aplicado na própria fusão (arquivo idêntico
+em ambas → mantido uma vez; nome igual mas conteúdo diferente → ambos
+mantidos, o recém-chegado com um sufixo curto). Isso inclui os 7 pares
+quase-duplicados resolvidos na issue
+[#13](https://github.com/lucafchala/t-embed-cc1101-suite/issues/13)
+(grafia com espaço vs. underscore no mesmo nome de pasta).
+
+Total: 15.889 arquivos únicos (após deduplicação — ver
+[Deduplicação](#deduplicação-aplicada)).
+
+> **⚠️ Aviso — `Jamming/` e `Car_Key_Jammer/`**: diferente do resto desta
+> pasta (que lê, testa ou faz replay de sinais individuais), essas duas
+> categorias contêm arquivos `RAW_Data` de ruído puro, prontos pra
+> transmitir via TX do Bruce sem precisar de nenhum script — cobrindo
+> sistematicamente praticamente toda a faixa 300–928 MHz que o CC1101
+> transmite. É o mesmo risco já documentado pro [`rf_jammer.js`](#interpreter_js_apps)
+> (interferência ativa de RF, ilegal na maioria das jurisdições, afeta
+> qualquer receptor na frequência, não só um alvo específico) — só que mais
+> fácil de disparar por engano, já que não passa pelo interpretador JS.
+> **No Brasil especificamente**: boa parte do conteúdo de portão/carro
+> norte-americano nesta suíte opera em 315 MHz, que **não está** entre as
+> faixas de radiação restrita permitidas pela Anatel (Resolução 680/2017,
+> Anexo I — permitidas 335,4–399,9 MHz, 410–608 MHz e 915–948 MHz).
+> Transmitir fora dessas faixas pode configurar atividade clandestina de
+> telecomunicação (Lei 9.472/1997, art. 183). Isto não é aconselhamento
+> jurídico — confirme a legislação do seu país antes de transmitir
+> qualquer coisa.
+
+> **Nota — `Rg/`, `Am_far/`, `Fm_far/`, `Fm_close/`**: 4 pastas com 1
+> arquivo `RAW_Data` cada (467,75 MHz e 433,92 MHz OOK/2FSK). Pelo
+> conteúdo, parecem gravações de teste de alcance (far/close) — a fonte
+> agregada não documenta o propósito exato nem o dispositivo-alvo.
+> Mantidas por não haver indicação de que sejam inúteis ou duplicadas,
+> mas sem uma categoria clara pra encaixar.
+
+## universal_ir/
+
+Dado complementar do recurso **"Universal Remote"** do Bruce, ainda não
+implementado no firmware oficial. Contém `layouts.ini` e 6 arquivos `.ir`
+soltos em `assets/` (`ac.ir`, `audio.ir`, `fans.ir`, `leds.ir`,
+`projectors.ir`, `tv.ir`) que servem de dado companheiro pro recurso
+quando ele for implementado — mantidos visíveis em vez de descartados,
+já que não têm risco de segurança e podem passar a ser usados no futuro.
+
+O restante do banco oficial que antes vivia aqui (829 arquivos IR
+organizados por categoria) foi mesclado em [`ir/`](#ir) — ver essa seção
+pra detalhes do merge.
 
 - Fonte: [BruceDevices/firmware](https://github.com/BruceDevices/firmware) (release oficial)
 - Licença: AGPL-3.0
+
+Total: 7 arquivos.
 
 ## badusb_ducky_scripts/
 
@@ -190,90 +310,6 @@ Total: 74 arquivos.
 > interferência afeta qualquer receptor na frequência, não só um alvo
 > específico. Uso por conta e risco exclusivos de quem opera o dispositivo.
 
-## subghz_extra_dbs/
-
-Bancos Sub-GHz **além** do `universal_rf/` oficial, reorganizados por
-**categoria** (device/uso), mesclando todas as fontes numa única árvore e
-deduplicando por hash de conteúdo. A proveniência por arquivo individual se
-perde na fusão — as fontes agregadas estão listadas abaixo.
-
-Fontes agregadas nesta pasta:
-
-| Fonte | Repositório |
-|---|---|
-| Coleção "flagship" da comunidade Flipper Zero (Sub-GHz + BadUSB + NFC + Music) | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
-| Coleção geral de sinais | [Zero-Sploit/FlipperZero-Subghz-DB](https://github.com/Zero-Sploit/FlipperZero-Subghz-DB) |
-| Sinais RF da comunidade Bruce | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
-| Botões de campainha/customer service comercial | [DRA6N/SubGhz_Cust_Serv](https://github.com/DRA6N/SubGhz_Cust_Serv) |
-| Sinal de abertura da tampa de carregamento Tesla | [Robbbbbbbbb/tesla-chargeport](https://github.com/Robbbbbbbbb/tesla-chargeport) |
-| Pulseiras de LED de evento (protocolo CrowdLED, EN+ES) | [niltefa/Flipper-CrowdLED-Wristbands](https://github.com/niltefa/Flipper-CrowdLED-Wristbands) |
-
-Categorias notáveis: `Garages`, `Gates`, `Vehicles`, `Doorbells`,
-`Ceiling_Fans`, `Concert_bracelet` (com subpasta `CrowdLED_Wristbands/`),
-`Smart_Home_Remotes`, `Retekess_pager_system_t119`, `Jamming`,
-`Car_Key_Jammer` e `OOK_bruteforce` (as 3 últimas com aviso próprio de uso
-abaixo — não são sinais de replay comuns), entre ~65 outras.
-Categorias que vieram de fontes distintas com grafias diferentes pro mesmo
-nome (ex.: `Ceiling Fans` vs `Ceiling_Fans`) foram mescladas numa pasta só,
-com dedup por hash de conteúdo aplicado na própria fusão (arquivo idêntico
-em ambas → mantido uma vez; nome igual mas conteúdo diferente → ambos
-mantidos, o recém-chegado com um sufixo curto).
-
-Total: 14.086 arquivos únicos (após deduplicação — ver
-[Deduplicação](#deduplicação-aplicada)).
-
-> **⚠️ Aviso — `Jamming/` e `Car_Key_Jammer/`**: diferente do resto desta
-> pasta (que lê, testa ou faz replay de sinais individuais), essas duas
-> categorias contêm arquivos `RAW_Data` de ruído puro, prontos pra
-> transmitir via TX do Bruce sem precisar de nenhum script — cobrindo
-> sistematicamente praticamente toda a faixa 300–928 MHz que o CC1101
-> transmite. É o mesmo risco já documentado pro [`rf_jammer.js`](#interpreter_js_apps)
-> (interferência ativa de RF, ilegal na maioria das jurisdições, afeta
-> qualquer receptor na frequência, não só um alvo específico) — só que mais
-> fácil de disparar por engano, já que não passa pelo interpretador JS.
-> **No Brasil especificamente**: boa parte do conteúdo de portão/carro
-> norte-americano nesta suíte opera em 315 MHz, que **não está** entre as
-> faixas de radiação restrita permitidas pela Anatel (Resolução 680/2017,
-> Anexo I — permitidas 335,4–399,9 MHz, 410–608 MHz e 915–948 MHz).
-> Transmitir fora dessas faixas pode configurar atividade clandestina de
-> telecomunicação (Lei 9.472/1997, art. 183). Isto não é aconselhamento
-> jurídico — confirme a legislação do seu país antes de transmitir
-> qualquer coisa.
-
-> **Nota — `Rg/`, `Am_far/`, `Fm_far/`, `Fm_close/`**: 4 pastas com 1
-> arquivo `RAW_Data` cada (467,75 MHz e 433,92 MHz OOK/2FSK). Pelo
-> conteúdo, parecem gravações de teste de alcance (far/close) — a fonte
-> agregada não documenta o propósito exato nem o dispositivo-alvo.
-> Mantidas por não haver indicação de que sejam inúteis ou duplicadas,
-> mas sem uma categoria clara pra encaixar.
-
-## ir_extra_dbs/
-
-Bancos IR **além** do `universal_ir/` oficial, reorganizados por
-**categoria** (device/uso) da mesma forma que o Sub-GHz.
-
-Fontes agregadas nesta pasta:
-
-| Fonte | Repositório |
-|---|---|
-| Principal banco IR da comunidade Flipper Zero (TVs, ACs, consoles etc.) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) |
-| IR extra da comunidade Bruce | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) |
-| Banco IR **oficial** do time do Flipper Zero (mesclado dentro das categorias já existentes, em `<Categoria>/flipperdevices_IRDB/`) | [flipperdevices/IRDB](https://github.com/flipperdevices/IRDB) |
-| IR extra independente (pasta `_sasiplavnik_extra/`) | [sasiplavnik/Flipper-IRDB](https://github.com/sasiplavnik/Flipper-IRDB) |
-| Controle de vaporizador Arizer XQ2 (pasta `_magikh0e_extra/`) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
-| 3 coleções extras atribuídas ao colaborador "sark" — controles universais, `IrBegone_@sark/` (bloqueio de sinal de TV por ambiente) e `irtobefree_@sark/` (eletrônicos diversos) | fonte original não identificada; nomes de pasta padronizados nesta curadoria (grafia `@sark` consistente) |
-
-Categorias notáveis: `TVs`, `ACs`, `Consoles`, `Projectors`, `Cable_Boxes`,
-`Box_SetTopBoxes` (nova — set-top boxes majoritariamente de marcas
-chinesas/asiáticas: Xiaomi, ZTE, XGIMI, EVPAD, etc., trazida pelo
-flipperdevices/IRDB), `Brand_sorted` (a mesma coleção organizada por
-marca em vez de tipo de dispositivo), entre ~50 outras.
-
-Total: 16.825 arquivos únicos (após deduplicação). Só os arquivos `.ir` do
-flipperdevices/IRDB foram trazidos — os `.json`/`.png` de metadado que
-acompanham cada dispositivo são específicos da UI do app oficial do
-Flipper e não são lidos pelo Bruce.
-
 ## badusb_extra_payloads/
 
 Payloads BadUSB **além** do `badusb_ducky_scripts/` oficial:
@@ -286,7 +322,7 @@ Payloads BadUSB **além** do `badusb_ducky_scripts/` oficial:
 | `UberGuidoZ_BadUSB/` | Payloads adicionais (bombs, pranks, recon, exfiltração) não duplicados nas fontes acima | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) |
 | `magikh0e_BadUSB/` | 2 payloads de "post-exploitation" (coleta de informações do sistema; criação de conta admin oculta + desativação de firewall) | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) |
 
-Total: 3.316 arquivos únicos (após deduplicação e remoção de 3 arquivos
+Total: 3.317 arquivos únicos (após deduplicação e remoção de 3 arquivos
 "prank" de ~15MB cada, que eram hexdumps de imagem sem função real).
 
 > **Compatibilidade com o interpretador BadUSB do Bruce**: nem todo
@@ -445,7 +481,7 @@ aplicativos compilados especificamente para o firmware/hardware do
 próprias, não duplicatas de fato, e não têm problema de segurança.
 `magikh0e/FlipperZero_Stuff` também teve um arquivo `.ir` legítimo
 incluído (controle de vaporizador Arizer XQ2) — ver
-[ir_extra_dbs/](#ir_extra_dbs). O `rf_jammer.js` e os 2 payloads BadUSB
+[ir/](#ir). O `rf_jammer.js` e os 2 payloads BadUSB
 `magikh0e_BadUSB/` — que este documento recomendava deixar de fora — foram
 adicionados diretamente pelo mantenedor do repositório; ver os avisos nas
 seções [interpreter_js_apps/](#interpreter_js_apps) e
