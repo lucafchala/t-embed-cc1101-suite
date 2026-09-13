@@ -281,3 +281,12 @@ sections linked above — read them before use.
 > leaving out — were added directly by the repository maintainer,
 > outside the hash-curation process; see the warnings in the
 > corresponding sections of `sd_card_content/README.en.md`.
+## Nota de manutenção (2026-09-13)
+
+A tabela de proveniência detalhada acima foi escrita antes de uma
+reorganização funcional profunda de `nfc/` e `badusb_extra_payloads/`
+(fusão por tipo de dispositivo/categoria em vez de por pasta de vendor).
+Alguns caminhos de pasta referenciados acima podem não existir mais
+literalmente. A fonte de verdade atual e mantida por script é
+`PROVENANCE.csv` (linha por arquivo) e `CREDITS.md` (agregado por fonte
+real). Ver também `MAINTENANCE.md` para o processo de manutenção.
