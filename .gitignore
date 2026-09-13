@@ -1,2 +1,4 @@
 tree.txt
 output.txt
+__pycache__/
+*.pyc
