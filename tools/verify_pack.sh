@@ -1,42 +1,50 @@
 #!/usr/bin/env bash
-# verify_pack.sh — Completeness checker for the T-Embed CC1101 Plus SD-card pack
+# verify_pack.sh — checador de completude do pack SD do T-Embed CC1101 Plus
 #
-# Usage:  ./tools/verify_pack.sh [path-to-SD_Card_T-Embed]
+# Uso:  ./tools/verify_pack.sh [caminho-para-sd_card_content]
 #
-# Checks:
-#   1. Mandatory official Bruce files are present (the ones shipped by
-#      BruceDevices/firmware sd_files and required by the docs).
-#   2. Every documented folder exists and prints its actual file count
-#      (so README tables can be kept in sync).
-#   3. Prints totals (file count + size) for the whole pack.
-#   4. Cross-checks against expected counts from the README table if present
-#      (values set below — update them whenever README.md counts change).
+# Checa:
+#   1. Arquivos obrigatórios presentes (oficiais do Bruce + os que o próprio
+#      repositório adicionou fora da curadoria por hash).
+#   2. Cada pasta documentada existe e imprime a contagem real de arquivos
+#      (pra manter as tabelas do README sincronizadas).
+#   3. Totais (contagem + tamanho) do pack inteiro.
+#   4. Cruza contra as contagens esperadas abaixo (atualize sempre que os
+#      números do README mudarem — ou depois de qualquer merge/rename).
 #
-# Exit code: 0 if all mandatory files exist, 1 otherwise.
-
+# Código de saída: 0 se tudo bate, 1 se algo precisa de atenção.
+#
+# NOTA (2026-09, v3): atualizado depois do merge universal_ir -> ir_extra_dbs
+# e universal_rf -> subghz_extra_dbs. `universal_rf` saiu da lista (deixou de
+# existir, 100% absorvido). `universal_ir` caiu pra ~8 arquivos: layouts.ini
+# + os 6 arquivos soltos companheiros dele (audio/ac/tv/projectors/leds/fans.ir,
+# dados do recurso "Universal Remote" do Bruce, ainda não implementado -- não
+# são remotos de vendor, por isso não entraram no merge) + 1 ReadMe.md ainda
+# em revisão manual (conflito não-.ir). Quando isso for resolvido e os
+# containers finais forem renomeados (ir_extra_dbs -> ir/, subghz_extra_dbs
+# -> rf/), este script precisa de outra atualização -- esperado, é o preço de
+# manter isso sincronizado, não um bug.
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SD_DIR="${1:-$REPO_DIR/SD_Card_T-Embed}"
+SD_DIR="${1:-$REPO_DIR/sd_card_content}"
 
-# ---- 1. Official files that MUST ship with the pack (relative to SD_DIR) ----
+CHECK=0
+
 MANDATORY_FILES=(
   "README.md"
   "README.en.md"
-  "esp32_serial_navigator.html"                     # PC-side WebSerial tool (root)
-  "interpreter_js_apps/xFlipper.js"                 # JS interpreter app (→ /BruceJS)
-  "pwnagotchi/pwngridspam.txt"                         # Pwnagotchi ambient spam faces
-  "reverseshell/README.md"                             # Reverse-shell (BruceC2) usage
-  "ssid_list/ssid_list.txt"                            # Karma SSID list → SD root
-  "ssid_list/readme.txt"                               # official usage note
+  "esp32_serial_navigator.html"
+  "interpreter_js_apps/xFlipper.js"
+  "pwnagotchi/pwngridspam.txt"
+  "reverseshell/README.md"
+  "ssid_list/ssid_list.txt"
+  "ssid_list/readme.txt"
 )
 
-# ---- Expected counts per folder (mirror the table in SD_Card_T-Embed/README.md) --
-# FOLDER_NAMES and EXPECTED_COUNTS must stay in sync and be updated together.
 FOLDER_NAMES=(
-  "UniversalIR"
-  "UniversalRF"
-  "BadUSB_BlueDucky"
+  "universal_ir"
+  "badusb_ducky_scripts"
   "nfc"
   "themes"
   "wifi_portals"
@@ -49,24 +57,20 @@ FOLDER_NAMES=(
   "reverseshell"
   "ssid_list"
 )
-EXPECTED_COUNTS=(829)   # values refreshed below after each recheck
-# Real values are computed; expected table lives in README.md only.
-# If you want a hard cross-check, add counts here, e.g.:
-EXPECTED_COUNTS=(829 2052 3 5344 96 43 62 14088 16813 3033 11196 1 1 2)
+EXPECTED_COUNTS=(8 3 8007 410 42 74 15893 16883 3317 11195 1 1 2)
 
-missing=0
-echo "== Mandatory files =="
+echo "== Arquivos obrigatorios =="
 for f in "${MANDATORY_FILES[@]}"; do
   if [[ -f "$SD_DIR/$f" ]]; then
     printf "   OK   %s\n" "$f"
   else
-    printf "  MISS  %s\n" "$f"
+    printf "  FALTA %s\n" "$f"
     CHECK=1
   fi
 done
-echo
 
-echo "== Per-folder file counts ($SD_DIR) =="
+echo
+echo "== Contagem de arquivos por pasta ($SD_DIR) =="
 total=0
 for i in "${!FOLDER_NAMES[@]}"; do
   d="${FOLDER_NAMES[$i]}"
@@ -76,34 +80,33 @@ for i in "${!FOLDER_NAMES[@]}"; do
     exp="${EXPECTED_COUNTS[$i]:-?}"
     note=""
     if [[ "$exp" != "?" && "$c" -ne "$exp" ]]; then
-      note="  (README says $exp — out of sync!)"
+      note="  (esperado $exp -- FORA DE SINCRONIA, atualize README ou este script)"
       CHECK=1
     fi
-    printf "  %-24s %6d files%s\n" "$d" "$c" "$note"
+    printf "  %-24s %6d arquivos%s\n" "$d" "$c" "$note"
   else
-    printf "  %-24s  MISSING directory\n" "$d"
+    printf "  %-24s  PASTA AUSENTE\n" "$d"
     CHECK=1
   fi
 done
 
 echo
-printf "== Totals: %d files across %d folders ==\n" "$total" "${#FOLDER_NAMES[@]}"
+printf "== Totais: %d arquivos em %d pastas ==\n" "$total" "${#FOLDER_NAMES[@]}"
 echo
 du -sh "$SD_DIR"
 echo
 
-# Zero-byte files are suspicious (corrupted download / bad extraction)
 empty=$(find "$SD_DIR" -type f -size 0 | wc -l)
 if [[ "$empty" -gt 0 ]]; then
-  echo "WARNING: $empty zero-byte file(s) present:"
+  echo "AVISO: $empty arquivo(s) de 0 bytes encontrados:"
   find "$SD_DIR" -type f -size 0 -printf "  %p\n"
   CHECK=1
 fi
 
 echo
-if [[ "${CHECK:-0}" -eq 0 ]]; then
-  echo "PASS: pack looks complete and consistent."
+if [[ "$CHECK" -eq 0 ]]; then
+  echo "PASS: pack parece completo e consistente."
 else
-  echo "FAIL: see issues above."
+  echo "FAIL: ver itens acima."
 fi
-exit "${CHECK:-0}"
+exit "$CHECK"
