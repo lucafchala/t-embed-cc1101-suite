@@ -222,6 +222,7 @@ Anthropic), under the human maintainer's
 ([lucafchala](https://github.com/lucafchala)) supervision and final
 decision at every step — no inclusion, removal, or classification of
 sensitive content was automatic or unreviewed.
+* [bollgio / BruceIRF](https://github.com/bollgio/BruceIRF) -- ESP32 Bruce fork adding UniversalIR/UniversalRF modules (AGPL-3.0); source of this repo's 'Universal*' IR leftover folders
 
 ## Contributing
 

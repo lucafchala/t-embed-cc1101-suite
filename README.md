@@ -223,6 +223,7 @@ feitas com assistência de IA (Claude, da Anthropic), sob supervisão e
 decisão final do mantenedor humano ([lucafchala](https://github.com/lucafchala))
 em cada etapa — nenhuma inclusão, remoção ou classificação de conteúdo
 sensível foi automática ou não revisada.
+* [bollgio / BruceIRF](https://github.com/bollgio/BruceIRF) -- ESP32 Bruce fork adding UniversalIR/UniversalRF modules (AGPL-3.0); source of this repo's 'Universal*' IR leftover folders
 
 ## Contribuindo
 
