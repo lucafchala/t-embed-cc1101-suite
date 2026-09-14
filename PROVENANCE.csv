@@ -10578,3 +10578,5 @@ sd_card_content/wifi_portals/en,wifi_portals,,unconfirmed,needs-manual-review
 sd_card_content/wifi_portals/fake_login_borys,wifi_portals,,unconfirmed,needs-manual-review
 sd_card_content/wifi_portals/pt-br,wifi_portals,,unconfirmed,needs-manual-review
 sd_card_content/wifi_portals/router_login_batcherss,wifi_portals,,unconfirmed,needs-manual-review
+sd_card_content/nfc/Community_Misc/bruce_repo.rfid,nfc,,Bruce-official-demo,moved-from-nfc-root
+sd_card_content/nfc/Community_Misc/rickroll.rfid,nfc,,Bruce-official-demo,moved-from-nfc-root
