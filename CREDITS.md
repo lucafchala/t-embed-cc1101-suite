@@ -7,7 +7,6 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 | Fonte | Licença | Arquivos | Funções |
 |---|---|---|---|
 | [sloth632/Bruce-Scripts-Heaven](https://github.com/sloth632/Bruce-Scripts-Heaven) | Ver repositório | 5067 | nfc (2688), badusb (2379) |
-| [BruceDevices/firmware](https://github.com/BruceDevices/firmware) | AGPL-3.0 | 2840 | rf (2052), ir (788) |
 | [UberGuidoZ/Flipper](https://github.com/UberGuidoZ/Flipper) | Ver repositório | 2314 | nfc (1901), badusb (413) |
 | [AmiiboDB/Amiibo](https://github.com/AmiiboDB/Amiibo) | Ver repositório | 1917 | nfc (1917) |
 | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório | 712 | nfc (712) |
@@ -44,4 +43,4 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 |---|---|---|
 | `unconfirmed` | 145 | ir (53), rf (49), music_rtttl (31), interpreter_js_apps (4), wifi_portals (4), themes (3), universal_ir (1) |
 
-**Total de arquivos rastreados em PROVENANCE.csv: 13419**
+**Total de arquivos rastreados em PROVENANCE.csv: 10579**
