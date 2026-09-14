@@ -28,7 +28,7 @@ pra maioria dos arquivos, então o historico nao se perde na pratica.
 
 Uso:
   python3 classify_nfc.py                 # dry-run: só relatorio, nao mexe em nada
-  python3 classify_nfc.py apply           # aplica de verdade + escreve provenance_nfc.csv
+  python3 classify_nfc.py apply           # aplica de verdade + escreve tools/provenance_sources/provenance_nfc.csv
 """
 import sys
 import os
@@ -50,7 +50,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_PATH = os.environ.get("TAXONOMY_PATH", os.path.join(SCRIPT_DIR, "taxonomy.yaml"))
 REPO_ROOT = os.environ.get("REPO_ROOT", os.getcwd())
 NFC_ROOT = os.path.join(REPO_ROOT, "sd_card_content", "nfc")
-PROVENANCE_CSV = os.path.join(REPO_ROOT, "provenance_nfc.csv")
+PROVENANCE_CSV = os.path.join(REPO_ROOT, "tools/provenance_sources/provenance_nfc.csv")
 
 
 def load_taxonomy():

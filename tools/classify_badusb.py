@@ -28,7 +28,7 @@ Duas passadas:
 
 Uso:
   python3 classify_badusb.py                 # dry-run: relatorio compacto (nao mexe em nada)
-  python3 classify_badusb.py apply            # aplica de verdade + provenance_badusb.csv
+  python3 classify_badusb.py apply            # aplica de verdade + tools/provenance_sources/provenance_badusb.csv
   python3 classify_badusb.py sample N         # dry-run, mas mostra ate N nomes de arquivo
                                                # nao-classificados por categoria (default 40)
 """
@@ -56,7 +56,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TAXONOMY_PATH = os.environ.get("TAXONOMY_PATH", os.path.join(SCRIPT_DIR, "taxonomy.yaml"))
 REPO_ROOT = os.environ.get("REPO_ROOT", os.getcwd())
 BADUSB_ROOT = os.path.join(REPO_ROOT, "sd_card_content", "badusb_extra_payloads")
-PROVENANCE_CSV = os.path.join(REPO_ROOT, "provenance_badusb.csv")
+PROVENANCE_CSV = os.path.join(REPO_ROOT, "tools/provenance_sources/provenance_badusb.csv")
 
 LIBRARY_VENDOR = "BadUsb-Library"
 OTHER_VENDORS = ["Bruce-Scripts-Heaven_BAD", "I-Am-Jakoby_BadUSB", "magikh0e_BadUSB", "UberGuidoZ_BadUSB"]

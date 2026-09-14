@@ -19,7 +19,7 @@ Uso:
                                               # mantendo so 1 copia canonica
                                               # por grupo de hash
 
-Le provenance_badusb.csv (gerado pelo apply do classify_badusb.py) pra
+Le tools/provenance_sources/provenance_badusb.csv (gerado pelo apply do classify_badusb.py) pra
 decidir qual copia manter quando ha duplicata -- a escolha e por REGRA
 (nunca por ordem de descoberta no filesystem, que seria nao-deterministica
 entre rodadas):
@@ -35,7 +35,7 @@ entre rodadas):
   4. Empate depois disso: mantem o path mais curto, desempate alfabetico
      (so pra ser deterministico -- na pratica quase nunca chega aqui).
 
-Cada arquivo removido e logado em dedup_removed_badusb.csv
+Cada arquivo removido e logado em tools/provenance_sources/dedup_removed_badusb.csv
 (removed_path, kept_path, sha256) -- nunca so deletado sem rastro.
 """
 import csv
@@ -46,8 +46,8 @@ from collections import defaultdict
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BADUSB_ROOT = os.path.join(REPO_ROOT, "sd_card_content", "badusb_extra_payloads")
-PROVENANCE_CSV = os.path.join(REPO_ROOT, "provenance_badusb.csv")
-DEDUP_LOG_CSV = os.path.join(REPO_ROOT, "dedup_removed_badusb.csv")
+PROVENANCE_CSV = os.path.join(REPO_ROOT, "tools/provenance_sources/provenance_badusb.csv")
+DEDUP_LOG_CSV = os.path.join(REPO_ROOT, "tools/provenance_sources/dedup_removed_badusb.csv")
 
 # Marcadores de colecao-duplicada-embutida conhecida dentro de
 # Bruce-Scripts-Heaven_BAD (achados no dry-run/apply real de 2026-09-13).

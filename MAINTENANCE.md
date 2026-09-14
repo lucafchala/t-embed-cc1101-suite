@@ -45,7 +45,7 @@ arquivos), a ordem correta é:
    `taxonomy.yaml` com palavras-chave novas, pra tentar resgatar arquivos
    que ficaram em `_unclassified/`.
 5. `merge_provenance.py` -- regenera `PROVENANCE.csv` a partir de todas
-   as fontes (`provenance_nfc.csv`, `provenance_badusb.csv`,
+   as fontes (`tools/provenance_sources/provenance_nfc.csv`, `tools/provenance_sources/provenance_badusb.csv`,
    `tools/migrations/2026-09-merge-ir-rf/provenance_ir_rf_merge.csv`, e
    os logs de dedup). Depois de rodar, confira que a saída bate: 0 linhas
    órfãs (todo `new_path` listado existe de fato na árvore).

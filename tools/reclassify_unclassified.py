@@ -14,7 +14,7 @@ modulo, sem duplicar codigo) -- as regras vivem so em taxonomy.yaml.
 
 Uso:
   python3 reclassify_unclassified.py            # dry-run
-  python3 reclassify_unclassified.py apply       # aplica + atualiza provenance_badusb.csv
+  python3 reclassify_unclassified.py apply       # aplica + atualiza tools/provenance_sources/provenance_badusb.csv
 """
 import sys
 import os
@@ -29,7 +29,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.environ.get("REPO_ROOT", os.getcwd())
 BADUSB_ROOT = os.path.join(REPO_ROOT, "sd_card_content", "badusb_extra_payloads")
 UNCLASSIFIED_ROOT = os.path.join(BADUSB_ROOT, "_unclassified")
-PROVENANCE_CSV = os.path.join(REPO_ROOT, "provenance_badusb.csv")
+PROVENANCE_CSV = os.path.join(REPO_ROOT, "tools/provenance_sources/provenance_badusb.csv")
 
 spec = importlib.util.spec_from_file_location("classify_badusb", os.path.join(SCRIPT_DIR, "classify_badusb.py"))
 classify_badusb = importlib.util.module_from_spec(spec)
@@ -124,7 +124,7 @@ def main():
         w = csv.DictWriter(f, fieldnames=["new_path", "function", "bucket", "original_vendor_folder", "merge_type"])
         w.writeheader()
         w.writerows(rows)
-    print(f"provenance_badusb.csv atualizado ({len(rows)} linhas).")
+    print(f"tools/provenance_sources/provenance_badusb.csv atualizado ({len(rows)} linhas).")
 
 
 if __name__ == "__main__":

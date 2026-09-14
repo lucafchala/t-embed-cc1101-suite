@@ -21,7 +21,7 @@ Linhas cujo merge_type/acao contenha "dropped"/"discard" (ex.: o
 uma localizacao final -- sao excluidas da checagem de new_path duplicado
 (esperado que varias delas apontem pro mesmo destino sobrevivente).
 
-Tambem cruza com DEDUP_LOGS (ex.: dedup_removed_badusb.csv) pra excluir
+Tambem cruza com DEDUP_LOGS (ex.: tools/provenance_sources/dedup_removed_badusb.csv) pra excluir
 linhas cujo arquivo foi apagado por uma dedup posterior ao provenance_*.csv
 de origem ter sido gravado.
 
@@ -54,8 +54,8 @@ SOURCES = [
             "sd_card_content/subghz_extra_dbs/": "sd_card_content/rf/",
         },
     },
-    {"path": "provenance_nfc.csv", "field_map": None, "path_prefix_renames": None},
-    {"path": "provenance_badusb.csv", "field_map": None, "path_prefix_renames": None},
+    {"path": "tools/provenance_sources/provenance_nfc.csv", "field_map": None, "path_prefix_renames": None},
+    {"path": "tools/provenance_sources/provenance_badusb.csv", "field_map": None, "path_prefix_renames": None},
 ]
 
 OUT = os.path.join(REPO_ROOT, "PROVENANCE.csv")
@@ -65,7 +65,7 @@ OUT = os.path.join(REPO_ROOT, "PROVENANCE.csv")
 # de origem foi gravado (ex.: dedup_badusb.py rodou DEPOIS do apply do
 # classify_badusb.py). Excluidos do PROVENANCE.csv final pra nao deixar
 # linha orfa apontando pra um arquivo que nao existe mais.
-DEDUP_LOGS = ["dedup_removed_badusb.csv"]
+DEDUP_LOGS = ["tools/provenance_sources/dedup_removed_badusb.csv"]
 
 # merge_type/acao que documentam um arquivo removido (nao uma localizacao
 # final) -- excluidos da checagem de new_path duplicado.
