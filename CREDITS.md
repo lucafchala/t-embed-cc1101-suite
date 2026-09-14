@@ -13,6 +13,7 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório | 712 | nfc (712) |
 | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) | Ver repositório | 314 | badusb (314) |
 | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório | 83 | badusb (83) |
+| [https://github.com/bollgio/BruceIRF](AGPL-3.0) | ESP32 Bruce fork adding UniversalIR/UniversalRF modules; source of this repo's 'Universal*' IR leftover folders | 5 | ir (5) |
 | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório | 2 | badusb (2) |
 
-**Total de arquivos rastreados em PROVENANCE.csv: 13249**
+**Total de arquivos rastreados em PROVENANCE.csv: 13254**

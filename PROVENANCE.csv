@@ -13248,3 +13248,8 @@ sd_card_content/badusb_extra_payloads/data_exfiltration/Win/directly_ready/UberG
 sd_card_content/badusb_extra_payloads/defense_evasion/Unix-like/macOS/directly_ready/UberGuidoZ_BadUSB/NullSec-BadUSB/README.md,badusb,defense_evasion,UberGuidoZ_BadUSB,classified
 sd_card_content/badusb_extra_payloads/_unclassified/UberGuidoZ_BadUSB/NullSec-BadUSB/24_DownloadExecute.txt,badusb,_unclassified,UberGuidoZ_BadUSB,classified-unmatched
 sd_card_content/badusb_extra_payloads/prank/Win/directly_ready/UberGuidoZ_BadUSB/NullSec-BadUSB/16_RickRoll.txt,badusb,prank,UberGuidoZ_BadUSB,classified
+sd_card_content/ir/U/Uni,ir,U,BruceIRF,pre-existing-unlogged
+sd_card_content/ir/U/Universal_TV_Remotes,ir,U,BruceIRF,pre-existing-unlogged
+sd_card_content/ir/U/universal_remotes_@sark,ir,U,BruceIRF,pre-existing-unlogged
+sd_card_content/ir/I/irtobefree_@sark,ir,I,BruceIRF,pre-existing-unlogged
+sd_card_content/ir/I/IrBegone_@sark,ir,I,BruceIRF,pre-existing-unlogged

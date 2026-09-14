@@ -40,6 +40,7 @@ OUT = os.path.join(REPO_ROOT, "CREDITS.md")
 # vendor_key -> (nome de exibicao, URL, licenca) -- copiado de
 # CONTRIBUTING.md, nao inventado aqui.
 VENDOR_SOURCES = {
+    'BruceIRF': ('https://github.com/bollgio/BruceIRF', 'AGPL-3.0', "ESP32 Bruce fork adding UniversalIR/UniversalRF modules; source of this repo's 'Universal*' IR leftover folders"),
     "Bruce-Scripts-Heaven_RFID": ("sloth632/Bruce-Scripts-Heaven", "https://github.com/sloth632/Bruce-Scripts-Heaven", "Ver repositório"),
     "Bruce-Scripts-Heaven_BAD": ("sloth632/Bruce-Scripts-Heaven", "https://github.com/sloth632/Bruce-Scripts-Heaven", "Ver repositório"),
     "universal_rf": ("BruceDevices/firmware", "https://github.com/BruceDevices/firmware", "AGPL-3.0"),
