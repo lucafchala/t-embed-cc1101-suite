@@ -1,0 +1,30 @@
+REM [Bruce compat rewrite] Original Hak5 demo used ENABLE_BUTTON/
+REM DISABLE_BUTTON plus BUTTON_DEF to toggle a forever WHILE loop between
+REM "button armed" and "button disarmed" 5-second windows. Bruce's
+REM ducky_typer.cpp has no BUTTON_DEF/ENABLE_BUTTON/DISABLE_BUTTON support
+REM and no WHILE loops — this is a pure language-feature demo (DuckyScript
+REM 3.0), not an operational payload, and there is no compatible way to
+REM reproduce infinite alternating windows on classic Ducky. Below is a
+REM single pass through both narration messages (loop removed) so the
+REM file still documents the original behavior without claiming to repeat
+REM it forever.
+REM The ENABLE_BUTTON command allows pressing the button to call the BUTTON_DEF.
+
+STRING The button is disabled for the next
+STRING 5 seconds...
+ENTER
+STRING Pressing the button will do nothing...
+ENTER
+DELAY 5000
+STRING The button is enabled for the next
+STRING 5 seconds...
+ENTER
+STRING Pressing the button will execute
+STRING the button definition...
+ENTER
+DELAY 5000
+
+REM The payload will alternate between the button being enabled and disabled.
+REM If the button is pressed within the 5 second disabled window, nothing will happen.
+REM If the button is pressed within the 5 second enabled window, the button definition will be executed and "The button was pressed!" will be typed.
+REM The payload will loop forever.

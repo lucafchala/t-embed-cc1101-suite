@@ -1,0 +1,18 @@
+REM [Bruce compat rewrite] Original Hak5 demo showed nested BUTTON_DEF
+REM callbacks interrupting an infinite WHILE-loop "typing dots" payload.
+REM Bruce's ducky_typer.cpp supports neither BUTTON_DEF (no button-press
+REM callback mechanism) nor WHILE loops (no control flow at all) — both
+REM are DuckyScript 3.0 features. There is no way to reproduce "press the
+REM button to interrupt the loop" on Bruce, so the interruptible loop was
+REM dropped entirely; only the intro message that always ran is kept.
+REM This is a Hak5 documentation example demonstrating a language feature,
+REM not an operational payload — see the removed REM text below for what
+REM it originally did.
+
+STRING Press the button twice to see
+STRING how nested button definitions work!
+ENTER
+
+REM If the button is pressed once at any point in the payload it will stop typing “.” and the first button definition will be executed.
+REM When the first button definition is executed, a secondary button definition will be implemented.
+REM If the button pressed a second time, the newly implement second button definition will execute.

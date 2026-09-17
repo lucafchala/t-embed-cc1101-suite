@@ -1,0 +1,108 @@
+REM Title: Android Notification Spammer
+REM Author: BadUSB Library
+REM Description: Creates spam notifications
+REM Target: Android 7.0+
+REM Category: Prank
+REM Type: Directly Ready
+
+REM Open Settings
+DELAY 2000
+GUI SPACE
+DELAY 1000
+STRING Settings
+ENTER
+DELAY 3000
+
+REM Navigate to Apps
+STRING Apps
+ENTER
+DELAY 2000
+
+STRING All apps
+ENTER
+DELAY 2000
+
+REM Select random app
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Open app settings
+STRING ENTER
+ENTER
+DELAY 2000
+
+STRING Notifications
+ENTER
+DELAY 2000
+
+REM Enable all notifications
+STRING Allow notifications
+ENTER
+DELAY 2000
+
+STRING Show on lock screen
+ENTER
+DELAY 2000
+
+STRING Show as pop-up
+ENTER
+DELAY 2000
+
+REM Go back and select another app
+STRING Back
+ENTER
+DELAY 1000
+
+STRING Back
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+STRING TAB
+ENTER
+DELAY 1000
+
+REM Open another app
+STRING ENTER
+ENTER
+DELAY 2000
+
+STRING Notifications
+ENTER
+DELAY 2000
+
+STRING Allow notifications
+ENTER
+DELAY 2000

