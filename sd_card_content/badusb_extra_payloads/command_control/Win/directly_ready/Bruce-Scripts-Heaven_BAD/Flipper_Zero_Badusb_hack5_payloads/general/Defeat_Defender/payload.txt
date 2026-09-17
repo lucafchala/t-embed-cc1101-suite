@@ -1,4 +1,4 @@
-﻿REM Title: Disable Windows Defender
+REM Title: Disable Windows Defender
 REM Author: Zero_Sploit (v1.0)
 REM Updated: B33m0 (v1.1)
 REM Updated: UberGuidoZ (v1.2)

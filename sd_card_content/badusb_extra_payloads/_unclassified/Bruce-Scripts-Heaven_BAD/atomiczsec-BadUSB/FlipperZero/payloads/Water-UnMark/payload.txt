@@ -1,4 +1,4 @@
-﻿REM Title:       Water-UnMark
+REM Title:       Water-UnMark
 REM Author:      atomiczsec
 REM Target OS:   Windows 10
 REM Description: This script will get rid of the ugly windows watermark. This script will automatically reboot the device. This is not activating your computer!!

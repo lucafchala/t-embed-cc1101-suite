@@ -39,22 +39,22 @@ STRING    )
 DELAY 100
 ENTER
 
-    # Calculate number of key presses. 
+    REM Calculate number of key presses. 
 STRING    $keyPresses = [Math]::Ceiling( $volume / 2 )
 DELAY 100
 ENTER
     
-    # Create the Windows Shell object. 
+    REM Create the Windows Shell object. 
 STRING    $obj = New-Object -ComObject WScript.Shell
 DELAY 100
 ENTER
     
-    # Set volume to zero. 
+    REM Set volume to zero. 
 STRING    1..50 | ForEach-Object {  $obj.SendKeys( [char] 174 )  }
 DELAY 100
 ENTER
     
-    # Set volume to specified level. 
+    REM Set volume to specified level. 
 STRING    for( $i = 0; $i -lt $keyPresses; $i++ )
 DELAY 100
 ENTER
@@ -74,7 +74,7 @@ STRING New-Alias -Name "ssv" Set-SoundVolume
 DELAY 100
 ENTER
  
-# Example usage
+REM Example usage
 STRING Set-SoundVolume 100
 DELAY 100
 ENTER
