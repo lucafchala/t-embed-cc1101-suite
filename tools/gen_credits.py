@@ -75,6 +75,7 @@ VENDOR_SOURCES = {
     "magikh0e_BadUSB": ("magikh0e/FlipperZero_Stuff", "https://github.com/magikh0e/FlipperZero_Stuff", "Ver repositório"),
     "UberGuidoZ_Mifare_Classic_Dict": ("UberGuidoZ/Flipper", "https://github.com/UberGuidoZ/Flipper", "Ver repositório"),
     "UberGuidoZ_H10301_RFID_Bruteforce": ("UberGuidoZ/Flipper", "https://github.com/UberGuidoZ/Flipper", "Ver repositório"),
+    "_vendor_0xNOWHERE": ("0xN0WHERE/BRUCE-FILES", "https://github.com/0xN0WHERE/BRUCE-FILES", "Ver repositório"),
 }
 
 

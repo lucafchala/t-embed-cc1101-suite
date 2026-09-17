@@ -12,6 +12,7 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 | [nortakales/flipper-zero-tonies](https://github.com/nortakales/flipper-zero-tonies) | Ver repositório | 712 | nfc (712) |
 | [Starvinci/BadUsb-Library](https://github.com/Starvinci/BadUsb-Library) | Ver repositório | 314 | badusb (314) |
 | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório | 83 | badusb (83) |
+| [0xN0WHERE/BRUCE-FILES](https://github.com/0xN0WHERE/BRUCE-FILES) | Ver repositório | 10 | badusb (10) |
 | [https://github.com/bollgio/BruceIRF](AGPL-3.0) | ESP32 Bruce fork adding UniversalIR/UniversalRF modules; source of this repo's 'Universal*' IR leftover folders | 5 | ir (5) |
 | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório | 2 | badusb (2) |
 | [https://github.com/Lucaslhm/Flipper-IRDB](Unknown) | Auto-detected via README/LICENSE reference during full credit audit (sd_card_content/ir/#/_Converted_) | 1 | ir (1) |
@@ -42,5 +43,6 @@ Escopo: cobre so o conteudo que passou pelos scripts de reorganizacao (`ir/`, `r
 | Pasta original | Arquivos | Funções |
 |---|---|---|
 | `unconfirmed` | 145 | ir (53), rf (49), music_rtttl (31), interpreter_js_apps (4), wifi_portals (4), themes (3), universal_ir (1) |
+| `Bruce-official-demo` | 2 | nfc (2) |
 
-**Total de arquivos rastreados em PROVENANCE.csv: 10579**
+**Total de arquivos rastreados em PROVENANCE.csv: 10591**

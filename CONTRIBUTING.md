@@ -50,20 +50,34 @@ abaixo) e inclua o link do repositório de origem na descrição do PR.
 | `sd_card_content/themes/Pwnagotchi_theme_pfefferle/` | [pfefferle/bruce-pwnagotchi-theme](https://github.com/pfefferle/bruce-pwnagotchi-theme) | Ver repositório |
 | `sd_card_content/wifi_portals/router_login_batcherss/` | [Batcherss/evil-portal-html](https://github.com/Batcherss/evil-portal-html) | Ver repositório |
 | `sd_card_content/wifi_portals/fake_login_borys/` | [Borys-esp/EvilPortal_DB](https://github.com/Borys-esp/EvilPortal_DB) | Ver repositório |
-| `sd_card_content/interpreter_js_apps/ProtoPirate.js` | [Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce) | Ver repositório |
-| `sd_card_content/interpreter_js_apps/App_Store.js`, `rename-catch.js`, `rf_433_replay.js`, `ir_brute_force.js`, `rf_brute_nmrf.js`, `rf_jammer.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
-| `sd_card_content/interpreter_js_apps/browser_OnChainTemplars.js`, `cryptocurrencies_OnChainTemplars.js` | [OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps) | GPL-3.0 |
+| `sd_card_content/interpreter_js_apps/RF/ProtoPirate.js` | [Senape3000/ProtoPirate-Bruce](https://github.com/Senape3000/ProtoPirate-Bruce) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/Tools/App_Store.js`, `tools/rename-catch.js` (raiz do repo — ferramenta de build, não roda no dispositivo), `sd_card_content/interpreter_js_apps/RF/rf_433_replay.js`, `Infrared/ir_brute_force.js`, `RF/rf_brute_nmrf.js`, `RF/rf_jammer.js` | [Jiggyv3/Bruce-App-Store](https://github.com/Jiggyv3/Bruce-App-Store) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/Utilities/browser_OnChainTemplars.js`, `Crypto/cryptocurrencies_OnChainTemplars.js` | [OnChainTemplars/bruce-apps](https://github.com/OnChainTemplars/bruce-apps) | GPL-3.0 |
 | `sd_card_content/ir/_magikh0e_extra/`, `sd_card_content/badusb_extra_payloads/magikh0e_BadUSB/` | [magikh0e/FlipperZero_Stuff](https://github.com/magikh0e/FlipperZero_Stuff) | Ver repositório |
 | `sd_card_content/themes/Bruce-Themes_community/` | [anonimoKali/Bruce-Themes](https://github.com/anonimoKali/Bruce-Themes) | Ver repositório |
 | `sd_card_content/interpreter_js_apps/BruceScripts_community/` | [badgib/BruceScripts](https://github.com/badgib/BruceScripts) | Ver repositório |
-| `sd_card_content/interpreter_js_apps/js-apps-bruce/` | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/Utilities/ha_dashboard.js`, `ha_dashboard.README.md` (antiga pasta `js-apps-bruce/`; os 5 arquivos de governança de repositório GitHub do vendor — CODE_OF_CONDUCT.md/CONTRIBUTING.md/FUNDING.md/RULES.md/.github/copilot-instructions.md — foram removidos por não serem conteúdo funcional do dispositivo) | [michauMiau/js-apps-bruce](https://github.com/michauMiau/js-apps-bruce) (confirmado por hash SHA-256 nesta rodada — ver nota abaixo) | Ver repositório |
 | `sd_card_content/nfc/Skylanders_LEGO_Toys/` (dumps) | [sealldeveloper/FlipperSkylanders](https://github.com/sealldeveloper/FlipperSkylanders) | Ver repositório |
 | `sd_card_content/nfc/Skylanders_LEGO_Toys/key_generator_scripts/` | [LNRC/Flipper-Infinity-Skylanders](https://github.com/LNRC/Flipper-Infinity-Skylanders) (idêntico a [V0lk3n/Flipper-Skylanders](https://github.com/V0lk3n/Flipper-Skylanders)) | Ver repositório |
 | `sd_card_content/interpreter_js_apps/koua29_community/`, `sd_card_content/themes/koua29_community/` | [koua29](https://github.com/koua29) (7 repos de apps + 2 de temas — ver README da pasta) | MIT |
-| `sd_card_content/interpreter_js_apps/BruceSafe.js` | [ssstee/BruceSafe](https://github.com/ssstee/BruceSafe) | Ver repositório |
-| `sd_card_content/interpreter_js_apps/BruteRF.js` | [Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps) | Ver repositório |
+| `sd_card_content/interpreter_js_apps/Games/BruceSafe.js` | [ssstee/BruceSafe](https://github.com/ssstee/BruceSafe) | Ver repositório |
+
+> **Nota sobre `js-apps-bruce/`**: numa rodada anterior a fonte real não pôde ser confirmada por busca na web e ficou documentada como "não confirmada", por decisão explícita do mantenedor. Nesta rodada, clonando o candidato `michauMiau/js-apps-bruce` e comparando por hash SHA-256, `ha_dashboard.js` e `README.md` deram byte-a-byte idênticos aos do repositório real — a atribuição na tabela acima passou a ser confirmada, revertendo a marcação anterior.
+
+### Reorganização de `interpreter_js_apps/` (2026-09-17)
+
+O conteúdo de `sd_card_content/interpreter_js_apps/` foi reorganizado de uma lista plana pra subpastas por função (`Audio/`, `Infrared/`, `RF/`, `WiFi/`, `Tools/`, `Utilities/`, `Games/`, `Crypto/`), no mesmo padrão de taxonomia usado no resto do repositório. As coleções já organizadas internamente (`BruceScripts_community/`, `koua29_community/`) foram mantidas intactas como estão.
+
+Durante a reorganização:
+- 3 arquivos foram renomeados pra bater com o nome "oficial" já usado na App Store do Bruce, confirmado por hash idêntico contra `sd_card_mirror/BruceJS/` (mirror físico do dispositivo): `ir_brute.js` → `Infrared/IR_Brute_Force.js`, `rf_brute.js` → `RF/RF_Brute_Force.js`, `wifi_brute.js` → `WiFi/WiFi_Brute_Force.js`.
+- `rename-catch.js` (ferramenta de build Node/babel, não roda no dispositivo) foi movido pra `tools/rename-catch.js`, junto dos outros scripts de manutenção do repositório.
+- 6 apps que só existiam no mirror físico do dispositivo (`sd_card_mirror/BruceJS/`) e nunca tinham sido capturados de volta pra árvore curada foram copiados pra `interpreter_js_apps/`: `Audio/Cricket.js`, `Audio/Tone Generator.js`, `Tools/App_Store.min.js` (versão minificada/instalada, renomeada pra não colidir com o `Tools/App_Store.js` fonte), `Tools/Device Info.js`, `Tools/Key Decoding.js`, `Tools/Lock Device.js`, `Utilities/Web Browser.js`.
+- Log completo de origem/destino de cada `git mv`/remoção/cópia desta reorganização: [`js_reorg_log.csv`](js_reorg_log.csv).
+| `sd_card_content/interpreter_js_apps/RF/BruteRF.js` | [Senape3000/Bruce-JS-Apps](https://github.com/Senape3000/Bruce-JS-Apps) | Ver repositório |
 | `sd_card_content/ir/` (parte, 20 arquivos novos desta rodada) | [Lucaslhm/Flipper-IRDB](https://github.com/Lucaslhm/Flipper-IRDB) | Ver repositório |
 | `sd_card_content/badusb_extra_payloads/I-Am-Jakoby_BadUSB/` (substitui a antiga `Flipper-Zero-BadUSB/`, que só tinha os READMEs sem os scripts `.ps1` reais) | [I-Am-Jakoby/Flipper-Zero-BadUSB](https://github.com/I-Am-Jakoby/Flipper-Zero-BadUSB) | Ver repositório |
+| `sd_card_content/badusb_extra_payloads/_vendor_0xNOWHERE/` (pasta `BAD USB,BLE/` do vendor; 10 arquivos, único conteúdo desse vendor sem redundância com `sloth632/Bruce-Scripts-Heaven` — ver correção acima) | [0xN0WHERE/BRUCE-FILES](https://github.com/0xN0WHERE/BRUCE-FILES) | Ver repositório |
+| `sd_card_content/wifi_portals/!repo/0xNOWHERE_BRUCE-FILES/` (pasta `EVIL PORTAL/` do vendor; 289 arquivos, 228 hashes únicos) | [0xN0WHERE/BRUCE-FILES](https://github.com/0xN0WHERE/BRUCE-FILES) | Ver repositório |
 
 "Ver repositório" significa que a licença não foi confirmada nesta
 organização — consulte o repositório de origem antes de redistribuir ou
@@ -80,7 +94,7 @@ recebeu:
 
 | Item | O que é | Onde |
 |---|---|---|
-| `sd_card_content/interpreter_js_apps/rf_jammer.js` | Ferramenta de jamming **ativo** de RF (transmite, não só recebe/testa) | [interpreter_js_apps/](sd_card_content/README.md#interpreter_js_apps) |
+| `sd_card_content/interpreter_js_apps/RF/rf_jammer.js` | Ferramenta de jamming **ativo** de RF (transmite, não só recebe/testa) | [interpreter_js_apps/](sd_card_content/README.md#interpreter_js_apps) |
 | `sd_card_content/badusb_extra_payloads/magikh0e_BadUSB/` (2 arquivos) | Payloads BadUSB de pós-exploração (criação de conta admin oculta + desativação de firewall) | [badusb_extra_payloads/](sd_card_content/README.md#badusb_extra_payloads) |
 
 Ambos tinham sido inicialmente descartados neste documento (ver
@@ -110,7 +124,8 @@ usar.
 |---|---|
 | Wordlists de bruteforce (rockyou.txt, openwall.txt) | Não incluídas por tamanho e por serem padrão da indústria, fáceis de obter separadamente |
 | 3 arquivos "prank" de ~15MB (`Bruce-Scripts-Heaven_BAD/`) | Hexdumps de imagem sem função real de payload |
-| `techniixdotcom/Bruce-Scripts`, `0xN0WHERE/BRUCE-FILES` | Cópias exatas de `sloth632/Bruce-Scripts-Heaven`, descartadas por redundância |
+| `techniixdotcom/Bruce-Scripts` | Cópia exata (fork) de `sloth632/Bruce-Scripts-Heaven` (mesmo commit HEAD, 50.776 arquivos idênticos, zero arquivo próprio) — descartado por redundância total |
+| `0xN0WHERE/BRUCE-FILES` (pastas `IR/` e `RF/`) | Reconferido por hash contra `sloth632/Bruce-Scripts-Heaven` inteiro nesta rodada: apenas 488 de 11.482 hashes de IR e 2 de 14.003 hashes de RF são novos (~4% e ~0,01%) — quase-duplicata total, descartado por redundância. As pastas `EVIL PORTAL/` e `BAD USB,BLE/` do mesmo repositório **não são redundantes** (120/228 e 10/10 hashes novos, respectivamente) e foram integradas — ver linhas de `wifi_portals/` e `badusb_extra_payloads/` na tabela de proveniência acima |
 | Bruce Theme Builder, Bruce Web Flasher, CapibaraZero Web-Flasher | Ferramentas web, não arquivos pra incluir em repositório — linkadas em [Links úteis](README.md#-links-úteis) no README raiz em vez disso |
 | `tutyr2-jpg/Bruce-A-C-Edition`, `Bollgio/BruceIRF` | Forks alternativos do Bruce; este repositório documenta o Bruce oficial via Launcher |
 | `twowayteigan/all-public-esp32-firmware` | Apenas uma lista de links, sem binários próprios |
@@ -124,6 +139,8 @@ usar.
 | `Jalapenothedragon/evil-portal-html` | Mesmo conjunto de templates que `Batcherss/evil-portal-html` já incluído, com 2 variantes a menos — reconferido por hash, zero arquivos novos |
 | `MuddledBox/FlipperZeroSub-GHz`, `ErikLentz/Flipper-Finds` | Reconferidos por hash a pedido: só metadado de repositório (LICENSE/README) e uma foto eram "novos" — nenhum arquivo de conteúdo real |
 | `dolmen-go/legodim` | Ferramenta Go para o **LEGO Dimensions Toy Pad**, um periférico USB para PC/console — protocolo e hardware completamente diferentes de NFC/Bruce/T-Embed. Não produz nenhum artefato vendorizável para o cartão SD (não é um gerador de dumps; é um driver para ler/escrever um leitor físico via USB-HID que o T-Embed não possui) |
+
+> **Correção (2026-09-17)**: uma rodada anterior deste documento avaliou `0xN0WHERE/BRUCE-FILES` como um todo e concluiu "cópia exata" — verdade para IR/RF, que dominam a contagem de arquivos do repositório (>99% do total), mas a conclusão foi generalizada sem checar `EVIL PORTAL/` e `BAD USB,BLE/` individualmente. Reconferido por hash contra o `sloth632/Bruce-Scripts-Heaven` inteiro nesta rodada antes de reintegrar as duas pastas que continham conteúdo genuinamente novo.
 | `Senape3000/Bruce-JS-Apps/ProtoPirate/ProtoPirate_6.js` | Comparado byte a byte com o já vendorizado `ProtoPirate.js` (fonte: `Senape3000/ProtoPirate-Bruce`) — o já incluído é mais recente (Bruce 2.0+, com fix de navegação de menu) que este (`v1.0.0`, Bruce 1.4+); descartado por ser versão anterior, não por redundância de conteúdo |
 | `koua29/bruce-grille-theme`, `bruce-spiderman-theme`, `bruce-fallout-theme` | Já cadastrados na Bruce App Store (`BruceDevices/App-Store-Data`) sob o mesmo usuário `koua29` — instaláveis direto pelo dispositivo, não vendorizados como cópia estática. Distintos dos 9 repositórios `koua29` de apps/temas que **foram** incluídos nesta rodada (nenhum destes 9 está na App Store) |
 | `SasPes/key-decoding`, `SasPes/magic-8-ball` | Cadastrados na Bruce App Store sob `SasPes` — mesma lógica acima |

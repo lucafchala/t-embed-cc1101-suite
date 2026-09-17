@@ -1,0 +1,49 @@
+old_path,new_path,action
+sd_card_content/interpreter_js_apps/ir_brute.js,sd_card_content/interpreter_js_apps/Infrared/IR_Brute_Force.js,moved
+sd_card_content/interpreter_js_apps/rf_brute.js,sd_card_content/interpreter_js_apps/RF/RF_Brute_Force.js,moved
+sd_card_content/interpreter_js_apps/wifi_brute.js,sd_card_content/interpreter_js_apps/WiFi/WiFi_Brute_Force.js,moved
+sd_card_content/interpreter_js_apps/App_Store.js,sd_card_content/interpreter_js_apps/Tools/App_Store.js,moved
+sd_card_content/interpreter_js_apps/BruteRF.js,sd_card_content/interpreter_js_apps/RF/BruteRF.js,moved
+sd_card_content/interpreter_js_apps/calculator_t-embed.js,sd_card_content/interpreter_js_apps/Tools/calculator_t-embed.js,moved
+sd_card_content/interpreter_js_apps/ir2keys.js,sd_card_content/interpreter_js_apps/Infrared/ir2keys.js,moved
+sd_card_content/interpreter_js_apps/ir_brute_force.js,sd_card_content/interpreter_js_apps/Infrared/ir_brute_force.js,moved
+sd_card_content/interpreter_js_apps/ProtoPirate.js,sd_card_content/interpreter_js_apps/RF/ProtoPirate.js,moved
+sd_card_content/interpreter_js_apps/rf_433_replay.js,sd_card_content/interpreter_js_apps/RF/rf_433_replay.js,moved
+sd_card_content/interpreter_js_apps/rf_brute_nmrf.js,sd_card_content/interpreter_js_apps/RF/rf_brute_nmrf.js,moved
+sd_card_content/interpreter_js_apps/rf_jammer.js,sd_card_content/interpreter_js_apps/RF/rf_jammer.js,moved
+sd_card_content/interpreter_js_apps/spectrum_t-embed.js,sd_card_content/interpreter_js_apps/RF/spectrum_t-embed.js,moved
+sd_card_content/interpreter_js_apps/BruceSafe.js,sd_card_content/interpreter_js_apps/Games/BruceSafe.js,moved
+sd_card_content/interpreter_js_apps/Example1.js,sd_card_content/interpreter_js_apps/Tools/Example1.js,moved
+sd_card_content/interpreter_js_apps/M5stickcplus2_arcade-games.js,sd_card_content/interpreter_js_apps/Games/M5stickcplus2_arcade-games.js,moved
+sd_card_content/interpreter_js_apps/M5stickcplus2_calculator.js,sd_card_content/interpreter_js_apps/Tools/M5stickcplus2_calculator.js,moved
+sd_card_content/interpreter_js_apps/Snake_Cardputer.js,sd_card_content/interpreter_js_apps/Games/Snake_Cardputer.js,moved
+sd_card_content/interpreter_js_apps/Snake_Stick_CoreS3.js,sd_card_content/interpreter_js_apps/Games/Snake_Stick_CoreS3.js,moved
+sd_card_content/interpreter_js_apps/browser_OnChainTemplars.js,sd_card_content/interpreter_js_apps/Utilities/browser_OnChainTemplars.js,moved
+sd_card_content/interpreter_js_apps/browser_bruce.js,sd_card_content/interpreter_js_apps/Utilities/browser_bruce.js,moved
+sd_card_content/interpreter_js_apps/crypto-prices.js,sd_card_content/interpreter_js_apps/Crypto/crypto-prices.js,moved
+sd_card_content/interpreter_js_apps/cryptocurrencies_OnChainTemplars.js,sd_card_content/interpreter_js_apps/Crypto/cryptocurrencies_OnChainTemplars.js,moved
+sd_card_content/interpreter_js_apps/dino_game.js,sd_card_content/interpreter_js_apps/Games/dino_game.js,moved
+sd_card_content/interpreter_js_apps/dtmf.js,sd_card_content/interpreter_js_apps/Audio/dtmf.js,moved
+sd_card_content/interpreter_js_apps/gifs.js,sd_card_content/interpreter_js_apps/Utilities/gifs.js,moved
+sd_card_content/interpreter_js_apps/gifs,sd_card_content/interpreter_js_apps/Utilities/gifs,moved
+sd_card_content/interpreter_js_apps/highway_racer.js,sd_card_content/interpreter_js_apps/Games/highway_racer.js,moved
+sd_card_content/interpreter_js_apps/pingpong.js,sd_card_content/interpreter_js_apps/Games/pingpong.js,moved
+sd_card_content/interpreter_js_apps/space_shooter.js,sd_card_content/interpreter_js_apps/Games/space_shooter.js,moved
+sd_card_content/interpreter_js_apps/tamagochi.js,sd_card_content/interpreter_js_apps/Games/tamagochi.js,moved
+sd_card_content/interpreter_js_apps/timer_background.js,sd_card_content/interpreter_js_apps/Tools/timer_background.js,moved
+sd_card_content/interpreter_js_apps/xFlipper.js,sd_card_content/interpreter_js_apps/Utilities/xFlipper.js,moved
+sd_card_content/interpreter_js_apps/rename-catch.js,tools/rename-catch.js,moved
+sd_card_content/interpreter_js_apps/js-apps-bruce/CODE_OF_CONDUCT.md,(removido - boilerplate de governanca de repo, nao e conteudo funcional),removed
+sd_card_content/interpreter_js_apps/js-apps-bruce/CONTRIBUTING.md,(removido - boilerplate de governanca de repo, nao e conteudo funcional),removed
+sd_card_content/interpreter_js_apps/js-apps-bruce/FUNDING.md,(removido - boilerplate de governanca de repo, nao e conteudo funcional),removed
+sd_card_content/interpreter_js_apps/js-apps-bruce/RULES.md,(removido - boilerplate de governanca de repo, nao e conteudo funcional),removed
+sd_card_content/interpreter_js_apps/js-apps-bruce/.github/copilot-instructions.md,(removido - boilerplate),removed
+sd_card_content/interpreter_js_apps/js-apps-bruce/ha_dashboard.js,sd_card_content/interpreter_js_apps/Utilities/ha_dashboard.js,moved
+sd_card_content/interpreter_js_apps/js-apps-bruce/README.md,sd_card_content/interpreter_js_apps/Utilities/ha_dashboard.README.md,moved
+sd_card_mirror/BruceJS/Audio/Cricket.js,sd_card_content/interpreter_js_apps/Audio/Cricket.js,copied_from_mirror
+sd_card_mirror/BruceJS/Audio/Tone Generator.js,sd_card_content/interpreter_js_apps/Audio/Tone Generator.js,copied_from_mirror
+sd_card_mirror/BruceJS/Tools/App Store.js,sd_card_content/interpreter_js_apps/Tools/App_Store.min.js,copied_from_mirror
+sd_card_mirror/BruceJS/Tools/Device Info.js,sd_card_content/interpreter_js_apps/Tools/Device Info.js,copied_from_mirror
+sd_card_mirror/BruceJS/Tools/Key Decoding.js,sd_card_content/interpreter_js_apps/Tools/Key Decoding.js,copied_from_mirror
+sd_card_mirror/BruceJS/Tools/Lock Device.js,sd_card_content/interpreter_js_apps/Tools/Lock Device.js,copied_from_mirror
+sd_card_mirror/BruceJS/Utilities/Web Browser.js,sd_card_content/interpreter_js_apps/Utilities/Web Browser.js,copied_from_mirror
