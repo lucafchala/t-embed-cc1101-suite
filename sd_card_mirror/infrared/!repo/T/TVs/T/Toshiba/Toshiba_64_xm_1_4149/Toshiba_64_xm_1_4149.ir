@@ -1,0 +1,284 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Record Speed
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 3A 00 00 00
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 10 00 00 00
+# 
+name: INPUT 1
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: C1 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 10 00 00 00
+# 
+name: home
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1F 00 00 00
+# 
+name: dtv
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1B 00 00 00
+# 
+name: PC
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 69 00 00 00
+# 
+name: component 3
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: C3 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 11 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 08 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0C 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 12 00 00 00
+# 
+name: 1
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 04 00 00 00
+# 
+name: FF
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1A 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0D 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 02 00 00 00
+# 
+name: sap
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: stop
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 15 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0B 00 00 00
+# 
+name: Cancel
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: External
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1B 00 00 00
+# 
+name: back
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: INPUT 2
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: F8 00 00 00
+# 
+name: record
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 14 00 00 00
+# 
+name: REW
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 18 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 24 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 07 00 00 00
+# 
+name: info
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1E 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 05 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 07 00 00 00
+# 
+name: Pre-CH
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: display
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 09 00 00 00
+# 
+name: pause
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 16 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 12 00 00 00
+# 
+name: play
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 19 00 00 00
+# 
+name: 3
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 06 00 00 00
+# 
+name: +100
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 26 00 00 00
+# 
+name: 6
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0A 00 00 00
+# 
+name: last
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 2A 00 00 00
+# 
+name: INPUT 3
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: F9 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1F 00 00 00
+# 
+name: Component 2
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: FD 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0F 00 00 00
+# 
+name: clear
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: 05 00 00 00
+command: 0B 00 00 00

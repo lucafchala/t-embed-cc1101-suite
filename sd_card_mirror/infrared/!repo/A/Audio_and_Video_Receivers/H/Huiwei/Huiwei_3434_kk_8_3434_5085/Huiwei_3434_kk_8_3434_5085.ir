@@ -1,0 +1,260 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: high_pitch+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 59 A6 00 00
+# 
+name: right surround-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 45 BA 00 00
+# 
+name: high_pitch-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 5A A5 00 00
+# 
+name: heavy bass
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 43 BC 00 00
+# 
+name: center-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 08 F7 00 00
+# 
+name: delay-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 54 AB 00 00
+# 
+name: mic_bass+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 00 FF 00 00
+# 
+name: delay+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0E F1 00 00
+# 
+name: left surround-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 07 F8 00 00
+# 
+name: dsp
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 03 FC 00 00
+# 
+name: main channel+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 4A B5 00 00
+# 
+name: reverb
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0D F2 00 00
+# 
+name: left-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 16 E9 00 00
+# 
+name: factory parameter
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 5C A3 00 00
+# 
+name: mic_treble-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 06 F9 00 00
+# 
+name: right surround+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 17 E8 00 00
+# 
+name: right-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0F F0 00 00
+# 
+name: center+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0B F4 00 00
+# 
+name: Right+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0A F5 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1F E0 00 00
+# 
+name: channel mode
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1A E5 00 00
+# 
+name: heavy_bass-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 05 FA 00 00
+# 
+name: mic_bass-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 04 FB 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 5E A1 00 00
+# 
+name: bass+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 02 FD 00 00
+# 
+name: left surround+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1C E3 00 00
+# 
+name: Noise Test
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1B E4 00 00
+# 
+name: display mode
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 5B A4 00 00
+# 
+name: heavy_bass+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 47 B8 00 00
+# 
+name: TransferMode
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1D E2 00 00
+# 
+name: storage
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 1E E1 00 00
+# 
+name: bass-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 18 E7 00 00
+# 
+name: input selection
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 19 E6 00 00
+# 
+name: left+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 48 B7 00 00
+# 
+name: microphone-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 44 BB 00 00
+# 
+name: Bright
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 49 B6 00 00
+# 
+name: ok mode
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 0C F3 00 00
+# 
+name: mic_treble+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 42 BD 00 00
+# 
+name: hifi
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 58 A7 00 00
+# 
+name: reverberation_
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 15 EA 00 00
+# 
+name: main channel-
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 4B B4 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 5F A0 00 00
+# 
+name: microphone+
+type: parsed
+protocol: NECext
+address: 00 FD 00 00
+command: 40 BF 00 00

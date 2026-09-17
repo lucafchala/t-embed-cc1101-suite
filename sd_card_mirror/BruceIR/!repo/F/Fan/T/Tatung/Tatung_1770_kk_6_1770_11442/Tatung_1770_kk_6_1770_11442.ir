@@ -1,0 +1,56 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: COLD WIND
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 87 78 00 00
+# 
+name: wind_type
+type: raw
+frequency: 38020
+duty_cycle: 0.330000
+data: 9007 4450 589 503 615 504 562 530 589 504 615 504 562 530 588 504 615 504 562 530 588 504 615 1635 588 1635 562 1661 615 1635 588 1582 615 1661 588 1635 588 504 615 1635 588 504 615 504 562 530 588 504 614 1635 588 504 667 1556 588 504 614 1635 588 1635 562 1661 615 1635 588 504 614 42021 9006 2189 614 96052
+# 
+name: wind_speed
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 84 7B 00 00
+# 
+name: shake_wind
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 82 7D 00 00
+# 
+name: shutdown
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 80 7F 00 00
+# 
+name: anion
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 83 7C 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 86 79 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 85 7A 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 FC 00 00
+command: 80 7F 00 00

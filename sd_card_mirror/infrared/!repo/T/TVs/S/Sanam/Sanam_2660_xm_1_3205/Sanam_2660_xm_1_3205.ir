@@ -1,0 +1,410 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: tv
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 821 1641 795 821 821 821 821 821 821 821 821 821 1641 821 821 821 821 821 821 1641 795 821 86709 821 821 1641 795 821 821 821 821 821 821 821 821 821 1641 821 821 821 821 821 821 1641 795 821 86709
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: tv_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 821 769 821 769 1641 769 821 87203 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 821 769 821 769 1641 769 821 87203
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: yellow_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 795 821 795 1641 821 821 795 821 795 821 795 821 1615 821 795 1641 821 821 1615 1641 86867 821 795 821 795 1641 821 821 795 821 795 821 795 821 1615 821 795 1641 821 821 1615 1641 86867
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: pip
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 795 1641 795 821 795 821 795 821 795 821 795 821 1615 1641 1590 1641 795 821 1615 821 86124 821 795 1641 795 821 795 821 795 821 795 821 795 821 1615 1641 1590 1641 795 821 1615 821 86124
+# 
+name: yellow
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 1641 846 821 846 821 846 821 846 821 846 821 1641 821 846 1641 846 821 1641 1641 86459 821 846 1641 846 821 846 821 846 821 846 821 846 821 1641 821 846 1641 846 821 1641 1641 86459
+# 
+name: return
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 1641 795 821 769 821 769 821 769 821 769 821 1590 1641 1590 1641 795 821 769 821 87125 821 769 1641 795 821 769 821 769 821 769 821 769 821 1590 1641 1590 1641 795 821 769 821 87125
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: green
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 795 1641 795 821 795 821 795 821 795 821 795 821 1615 821 795 1641 1590 821 795 1641 86944 821 795 1641 795 821 795 821 795 821 795 821 795 821 1615 821 795 1641 1590 821 795 1641 86944
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: --
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: AV
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 821 1641 795 821 821 821 821 821 821 821 821 821 1641 821 821 821 821 1641 795 821 821 821 86709 821 821 1641 795 821 821 821 821 821 821 821 821 821 1641 821 821 821 821 1641 795 821 821 821 86709
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: text_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 821 769 1641 795 821 769 821 769 821 769 821 1590 821 769 821 769 821 769 1641 795 821 87176 821 769 821 769 1641 795 821 769 821 769 821 769 821 1590 821 769 821 769 821 769 1641 795 821 87176
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: return_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 795 821 795 1641 795 821 795 821 795 821 795 821 1615 1641 1615 1641 795 821 795 821 86919 821 795 821 795 1641 795 821 795 821 795 821 795 821 1615 1641 1615 1641 795 821 795 821 86919
+# 
+name: --_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: green_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 821 846 1641 846 821 846 821 846 821 846 821 1641 821 846 1641 1667 821 846 1641 86433 821 846 821 846 1641 846 821 846 821 846 821 846 821 1641 821 846 1641 1667 821 846 1641 86433
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: red
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 1641 821 821 846 821 846 821 846 821 846 821 1667 821 846 1641 1641 821 846 821 846 821 85611 821 846 1641 821 821 846 821 846 821 846 821 846 821 1667 821 846 1641 1641 821 846 821 846 821 85611
+# 
+name: ok
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: pip_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 821 846 1641 821 821 846 821 846 821 846 821 1641 1641 1667 1641 821 821 1641 821 85688 821 846 821 846 1641 821 821 846 821 846 821 846 821 1641 1641 1667 1641 821 821 1641 821 85688
+# 
+name: blue
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 1641 846 821 846 821 846 821 846 821 846 821 1667 821 846 1641 1667 1641 846 821 86407 821 846 1641 846 821 846 821 846 821 846 821 846 821 1667 821 846 1641 1667 1641 846 821 86407
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: blue_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 1641 1590 1641 769 821 87152 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 1641 1590 1641 769 821 87152
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 1641 1590 821 769 821 769 821 86382 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 1641 1590 821 769 821 769 821 86382
+# 
+name: left
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: text
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 846 1641 846 821 846 821 846 821 846 821 846 821 1641 821 846 821 846 821 846 1641 846 821 86407 821 846 1641 846 821 846 821 846 821 846 821 846 821 1641 821 846 821 846 821 846 1641 846 821 86407
+# 
+name: AV_r
+type: raw
+frequency: 39200
+duty_cycle: 0.330000
+data: 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 821 769 1641 769 821 769 821 87203 821 769 821 769 1641 769 821 769 821 769 821 769 821 1615 821 769 821 769 1641 769 821 769 821 87203

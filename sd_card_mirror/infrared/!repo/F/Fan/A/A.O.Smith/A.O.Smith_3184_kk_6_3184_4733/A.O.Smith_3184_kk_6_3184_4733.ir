@@ -1,0 +1,14 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 58 00 00 00
+command: 14 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 58 00 00 00
+command: 00 00 00 00

@@ -1,0 +1,194 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: raw
+frequency: 37037
+duty_cycle: 0.330000
+data: 9234 4563 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 1701 594 1701 594 567 594 1701 594 1701 594 567 594 567 594 567 594 567 594 567 594 1701 594 567 594 567 594 1701 594 1701 594 40041 9234 2295 594 98415 9234 2295 594 98415
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 13 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: FF 00 00 00
+# 
+name: textoff
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 10 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0A 00 00 00
+# 
+name: --
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 09 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 00 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 05 00 00 00
+# 
+name: up
+type: raw
+frequency: 37037
+duty_cycle: 0.330000
+data: 9234 4563 594 567 594 567 594 567 594 1728 594 1728 594 1728 594 567 594 567 594 1728 594 1728 594 1728 594 567 594 567 594 567 594 1728 594 1728 594 567 594 1728 594 1728 594 567 594 1728 594 1728 594 567 594 567 594 1728 594 567 594 567 594 1728 594 567 594 567 594 1728 594 1728 594 40068 9234 2295 594 98388 9234 2295 594 98388
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 03 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0C 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 04 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 1C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0E 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0B 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 17 00 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 11 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0F 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 14 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 16 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: raw
+frequency: 37037
+duty_cycle: 0.330000
+data: 9234 4563 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 40041 9234 2295 594 98415 9234 2295 594 98415
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 18 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 07 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 08 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 12 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 0D 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 01 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 06 00 00 00
+# 
+name: menu
+type: raw
+frequency: 37037
+duty_cycle: 0.330000
+data: 9234 4563 594 594 594 594 594 594 594 1701 594 1701 594 1701 594 594 594 594 594 1701 594 1701 594 1701 594 594 594 594 594 594 594 1701 594 1701 594 594 594 1701 594 594 594 1701 594 594 594 1701 594 1701 594 1701 594 1701 594 594 594 1701 594 594 594 1701 594 594 594 594 594 594 594 40095 9234 2295 594 98550 9234 2295 594 98550
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 38 00 00 00
+command: 15 00 00 00
+# 
+name: left
+type: raw
+frequency: 37037
+duty_cycle: 0.330000
+data: 9234 4563 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 1701 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 567 594 567 594 567 594 1701 594 1701 594 40041 9234 2322 594 98388 9234 2322 594 98388

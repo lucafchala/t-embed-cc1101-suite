@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: radios
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 11 00 00 00
+# 
+name: program_down
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 05 00 00 00
+# 
+name: SLEEP
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 0A 00 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 12 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 04 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 08 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 07 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 00 00 00 00
+# 
+name: program_up
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 03 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC42
+address: 48 00 00 00
+command: 09 00 00 00

@@ -1,0 +1,770 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: f1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: illustrate
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 35 00 00 00
+# 
+name: lock_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: sound
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: audio_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: yellow_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: SAVE_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: nicam_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: calendar_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: sound effects_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: f1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: navigate
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: SoundMenu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: sound effects
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: timer
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: Image
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: nicam
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: diaplasis
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: Image_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: game
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: diaplasis_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: favorites
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: green
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: edit
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: acoustics
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: --
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: SoundMenu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: guide
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: wide_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: clock_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: edit_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: --_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: greater100_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: epg
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: Hdtv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: green_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: aspect ratio
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: navigate_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: radio_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: f2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: calendar
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: image effects_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: Loudness_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: image effects
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: f2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: stop_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 842 816 842 816 1684 816 842 816 842 816 842 816 842 816 842 1658 842 816 1684 1632 842 816 842 84395 842 816 842 816 1684 816 842 816 842 816 842 816 842 816 842 1658 842 816 1684 1632 842 816 842 100000
+# 
+name: picture
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: red
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: illustrate_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 35 00 00 00
+# 
+name: SAVE
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 865 811 1730 811 865 811 865 811 865 811 865 811 865 811 865 1622 865 811 1730 811 865 811 865 86158 865 811 1730 811 865 811 865 811 865 811 865 811 865 811 865 1622 865 811 1730 811 865 811 865 86158
+# 
+name: tv_av
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: Loudness
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: guide_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: still
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: clock
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: dtv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: dtv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: wide
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 842 816 1684 816 842 816 842 816 842 816 842 816 842 816 842 1658 842 816 1684 1632 1684 85237 842 816 1684 816 842 816 842 816 842 816 842 816 842 816 842 1658 842 816 1684 1632 1684 100000
+# 
+name: picture mode_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: Hdtv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: timer_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: favorite_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: still_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: favorites_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: radio
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: aspect ratio_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: sound_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 24 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: acoustics_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: picture_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: greater100
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: game_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: favorite
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: lock
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: epg_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00

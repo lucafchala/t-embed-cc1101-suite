@@ -1,0 +1,314 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: go
+type: parsed
+protocol: NECext
+address: 96 29 00 00
+command: 00 00 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 96 1E 00 00
+command: 00 00 00 00
+# 
+name: caption
+type: parsed
+protocol: NECext
+address: 96 57 00 00
+command: 00 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 96 19 00 00
+command: 00 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: NECext
+address: 96 1A 00 00
+command: 00 00 00 00
+# 
+name: dtv
+type: parsed
+protocol: NECext
+address: 96 12 00 00
+command: 00 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 96 52 00 00
+command: 00 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 96 13 00 00
+command: 00 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 96 17 00 00
+command: 00 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 96 58 00 00
+command: 00 00 00 00
+# 
+name: angle
+type: parsed
+protocol: NECext
+address: 96 23 00 00
+command: 00 00 00 00
+# 
+name: function
+type: parsed
+protocol: NECext
+address: 96 2F 00 00
+command: 00 00 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 96 21 00 00
+command: 00 00 00 00
+# 
+name: title
+type: parsed
+protocol: NECext
+address: 96 53 00 00
+command: 00 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 96 1B 00 00
+command: 00 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 96 6F 00 00
+command: 00 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 96 5C 00 00
+command: 00 00 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 96 56 00 00
+command: 00 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 96 52 00 00
+command: 00 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 96 68 00 00
+command: 00 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 96 15 00 00
+command: 00 00 00 00
+# 
+name: less tv
+type: parsed
+protocol: NECext
+address: 96 59 00 00
+command: 00 00 00 00
+# 
+name: bookmarks
+type: parsed
+protocol: NECext
+address: 96 1D 00 00
+command: 00 00 00 00
+# 
+name: photo
+type: parsed
+protocol: NECext
+address: 96 2E 00 00
+command: 00 00 00 00
+# 
+name: scroll
+type: parsed
+protocol: NECext
+address: 96 26 00 00
+command: 00 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 96 1F 00 00
+command: 00 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 96 6A 00 00
+command: 00 00 00 00
+# 
+name: record
+type: parsed
+protocol: NECext
+address: 96 31 00 00
+command: 00 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 96 6B 00 00
+command: 00 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 96 25 00 00
+command: 00 00 00 00
+# 
+name: de
+type: parsed
+protocol: NECext
+address: 96 62 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 96 27 00 00
+command: 00 00 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 96 6F 00 00
+command: 00 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 96 65 00 00
+command: 00 00 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 96 67 00 00
+command: 00 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 96 60 00 00
+command: 00 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 96 6E 00 00
+command: 00 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 96 21 00 00
+command: 00 00 00 00
+# 
+name: skip forward
+type: parsed
+protocol: NECext
+address: 96 22 00 00
+command: 00 00 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: 96 2A 00 00
+command: 00 00 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 96 49 00 00
+command: 00 00 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 96 6E 00 00
+command: 00 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 96 2B 00 00
+command: 00 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 96 64 00 00
+command: 00 00 00 00
+# 
+name: program-guide
+type: parsed
+protocol: NECext
+address: 96 73 00 00
+command: 00 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 96 6E 00 00
+command: 00 00 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 96 6B 00 00
+command: 00 00 00 00
+# 
+name: shuf
+type: parsed
+protocol: NECext
+address: 96 5F 00 00
+command: 00 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 96 6A 00 00
+command: 00 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 96 5E 00 00
+command: 00 00 00 00
+# 
+name: del
+type: parsed
+protocol: NECext
+address: 96 62 00 00
+command: 00 00 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 96 6B 00 00
+command: 00 00 00 00

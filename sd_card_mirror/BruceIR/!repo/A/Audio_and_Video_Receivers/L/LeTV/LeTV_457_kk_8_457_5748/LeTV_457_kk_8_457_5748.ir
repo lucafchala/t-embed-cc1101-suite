@@ -1,0 +1,74 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: sound effects
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C2 B1 00 00
+# 
+name: sound_source
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C3 B2 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B5 A6 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B2 A3 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B4 A5 00 00
+# 
+name: DTS TVOL
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C6 B5 00 00
+# 
+name: bass+
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B6 A0 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B3 A4 00 00
+# 
+name: bass-
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C1 B0 00 00
+# 
+name: Bluetooth
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: B1 A1 00 00
+# 
+name: DTS TSHD
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C5 B4 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: E4 B6 00 00
+command: C4 B3 00 00

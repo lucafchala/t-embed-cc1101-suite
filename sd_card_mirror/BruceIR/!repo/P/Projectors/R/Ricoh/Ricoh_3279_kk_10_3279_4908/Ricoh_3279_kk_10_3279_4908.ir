@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aspect
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 27 D8 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 41 BE 00 00
+# 
+name: ECO
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 28 D7 00 00
+# 
+name: keystone+
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 40 BF 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 45 BA 00 00
+# 
+name: AutoSetup
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 15 EA 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 12 ED 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 06 F9 00 00
+# 
+name: av mute
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 11 EE 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 23 DC 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 13 EC 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 03 FC 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 43 BC 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 14 EB 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 04 FB 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 5A A5 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 1B E4 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 80 EB 00 00
+command: 42 BD 00 00

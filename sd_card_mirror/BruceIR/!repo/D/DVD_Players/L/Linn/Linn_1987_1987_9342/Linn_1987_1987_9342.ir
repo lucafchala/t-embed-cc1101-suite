@@ -1,0 +1,248 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 30 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0C 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 32 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5X
+address: 19 00 00 00
+command: 03 00 00 00
+# 
+name: page_up_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 35 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 60 9F 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 34 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 64 9B 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 67 98 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 61 9E 00 00
+# 
+name: FF
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 34 00 00 00
+# 
+name: 8
+type: raw
+frequency: 37800
+duty_cycle: 0.330000
+data: 8582 4224 557 509 557 509 557 509 557 509 557 509 557 510 558 1581 557 509 557 1581 557 509 557 1581 557 509 557 509 558 1579 557 509 557 509 557 509 557 509 557 509 557 1581 557 509 557 1581 557 1581 557 509 557 1581 557 1581 558 1580 558 509 557 1581 557 509 558 509 557 1581 558 47657
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 36 00 00 00
+# 
+name: next
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 36 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 32 00 00 00
+# 
+name: 2
+type: raw
+frequency: 37800
+duty_cycle: 0.330000
+data: 8582 4224 557 509 557 509 557 509 557 509 557 509 557 510 557 1581 557 509 557 1582 557 509 557 1581 557 509 557 510 556 1581 557 509 557 510 556 509 557 1581 557 509 556 509 557 509 557 1582 556 1581 557 509 557 1581 557 509 557 1581 557 1581 557 1581 557 509 557 509 557 1581 558 47659
+# 
+name: display
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 0B 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 65 9A 00 00
+# 
+name: pause
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 30 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 35 00 00 00
+# 
+name: 3
+type: raw
+frequency: 37800
+duty_cycle: 0.330000
+data: 8584 4224 557 509 557 509 557 509 557 510 556 509 557 509 557 1582 557 509 557 1581 557 509 557 1581 557 509 557 509 557 1581 557 509 557 509 557 1581 557 1581 557 509 557 509 557 509 557 1581 557 1581 557 509 557 509 557 509 557 1583 557 1581 557 1582 557 509 558 508 557 1583 558 47652
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 40 25 00 00
+command: 66 99 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 0B 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 21 00 00 00
+# 
+name: page_down_r
+type: parsed
+protocol: RC5
+address: 19 00 00 00
+command: 20 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5X
+address: 19 00 00 00
+command: 03 00 00 00

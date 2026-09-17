@@ -1,0 +1,218 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: enter-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 1E E1 00 00
+# 
+name: direct
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 02 FD 00 00
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 1F E0 00 00
+# 
+name: mode+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 19 E6 00 00
+# 
+name: MIC1-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 1B E4 00 00
+# 
+name: standby
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 02 FD 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 12 ED 00 00
+# 
+name: HD2
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 04 FB 00 00
+# 
+name: MICP-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 48 B7 00 00
+# 
+name: MIC1+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 1A E5 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 4A B5 00 00
+# 
+name: enter+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 01 FE 00 00
+# 
+name: less light
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 4D B2 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 15 EA 00 00
+# 
+name: EFT+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 5A A5 00 00
+# 
+name: HD1
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 05 FA 00 00
+# 
+name: left-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 40 BF 00 00
+# 
+name: MIC2-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 42 BD 00 00
+# 
+name: MICP+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 45 BA 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 16 E9 00 00
+# 
+name: mode-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 11 EE 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 10 EF 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 4F B0 00 00
+# 
+name: stereo
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 13 EC 00 00
+# 
+name: status
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 50 AF 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 49 B6 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 18 E7 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 4B B4 00 00
+# 
+name: CO1
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 05 FA 00 00
+# 
+name: KAR_OK
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 00 FF 00 00
+# 
+name: MIC2+
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 44 BB 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 0C F3 00 00
+# 
+name: OP1
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 1C E3 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 14 EB 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 0D F2 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 20 5F 00 00
+command: 17 E8 00 00

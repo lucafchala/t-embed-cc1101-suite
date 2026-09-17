@@ -1,0 +1,212 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D1 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 91 00 00 00
+# 
+name: xianshi
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: DA 00 00 00
+# 
+name: game
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 8F 00 00 00
+# 
+name: s-visual
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D2 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C6 00 00 00
+# 
+name: intelligence
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D6 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C2 00 00 00
+# 
+name: scanning
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 8D 00 00 00
+# 
+name: energy save
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 99 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C1 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 90 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C3 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C8 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D7 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 81 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 97 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 8E 00 00 00
+# 
+name: picture
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 98 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D5 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 80 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 96 00 00 00
+# 
+name: sequence
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 9A 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 89 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D4 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 8B 00 00 00
+# 
+name: f
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 94 00 00 00
+# 
+name: clock
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D9 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 92 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: C0 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 83 00 00 00
+# 
+name: digital
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 88 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: D5 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 95 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 10 00 00 00
+command: 86 00 00 00

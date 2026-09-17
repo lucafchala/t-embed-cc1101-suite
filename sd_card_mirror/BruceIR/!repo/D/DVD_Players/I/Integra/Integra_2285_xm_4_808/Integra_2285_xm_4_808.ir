@@ -1,0 +1,320 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: top menu
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4E 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 51 00 00
+# 
+name: caption
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 54 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1E 00 00
+# 
+name: zoom
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 48 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 9E 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 09 00 00
+# 
+name: yellow
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 C9 00 00
+# 
+name: eject
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 05 00 00
+# 
+name: green
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 C7 00 00
+# 
+name: pop up
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 05 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 17 00 00
+# 
+name: b
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 45 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 58 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 11 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 14 00 00
+# 
+name: angle
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 07 00 00
+# 
+name: search
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 19 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 50 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 0E 00 00
+# 
+name: resolution
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 DD 00 00
+# 
+name: Marker
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 49 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 0C 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 15 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 04 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1C 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 16 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1D 00 00
+# 
+name: not commonly used keys
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4E 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1E 00 00
+# 
+name: red
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 C6 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4F 00 00
+# 
+name: blue
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 C8 00 00
+# 
+name: Subtitle
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 54 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 0D 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 0F 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 53 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 44 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 06 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 12 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1F 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1D 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1E 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 55 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1D 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4D 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 1B 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 10 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 13 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 08 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4F 00 00
+# 
+name: clear
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 4B 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: D2 1F 00 00
+command: 00 52 00 00

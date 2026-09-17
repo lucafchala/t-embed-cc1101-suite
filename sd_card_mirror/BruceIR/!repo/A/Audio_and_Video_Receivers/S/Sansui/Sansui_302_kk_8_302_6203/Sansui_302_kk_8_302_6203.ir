@@ -1,0 +1,284 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: hdmi3
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 11 EE 00 00
+# 
+name: FmMode
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 6A 95 00 00
+# 
+name: osd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 98 67 00 00
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 90 6F 00 00
+# 
+name: direct
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: F9 06 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 5E A1 00 00
+# 
+name: PRESET_+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8F 70 00 00
+# 
+name: TestTone
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: EF 10 00 00
+# 
+name: Tune Down
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: EE 11 00 00
+# 
+name: less light
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: F3 0C 00 00
+# 
+name: Tune Up
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: ED 12 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 25 DA 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 89 76 00 00
+# 
+name: memory
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 69 96 00 00
+# 
+name: PRESET_-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: FA 05 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 83 7C 00 00
+# 
+name: Sorround
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 2D D2 00 00
+# 
+name: channel
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 97 68 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 86 79 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 0F F0 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 5D A2 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 80 7F 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 24 DB 00 00
+# 
+name: video1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 14 EB 00 00
+# 
+name: rds
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 68 97 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 87 78 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 97 68 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 88 77 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9E 61 00 00
+# 
+name: tape
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 26 D9 00 00
+# 
+name: video2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 27 D8 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 96 69 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9F 60 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 81 7E 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 5F A0 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 84 7B 00 00
+# 
+name: tuner
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 91 6E 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 82 7D 00 00
+# 
+name: Digtal
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 5C A3 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 85 7A 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 10 EF 00 00
+# 
+name: speaker
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 3E C1 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9B 64 00 00
+# 
+name: delay
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 37 C8 00 00
+# 
+name: night
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 72 8D 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 99 66 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 60 9F 00 00

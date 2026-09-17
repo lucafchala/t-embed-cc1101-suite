@@ -1,0 +1,236 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 67 98 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 85 7A 00 00
+# 
+name: keystone+
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 82 7D 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C7 38 00 00
+# 
+name: 3d
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 8A 75 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D2 2D 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 80 7F 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D0 2F 00 00
+# 
+name: Zoom Out
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D4 2B 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D1 2E 00 00
+# 
+name: component
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 66 99 00 00
+# 
+name: Zoom In
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D3 2C 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 82 7D 00 00
+# 
+name: WIFI
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 4B B4 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C7 38 00 00
+# 
+name: hide
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D2 2D 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C9 36 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D6 29 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 87 78 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 4B B4 00 00
+# 
+name: Ratio
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 60 9F 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C1 3E 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C2 3D 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C8 37 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 81 7E 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 66 99 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C2 3D 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D0 2F 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 8C 73 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D1 2E 00 00
+# 
+name: vga
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C8 37 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C2 3D 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: C9 36 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 67 98 00 00
+# 
+name: keystone-
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 85 7A 00 00
+# 
+name: media
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: D6 29 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 84 7B 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 61 9E 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 08 13 00 00
+command: 83 7C 00 00

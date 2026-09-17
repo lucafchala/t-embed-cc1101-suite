@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: repeat_code
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9000 4500 560 560 560 560 560 1680 560 560 560 560 560 560 560 560 560 560 560 1680 560 1680 560 1680 560 1680 560 1680 560 1680 560 1680 560 1680 9000 2250 560 96190 560 40180
+# 
+name: shake_wind
+type: parsed
+protocol: NECext
+address: 04 FF 00 00
+command: 06 F9 00 00
+# 
+name: wind_type
+type: parsed
+protocol: NECext
+address: 04 FF 00 00
+command: FF 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: 04 FF 00 00
+command: 07 F8 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 04 FF 00 00
+command: 03 FC 00 00
+# 
+name: wind_speed
+type: parsed
+protocol: NECext
+address: 04 FF 00 00
+command: 04 FB 00 00

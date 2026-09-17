@@ -1,0 +1,206 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: Kaseikyo
+address: 52 54 32 01
+command: 0E 00 00 00
+# 
+name: down
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 21 00 00 00
+# 
+name: music
+type: parsed
+protocol: Kaseikyo
+address: 57 54 32 01
+command: 85 00 00 00
+# 
+name: cd
+type: parsed
+protocol: Kaseikyo
+address: 53 54 32 01
+command: 07 00 00 00
+# 
+name: skip back
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0D 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 1B 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 14 00 00 00
+# 
+name: net_radio
+type: parsed
+protocol: Kaseikyo
+address: 57 54 32 01
+command: 84 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 17 00 00 00
+# 
+name: up
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 20 00 00 00
+# 
+name: tone
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 30 00 00 00
+# 
+name: 1
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 11 00 00 00
+# 
+name: FF
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0E 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 18 00 00 00
+# 
+name: usb
+type: parsed
+protocol: Kaseikyo
+address: 52 54 32 01
+command: 13 00 00 00
+# 
+name: power
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 03 00 00 00
+# 
+name: stop
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 3F 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 19 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 05 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 24 00 00 00
+# 
+name: REW
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0F 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 04 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 12 00 00 00
+# 
+name: right
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 23 00 00 00
+# 
+name: 5
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 15 00 00 00
+# 
+name: pause
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0A 00 00 00
+# 
+name: skip forward
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0C 00 00 00
+# 
+name: play
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 0A 00 00 00
+# 
+name: 3
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 13 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: Kaseikyo
+address: 56 54 32 01
+command: 07 00 00 00
+# 
+name: 6
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 16 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 31 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 06 00 00 00
+# 
+name: left
+type: parsed
+protocol: Kaseikyo
+address: 51 54 32 01
+command: 22 00 00 00

@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: formats
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 13 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 21 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1F 00 00 00
+# 
+name: computer
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 17 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 20 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1C 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 03 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 0D 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 0E 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1F 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 0C 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1E 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 14 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 00 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1F 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 60 00 00 00
+command: 1B 00 00 00

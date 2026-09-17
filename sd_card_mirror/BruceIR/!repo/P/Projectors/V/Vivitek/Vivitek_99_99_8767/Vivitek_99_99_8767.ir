@@ -1,0 +1,80 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: pipinput
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 10 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 20 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 0A 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 18 00 00 00
+# 
+name: pip move
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 1A 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 02 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 42 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 02 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 08 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 00 00 00 00
+# 
+name: pip on
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 10 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 20 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 30 00 00 00
+command: 00 00 00 00

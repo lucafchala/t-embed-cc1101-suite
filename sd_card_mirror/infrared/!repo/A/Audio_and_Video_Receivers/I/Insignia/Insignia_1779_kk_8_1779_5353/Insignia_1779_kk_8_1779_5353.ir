@@ -1,0 +1,74 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: SubWooferLevel2
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 9B 64 00 00
+# 
+name: AudysseyDynamicVolume4
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: AD 52 00 00
+# 
+name: AudysseyDynamicVolume2
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: AA 55 00 00
+# 
+name: AudysseyDynamicVolume3
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: AB 54 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 78 87 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 08 F7 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 60 9F 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 61 9E 00 00
+# 
+name: AudysseyDynamicVolume1
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: AC 53 00 00
+# 
+name: SubWooferLevel1
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 9C 63 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 78 87 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 ED 00 00
+command: 6A 95 00 00

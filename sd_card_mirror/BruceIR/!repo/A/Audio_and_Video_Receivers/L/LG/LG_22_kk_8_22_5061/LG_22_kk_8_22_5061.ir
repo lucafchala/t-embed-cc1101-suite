@@ -1,0 +1,326 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A6 00 00 00
+# 
+name: MusicId
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: D3 00 00 00
+# 
+name: home
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A5 00 00 00
+# 
+name: into
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: AA 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 6E 00 00 00
+# 
+name: mark
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: B4 00 00 00
+# 
+name: green
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 6D 00 00 00
+# 
+name: SpeakerLevel
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 66 00 00 00
+# 
+name: pop up
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 9A 00 00 00
+# 
+name: skip back
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 06 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 4B 00 00 00
+# 
+name: search for
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: B3 00 00 00
+# 
+name: Optical
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: B6 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 44 00 00 00
+# 
+name: Tuning
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A8 00 00 00
+# 
+name: star
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A7 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 47 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A7 00 00 00
+# 
+name: title
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: AF 00 00 00
+# 
+name: 1
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 41 00 00 00
+# 
+name: cp
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A4 00 00 00
+# 
+name: FF
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 52 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 48 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 1E 00 00 00
+# 
+name: stop
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 05 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 49 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 16 00 00 00
+# 
+name: next
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 07 00 00 00
+# 
+name: back
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A2 00 00 00
+# 
+name: red
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 6C 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: AA 00 00 00
+# 
+name: blue
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 6F 00 00 00
+# 
+name: record
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 83 00 00 00
+# 
+name: REW
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 53 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 17 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 42 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A9 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 4E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 45 00 00 00
+# 
+name: pause
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 4F 00 00 00
+# 
+name: soundeffect
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 2F 00 00 00
+# 
+name: skip forward
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 07 00 00 00
+# 
+name: input
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: CC 00 00 00
+# 
+name: DISPLAY
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A3 00 00 00
+# 
+name: play
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 04 00 00 00
+# 
+name: 3
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 43 00 00 00
+# 
+name: 6
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 46 00 00 00
+# 
+name: Radio&Input
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 8A 00 00 00
+# 
+name: last
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 53 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: C2 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A4 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 1F 00 00 00
+# 
+name: clear
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: B0 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A8 00 00 00

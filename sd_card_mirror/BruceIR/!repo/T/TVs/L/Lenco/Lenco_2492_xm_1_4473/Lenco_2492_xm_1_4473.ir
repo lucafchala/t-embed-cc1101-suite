@@ -1,0 +1,296 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: go
+type: parsed
+protocol: NECext
+address: 31 CE 00 00
+command: 35 50 00 00
+# 
+name: aspect
+type: parsed
+protocol: NECext
+address: 30 CF 00 00
+command: 35 50 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 21 DE 00 00
+command: 35 50 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 71 8E 00 00
+command: 35 50 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 3A C5 00 00
+command: 35 50 00 00
+# 
+name: yellow
+type: parsed
+protocol: NECext
+address: 5B A4 00 00
+command: 35 50 00 00
+# 
+name: eject
+type: parsed
+protocol: NECext
+address: 36 C9 00 00
+command: 35 50 00 00
+# 
+name: TeletextMode
+type: parsed
+protocol: NECext
+address: 32 CD 00 00
+command: 35 50 00 00
+# 
+name: green
+type: parsed
+protocol: NECext
+address: 38 C7 00 00
+command: 35 50 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 55 AA 00 00
+command: 35 50 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 64 9B 00 00
+command: 35 50 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 67 98 00 00
+command: 35 50 00 00
+# 
+name: angle
+type: parsed
+protocol: NECext
+address: 2D D2 00 00
+command: 35 50 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 20 DF 00 00
+command: 35 50 00 00
+# 
+name: title
+type: parsed
+protocol: NECext
+address: 2B D4 00 00
+command: 35 50 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 61 9E 00 00
+command: 35 50 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 38 C7 00 00
+command: 35 50 00 00
+# 
+name: card
+type: parsed
+protocol: NECext
+address: 32 CD 00 00
+command: 35 50 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 68 97 00 00
+command: 35 50 00 00
+# 
+name: DVDMenu
+type: parsed
+protocol: NECext
+address: 2C D3 00 00
+command: 35 50 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 1C E3 00 00
+command: 35 50 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 5A A5 00 00
+command: 35 50 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 69 96 00 00
+command: 35 50 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: A2 5D 00 00
+command: 35 50 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 6A 95 00 00
+command: 35 50 00 00
+# 
+name: red
+type: parsed
+protocol: NECext
+address: 35 CA 00 00
+command: 35 50 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 24 DB 00 00
+command: 35 50 00 00
+# 
+name: blue
+type: parsed
+protocol: NECext
+address: 72 8D 00 00
+command: 35 50 00 00
+# 
+name: Subtitle
+type: parsed
+protocol: NECext
+address: 51 AE 00 00
+command: 35 50 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 53 AC 00 00
+command: 35 50 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: A1 5E 00 00
+command: 35 50 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 62 9D 00 00
+command: 35 50 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 23 DC 00 00
+command: 35 50 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 2A D5 00 00
+command: 35 50 00 00
+# 
+name: inputtv
+type: parsed
+protocol: NECext
+address: 54 AB 00 00
+command: 35 50 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 6C 93 00 00
+command: 35 50 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 65 9A 00 00
+command: 35 50 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 5E A1 00 00
+command: 35 50 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 10 EF 00 00
+command: 35 50 00 00
+# 
+name: effect
+type: parsed
+protocol: NECext
+address: 74 8B 00 00
+command: 35 50 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: 56 A9 00 00
+command: 35 50 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 75 8A 00 00
+command: 35 50 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 63 9C 00 00
+command: 35 50 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 66 99 00 00
+command: 35 50 00 00
+# 
+name: Dsub
+type: parsed
+protocol: NECext
+address: 39 C6 00 00
+command: 35 50 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 33 CC 00 00
+command: 35 50 00 00
+# 
+name: SCART
+type: parsed
+protocol: NECext
+address: 11 EE 00 00
+command: 35 50 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: A3 5C 00 00
+command: 35 50 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 22 DD 00 00
+command: 35 50 00 00

@@ -1,0 +1,92 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: vcr2
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: C0 3F 00 00
+# 
+name: radios
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 89 76 00 00
+# 
+name: center-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D5 2A 00 00
+# 
+name: tape1
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8D 72 00 00
+# 
+name: center+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D0 2F 00 00
+# 
+name: tape2
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 91 6E 00 00
+# 
+name: cp
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 85 7A 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 80 7F 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 8C 73 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 88 77 00 00
+# 
+name: rear-
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D7 28 00 00
+# 
+name: diapason
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 24 DB 00 00
+# 
+name: rear+
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: D6 29 00 00
+# 
+name: test
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: CD 32 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 87 7C 00 00
+command: 94 6B 00 00

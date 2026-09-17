@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: list
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: list_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00

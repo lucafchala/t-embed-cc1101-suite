@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: D2 2D 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 42 BD 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: C5 3A 00 00
+# 
+name: scale
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: D6 29 00 00
+# 
+name: green
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 8C 73 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: CA 35 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 45 BA 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 95 6A 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 41 BE 00 00
+# 
+name: red
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: DD 22 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: CE 31 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: D0 2F 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: C1 3E 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 88 77 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 80 7F 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 02 BD 00 00
+command: 99 66 00 00

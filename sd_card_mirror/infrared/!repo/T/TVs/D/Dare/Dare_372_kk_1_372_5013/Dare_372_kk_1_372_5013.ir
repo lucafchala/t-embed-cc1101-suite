@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 9F 60 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 87 78 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 8E 71 00 00
+# 
+name: under continuous
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: D2 2D 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 8B 74 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: DC 23 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: C4 3B 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: continuous on
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: CA 35 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 93 6C 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 8F 70 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 9E 61 00 00
+# 
+name: continuous left
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: C1 3E 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: CC 33 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: C8 37 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 01 FD 00 00
+command: 95 6A 00 00

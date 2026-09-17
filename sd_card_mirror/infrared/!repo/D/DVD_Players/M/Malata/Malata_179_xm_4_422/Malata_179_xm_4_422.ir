@@ -1,0 +1,308 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: formats
+type: parsed
+protocol: NECext
+address: 5A A5 00 00
+command: 35 30 00 00
+# 
+name: favorite songs
+type: parsed
+protocol: NECext
+address: 2C D3 00 00
+command: 35 30 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 5E A1 00 00
+command: 35 30 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 21 DE 00 00
+command: 35 30 00 00
+# 
+name: single step
+type: parsed
+protocol: NECext
+address: 68 97 00 00
+command: 35 30 00 00
+# 
+name: eject
+type: parsed
+protocol: NECext
+address: 2A D5 00 00
+command: 35 30 00 00
+# 
+name: browse
+type: parsed
+protocol: NECext
+address: 58 A7 00 00
+command: 35 30 00 00
+# 
+name: ptt
+type: parsed
+protocol: NECext
+address: A2 5D 00 00
+command: 35 30 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 60 9F 00 00
+command: 35 30 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 66 99 00 00
+command: 35 30 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 6C 93 00 00
+command: 35 30 00 00
+# 
+name: search
+type: parsed
+protocol: NECext
+address: 2D D2 00 00
+command: 35 30 00 00
+# 
+name: lyrics
+type: parsed
+protocol: NECext
+address: 32 CD 00 00
+command: 35 30 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 20 DF 00 00
+command: 35 30 00 00
+# 
+name: b
+type: parsed
+protocol: NECext
+address: 64 9B 00 00
+command: 35 30 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 61 9E 00 00
+command: 35 30 00 00
+# 
+name: smartone
+type: parsed
+protocol: NECext
+address: 73 8C 00 00
+command: 35 30 00 00
+# 
+name: repeat to sing
+type: parsed
+protocol: NECext
+address: 55 AA 00 00
+command: 35 30 00 00
+# 
+name: favorite
+type: parsed
+protocol: NECext
+address: 31 CE 00 00
+command: 35 30 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 52 AD 00 00
+command: 35 30 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 5C A3 00 00
+command: 35 30 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 1C E3 00 00
+command: 35 30 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 36 C9 00 00
+command: 35 30 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 5D A2 00 00
+command: 35 30 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 39 C6 00 00
+command: 35 30 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 50 AF 00 00
+command: 35 30 00 00
+# 
+name: priority
+type: parsed
+protocol: NECext
+address: 2B D4 00 00
+command: 35 30 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 51 AE 00 00
+command: 35 30 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 3A C5 00 00
+command: 35 30 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 24 DB 00 00
+command: 35 30 00 00
+# 
+name: sequence +
+type: parsed
+protocol: NECext
+address: 38 C7 00 00
+command: 35 30 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 53 AC 00 00
+command: 35 30 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 74 8B 00 00
+command: 35 30 00 00
+# 
+name: applause
+type: parsed
+protocol: NECext
+address: 30 CF 00 00
+command: 35 30 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 62 9D 00 00
+command: 35 30 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 23 DC 00 00
+command: 35 30 00 00
+# 
+name: learn to sing
+type: parsed
+protocol: NECext
+address: 71 8E 00 00
+command: 35 30 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 57 A8 00 00
+command: 35 30 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 75 8A 00 00
+command: 35 30 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 67 98 00 00
+command: 35 30 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 68 97 00 00
+command: 35 30 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 37 C8 00 00
+command: 35 30 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 2B D4 00 00
+command: 35 30 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 63 9C 00 00
+command: 35 30 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 6A 95 00 00
+command: 35 30 00 00
+# 
+name: selected
+type: parsed
+protocol: NECext
+address: 10 EF 00 00
+command: 35 30 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 35 CA 00 00
+command: 35 30 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 54 AB 00 00
+command: 35 30 00 00
+# 
+name: clear
+type: parsed
+protocol: NECext
+address: A3 5C 00 00
+command: 35 30 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 22 DD 00 00
+command: 35 30 00 00
+# 
+name: sequence -
+type: parsed
+protocol: NECext
+address: 33 CC 00 00
+command: 35 30 00 00

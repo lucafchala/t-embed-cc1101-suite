@@ -1,0 +1,500 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: caption
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 4B 00 00 00
+# 
+name: caption_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 4B 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: display information
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: sound effects_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 51 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 06 00 00 00
+# 
+name: sound_sync
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 4E 00 00 00
+# 
+name: sound effects
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 51 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: eject_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 42 00 00 00
+# 
+name: broadcast
+type: parsed
+protocol: RC6
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: eject
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 42 00 00 00
+# 
+name: cd
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: mp3_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 2549 1012 386 959 280 616 333 564 1230 1461 360 511 360 511 333 564 360 537 808 959 360 564 782 511 333 590 333 564 333 986 782 564 333 590 307 85375 2549 1012 386 959 280 616 333 564 1230 1461 360 511 360 511 333 564 360 537 808 959 360 564 782 511 333 590 333 564 333 986 782 564 333 590 307 85375
+# 
+name: 5_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 05 00 00 00
+# 
+name: vocal_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: E7 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 00 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 04 00 00 00
+# 
+name: back_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 04 00 00 00
+# 
+name: sound_source
+type: parsed
+protocol: RC6
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: karaoke
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: E8 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 01 00 00 00
+# 
+name: surround
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 52 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 08 00 00 00
+# 
+name: usb
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 7E 00 00 00
+# 
+name: surround_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 52 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 09 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: repeat_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: FB 00 00 00
+# 
+name: display information_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: cd_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: D1 00 00 00
+# 
+name: vocal
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: E7 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 01 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: microphone+_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2E 00 00 00
+# 
+name: sound_source_r
+type: parsed
+protocol: RC6
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: FB 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 03 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: usb_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 7E 00 00 00
+# 
+name: microphone-
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2F 00 00 00
+# 
+name: set_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 82 00 00 00
+# 
+name: mp3
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 2549 1012 386 959 280 616 333 564 439 880 861 458 360 511 360 511 333 564 360 537 808 959 360 564 781 511 333 590 333 564 333 986 782 564 333 590 307 85429 2549 1012 386 959 280 616 333 564 439 880 861 458 360 511 360 511 333 564 360 537 808 959 360 564 781 511 333 590 333 564 333 986 782 564 333 590 307 85429
+# 
+name: set
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 82 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 03 00 00 00
+# 
+name: broadcast_r
+type: parsed
+protocol: RC6
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 06 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 08 00 00 00
+# 
+name: karaoke_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: E8 00 00 00
+# 
+name: sound_sync_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 4E 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 09 00 00 00
+# 
+name: microphone+
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2E 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: microphone-_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2F 00 00 00

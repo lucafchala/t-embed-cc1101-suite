@@ -1,0 +1,14 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: shutter
+type: raw
+frequency: 32700
+duty_cycle: 0.330000
+data: 550 7200 550 40000
+# 
+name: delay
+type: raw
+frequency: 32700
+duty_cycle: 0.330000
+data: 550 5300 550 40000

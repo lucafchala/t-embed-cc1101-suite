@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 15 EA 00 00
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 15 EA 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: BA 4F 00 00
+command: 03 FC 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 0E F1 00 00
+# 
+name: PAUSE
+type: parsed
+protocol: NECext
+address: BA 43 00 00
+command: 03 FC 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: BA A0 00 00
+command: C0 3F 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 4C B3 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 02 FD 00 00
+# 
+name: >>I
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 4E B1 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 03 FC 00 00
+# 
+name: LDP
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 17 E8 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 0B F4 00 00
+# 
+name: vcr1
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 0D F2 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 0F F0 00 00
+# 
+name: program-guide
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 4F B0 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 0A F5 00 00
+# 
+name: SAT
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 16 E9 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: BA 47 00 00
+command: 01 FE 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: BA 4B 00 00
+command: A0 5F 00 00

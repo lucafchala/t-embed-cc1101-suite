@@ -1,0 +1,452 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 21 00 00 00
+# 
+name: rew
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 29 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 21 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: D3 00 00 00
+# 
+name: audio_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4E 00 00 00
+# 
+name: pre_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 21 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 30 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0C 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 02 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 06 00 00 00
+# 
+name: topmenu
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9C 00 00 00
+# 
+name: ff
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 28 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5B 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 05 00 00 00
+# 
+name: boot
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 92 00 00 00
+# 
+name: ff_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 28 00 00 00
+# 
+name: play_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 2C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 00 00 00 00
+# 
+name: repeata-b
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 3B 00 00 00
+# 
+name: bonusview_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5D 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 04 00 00 00
+# 
+name: back_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 83 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 04 00 00 00
+# 
+name: angle_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 85 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 58 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 07 00 00 00
+# 
+name: angle
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 85 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: subtitle_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4B 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 01 00 00 00
+# 
+name: repeata-b_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 3B 00 00 00
+# 
+name: switch_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 42 00 00 00
+# 
+name: topmenu_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9C 00 00 00
+# 
+name: hdmi
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: C6 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 08 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 07 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 09 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5C 00 00 00
+# 
+name: repeat_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 1D 00 00 00
+# 
+name: hdmi_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: C6 00 00 00
+# 
+name: boot_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 92 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 83 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 31 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5C 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 01 00 00 00
+# 
+name: subtitle
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4B 00 00 00
+# 
+name: info
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0F 00 00 00
+# 
+name: info_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 0F 00 00 00
+# 
+name: bonusview
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5D 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 02 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5B 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 1D 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 03 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 30 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 20 00 00 00
+# 
+name: audio
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 4E 00 00 00
+# 
+name: rew_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 29 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 2C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 03 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 06 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 08 00 00 00
+# 
+name: zoom_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: D3 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 9A 00 00 00
+# 
+name: switch
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 42 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 09 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 46 00 00 00
+command: 5A 00 00 00

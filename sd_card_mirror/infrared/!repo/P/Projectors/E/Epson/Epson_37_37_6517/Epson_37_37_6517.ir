@@ -1,0 +1,74 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B2 4D 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B0 4F 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 90 6F 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 99 66 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 84 7B 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 85 7A 00 00
+# 
+name: vol+
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 8569 4250 524 1612 525 1612 524 531 525 530 524 531 524 531 524 531 524 1612 525 1612 524 531 525 1612 524 531 524 1612 524 531 524 1612 524 531 524 531 525 531 524 531 524 1612 524 1612 524 531 524 531 524 1612 524 1612 524 1612 525 1612 524 531 524 531 524 1612 524 1612 524 531 524 44677
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B1 4E 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 87 78 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 86 79 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: 9A 65 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 83 55 00 00
+command: B3 4C 00 00

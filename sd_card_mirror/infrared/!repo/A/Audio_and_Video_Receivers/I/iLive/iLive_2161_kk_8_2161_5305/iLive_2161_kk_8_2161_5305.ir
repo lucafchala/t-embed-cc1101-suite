@@ -1,0 +1,32 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 50 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 43 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 42 00 00 00
+# 
+name: power
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8998 4426 614 467 613 468 614 467 613 468 613 468 613 494 587 494 587 494 613 1562 613 1588 613 1588 613 1588 613 1588 586 1588 612 1588 613 1588 613 468 613 468 612 1588 613 1588 587 494 586 495 612 469 612 469 612 1588 586 1588 612 469 612 495 586 1589 612 1589 612 1588 612 1589 586 40154 8918 2214 560 100124 8919 2214 560 100124 8919 2214 560 84056

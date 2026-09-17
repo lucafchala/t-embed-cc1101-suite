@@ -1,0 +1,20 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: wind_speed
+type: parsed
+protocol: NECext
+address: 82 21 00 00
+command: 1B E4 00 00
+# 
+name: shake_wind
+type: parsed
+protocol: NECext
+address: 82 21 00 00
+command: 0F F0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 82 21 00 00
+command: 1F E0 00 00

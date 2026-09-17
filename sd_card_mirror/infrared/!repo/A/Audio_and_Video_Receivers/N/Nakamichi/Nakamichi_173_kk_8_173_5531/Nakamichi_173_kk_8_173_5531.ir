@@ -1,0 +1,80 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 0A F5 00 00
+# 
+name: vcr2
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 07 F8 00 00
+# 
+name: tuning
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 59 A6 00 00
+# 
+name: av_mode
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 01 FE 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 12 ED 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 03 FC 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 04 FB 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 10 EF 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 05 FA 00 00
+# 
+name: vcr1
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 0B F4 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 58 A7 00 00
+# 
+name: dvi
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 00 FF 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 82 5D 00 00
+command: 0C F3 00 00

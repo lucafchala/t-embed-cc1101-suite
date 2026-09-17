@@ -1,0 +1,410 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: pip freeze_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: -- (10 key)_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: sound mode
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: home
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sleep_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: pip on_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: time_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: PIP Channel Down
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: time
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: --
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: pip swap_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: PIP Channel Down_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: pip swap
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: pip freeze
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: sound mode_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: pip move_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sap
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: exit_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: pip input_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: pip move
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: sap_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: picture mode_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: pip input
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: PIP Channel Up
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: pip on
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: PIP Channel Up_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00

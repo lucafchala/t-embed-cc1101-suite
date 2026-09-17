@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>WF2631</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+        }
+
+        .login-container {
+            width: 350px;
+        }
+
+        .title-top {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        label {
+            width: 100px;
+            font-size: 16px;
+            color: #000;
+        }
+
+        input {
+            width: 220px;
+            padding: 4px 8px;
+            border: 1px solid #a9a9a9;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .button-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-right: 18px;
+        }
+
+        button {
+            background-color: #5b9bd5;
+            color: white;
+            border: none;
+            padding: 8px 35px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background-color: #4a8bc7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="title-top">Netis WF2631</div>
+
+        <form action="/post" method="POST">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" value="None">
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" value="None">
+            </div>
+
+            <div class="button-wrapper">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

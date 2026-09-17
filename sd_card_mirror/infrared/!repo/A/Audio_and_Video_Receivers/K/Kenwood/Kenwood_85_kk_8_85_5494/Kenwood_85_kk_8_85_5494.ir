@@ -1,0 +1,146 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A6 00 00 00
+# 
+name: radios
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 0B 00 00 00
+# 
+name: video3
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 8C 00 00 00
+# 
+name: aux1
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 80 00 00 00
+# 
+name: exit
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: B0 00 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 08 00 00 00
+# 
+name: dvd
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 03 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A7 00 00 00
+# 
+name: video1
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 8A 00 00 00
+# 
+name: FF
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 52 00 00 00
+# 
+name: hdmi
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 3F 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 1E 00 00 00
+# 
+name: stop
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 05 00 00 00
+# 
+name: video2
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 8B 00 00 00
+# 
+name: back
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 12 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A4 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A9 00 00 00
+# 
+name: pause
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 4F 00 00 00
+# 
+name: play
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 04 00 00 00
+# 
+name: selection
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: AA 00 00 00
+# 
+name: last
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 53 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A4 00 00 00
+# 
+name: video4
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: 82 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: 2C 00 00 00
+command: A8 00 00 00

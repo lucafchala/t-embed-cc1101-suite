@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: shake_wind
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 08 00 00 00
+# 
+name: Natural Wind
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 15 00 00 00
+# 
+name: Timer Off
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 0A 00 00 00
+# 
+name: Timer On
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 0B 00 00 00
+# 
+name: ud_wind_mode_swing
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 17 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 4B 00 00 00
+command: 12 00 00 00

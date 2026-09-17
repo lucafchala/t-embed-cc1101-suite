@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A1 00 00 00
+# 
+name: tv
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A2 00 00 00
+# 
+name: SLEEP
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: AC 00 00 00
+# 
+name: tape1
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: AB 00 00 00
+# 
+name: cd
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A9 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A0 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B3 00 00 00
+# 
+name: >>I
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B6 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B2 00 00 00
+# 
+name: LDP
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A4 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B5 00 00 00
+# 
+name: tuner
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: AA 00 00 00
+# 
+name: vcr1
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A6 00 00 00
+# 
+name: program-guide
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A8 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B4 00 00 00
+# 
+name: SAT
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: A7 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 5B 00 00 00
+command: B1 00 00 00

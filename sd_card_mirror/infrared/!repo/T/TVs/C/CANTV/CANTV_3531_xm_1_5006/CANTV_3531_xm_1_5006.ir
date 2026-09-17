@@ -1,0 +1,122 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: D2 2D 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 86 79 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 88 77 00 00
+# 
+name: xianshi
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 09 F6 00 00
+# 
+name: sound effects
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 48 B7 00 00
+# 
+name: CAN
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 55 AA 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: CA 35 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: DC 23 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 96 69 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: C5 3A 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 49 B6 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: CE 31 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 08 F7 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 97 68 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: C1 3E 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 85 7A 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 8D 72 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 89 76 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 9C 63 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: B3 7C 00 00
+command: 99 66 00 00

@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 0E 00 00 00
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 1A 00 00 00
+# 
+name: double screen
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 41 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 0B 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 4D 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 17 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 42 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 0D 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 18 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 11 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 1A 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 1A 00 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 1E 00 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 41 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 47 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 43 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 21 00 00 00
+command: 10 00 00 00

@@ -1,0 +1,296 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: D8 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 8E 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DC 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 8F 00 00 00
+# 
+name: eject
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C2 00 00 00
+# 
+name: dtv
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1667 564 538 564 538 564 538 564 538 538 1667 538 1667 538 1667 564 538 538 1667 538 1667 538 1667 538 1667 564 538 538 1667 564 538 564 538 564 538 564 538 564 538 538 1667 538 1667 564 538 538 1667 538 1667 538 1667 538 1667 538 1667 564 538 564 40538 8718 2231 564 99026
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 8B 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: D9 00 00 00
+# 
+name: --
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4333 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 538 1641 564 538 538 1641 564 538 538 1641 564 538 538 1641 538 1641 564 538 538 1641 564 538 538 1641 564 538 538 1641 564 538 564 538 564 40385 8718 2231 564 98718
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: D6 00 00 00
+# 
+name: guide
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C4 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 96 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 92 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 95 00 00 00
+# 
+name: enter
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4333 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 564 538 564 538 538 1641 564 538 564 538 538 1641 564 538 564 538 538 1641 538 1641 564 538 564 40385 8718 2205 564 98718
+# 
+name: FF
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 564 538 564 538 538 1641 564 538 564 538 538 1641 564 538 564 538 538 1641 538 1641 564 538 538 1641 538 1641 564 538 564 40385 8718 2231 564 98718
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 9A 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: D7 00 00 00
+# 
+name: stop
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 513 564 513 564 513 538 1641 564 513 564 513 564 513 564 513 538 1641 538 1641 538 1641 564 513 538 1641 538 1641 538 1641 538 1641 564 513 538 1641 564 513 538 1641 564 513 564 513 538 1641 538 1641 538 1641 564 513 538 1641 564 513 538 1641 538 1641 564 513 564 513 564 40385 8718 2231 564 98718
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 9E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 86 00 00 00
+# 
+name: pvr
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 564 538 564 538 564 538 538 1641 564 538 564 538 538 1641 538 1641 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 564 538 564 538 564 40385 8718 2231 564 98718
+# 
+name: teletext
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: CB 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DD 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DD 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 87 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 9B 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 93 00 00 00
+# 
+name: PictureMode
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C2 00 00 00
+# 
+name: record
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 513 564 513 564 513 538 1641 564 513 564 513 564 513 564 513 538 1641 538 1641 538 1641 564 513 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 564 513 564 513 564 513 564 513 538 1641 564 513 564 513 564 513 538 1641 538 1641 538 1641 538 1641 564 513 564 40385 8718 2231 564 98718
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 8B 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C3 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 83 00 00 00
+# 
+name: info
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 564 538 538 1641 564 538 538 1641 564 538 564 538 564 538 538 1641 538 1641 564 538 538 1641 564 538 538 1641 538 1641 538 1641 564 538 564 40385 8718 2205 564 98718
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 99 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 9F 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 8A 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DA 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 80 00 00 00
+# 
+name: set
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1667 564 538 564 538 564 538 564 538 538 1667 538 1667 538 1667 564 538 538 1667 538 1667 538 1667 538 1667 538 1667 564 538 538 1667 538 1667 564 538 564 538 538 1667 538 1667 564 538 538 1667 564 538 564 538 538 1667 538 1667 564 538 564 538 564 40410 8718 2231 564 98718
+# 
+name: play
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 538 1641 564 538 564 538 564 538 538 1641 564 538 564 538 564 538 564 538 538 1641 538 1641 538 1641 564 538 564 40410 8718 2231 564 98718
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 9D 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DE 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C0 00 00 00
+# 
+name: favorite
+type: raw
+frequency: 38095
+duty_cycle: 0.330000
+data: 8718 4359 564 538 564 538 564 538 538 1667 564 538 564 538 564 538 564 538 538 1667 538 1667 538 1667 564 538 538 1667 538 1667 538 1667 538 1667 538 1667 564 538 564 538 564 538 564 538 564 538 564 538 538 1667 564 538 538 1667 538 1667 538 1667 538 1667 538 1667 538 1667 564 538 564 40410 8718 2205 564 98718
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: D4 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: DF 00 00 00
+# 
+name: SoundMode
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: C1 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 97 00 00 00

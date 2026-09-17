@@ -1,0 +1,188 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: FA 05 00 00
+# 
+name: radios
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8D 72 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 94 6B 00 00
+# 
+name: less light
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: F3 0C 00 00
+# 
+name: timer
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 15 EA 00 00
+# 
+name: PreviousTrack
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D4 2B 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8C 73 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8F 70 00 00
+# 
+name: tone
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 98 67 00 00
+# 
+name: rds
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: CE 31 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 97 68 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D0 2F 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9E 61 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D3 2C 00 00
+# 
+name: record
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: B1 4E 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9F 60 00 00
+# 
+name: Usb
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 90 6F 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: DA 25 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: CE 31 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D1 2E 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D1 2E 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 91 6E 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: B3 4C 00 00
+# 
+name: program
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: DC 23 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9B 64 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 41 BE 00 00
+# 
+name: shuf
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: D8 27 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 97 68 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 99 66 00 00
+# 
+name: TimeSet
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 57 A8 00 00
+# 
+name: clear
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: DE 21 00 00

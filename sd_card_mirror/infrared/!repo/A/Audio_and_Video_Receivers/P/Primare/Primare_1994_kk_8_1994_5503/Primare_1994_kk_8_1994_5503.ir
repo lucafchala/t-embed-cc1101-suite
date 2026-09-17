@@ -1,0 +1,158 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 0A 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3D 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 10 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 04 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 03 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 06 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3C 00 00 00
+# 
+name: enter
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 1F 00 00 00
+# 
+name: shutdown_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 0C 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 06 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 0A 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 11 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 31 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3D 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 11 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 03 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3E 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3E 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 04 00 00 00
+# 
+name: shutdown
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 0C 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 31 00 00 00
+# 
+name: enter_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 1F 00 00 00

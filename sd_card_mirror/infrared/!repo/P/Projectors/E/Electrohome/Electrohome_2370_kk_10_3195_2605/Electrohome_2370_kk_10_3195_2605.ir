@@ -1,0 +1,254 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: sound
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1E 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 53 00 00 00
+# 
+name: ch-
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 9311 4679 584 616 584 616 584 589 584 1761 584 616 584 589 584 589 584 616 584 1734 584 1734 584 1761 584 589 584 1734 584 1734 584 1761 584 1734 584 616 584 616 584 589 584 589 584 1761 584 589 584 616 584 616 584 1734 584 1761 584 1762 584 1734 584 616 584 1761 584 1735 583 1761 584 41114 9311 2334 585 91766
+# 
+name: zoom
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1F 00 00 00
+# 
+name: PHOTOGRAPHY
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1D 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0E 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 15 00 00 00
+# 
+name: 0
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 9012 4466 598 536 572 536 572 510 598 1565 651 536 572 510 598 536 572 536 572 1644 572 1644 572 1618 598 536 571 1644 571 1644 572 1618 572 1618 598 1618 598 537 571 536 572 1644 572 536 545 536 572 536 572 536 572 536 572 1644 571 1644 572 536 545 1644 571 1618 598 1644 545 1644 572 39838 9012 2198 571 95232
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 03 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 06 00 00 00
+# 
+name: up
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 8862 4574 455 671 455 645 508 619 481 1746 481 671 429 671 455 645 481 645 455 1771 507 1745 455 1771 481 645 455 1771 455 1771 481 1745 482 1771 455 645 481 645 507 619 455 645 481 1771 455 671 481 1745 482 645 455 1771 455 1771 481 1772 481 1719 481 671 455 1797 455 619 481 1771 553 39924 8998 2223 553 95219
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 00 00 00 00
+# 
+name: turn
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 9311 4680 583 616 584 616 584 589 584 1761 584 589 584 589 584 616 584 589 584 1734 584 1734 584 1761 584 589 584 1734 584 1734 584 1734 584 1761 584 1734 584 1761 584 1734 584 1761 584 589 584 616 584 616 584 589 584 589 584 616 584 616 584 589 584 1761 584 1734 584 1734 584 1762 584 41114 9311 2334 584 91848
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 07 00 00 00
+# 
+name: usb
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 47 00 00 00
+# 
+name: Auto Focus
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1D 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0B 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 45 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 08 00 00 00
+# 
+name: vol-
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 8863 4626 455 671 481 619 508 619 455 1771 481 671 455 671 455 645 508 619 455 1771 508 1745 455 1771 455 671 481 1745 481 1771 455 1771 455 1771 455 671 481 1745 455 671 455 645 508 1771 455 619 534 645 429 645 481 1771 455 724 455 1745 481 1746 455 697 455 1745 508 1771 455 1771 455 39932 8998 2223 553 95219
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 15 00 00 00
+# 
+name: ok
+type: raw
+frequency: 38180
+duty_cycle: 0.330000
+data: 8889 4574 455 671 455 619 534 619 455 1772 533 593 455 645 481 645 508 619 455 1771 481 1771 455 1771 455 645 481 1771 481 1745 481 1771 455 1771 455 697 455 645 507 1745 481 1745 455 1745 508 645 481 645 455 645 481 1798 455 1771 481 645 455 593 534 645 481 1745 481 1771 455 1771 455 39932 8889 2347 455 95217
+# 
+name: screen size
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1A 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 13 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0D 00 00 00
+# 
+name: Screen Close
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 40 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 01 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 52 00 00 00
+# 
+name: keystone
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0D 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 04 00 00 00
+# 
+name: still
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0E 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 11 00 00 00
+# 
+name: page_up
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0C 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0C 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 02 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 05 00 00 00
+# 
+name: zoom_down
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1F 00 00 00
+# 
+name: signal
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 0C 00 00 00
+# 
+name: zoom_up
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 1F 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 17 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 14 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 08 00 00 00
+command: 51 00 00 00

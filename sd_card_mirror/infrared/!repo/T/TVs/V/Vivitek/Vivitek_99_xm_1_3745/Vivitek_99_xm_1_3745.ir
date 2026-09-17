@@ -1,0 +1,326 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: hdmi3
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: tv
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: D6 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 46 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 01 00 00 00
+# 
+name: CC
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 39 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 65 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 49 00 00 00
+# 
+name: pip
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 60 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 52 00 00 00
+# 
+name: VIA
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 2D 00 00 00
+# 
+name: hdmi4
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 84 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 55 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 10 00 00 00
+# 
+name: rgb
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 98 00 00 00
+# 
+name: --
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: FF 00 00 00
+# 
+name: AV
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: A1 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 14 00 00 00
+# 
+name: guide
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 1C 00 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 17 00 00 00
+# 
+name: component
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 71 00 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 81 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 45 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 11 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 36 00 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: C6 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 18 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 08 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 30 00 00 00
+# 
+name: 9
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 19 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 03 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 4A 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 54 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 44 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 53 00 00 00
+# 
+name: pipswap
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 66 00 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 34 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 35 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 2F 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 02 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 12 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 48 00 00 00
+# 
+name: display
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 1B 00 00 00
+# 
+name: 5
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 15 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 37 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 00 00 00 00
+# 
+name: wide
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 77 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 33 00 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 13 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 16 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 1A 00 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 82 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 4F 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 09 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 04 00 00 00
+command: 47 00 00 00

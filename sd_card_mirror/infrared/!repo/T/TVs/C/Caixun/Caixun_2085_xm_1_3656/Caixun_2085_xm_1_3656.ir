@@ -1,0 +1,170 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 0B F4 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 0B F4 00 00
+# 
+name: exit
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8974 4474 553 526 579 526 658 447 553 526 579 526 658 447 553 526 579 526 658 1553 579 1711 500 1711 526 1711 500 1711 500 1711 526 1711 500 526 658 1632 500 1711 500 526 579 526 632 474 553 526 579 526 632 474 553 526 579 526 632 1579 579 1711 500 1711 526 1711 500 1711 500 1711 526 40947 8974 2237 553 96000
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 47 B8 00 00
+# 
+name: --
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 0A F5 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 0D F2 00 00
+# 
+name: 7
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8974 4474 553 526 579 526 658 447 553 526 579 526 658 447 553 526 579 526 658 1553 579 1711 500 1711 526 1711 500 1711 500 1711 526 1711 500 526 658 1632 500 1711 500 526 579 1711 500 1711 526 526 553 1711 526 526 553 526 579 526 632 1579 579 526 658 447 553 1711 526 526 553 1711 526 40947 8974 2263 526 100000
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 1F E0 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 01 FE 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 13 EC 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 5F A0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 04 FB 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 43 BC 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 07 F8 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 13 EC 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 44 BB 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 17 E8 00 00
+# 
+name: 2
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8974 4474 553 526 579 526 658 447 553 526 579 526 658 447 553 526 579 526 658 1553 579 1711 500 1711 526 1711 500 1711 500 1711 526 1711 500 526 658 1632 500 526 658 1632 500 526 658 447 553 526 579 526 632 474 553 526 579 1711 500 526 579 1711 500 1711 526 1711 500 1711 500 1711 526 40947 8974 2237 553 100000
+# 
+name: right
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8974 4474 553 526 579 526 658 447 553 526 579 526 658 447 553 526 579 526 658 1553 579 1711 500 1711 526 1711 500 1711 500 1711 526 1711 500 526 658 1632 500 1711 500 1711 526 526 553 1711 526 526 553 526 579 526 632 474 553 526 579 526 632 1579 579 526 658 1605 526 1711 500 1711 526 40947 8974 2263 526 100000
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 0F F0 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 53 AC 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 1F E0 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 09 F6 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 57 A8 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 4F B0 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 1B E4 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 08 F7 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 00 7F 00 00
+command: 07 F8 00 00

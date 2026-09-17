@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: rew
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 22 D0 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 16 E0 00 00
+# 
+name: pre
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 1F E0 00 00
+# 
+name: ff
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 24 D0 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 14 E0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 35 C0 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 48 B0 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 45 00 00 00
+command: 21 00 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 1E E0 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 19 E0 00 00
+# 
+name: record
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 20 D0 00 00
+# 
+name: info
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 13 E0 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 15 E0 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 23 D0 00 00
+# 
+name: cancel
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 45 B0 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 21 D0 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 00 F0 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 85 30 00 00
+command: 17 E0 00 00

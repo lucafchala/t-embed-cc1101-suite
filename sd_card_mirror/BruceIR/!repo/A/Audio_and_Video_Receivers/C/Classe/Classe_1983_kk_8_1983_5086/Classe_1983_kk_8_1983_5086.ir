@@ -1,0 +1,182 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: INPUT 3_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 04 00 00 00
+# 
+name: vcr
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 02 00 00 00
+# 
+name: INPUT11
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 7A 00 00 00
+# 
+name: INPUT 1
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 0B 00 00 00
+# 
+name: INPUT 9_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 78 00 00 00
+# 
+name: INPUT 1_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 0B 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 0C 00 00 00
+# 
+name: INPUT 9
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 78 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 10 00 00 00
+# 
+name: INPUT10
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 79 00 00 00
+# 
+name: INPUT 6
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 07 00 00 00
+# 
+name: INPUT10_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 79 00 00 00
+# 
+name: INPUT 4_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 05 00 00 00
+# 
+name: INPUT12_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 7B 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 0C 00 00 00
+# 
+name: INPUT 4
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 05 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 11 00 00 00
+# 
+name: INPUT12
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 7B 00 00 00
+# 
+name: vcr_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 02 00 00 00
+# 
+name: INPUT 2
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 03 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 0D 00 00 00
+# 
+name: INPUT 7
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 08 00 00 00
+# 
+name: INPUT 2_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 03 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 11 00 00 00
+# 
+name: INPUT 7_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 08 00 00 00
+# 
+name: INPUT 6_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 07 00 00 00
+# 
+name: INPUT 3
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 04 00 00 00
+# 
+name: INPUT11_r
+type: parsed
+protocol: RC6
+address: 74 00 00 00
+command: 7A 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC6
+address: C8 00 00 00
+command: 0D 00 00 00

@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 84 7B 00 00
+# 
+name: Video Record
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 81 7E 00 00
+# 
+name: shutter
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 89 76 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 83 7C 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 87 78 00 00
+# 
+name: BACK
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 88 77 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 85 7A 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 82 7D 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 87 78 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: CB 30 00 00
+command: 86 79 00 00

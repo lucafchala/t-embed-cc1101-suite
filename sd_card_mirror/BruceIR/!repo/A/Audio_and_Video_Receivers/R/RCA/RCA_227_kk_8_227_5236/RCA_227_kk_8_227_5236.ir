@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 24 DB 00 00
+# 
+name: vcr
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 26 D9 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 25 DA 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 0F F0 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 97 68 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9E 61 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9F 60 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 25 DA 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 99 66 00 00
+# 
+name: md
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 25 DA 00 00

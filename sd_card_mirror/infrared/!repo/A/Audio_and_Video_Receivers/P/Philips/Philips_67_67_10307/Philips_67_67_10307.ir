@@ -1,0 +1,326 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: tv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: tv2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: pause_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: pop-up menu_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 82 00 00 00
+# 
+name: pop-up menu
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 82 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC5
+address: 15 00 00 00
+command: 3F 00 00 00
+# 
+name: menu_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 2778 783 510 809 510 440 510 440 1406 1311 510 440 510 440 510 440 510 440 1011 783 510 440 1011 387 510 809 1011 809 510 440 510 440 1011 86559 2778 783 510 809 510 440 509 440 1406 1310 510 440 510 440 510 440 510 440 1011 809 509 440 1011 414 510 809 1011 809 510 440 510 440 1011 86586 2778 783 510 809 510 440 510 440 1406 1310 510 440 510 440 510 440 510 440 1011 809 510 440 1011 387 509 809 984 809 510 440 510 440 984 78868
+# 
+name: cd
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: sel
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: tuner_input_r
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: tv2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: back_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 59 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: sel_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5C 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 58 00 00 00
+# 
+name: FF
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: C7 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: exit_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: tape
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: cd_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 83 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 31 00 00 00
+# 
+name: tape_r
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: REW
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5X
+address: 10 00 00 00
+command: 0F 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5B 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC6
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: display
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: pause
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 2C 00 00 00
+# 
+name: page_down
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: vcr1
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: display_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 0F 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 21 00 00 00
+# 
+name: page_down_r
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 20 00 00 00
+# 
+name: menu
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 2778 783 510 809 510 440 510 440 483 809 879 440 510 440 509 440 510 440 510 440 1011 783 510 440 1011 387 510 809 1011 809 510 440 510 440 1011 86559 2778 783 510 809 510 440 510 440 483 809 879 440 510 440 510 440 510 440 510 440 1011 809 510 440 1011 414 510 809 1011 809 510 440 510 440 1011 86585 2778 783 509 809 510 440 510 440 483 809 879 440 510 440 510 440 510 440 510 440 1011 809 510 440 1011 387 510 809 984 809 510 440 510 440 984 78868
+# 
+name: vcr1_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5X
+address: 10 00 00 00
+command: 0F 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC6
+address: 04 00 00 00
+command: 5A 00 00 00

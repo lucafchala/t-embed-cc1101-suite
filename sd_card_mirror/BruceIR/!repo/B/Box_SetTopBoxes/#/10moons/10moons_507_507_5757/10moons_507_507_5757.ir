@@ -1,0 +1,272 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: program switch
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1D E2 00 00
+# 
+name: file browser
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 14 EB 00 00
+# 
+name: a key guide
+type: raw
+frequency: 37990
+duty_cycle: 0.330000
+data: 8853 4507 483 609 482 657 483 609 483 609 483 609 483 609 483 1743 483 609 483 609 483 657 456 657 483 608 483 657 483 609 483 1743 456 657 483 1742 483 1743 456 704 456 609 535 1727 483 609 483 608 483 657 483 609 482 609 456 1743 483 1743 483 609 483 1743 482 1743 483 1742 483 46274 8853 2270 482 97717
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0E F1 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1A E5 00 00
+# 
+name: into
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0A F5 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1B E4 00 00
+# 
+name: pending
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0F F0 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 00 FF 00 00
+# 
+name: search for
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 47 B8 00 00
+# 
+name: delete collection
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 53 AC 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 04 FB 00 00
+# 
+name: 7
+type: raw
+frequency: 37990
+duty_cycle: 0.330000
+data: 8880 4507 483 625 456 688 483 625 483 625 483 625 456 688 483 1743 456 688 483 625 456 688 456 688 482 625 456 688 456 688 483 1743 482 625 483 1743 483 1743 483 1743 483 625 456 688 483 625 483 625 457 688 483 625 456 689 456 688 483 1743 482 1743 483 1743 483 1743 483 1743 483 46257 8880 2302 457 97203
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0B F4 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 01 FE 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 19 E6 00 00
+# 
+name: reach the peak
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1E E1 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 08 F7 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 4D B2 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 41 BE 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 09 F6 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1C E3 00 00
+# 
+name: browser
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 17 E8 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 42 BD 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0D F2 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 44 BB 00 00
+# 
+name: in the end
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 1F E0 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 16 E9 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 15 EA 00 00
+# 
+name: 2
+type: raw
+frequency: 37990
+duty_cycle: 0.330000
+data: 8827 4540 482 657 456 625 483 657 456 705 456 625 483 657 403 1775 483 656 483 656 456 625 483 656 483 656 483 657 483 656 456 1743 483 656 456 625 456 1743 483 657 456 625 483 657 456 625 456 625 483 657 456 1743 483 656 404 1775 483 1743 456 1743 456 1743 483 1743 456 1743 482 46291 8854 2286 483 97554
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 11 EE 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 5B A4 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 05 FA 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 40 BF 00 00
+# 
+name: backspace
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 12 ED 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 0C F3 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 40 BF 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 03 FC 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 06 F9 00 00
+# 
+name: internet tv
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 18 E7 00 00
+# 
+name: data sources
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 57 A8 00 00
+# 
+name: setup
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 46 B9 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 45 BA 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 43 BC 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 40 40 00 00
+command: 10 EF 00 00

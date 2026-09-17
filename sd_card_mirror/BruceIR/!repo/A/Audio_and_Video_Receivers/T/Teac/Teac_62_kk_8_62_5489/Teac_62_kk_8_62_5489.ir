@@ -1,0 +1,122 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 25 DA 00 00
+# 
+name: vcr
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 26 D9 00 00
+# 
+name: radios
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8D 72 00 00
+# 
+name: video3
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 28 D7 00 00
+# 
+name: aux1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 24 DB 00 00
+# 
+name: tape1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 95 6A 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8C 73 00 00
+# 
+name: am
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: F9 06 00 00
+# 
+name: CD-R
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 9C 63 00 00
+# 
+name: tape2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 8C 73 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 0F F0 00 00
+# 
+name: video1
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 26 D9 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 40 BF 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9E 61 00 00
+# 
+name: video2
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 27 D8 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 9F 60 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 91 6E 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 99 66 00 00
+# 
+name: video4
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 27 D8 00 00
+# 
+name: md
+type: parsed
+protocol: NECext
+address: 85 6A 00 00
+command: 94 6B 00 00

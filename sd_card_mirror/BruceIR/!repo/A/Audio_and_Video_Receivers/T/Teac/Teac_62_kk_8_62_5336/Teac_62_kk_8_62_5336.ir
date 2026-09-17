@@ -1,0 +1,146 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: amp2
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 81 7E 00 00
+# 
+name: radios
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 01 FE 00 00
+# 
+name: tuning
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 4D B2 00 00
+# 
+name: video3
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 12 ED 00 00
+# 
+name: tape1
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 13 EC 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 02 FD 00 00
+# 
+name: am
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 0A F5 00 00
+# 
+name: amp1
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 80 7F 00 00
+# 
+name: tape2
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 04 FB 00 00
+# 
+name: video1
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 10 EF 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 42 BD 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 07 F8 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 4A B5 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 06 F9 00 00
+# 
+name: rgb2
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 8B 74 00 00
+# 
+name: video2
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 11 EE 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 43 BC 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 05 FA 00 00
+# 
+name: rgb1
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 8A 75 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 03 FC 00 00
+# 
+name: digital2
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 45 BA 00 00
+# 
+name: fm
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 4E B1 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 08 F7 00 00
+# 
+name: video4
+type: parsed
+protocol: NECext
+address: 81 73 00 00
+command: 09 F6 00 00

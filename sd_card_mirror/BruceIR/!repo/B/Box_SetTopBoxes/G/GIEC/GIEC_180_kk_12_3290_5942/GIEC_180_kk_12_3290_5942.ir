@@ -1,0 +1,218 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 16 E9 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 00 FF 00 00
+# 
+name: caption
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0A F5 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 06 F9 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 04 FB 00 00
+# 
+name: tv series
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 32 CD 00 00
+# 
+name: scale
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 18 E7 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 17 E8 00 00
+# 
+name: search for
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0F F0 00 00
+# 
+name: mode
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 10 EF 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0E F1 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 13 EC 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 05 FA 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0B F4 00 00
+# 
+name: reach the peak
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 1D E2 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 14 EB 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 12 ED 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 15 EA 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0F F0 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 1A E5 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 08 F7 00 00
+# 
+name: in the end
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 28 D7 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 10 EF 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0C F3 00 00
+# 
+name: Variety
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 34 CB 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 09 F6 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 11 EE 00 00
+# 
+name: page_up
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 02 FD 00 00
+# 
+name: page_down
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 01 FE 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 20 DF 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 0D F2 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 27 D8 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 1B E4 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 1E E1 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 07 F8 00 00
+# 
+name: track
+type: parsed
+protocol: NECext
+address: 84 79 00 00
+command: 1F E0 00 00

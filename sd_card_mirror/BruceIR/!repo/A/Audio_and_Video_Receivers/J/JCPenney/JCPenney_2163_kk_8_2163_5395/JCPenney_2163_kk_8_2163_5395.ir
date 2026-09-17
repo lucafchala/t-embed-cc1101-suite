@@ -1,0 +1,32 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: stop
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 4353 4341 495 483 494 482 495 1496 495 482 495 482 495 1497 495 482 495 1497 495 483 495 483 495 1497 495 483 494 483 495 1497 495 483 495 1497 494 1497 495 1497 495 483 495 1497 495 1497 495 483 494 483 494 483 494 483 494 483 494 1497 494 483 494 483 494 1497 494 1497 494 1497 494 45372 4353 4341 495 1497 494 100786
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: A4 00 00 00
+command: A0 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: A4 00 00 00
+command: 60 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: A4 00 00 00
+command: 20 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: A4 00 00 00
+command: 16 00 00 00

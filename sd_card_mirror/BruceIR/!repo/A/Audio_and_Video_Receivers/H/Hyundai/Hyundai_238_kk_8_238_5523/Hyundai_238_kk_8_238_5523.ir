@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: right surround-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 12 00 00 00
+# 
+name: center-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 11 00 00 00
+# 
+name: left surround-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 13 00 00 00
+# 
+name: dsp
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 07 00 00 00
+# 
+name: right surround+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0E 00 00 00
+# 
+name: center+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0D 00 00 00
+# 
+name: enter
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 05 00 00 00
+# 
+name: preset
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 06 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 03 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 10 00 00 00
+# 
+name: bass+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 16 00 00 00
+# 
+name: Sub-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 1C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 08 00 00 00
+# 
+name: left surround+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0F 00 00 00
+# 
+name: Sub+
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 00 00 00 00
+# 
+name: bass-
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 04 00 00 00
+# 
+name: balance l
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0B 00 00 00
+# 
+name: balance r
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 0A 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 80 00 00 00
+command: 02 00 00 00

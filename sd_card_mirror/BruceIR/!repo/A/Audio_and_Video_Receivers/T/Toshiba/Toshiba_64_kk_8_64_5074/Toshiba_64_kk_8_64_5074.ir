@@ -1,0 +1,122 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: into
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 8A 00 00 00
+# 
+name: program_down
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 09 F6 00 00
+# 
+name: SLEEP
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 04 FB 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 0A F5 00 00
+# 
+name: inputtuner
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 0D F2 00 00
+# 
+name: PAUSE
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 01 FE 00 00
+# 
+name: recall
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 8B 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: D5 00 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 12 ED 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: D1 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 10 EF 00 00
+# 
+name: >>I
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 0B F4 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: D7 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 11 EE 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: D8 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: D4 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 00 FF 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 07 F8 00 00
+# 
+name: program_up
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 08 F7 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 2D D3 00 00
+command: 13 EC 00 00

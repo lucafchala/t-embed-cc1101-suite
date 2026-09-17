@@ -1,0 +1,50 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: repeat_code
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 9000 4500 560 560 560 1680 560 560 560 560 560 560 560 560 560 560 560 560 560 1680 560 560 560 1680 560 1680 560 1680 560 1680 560 1680 560 1680 9000 2250 560 96190 560 40180
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 03 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 01 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 04 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 02 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: FF 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 07 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 05 00 00 00

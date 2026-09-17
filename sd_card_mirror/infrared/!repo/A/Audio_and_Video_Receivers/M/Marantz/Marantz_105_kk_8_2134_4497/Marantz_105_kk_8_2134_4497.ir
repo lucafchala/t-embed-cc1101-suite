@@ -1,0 +1,446 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: tune+
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 968 1696 1838 1697 968 826 967 826 941 826 4528 827 967 826 941 826 968 826 941 826 968 826 941 826 968 826 1812 826 968 1723 1838 826 76297
+# 
+name: bd
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 853 888 1749 888 853 888 853 1785 853 888 853 888 853 4476 853 888 852 888 853 888 853 888 853 888 1749 888 853 889 852 888 852 889 852 888 853 77775
+# 
+name: tv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: vcr
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: next_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 30 00 00 00
+# 
+name: standby
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 827 967 1697 1838 1697 968 826 968 826 941 826 4528 826 967 826 1812 826 967 1697 968 826 968 852 941 826 968 853 941 826 1838 1697 77166
+# 
+name: down
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 11 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: tune-_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 967 826 967 826 967 1697 968 826 941 827 967 826 4502 826 941 826 942 826 968 827 941 826 968 826 941 826 967 826 1812 826 968 826 968 1697 77193
+# 
+name: pause_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 29 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0C 00 00 00
+# 
+name: REW_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 32 00 00 00
+# 
+name: tune
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: aux1
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 967 1723 1838 1697 968 827 967 826 941 826 4528 826 968 853 941 826 968 826 941 826 968 853 941 826 968 853 941 826 1838 826 967 1697 77087
+# 
+name: right_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 16 00 00 00
+# 
+name: game
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 942 1801 1839 1802 941 905 941 905 941 905 4423 905 941 905 941 905 941 905 941 905 941 905 1838 905 941 905 941 905 941 905 941 1802 76091
+# 
+name: dvd_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 905 941 905 941 1802 941 905 941 905 941 905 4423 905 941 905 942 905 941 905 941 905 941 905 941 905 941 905 1838 1802 1838 1802 76091
+# 
+name: menu_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 12 00 00 00
+# 
+name: cd
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: tune+_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 905 941 905 941 1802 941 905 941 905 941 905 4423 905 941 905 941 905 941 905 941 905 941 905 941 905 941 905 1838 905 941 1802 1838 905 75143
+# 
+name: play_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 35 00 00 00
+# 
+name: FF_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 34 00 00 00
+# 
+name: tune_r
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 3F 00 00 00
+# 
+name: back_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 13 00 00 00
+# 
+name: standby_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 905 941 905 941 1803 941 905 941 905 941 905 4423 905 941 905 1838 905 941 1803 941 905 941 905 941 905 941 905 941 905 1839 1801 76090
+# 
+name: m-xp_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 967 826 968 826 967 826 968 826 967 1723 1838 826 4528 826 967 826 968 826 968 826 968 826 968 1723 941 826 941 826 968 852 941 826 1838 853 76114
+# 
+name: down_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 11 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 15 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 10 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 10 00 00 00
+# 
+name: surround
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 25 00 00 00
+# 
+name: dvd
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 967 1697 1838 1697 967 826 968 853 941 826 4528 826 968 852 941 826 967 853 941 826 967 853 941 826 968 853 1812 1697 1838 1697 77114
+# 
+name: FF
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 34 00 00 00
+# 
+name: hdmi
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1697 967 826 1812 1723 941 826 967 826 941 826 5399 826 967 827 967 1723 941 826 968 853 941 826 968 853 941 826 967 826 942 826 968 853 77114
+# 
+name: cdr
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: usb
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 853 915 1768 1768 853 915 1723 941 852 941 853 5346 853 914 853 915 853 915 853 915 853 915 1749 915 853 1785 1723 1812 1749 77347
+# 
+name: surround_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 25 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 0C 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0C 00 00 00
+# 
+name: stop
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 36 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: cdr_r
+type: parsed
+protocol: RC5
+address: 1A 00 00 00
+command: 3F 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 17 00 00 00
+# 
+name: m-xp
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 853 889 1749 1785 853 888 853 888 1750 1785 852 4476 853 889 852 888 853 888 853 888 853 888 1749 888 852 888 853 888 853 888 853 1785 853 76824
+# 
+name: cd_r
+type: parsed
+protocol: RC5
+address: 14 00 00 00
+command: 3F 00 00 00
+# 
+name: next
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 30 00 00 00
+# 
+name: hdmi_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 1697 1793 906 906 1723 941 826 968 826 941 826 5399 826 968 826 968 1723 941 826 968 853 941 826 967 853 941 826 968 826 941 826 968 853 77113
+# 
+name: previous
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: vcr_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3F 00 00 00
+# 
+name: back
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 13 00 00 00
+# 
+name: stop_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 36 00 00 00
+# 
+name: aux1_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 905 941 905 941 1802 941 906 941 905 941 905 4423 905 941 905 941 905 941 906 941 905 941 905 941 905 941 905 941 905 1839 905 941 1802 76037
+# 
+name: ok
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 17 00 00 00
+# 
+name: tune-
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 1802 1838 1802 941 905 941 905 941 905 4423 905 941 905 941 905 941 905 941 905 941 905 941 905 941 905 1838 905 941 905 941 1802 76092
+# 
+name: REW
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 32 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 10 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: d
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 1803 1837 1802 941 905 942 905 941 905 4423 906 940 905 941 905 941 905 942 905 1838 1802 941 905 941 905 941 905 941 905 1838 905 75193
+# 
+name: right
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 16 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 11 00 00 00
+# 
+name: display
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 967 1697 1838 1697 968 826 968 826 967 827 4528 826 968 826 1812 826 968 826 967 826 968 1697 968 826 968 826 941 826 968 826 941 826 77139
+# 
+name: pause
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 29 00 00 00
+# 
+name: usb_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 852 915 853 915 853 915 853 915 1723 941 853 941 853 5346 853 915 853 915 853 915 852 915 853 915 1749 915 853 1785 1723 1812 1749 77347
+# 
+name: input
+type: parsed
+protocol: RC5
+address: 11 00 00 00
+command: 0C 00 00 00
+# 
+name: play
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 35 00 00 00
+# 
+name: display_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 905 941 905 941 905 941 1802 941 905 941 905 941 905 4423 905 941 905 1838 905 941 905 941 906 941 1802 941 905 941 905 941 905 941 905 942 904 76039
+# 
+name: bd_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 968 826 967 1697 967 826 1812 826 967 826 968 826 4502 826 968 826 968 827 967 826 968 826 967 1697 968 826 941 827 967 853 941 826 968 826 77087
+# 
+name: previous_r
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 31 00 00 00
+# 
+name: d_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 826 968 826 967 826 968 1697 968 826 941 826 968 826 4502 853 941 826 941 826 967 853 941 826 1838 1697 968 826 967 853 941 826 968 826 1812 853 76216
+# 
+name: game_r
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 853 914 853 915 853 915 1749 915 853 915 853 915 853 4475 853 915 853 915 853 915 853 914 853 915 853 1786 852 915 853 915 853 915 853 915 1749 77371
+# 
+name: menu
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 12 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 10 00 00 00
+command: 0D 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5X
+address: 05 00 00 00
+command: 15 00 00 00

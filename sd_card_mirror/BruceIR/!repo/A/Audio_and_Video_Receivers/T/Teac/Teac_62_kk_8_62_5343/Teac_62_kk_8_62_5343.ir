@@ -1,0 +1,128 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: Preset Next
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 84 7B 00 00
+# 
+name: Am Fm   Toggle
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 83 7C 00 00
+# 
+name: DiskSkip
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: CE 31 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 8A 75 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 89 76 00 00
+# 
+name: PalyCD
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: D9 26 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 8B 74 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 80 7F 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: D9 26 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 82 7D 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: DE 21 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: DF 20 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 81 7E 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: DB 24 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 9B 64 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 90 6F 00 00
+# 
+name: aux2
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 8B 74 00 00
+# 
+name: Preset Prev
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 85 7A 00 00
+# 
+name: shuf
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: CF 30 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 87 78 00 00
+# 
+name: md
+type: parsed
+protocol: NECext
+address: 85 9A 00 00
+command: 9C 63 00 00

@@ -1,0 +1,338 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: channel list
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 86 79 00 00
+# 
+name: tv
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4F B0 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4C B3 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 43 BC 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0B F4 00 00
+# 
+name: zoom
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 44 BB 00 00
+# 
+name: CC
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 1C E3 00 00
+# 
+name: freeze
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 53 AC 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 1B E4 00 00
+# 
+name: inputpc
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4E B1 00 00
+# 
+name: game
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 98 67 00 00
+# 
+name: closed caption
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 1C E3 00 00
+# 
+name: 0
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 09 F6 00 00
+# 
+name: --
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 41 BE 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 03 FC 00 00
+# 
+name: guide
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 45 BA 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 06 F9 00 00
+# 
+name: PLock
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 47 B8 00 00
+# 
+name: component
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4D B2 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: A2 5D 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 42 BD 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 00 FF 00 00
+# 
+name: enter
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 18 E7 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 50 AF 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 07 F8 00 00
+# 
+name: SAP
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 11 EE 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0F F0 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 08 F7 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0D F2 00 00
+# 
+name: picture
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 49 B6 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 14 EB 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 1D E2 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0C F3 00 00
+# 
+name: ChannelList
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 86 79 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 01 FE 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 15 EA 00 00
+# 
+name: inputtv
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4F B0 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 17 E8 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 04 FB 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0A F5 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 48 B7 00 00
+# 
+name: period
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 41 BE 00 00
+# 
+name: vga
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4E B1 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 02 FD 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4F B0 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 05 FA 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 18 E7 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 10 EF 00 00
+# 
+name: MTS
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 11 EE 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: A3 5C 00 00
+# 
+name: sleep
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 13 EC 00 00
+# 
+name: favorite
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 4B B4 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 14 EB 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 0E F1 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 86 05 00 00
+command: 16 E9 00 00

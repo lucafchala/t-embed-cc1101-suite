@@ -1,0 +1,182 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: KeystoneUp
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 40 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: CURSOR
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 41 00 00 00
+# 
+name: 3D SWITCH
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: computer
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 14 00 00 00
+# 
+name: 2D
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: scale
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 47 00 00 00
+# 
+name: Updown
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: mode
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 48 00 00 00
+# 
+name: AV
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: KeystoneDown
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: up
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8995 4389 666 487 614 487 640 513 614 486 614 513 613 513 614 513 614 513 614 1613 614 1666 587 1639 614 1639 614 1613 745 1535 665 1587 613 1613 613 1613 613 513 614 1613 613 1640 613 513 614 513 613 513 614 512 614 513 614 1613 614 513 614 513 613 1639 614 1613 614 1613 614 1639 614 39120 8995 2163 614 95221
+# 
+name: Leftright
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: turn
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 49 00 00 00
+# 
+name: hdmi
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: next
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8942 4416 613 513 613 513 613 513 613 513 613 513 613 513 613 565 613 461 640 1613 613 1639 613 1640 613 1639 614 1613 613 1692 561 1639 692 1587 613 487 613 1639 692 1614 561 513 692 435 639 513 613 1613 613 513 613 1639 613 513 613 513 639 1613 613 1639 613 1639 613 513 613 1614 613 39120 8994 2190 614 95106
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 44 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: vol+
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8995 4416 613 512 614 512 693 433 614 512 614 512 614 512 614 513 614 512 614 1613 614 1638 614 1639 614 1639 614 1639 615 1638 614 1639 614 1639 614 512 614 1639 614 513 614 1639 614 512 614 512 614 513 614 512 614 1639 614 513 614 1639 614 486 614 1639 614 1639 614 1639 614 1612 614 39119 8995 2163 614 95097
+# 
+name: apply
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 43 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: Online
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 42 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 45 00 00 00
+# 
+name: vga
+type: raw
+frequency: 38000
+duty_cycle: 0.330000
+data: 8968 4416 692 409 639 487 613 513 613 513 613 513 613 513 613 513 639 487 613 1639 613 1666 666 1587 613 1613 613 1639 613 1640 613 1639 613 1639 613 513 613 1639 613 1639 613 513 613 1639 613 513 613 513 613 513 613 1639 613 513 613 513 614 1639 613 513 613 1639 613 1639 613 1613 613 39120 8994 2189 613 95086
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 10 00 00 00

@@ -1,0 +1,146 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: spectrum mode
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 42 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: digital signal
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: analog signal
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 49 00 00 00
+# 
+name: znt
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 55 00 00 00
+# 
+name: channel control
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 45 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 44 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 56 00 00 00
+# 
+name: reach the peak
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 15 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 16 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 4C 00 00 00
+# 
+name: in the end
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 18 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 57 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 40 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1E 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1A 00 00 00
+# 
+name: set
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0F 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1A 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: sound field mode
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 10 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 50 00 00 00

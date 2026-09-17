@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: home
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 08 00 00 00
+# 
+name: mode conversion
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 0A 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 03 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 09 00 00 00
+# 
+name: next
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 06 00 00 00
+# 
+name: previous
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 04 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 02 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 01 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 05 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 02 00 00 00
+command: 00 00 00 00

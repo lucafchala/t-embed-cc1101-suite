@@ -1,0 +1,62 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 46 00 00 00
+# 
+name: magnetic tape
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 54 00 00 00
+# 
+name: cd
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 06 00 00 00
+# 
+name: am
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 4E 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 40 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 42 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 41 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 50 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 1C 00 00 00
+# 
+name: md
+type: parsed
+protocol: NEC
+address: 3C 00 00 00
+command: 62 00 00 00

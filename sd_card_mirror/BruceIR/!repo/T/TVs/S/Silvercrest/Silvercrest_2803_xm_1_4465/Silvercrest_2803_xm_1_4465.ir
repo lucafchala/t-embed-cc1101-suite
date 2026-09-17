@@ -1,0 +1,1238 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: TeletextDoubleSize
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: 16:9
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: aux
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: pipinput
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: ch-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: TeletextIndex_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2F 00 00 00
+# 
+name: NavRight2
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: tv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: PipChUp
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: into_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: SCART1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: down
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: Analogue
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 36 00 00 00
+# 
+name: tv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: ch+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 21 00 00 00
+# 
+name: MonoStereo_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: Start_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: into
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: yellow_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: NavDown3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: pipswap_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: PipFreeze
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: TeletextMixed
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: sleep_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: CC
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: TeletextStop_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: antenna_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: program-guide_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: SmartPicture_r
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 0A 00 00 00
+# 
+name: vol+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: pip ch+
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: computer
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: SoundMenu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 37 00 00 00
+# 
+name: freeze
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: last_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: teletext_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: PipChDown
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: Finish_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: exit
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: right_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: inputpc
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: NavLeft3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: PIPMove
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: pip
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: PipFreeze_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: NavRight4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 34 00 00 00
+# 
+name: aux_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: vid
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: PipChDown_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: Screen16x9
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: video
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: Input Aux_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: menu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: closed caption
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: tuner_input_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: green
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: inputtuner
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: 0
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: PP
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: PP_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0E 00 00 00
+# 
+name: NavUp4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: Surf
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: AV
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: NavRight3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: pip swap_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: SoundMenu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 37 00 00 00
+# 
+name: guide
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 04 00 00 00
+# 
+name: inputtv_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: Sleep2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: down_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: left_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: up_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: pip swap
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: Screen16x9_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: 7
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: antenna
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: NavUp3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: NavLeft3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1B 00 00 00
+# 
+name: Seq
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: NavLeft4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 36 00 00 00
+# 
+name: SmartPicture
+type: parsed
+protocol: RC5
+address: 03 00 00 00
+command: 0A 00 00 00
+# 
+name: selection_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: up
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: NavDown3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: green_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: enter
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: Sleep2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: pipinput_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: Antenna A_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: MonoStereo
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 23 00 00 00
+# 
+name: Surf_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: 8
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: Toggle
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 3F 00 00 00
+# 
+name: Select2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: pip move_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: PIPch-
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: 7_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 07 00 00 00
+# 
+name: input_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0C 00 00 00
+# 
+name: pip ch+_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: inputpc_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: 9
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: exit_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 39 00 00 00
+# 
+name: Finish
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: InstallMenu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 34 00 00 00
+# 
+name: ok_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: Picture+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: NavLeft2_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: screen enlarging_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: Toggle_r
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 3F 00 00 00
+# 
+name: teletext
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3C 00 00 00
+# 
+name: vid_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: NavUp4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: PictureMenu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 36 00 00 00
+# 
+name: previous
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: PIPMove_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: NavDown4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 35 00 00 00
+# 
+name: TeletextHiddenInfo
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: Seq_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: red
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: ok
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: pip_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: blue
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: NavUp3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 18 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 01 00 00 00
+# 
+name: PIPCH+_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 26 00 00 00
+# 
+name: TeletextIndex
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2F 00 00 00
+# 
+name: pipswap
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: Select2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: TeletextTime_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: closed caption_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 10 00 00 00
+# 
+name: NavRight3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1A 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: info
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: info_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 12 00 00 00
+# 
+name: cancel_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: 0_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 00 00 00 00
+# 
+name: CC_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1E 00 00 00
+# 
+name: NavLeft2
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 02 00 00 00
+# 
+name: freeze_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 1D 00 00 00
+# 
+name: pip move
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 19 00 00 00
+# 
+name: right
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: inputtv
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3F 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 11 00 00 00
+# 
+name: guide_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 05 00 00 00
+# 
+name: 3_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: TeletextHiddenInfo_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: 16:9_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: cancel
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0F 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 20 00 00 00
+# 
+name: inputtuner_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: blue_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: TeletextMixed_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: TeletextDoubleSize_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: 3
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 03 00 00 00
+# 
+name: pip ch-
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: screen enlarging
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: tuner_input
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: 6
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 06 00 00 00
+# 
+name: program-guide
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 38 00 00 00
+# 
+name: selection
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 17 00 00 00
+# 
+name: TeletextWait
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00
+# 
+name: TeletextStop
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 29 00 00 00
+# 
+name: 8_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 08 00 00 00
+# 
+name: previous_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: last
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 22 00 00 00
+# 
+name: NavRight2_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 16 00 00 00
+# 
+name: SCART2
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: pip ch-_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 27 00 00 00
+# 
+name: sleep
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 1D 00 00 00
+# 
+name: Input Aux
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2C 00 00 00
+# 
+name: Start
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2E 00 00 00
+# 
+name: FeatureMenu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 32 00 00 00
+# 
+name: Analogue_r
+type: parsed
+protocol: RC5X
+address: 03 00 00 00
+command: 36 00 00 00
+# 
+name: NavRight4_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 34 00 00 00
+# 
+name: menu
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3B 00 00 00
+# 
+name: Antenna A
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 25 00 00 00
+# 
+name: InstallMenu_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 34 00 00 00
+# 
+name: NavDown4
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 35 00 00 00
+# 
+name: computer_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 31 00 00 00
+# 
+name: mute
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0D 00 00 00
+# 
+name: 9_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 09 00 00 00
+# 
+name: red_r
+type: parsed
+protocol: RC5X
+address: 00 00 00 00
+command: 2B 00 00 00
+# 
+name: SCART2_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 33 00 00 00
+# 
+name: left
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 15 00 00 00
+# 
+name: SCART1_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: Picture+_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 3E 00 00 00
+# 
+name: TeletextTime
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2A 00 00 00
+# 
+name: video_r
+type: parsed
+protocol: RC5
+address: 05 00 00 00
+command: 3E 00 00 00
+# 
+name: enter_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 0A 00 00 00
+# 
+name: AV_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 1F 00 00 00
+# 
+name: TeletextWait_r
+type: parsed
+protocol: RC5
+address: 00 00 00 00
+command: 2D 00 00 00

@@ -1,0 +1,104 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 27 D8 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 11 EE 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 5B A4 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 26 D9 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 1A E5 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 0B F4 00 00
+# 
+name: back
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 5C A3 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 28 D7 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 1D E2 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 0A F5 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 25 DA 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 10 EF 00 00
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 1C E3 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 5A A5 00 00
+# 
+name: shopping
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 2E D1 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 1B E4 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 15 D8 00 00
+command: 24 DB 00 00

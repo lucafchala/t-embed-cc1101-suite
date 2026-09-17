@@ -1,0 +1,128 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 09 F6 00 00
+# 
+name: caption
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 4B B4 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 0C F3 00 00
+# 
+name: into
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 17 E8 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 1F E0 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 01 FE 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 14 EB 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 12 ED 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 04 FB 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 16 E9 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 0F F0 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 11 EE 00 00
+# 
+name: repeat
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 03 FC 00 00
+# 
+name: display
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 1B E4 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 17 E8 00 00
+# 
+name: audio
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 49 B6 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 17 E8 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 48 B7 00 00
+# 
+name: last
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 1C E3 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 16 E9 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 40 3F 00 00
+command: 19 E6 00 00

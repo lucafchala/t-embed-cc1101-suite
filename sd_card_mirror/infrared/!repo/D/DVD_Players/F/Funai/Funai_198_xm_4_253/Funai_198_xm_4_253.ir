@@ -1,0 +1,284 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: confirm
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 32 CD 00 00
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 94 6B 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 78 87 00 00
+# 
+name: ch-
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 35 CA 00 00
+# 
+name: display information
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 55 AA 00 00
+# 
+name: InputThreeDigit
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 59 A6 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 73 8C 00 00
+# 
+name: 12
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 89 76 00 00
+# 
+name: 11
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 88 77 00 00
+# 
+name: yellow
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 8B 74 00 00
+# 
+name: return
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 73 8C 00 00
+# 
+name: ChangeSound
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 7B 84 00 00
+# 
+name: 10
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 4E B1 00 00
+# 
+name: green
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 3E C1 00 00
+# 
+name: dvd
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 90 6F 00 00
+# 
+name: 4
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 48 B7 00 00
+# 
+name: 7
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 4B B4 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 77 88 00 00
+# 
+name: title
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 70 8F 00 00
+# 
+name: dLinkedData
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 8C 73 00 00
+# 
+name: 1
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 45 BA 00 00
+# 
+name: hdd
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 91 6E 00 00
+# 
+name: submenu
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 74 8B 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 53 AC 00 00
+# 
+name: 8
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 4C B3 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 41 BE 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 60 9F 00 00
+# 
+name: 9
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 4D B2 00 00
+# 
+name: red
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 8A 75 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 72 8D 00 00
+# 
+name: blue
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 9D 62 00 00
+# 
+name: TvProgList
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 93 6C 00 00
+# 
+name: record
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 3F C0 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 52 AD 00 00
+# 
+name: 2
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 46 B9 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 76 89 00 00
+# 
+name: 5
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 49 B6 00 00
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 5B A4 00 00
+# 
+name: ch+
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 34 CB 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 5E A1 00 00
+# 
+name: 3
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 47 B8 00 00
+# 
+name: 6
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 4A B5 00 00
+# 
+name: ChangeBroadcast
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 99 66 00 00
+# 
+name: selection
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 72 8D 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 71 8E 00 00
+# 
+name: clear
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 58 A7 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 84 F3 00 00
+command: 75 8A 00 00

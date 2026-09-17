@@ -1,0 +1,44 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: pause
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: 1F E0 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: 1F E0 00 00
+# 
+name: input
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: EA 15 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: BD 42 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: 61 9E 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: 60 9F 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 45 BD 00 00
+command: 12 ED 00 00

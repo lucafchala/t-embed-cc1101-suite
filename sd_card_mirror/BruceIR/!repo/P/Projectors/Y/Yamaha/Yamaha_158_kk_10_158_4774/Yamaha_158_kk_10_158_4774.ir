@@ -1,0 +1,68 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 6D 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 6C 00 00 00
+# 
+name: Auto Focus
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 26 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 62 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 70 00 00 00
+# 
+name: screen size
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 8A 00 00 00
+# 
+name: Screen Close
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 66 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 6F 00 00 00
+# 
+name: input
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 76 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 73 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: D1 00 00 00
+command: 6E 00 00 00

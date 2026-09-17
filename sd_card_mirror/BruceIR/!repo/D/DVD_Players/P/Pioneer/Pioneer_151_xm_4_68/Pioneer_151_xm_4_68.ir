@@ -1,0 +1,284 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: repeat b
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: E8 00 00 00
+# 
+name: disc1
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 31 00 00 00
+# 
+name: down
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: F3 00 00 00
+# 
+name: caption
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 36 00 00 00
+# 
+name: disc2
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 32 00 00 00
+# 
+name: single step
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B8 00 00 00
+# 
+name: lastmem
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: F6 00 00 00
+# 
+name: eject
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B6 00 00 00
+# 
+name: reversion
+type: parsed
+protocol: NEC
+address: A3 00 00 00
+command: 9B 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A0 00 00 00
+# 
+name: search for
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B3 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A4 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A7 00 00 00
+# 
+name: angle
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B5 00 00 00
+# 
+name: up
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: F2 00 00 00
+# 
+name: 1
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A1 00 00 00
+# 
+name: FF
+type: parsed
+protocol: Pioneer
+address: A3 00 00 00
+command: 9A 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A8 00 00 00
+# 
+name: c
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: E5 00 00 00
+# 
+name: power
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: BC 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: A3 00 00 00
+command: 98 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A9 00 00 00
+# 
+name: next
+type: parsed
+protocol: NEC
+address: A3 00 00 00
+command: 9C 00 00 00
+# 
+name: not commonly used keys
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B4 00 00 00
+# 
+name: previous
+type: parsed
+protocol: Pioneer
+address: A3 00 00 00
+command: 9D 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: EF 00 00 00
+# 
+name: disc4
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 34 00 00 00
+# 
+name: cd mode
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 60 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A2 00 00 00
+# 
+name: right
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 64 00 00 00
+# 
+name: random
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: FE 00 00 00
+# 
+name: repeat
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: E4 00 00 00
+# 
+name: display
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: E3 00 00 00
+# 
+name: 5
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A5 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: A3 00 00 00
+command: 9F 00 00 00
+# 
+name: disc3
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 33 00 00 00
+# 
+name: audio
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: BE 00 00 00
+# 
+name: set
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B0 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: A3 00 00 00
+command: 9F 00 00 00
+# 
+name: 3
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A3 00 00 00
+# 
+name: 6
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: A6 00 00 00
+# 
+name: condmem
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B1 00 00 00
+# 
+name: program
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: EC 00 00 00
+# 
+name: disc5
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 35 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B9 00 00 00
+# 
+name: slow play
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: B7 00 00 00
+# 
+name: left
+type: parsed
+protocol: Pioneer
+address: AF 00 00 00
+command: 63 00 00 00

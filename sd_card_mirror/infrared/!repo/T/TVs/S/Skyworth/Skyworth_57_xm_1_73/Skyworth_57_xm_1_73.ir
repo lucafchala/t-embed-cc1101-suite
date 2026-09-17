@@ -1,0 +1,314 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 10 00 00 00
+# 
+name: automatic search
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 20 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 10 00 00 00
+# 
+name: zoom
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 03 00 00 00
+# 
+name: sound mode
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2B 00 00 00
+# 
+name: listen alone
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 21 00 00 00
+# 
+name: pip size
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2F 00 00 00
+# 
+name: sprite source
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 24 00 00 00
+# 
+name: pip
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 26 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 28 00 00 00
+# 
+name: voice system
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 25 00 00 00
+# 
+name: multichannel
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 14 00 00 00
+# 
+name: green
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2C 00 00 00
+# 
+name: 0
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 11 00 00 00
+# 
+name: switching amplifier
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 00 00 00 00
+# 
+name: automatic adjustment
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 27 00 00 00
+# 
+name: 4
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 08 00 00 00
+# 
+name: pip position
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 22 00 00 00
+# 
+name: 7
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0C 00 00 00
+# 
+name: up
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 12 00 00 00
+# 
+name: 1
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 04 00 00 00
+# 
+name: hdmi
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 23 00 00 00
+# 
+name: 8
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0D 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 02 00 00 00
+# 
+name: 9
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0B 00 00 00
+# 
+name: jumping
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 19 00 00 00
+# 
+name: still image
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0F 00 00 00
+# 
+name: component input
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2D 00 00 00
+# 
+name: red
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1B 00 00 00
+# 
+name: ok
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1A 00 00 00
+# 
+name: blue
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2B 00 00 00
+# 
+name: swap
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 29 00 00 00
+# 
+name: tv_av
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 15 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 07 00 00 00
+# 
+name: info
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1F 00 00 00
+# 
+name: color tv system
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1C 00 00 00
+# 
+name: 2
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 05 00 00 00
+# 
+name: a12
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 2C 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 07 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 28 00 00 00
+# 
+name: 5
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 09 00 00 00
+# 
+name: input selection
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 13 00 00 00
+# 
+name: clock
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 18 00 00 00
+# 
+name: ch+
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 12 00 00 00
+# 
+name: 3
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 06 00 00 00
+# 
+name: 6
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0A 00 00 00
+# 
+name: last
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 16 00 00 00
+# 
+name: v12
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1B 00 00 00
+# 
+name: menu
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 1A 00 00 00
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 01 00 00 00
+# 
+name: left
+type: parsed
+protocol: Samsung32
+address: 17 00 00 00
+command: 0B 00 00 00

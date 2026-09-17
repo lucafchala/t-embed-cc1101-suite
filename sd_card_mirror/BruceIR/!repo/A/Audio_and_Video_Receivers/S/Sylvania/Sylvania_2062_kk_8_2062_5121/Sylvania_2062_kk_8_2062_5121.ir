@@ -1,0 +1,110 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: program_down_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: power_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 2_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 6_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: program_down
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: 5_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: tuner_input_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 4
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: 4_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 1
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: power
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: 1_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: mute_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 2
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00
+# 
+name: vol-_r
+type: parsed
+protocol: RC5
+address: 0A 00 00 00
+command: 3E 00 00 00
+# 
+name: 5
+type: parsed
+protocol: RC5
+address: 1E 00 00 00
+command: 3E 00 00 00

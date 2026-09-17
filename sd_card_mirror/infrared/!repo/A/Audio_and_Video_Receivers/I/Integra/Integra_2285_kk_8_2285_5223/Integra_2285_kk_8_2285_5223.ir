@@ -1,0 +1,128 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: aux
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 9F 60 00 00
+# 
+name: sat
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 0E F1 00 00
+# 
+name: computer
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 9C 63 00 00
+# 
+name: program_down
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 01 FE 00 00
+# 
+name: Game Input
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 0D F2 00 00
+# 
+name: net
+type: parsed
+protocol: NECext
+address: D2 14 00 00
+command: 87 78 00 00
+# 
+name: band
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 0B F4 00 00
+# 
+name: prevpreset
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 01 FE 00 00
+# 
+name: port
+type: parsed
+protocol: NECext
+address: D2 13 00 00
+command: 8A 75 00 00
+# 
+name: cd
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 09 F6 00 00
+# 
+name: usb
+type: parsed
+protocol: NECext
+address: D2 13 00 00
+command: 9E 61 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: D2 12 00 00
+command: CB 34 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 03 FC 00 00
+# 
+name: next
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 00 FF 00 00
+# 
+name: previous
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 01 FE 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 02 FD 00 00
+# 
+name: nextpreset
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 00 FF 00 00
+# 
+name: Dvr
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 0F F0 00 00
+# 
+name: program_up
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 00 FF 00 00
+# 
+name: BD DVD
+type: parsed
+protocol: NECext
+address: D2 12 00 00
+command: 8C 73 00 00
+# 
+name: mute
+type: parsed
+protocol: NECext
+address: D2 11 00 00
+command: 05 FA 00 00

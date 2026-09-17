@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: WIND DIRECTION
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 83 00 00 00
+# 
+name: COLD WIND
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 86 00 00 00
+# 
+name: HEATER
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 85 00 00 00
+# 
+name: wind_speed
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 87 00 00 00
+# 
+name: timer
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 82 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 00 00 00 00
+command: 84 00 00 00

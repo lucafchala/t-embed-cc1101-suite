@@ -1,0 +1,806 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: hdmi3
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 39 C6 00 00
+# 
+name: Instant Replay
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 22 DD 00 00
+# 
+name: analog 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 02 00 00 00
+# 
+name: digital 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: Text Hold
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 15 00 00 00
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 3F 00 00 00
+# 
+name: INPUT 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0D 00 00 00
+# 
+name: digital 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: ch-
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1F 00 00 00
+# 
+name: com  sat
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7D 00 00 00
+# 
+name: digital 10
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: home
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 20 DF 00 00
+# 
+name: Format (Aspect)
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 2B 00 00 00
+# 
+name: BS 10
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: AUX 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6D 00 00 00
+# 
+name: popmenu
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 34 CB 00 00
+# 
+name: BS 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: exit
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 3C 00 00 00
+# 
+name: TEXT EXPAND
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 00 00 00 00
+# 
+name: 3d
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 43 BC 00 00
+# 
+name: 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: analog 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: program information
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1C 00 00 00
+# 
+name: digital terrest
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7A 00 00 00
+# 
+name: 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: CS 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: Terrestrial Digital
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7A 00 00 00
+# 
+name: yellow
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 76 00 00 00
+# 
+name: link (device)
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 34 CB 00 00
+# 
+name: analog 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: Internet
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 25 00 00 00
+# 
+name: CS 5
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 05 00 00 00
+# 
+name: digital 8
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 08 00 00 00
+# 
+name: digit 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: CS 8
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 08 00 00 00
+# 
+name: BS 5
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 05 00 00 00
+# 
+name: CS 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: digital 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: analog 9
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 09 00 00 00
+# 
+name: green
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 75 00 00 00
+# 
+name: digital 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: analog terrest
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7B 00 00 00
+# 
+name: time
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 57 A8 00 00
+# 
+name: analog 5
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 05 00 00 00
+# 
+name: analog 10
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: 0
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: digital 4
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 04 00 00 00
+# 
+name: digit 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: --
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 60 00 00 00
+# 
+name: digital 11
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: 4
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 04 00 00 00
+# 
+name: Text Update
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: guide
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6E 00 00 00
+# 
+name: CS 10
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0A 00 00 00
+# 
+name: Quick Skip
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 23 DC 00 00
+# 
+name: 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: Title (Top) Menu
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6E 00 00 00
+# 
+name: Skip Reverse
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 27 D8 00 00
+# 
+name: ATV
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7B 00 00 00
+# 
+name: Text Mix
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0E 00 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 37 C8 00 00
+# 
+name: digital 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 02 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 3E 00 00 00
+# 
+name: blu-ray
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 9E 61 00 00
+# 
+name: -- (10 key)
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0B 00 00 00
+# 
+name: 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 2E D1 00 00
+# 
+name: digital 5
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 05 00 00 00
+# 
+name: 8
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 08 00 00 00
+# 
+name: BS 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: BS 9
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 09 00 00 00
+# 
+name: analog 8
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 08 00 00 00
+# 
+name: BS 4
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 04 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 12 00 00 00
+# 
+name: sap
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 13 00 00 00
+# 
+name: program schedule
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6E 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 2B D4 00 00
+# 
+name: Text Off
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 13 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1E 00 00 00
+# 
+name: CS 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: CS 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: back
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 3B 00 00 00
+# 
+name: red
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 74 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 3D 00 00 00
+# 
+name: blue
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 73 00 00 00
+# 
+name: INPUT 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0E 00 00 00
+# 
+name: Subtitle
+type: parsed
+protocol: NEC
+address: 43 00 00 00
+command: 52 00 00 00
+# 
+name: Text On
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0F 00 00 00
+# 
+name: record
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 86 00 00 00
+# 
+name: REW
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 2C D3 00 00
+# 
+name: tv_av
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0F 00 00 00
+# 
+name: broadcast sat
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7C 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1A 00 00 00
+# 
+name: info
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 71 00 00 00
+# 
+name: CS 4
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 04 00 00 00
+# 
+name: 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 02 00 00 00
+# 
+name: Page +
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 20 DF 00 00
+# 
+name: CS 9
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 09 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5B 00 00 00
+# 
+name: picture mode
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 59 00 00 00
+# 
+name: Text Reveal
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 16 00 00 00
+# 
+name: D-Data
+type: parsed
+protocol: NEC
+address: 43 00 00 00
+command: 14 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 50 00 00 00
+# 
+name: Page -
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 21 DE 00 00
+# 
+name: ch+
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 1B 00 00 00
+# 
+name: digital 9
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 09 00 00 00
+# 
+name: play
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 2D D2 00 00
+# 
+name: 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 03 00 00 00
+# 
+name: CS
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7D 00 00 00
+# 
+name: +100
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 60 00 00 00
+# 
+name: 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: view recording schedules
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 28 D7 00 00
+# 
+name: BS 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: BS
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 7C 00 00 00
+# 
+name: radio
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 6D 00 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 38 C7 00 00
+# 
+name: analog 7
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 07 00 00 00
+# 
+name: analog 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: Text Mix
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 17 00 00 00
+# 
+name: BS 8
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 08 00 00 00
+# 
+name: BS 1
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 01 00 00 00
+# 
+name: BS 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: time slip
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 24 DB 00 00
+# 
+name: INPUT 3
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 11 00 00 00
+# 
+name: analog 12
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 0C 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 27 00 00 00
+# 
+name: Setup Menu
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: D0 00 00 00
+# 
+name: Recordings
+type: parsed
+protocol: NECext
+address: 40 BE 00 00
+command: 28 D7 00 00
+# 
+name: CS 2
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 02 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 10 00 00 00
+# 
+name: digital 6
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 06 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 40 00 00 00
+command: 5F 00 00 00
+# 
+name: data
+type: parsed
+protocol: NEC
+address: 43 00 00 00
+command: 14 00 00 00

@@ -1,0 +1,116 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 4E 00 00 00
+# 
+name: display information
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 44 00 00 00
+# 
+name: exit
+type: parsed
+protocol: Pioneer
+address: 49 00 00 00
+command: 43 00 00 00
+# 
+name: up
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 4A 00 00 00
+# 
+name: FF
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 0D 00 00 00
+# 
+name: power
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 1A 00 00 00
+# 
+name: stop
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 15 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 4F 00 00 00
+# 
+name: ok
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 1B 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 51 00 00 00
+# 
+name: right
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 4B 00 00 00
+# 
+name: pause
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 03 00 00 00
+# 
+name: skip forward
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 57 00 00 00
+# 
+name: play
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 0A 00 00 00
+# 
+name: selection
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 0A 00 00 00
+# 
+name: last
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 09 00 00 00
+# 
+name: menu
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 1B 00 00 00
+# 
+name: mute
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 52 00 00 00
+# 
+name: left
+type: parsed
+protocol: NEC
+address: 49 00 00 00
+command: 12 00 00 00

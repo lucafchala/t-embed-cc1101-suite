@@ -1,0 +1,68 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 84 7B 00 00
+# 
+name: continuous right
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 89 76 00 00
+# 
+name: PHOTOGRAPHY
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 82 7D 00 00
+# 
+name: shutter
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 81 7E 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 83 7C 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 80 7F 00 00
+# 
+name: right
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 85 7A 00 00
+# 
+name: options
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 87 78 00 00
+# 
+name: continuous left
+type: raw
+frequency: 37910
+duty_cycle: 0.330000
+data: 9024 4481 584 1658 584 550 584 550 584 550 584 1658 584 1659 584 550 584 550 584 550 584 550 584 550 584 550 584 550 584 550 584 1658 584 1658 584 550 584 1658 584 550 584 1659 583 550 584 550 584 550 584 1658 584 1658 584 551 583 1658 584 550 584 1658 584 1579 689 1658 584 550 584 43202 8998 2239 584 96169
+# 
+name: set
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 88 77 00 00
+# 
+name: left
+type: parsed
+protocol: NECext
+address: 31 C0 00 00
+command: 86 79 00 00

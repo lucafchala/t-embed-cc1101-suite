@@ -1,0 +1,38 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: mute
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 14 00 00 00
+# 
+name: vol-
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 12 00 00 00
+# 
+name: vol+
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 13 00 00 00
+# 
+name: right
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 1C 00 00 00
+# 
+name: down
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 0D 00 00 00
+# 
+name: power
+type: parsed
+protocol: Samsung32
+address: 84 00 00 00
+command: 1B 00 00 00

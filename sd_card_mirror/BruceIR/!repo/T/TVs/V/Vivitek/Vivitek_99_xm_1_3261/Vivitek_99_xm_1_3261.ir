@@ -1,0 +1,98 @@
+Filetype: IR signals file
+Version: 1
+# 
+name: video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3D C2 00 00
+# 
+name: down
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8D 72 00 00
+# 
+name: exit
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 12 ED 00 00
+# 
+name: PC
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 38 C7 00 00
+# 
+name: s video
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 3E C1 00 00
+# 
+name: component
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 83 7C 00 00
+# 
+name: component1
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 83 7C 00 00
+# 
+name: hdmi1
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 37 C8 00 00
+# 
+name: up
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 8C 73 00 00
+# 
+name: power
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 00 FF 00 00
+# 
+name: vol-
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1E E1 00 00
+# 
+name: ok
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 0F F0 00 00
+# 
+name: component2
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 81 7E 00 00
+# 
+name: vol+
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1D E2 00 00
+# 
+name: hdmi2
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 13 EC 00 00
+# 
+name: menu
+type: parsed
+protocol: NECext
+address: 33 00 00 00
+command: 1C E3 00 00
