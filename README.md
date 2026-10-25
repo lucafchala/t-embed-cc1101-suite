@@ -23,6 +23,13 @@ oficial instalado através do **[bmorcelli/Launcher](https://github.com/bmorcell
 Este repositório é uma **curadoria e reorganização** de várias fontes públicas do
 GitHub — não é código original. Veja [Proveniência e licenças](#proveniência-e-licenças) antes de redistribuir qualquer parte dele.
 
+> **Uso responsável.** Reuni estes arquivos para pesquisa e testes na minha própria
+> infraestrutura, e abri o repositório a pedido da comunidade. Parte do conteúdo
+> (BadUSB, Sub-GHz, NFC, Wi-Fi) é de segurança e pesquisa em RF e pode ser mal usada.
+> Use só em equipamentos e redes que sejam seus ou com autorização por escrito, e
+> respeite a lei local. Não apoio nem incentivo o uso contra terceiros.
+> Veja o [Aviso de uso](#aviso-de-uso).
+
 **~55.834 arquivos, ~1,1 GB** de bancos de dados IR/Sub-GHz/NFC/BadUSB/música,
 deduplicados por hash de conteúdo e organizados por categoria — veja o
 detalhamento completo em [`sd_card_content/README.md`](sd_card_content/README.md).
