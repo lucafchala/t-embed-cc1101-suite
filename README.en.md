@@ -24,6 +24,13 @@ This repository is a **curation and reorganization** of several public GitHub
 sources — not original code. See [Provenance and licenses](#provenance-and-licenses)
 before redistributing any part of it.
 
+> **Responsible use.** I gathered these files for research and testing on my own
+> infrastructure, and opened the repository at the community's request. Part of the
+> content (BadUSB, Sub-GHz, NFC, Wi-Fi) is security and RF research material and can
+> be misused. Use it only on equipment and networks you own or have written
+> authorization to test, and follow local law. I do not support or encourage use
+> against third parties. See the [Usage notice](#usage-notice).
+
 **~55,834 files, ~1.1 GB** of IR/Sub-GHz/NFC/BadUSB/music databases, deduplicated
 by content hash and organized by category — see the full breakdown in
 [`sd_card_content/README.md`](sd_card_content/README.md).
